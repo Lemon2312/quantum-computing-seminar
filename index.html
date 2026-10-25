@@ -181,6 +181,26 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
 #ui button{background:#334155;color:#fff;border:0;border-radius:6px;padding:5px 12px;cursor:pointer;font:inherit}
 #progress{position:fixed;left:0;bottom:0;height:4px;background:var(--accent);transition:width .4s;z-index:11}
 
+/* ---------- 一覧モード ---------- */
+#ovHead{display:none}
+body.overview{overflow:auto}
+body.overview #viewport{position:static;padding:64px 24px 60px}
+body.overview #ovHead{display:flex;position:fixed;left:0;right:0;top:0;height:52px;align-items:center;gap:16px;padding:0 24px;
+  background:#0f172a;color:#e2e8f0;font-size:16px;z-index:12}
+body.overview #ovHead b{font-size:18px}
+body.overview #ovHead button{background:var(--accent);color:#fff;border:0;border-radius:6px;padding:6px 14px;cursor:pointer;font:inherit;font-weight:700;margin-left:auto}
+body.overview #stage{position:static;transform:none!important;width:auto;height:auto;overflow:visible;background:none;box-shadow:none;
+  display:grid;grid-template-columns:repeat(var(--cols,4),1fr);gap:22px}
+body.overview .slide{position:relative;inset:auto;width:1280px;height:720px;zoom:var(--z,.2);opacity:1;transform:none;pointer-events:auto;
+  cursor:pointer;background:var(--bg);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);outline:0 solid var(--accent);transition:outline-width .15s}
+body.overview .slide *{pointer-events:none}
+body.overview .slide:hover{outline-width:14px}
+body.overview .slide.current{outline-width:22px}
+body.overview .frag{opacity:1;transform:none}
+body.overview .bar-fill{width:var(--w);transition:none}
+body.overview .slide .pageno{font-size:44px;font-weight:800;color:var(--ink);bottom:24px;right:40px}
+body.overview #ui,body.overview #progress{display:none}
+
 @media print{
   @page{size:1280px 720px;margin:0}
   html,body{overflow:visible;background:#fff}
@@ -193,6 +213,7 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
 </style>
 </head>
 <body>
+<div id="ovHead"><b>スライド一覧</b><span>クリックでそのスライドへ ／ ← → で選択、Enter で開く、O / Esc で戻る</span><button id="btnOvClose">一覧を閉じる</button></div>
 <div id="viewport"><div id="stage">
 
 <!-- 1. タイトル -->
@@ -328,11 +349,11 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
     </div>
     <div>
       <div class="ttcap pop" style="--d:.1s">XOR の真理値表</div>
-      <table class="tt pop" style="--d:.1s" id="tXor"></table>
-      <div class="point blue frag">どちらか <b>片方だけ</b> が 1 のとき 1 → <b class="kb">排他的論理和</b>（exclusive or）<span class="formula" style="font-size:24px;padding:2px 12px">A ⊕ B</span></div>
-      <div class="point frag"><b>2 を法とした和</b>（mod 2 の足し算）＝ <b class="k">繰り上がりを考慮しない足し算</b><br>
-        <span class="formula" style="font-size:24px;padding:2px 12px">A ⊕ B = (A + B) mod 2</span><br>
-        <span style="font-size:19px">1 + 1 = 2 ≡ <b>0</b> (mod 2)</span></div>
+      <table class="tt small pop" style="--d:.1s" id="tXor"></table>
+      <div class="point blue frag" style="font-size:20px"><b>片方だけ</b> が 1 のとき 1 → <b class="kb">排他的論理和</b>（exclusive or）<span class="formula" style="font-size:21px;padding:0 10px">A ⊕ B</span><br>
+        ＝ OR の入力が <b>1, 1 のときに 1 にならないようにした</b> ゲート</div>
+      <div class="point frag" style="font-size:20px"><b>2 を法とした和</b> ＝ <b class="k">繰り上がりを考慮しない足し算</b><br>
+        <span class="formula" style="font-size:21px;padding:0 10px">A ⊕ B = (A + B) mod 2</span>　1 + 1 = 2 ≡ <b>0</b> (mod 2)</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -553,6 +574,7 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
 <div id="ui">
   <button id="btnPrev">◀</button><span id="counter"></span><button id="btnNext">▶</button>
   <button id="btnFs">全画面 (F)</button>
+  <button id="btnOv">一覧 (O)</button>
   <span>← → / Space でページ送り</span>
 </div>
 <div id="progress"></div>
@@ -1103,8 +1125,44 @@ function prev() {
 function fullscreen() {
   if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen();
 }
+let overview = false;
+function layoutOverview() {
+  const cols = innerWidth < 900 ? 2 : innerWidth < 1400 ? 3 : 4;
+  const w = (document.body.clientWidth - 48 - 22 * (cols - 1)) / cols;
+  stage.style.setProperty('--cols', cols);
+  stage.style.setProperty('--z', w / 1280);
+}
+function markCurrent() { slides.forEach((s, i) => s.classList.toggle('current', i === cur)); }
+function toggleOverview(on = !overview) {
+  overview = on;
+  document.body.classList.toggle('overview', on);
+  if (on) {
+    stoppers.forEach(f => f());
+    layoutOverview(); markCurrent();
+    slides[cur].scrollIntoView({ block: 'center' });
+  } else {
+    document.body.scrollTop = 0;
+    go(cur);
+  }
+}
+slides.forEach((s, i) => s.addEventListener('click', () => {
+  if (!overview) return;
+  cur = i; toggleOverview(false);
+}));
+addEventListener('resize', () => { if (overview) layoutOverview(); });
 addEventListener('keydown', e => {
+  if (overview) {
+    if (['o', 'O', 'Escape'].includes(e.key)) toggleOverview(false);
+    else if (e.key === 'Enter') { e.preventDefault(); toggleOverview(false); }
+    else if (['ArrowRight', 'ArrowLeft'].includes(e.key)) {
+      e.preventDefault();
+      cur = Math.max(0, Math.min(slides.length - 1, cur + (e.key === 'ArrowRight' ? 1 : -1)));
+      markCurrent(); slides[cur].scrollIntoView({ block: 'nearest' });
+    }
+    return;
+  }
   if (e.target.tagName === 'SUMMARY') return;
+  if (e.key === 'o' || e.key === 'O') return toggleOverview(true);
   if (['ArrowRight', 'PageDown', ' ', 'Enter', 'ArrowDown'].includes(e.key)) { e.preventDefault(); next(); }
   else if (['ArrowLeft', 'PageUp', 'Backspace', 'ArrowUp'].includes(e.key)) { e.preventDefault(); prev(); }
   else if (e.key === 'Home') go(0);
@@ -1114,13 +1172,15 @@ addEventListener('keydown', e => {
 let tx = null;
 addEventListener('touchstart', e => tx = e.touches[0].clientX, { passive: true });
 addEventListener('touchend', e => {
-  if (tx === null) return;
+  if (tx === null || overview) return;
   const dx = e.changedTouches[0].clientX - tx; tx = null;
   if (Math.abs(dx) > 60) dx < 0 ? next() : prev();
 });
 $('#btnNext').onclick = e => { e.currentTarget.blur(); next(); };
 $('#btnPrev').onclick = e => { e.currentTarget.blur(); prev(); };
 $('#btnFs').onclick = e => { e.currentTarget.blur(); fullscreen(); };
+$('#btnOv').onclick = e => { e.currentTarget.blur(); toggleOverview(true); };
+$('#btnOvClose').onclick = e => { e.currentTarget.blur(); toggleOverview(false); };
 addEventListener('beforeprint', () => slides.forEach(s => frags(s).forEach(f => showFrag(f, true))));
 go(Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1)) || 1) - 1)));
 </script>
