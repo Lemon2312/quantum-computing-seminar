@@ -482,8 +482,8 @@ body.overview #ui,body.overview #progress{display:none}
       <div class="point blue frag" style="margin-top:0;font-size:19px">教科書の比較は「<b>1個のゲートの実行時間が同じ</b>」という仮定の上での話。実際は、ゲートごとに <b>必要なトランジスタの数</b> も <b>計算時間</b> も違う<br>
         <span style="font-size:17px">半加算器のトランジスタ数（目安）：AND/OR/NOT利用 <b>20個</b>、XOR/AND利用 <b>18個</b></span></div>
       <div class="point frag" style="background:#dcfce7;border-left-color:var(--green);font-size:19px">回路の速さ・大きさは「<b>ゲートの数</b>」だけでなく「<b>どのゲートを使うか</b>」でも決まる<br><span style="font-size:17px">実際の集積回路では、少ないトランジスタで作れる NAND・NOR を基本にすることが多い</span></div>
-      <div class="point frag" style="background:#ede9fe;border-left-color:#7c3aed;font-size:19px"><b style="color:#6d28d9">量子コンピュータでも同じ</b>ことが言える<br>
-        <span style="font-size:17px">1量子ビットゲートと2量子ビットゲート（CNOT など）では実行時間や誤りの起こりやすさが違う。量子回路も「ゲートの数」だけでなく「どのゲートを何個使うか」「段数（深さ）」で評価する</span></div>
+      <div class="point frag" style="background:#ede9fe;border-left-color:#7c3aed;font-size:19px"><b style="color:#6d28d9">量子コンピュータでも同じ</b>ようなことが言える<br>
+        <span style="font-size:17px">実機の方式の違いや量子ゲートの種類などによって実行時間や誤りの起こりやすさが違う。量子回路の効率を考える場合でも「ゲートの数」だけでなく「どのゲートを何個使うか」「段数（深さ）」などでも評価する必要がある。</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -534,7 +534,6 @@ body.overview #ui,body.overview #progress{display:none}
     <div>
       <div class="ttcap pop" style="--d:.1s">全加算器の真理値表</div>
       <table class="tt small pop" style="--d:.1s" id="tFa"></table>
-      <div class="hint frag">1 + 1 + 1 = 11₂ の行（入力すべて 1）を選んで、2つの半加算器の動きを確かめよう</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -554,7 +553,6 @@ body.overview #ui,body.overview #progress{display:none}
         <button class="b" id="rpRand">ランダム</button>
       </div>
     </div>
-    <div class="point frag" style="font-size:20px">繰り上がり C が <b>右（下位）から左（上位）へ波のように伝わる</b>（ripple = さざ波）。n ビットなら最悪 n 個分の全加算器を順番に待つ必要がある → ビット数が増えると遅い</div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -565,13 +563,13 @@ body.overview #ui,body.overview #progress{display:none}
   <h2>まとめ</h2>
   <div class="body">
     <ul>
-      <li class="pop">古典回路は <b>AND / OR / NOT</b> などの基本演算（ゲート）を組み合わせて計算する。動作は <b>真理値表</b> で表せる</li>
+      <li class="pop">古典回路は <b>AND / OR / NOT / XOR</b> などの基本演算（ゲート）を組み合わせて計算する。動作は <b>真理値表</b> で表せる</li>
       <li class="pop" style="--d:.1s"><b>半加算器</b>：1ビット + 1ビット → <b class="k">和 = A ⊕ B</b>、<b class="k">繰り上がり = A · B</b></li>
-      <li class="pop" style="--d:.2s">同じ結果を出す回路は複数ある。<b>ゲート数・段数が少ない回路の方が速い</b>（4個・3段 → 2個・1段）</li>
+      <li class="pop" style="--d:.2s">同じ結果を出す回路は複数ある。</li>
+      <li class="pop" style="--d:.5s">実際の基本論理ゲートは、種類ごとに <b>必要なトランジスタの数や計算時間が違う</b></li>
       <li class="pop" style="--d:.3s"><b>全加算器</b>：下の桁からの繰り上がりを含む3入力の足し算。<b>半加算器 × 2 + OR</b> で作れる<br>
         <span class="formula" style="font-size:24px;padding:2px 12px">S = A ⊕ B ⊕ C<sub>in</sub>,　C<sub>out</sub> = A·B + (A ⊕ B)·C<sub>in</sub></span></li>
       <li class="pop" style="--d:.4s">全加算器を並べれば <b>任意ビットの加算器</b> になる（リップルキャリー加算器）</li>
-      <li class="pop" style="--d:.5s">実際の基本論理ゲートは、種類ごとに <b>必要なトランジスタの数や計算時間が違う</b></li>
     </ul>
   </div>
   <div class="pageno"></div>
