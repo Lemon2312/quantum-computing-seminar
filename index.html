@@ -351,7 +351,7 @@ body.overview #ui,body.overview #progress{display:none}
       <div class="ttcap pop" style="--d:.1s">XOR の真理値表</div>
       <table class="tt small pop" style="--d:.1s" id="tXor"></table>
       <div class="point blue frag" style="font-size:20px"><b>片方だけ</b> が 1 のとき 1 → <b class="kb">排他的論理和</b>（exclusive or）<span class="formula" style="font-size:21px;padding:0 10px">A ⊕ B</span><br>
-        ＝ OR の入力が <b>1, 1 のときに 1 にならないようにした</b> ゲート</div>
+        ＝ OR の入力が <b>両方 1 のときに出力が 1 にならないようにした</b> ゲート</div>
       <div class="point frag" style="font-size:20px"><b>2 を法とした和</b> ＝ <b class="k">繰り上がりを考慮しない足し算</b><br>
         <span class="formula" style="font-size:21px;padding:0 10px">A ⊕ B = (A + B) mod 2</span>　1 + 1 = 2 ≡ <b>0</b> (mod 2)</div>
     </div>
@@ -396,7 +396,7 @@ body.overview #ui,body.overview #progress{display:none}
     </div>
     <div>
       <div class="point pop" style="margin-top:0;font-size:20px">出力1（繰り上がり）＝「<b>両方 1 のときだけ繰り上がる</b>」<br><span style="font-size:17px">→ AND そのもの</span></div>
-      <div class="point blue pop" style="--d:.1s;font-size:20px">出力2（和）＝「<b>OR だけど、両方 1 のときは除く</b>」<br><span style="font-size:17px">→ OR と NOT(AND) を AND でつなぐ</span></div>
+      <div class="point blue pop" style="--d:.1s;font-size:20px">出力2（和）＝「<b>OR だけど、両方 1 のときは除く</b>」</div>
       <div class="ttcap pop" style="--d:.2s;margin-top:14px">半加算器の真理値表</div>
       <table class="tt small pop" style="--d:.2s" id="tHa4"></table>
       <div class="point frag" style="font-size:19px">ゲート <b>4個</b>。和が出るまでに <b>3段</b>（AND → NOT → AND）かかる</div>
@@ -417,7 +417,6 @@ body.overview #ui,body.overview #progress{display:none}
     </div>
     <div>
       <div class="formula pop" style="font-size:24px">和 = A ⊕ B　　繰り上がり = A · B</div>
-      <div class="hint pop" style="--d:.1s;font-size:17px">表2.6 の出力2（和）と表2.7 の XOR が一致：XOR は「繰り上がりを気にせず下の桁だけ見た足し算」</div>
       <div class="ttcap pop" style="--d:.2s;margin-top:16px">半加算器の真理値表</div>
       <table class="tt pop" style="--d:.2s" id="tHa2"></table>
       <div class="point frag" style="font-size:19px">AND・OR・NOT 版（図2.18）と <b>同じ結果</b> を、XOR と AND の <b>2個のゲート</b> で出せる</div>
@@ -441,12 +440,14 @@ body.overview #ui,body.overview #progress{display:none}
     </div>
     <div>
       <div class="card pop" style="--d:.15s">
-        <div style="font-weight:700;font-size:18px;margin-bottom:4px">ゲート数</div>
-        <div class="barrow"><span>AND/OR/NOT利用</span><div class="bar-bg"><div class="bar-fill o" style="--w:100%">4個</div></div></div>
-        <div class="barrow"><span>XOR/AND利用</span><div class="bar-bg"><div class="bar-fill a" style="--w:50%;transition-delay:.4s">2個</div></div></div>
-        <div style="font-weight:700;font-size:18px;margin:10px 0 4px">出力までの段数（遅延）</div>
-        <div class="barrow"><span>AND/OR/NOT利用</span><div class="bar-bg"><div class="bar-fill o" style="--w:100%;transition-delay:.8s">3段</div></div></div>
-        <div class="barrow"><span>XOR/AND利用</span><div class="bar-bg"><div class="bar-fill a" style="--w:33%;transition-delay:1.2s">1段</div></div></div>
+        <div style="font-weight:700;font-size:19px;margin-bottom:4px">AND/OR/NOT利用</div>
+        <div class="barrow"><span>ゲート数</span><div class="bar-bg"><div class="bar-fill o" style="--w:100%">4個</div></div></div>
+        <div class="barrow"><span>出力までの段数</span><div class="bar-bg"><div class="bar-fill o" style="--w:100%;transition-delay:.3s">3段</div></div></div>
+      </div>
+      <div class="card pop" style="--d:.3s;margin-top:12px">
+        <div style="font-weight:700;font-size:19px;margin-bottom:4px;color:var(--accent-d)">XOR/AND利用</div>
+        <div class="barrow"><span>ゲート数</span><div class="bar-bg"><div class="bar-fill a" style="--w:50%;transition-delay:.7s">2個</div></div></div>
+        <div class="barrow"><span>出力までの段数</span><div class="bar-bg"><div class="bar-fill a" style="--w:33%;transition-delay:1s">1段</div></div></div>
       </div>
       <div class="point frag">同じ結果を出す回路は複数ある</div>
       <div class="point blue frag">1個のゲートの実行時間が同じなら、<b>ゲート数が少ない・並列化できる回路の方が速い</b></div>
@@ -478,10 +479,11 @@ body.overview #ui,body.overview #progress{display:none}
       <div class="hint">値は回路方式によって変わる目安です</div>
     </div>
     <div>
-      <div class="point frag" style="margin-top:0">教科書の比較は「<b>1個のゲートの実行時間が同じ</b>」という仮定の上での話</div>
-      <div class="point blue frag">実際は、ゲートごとに <b>必要なトランジスタの数</b> も <b>計算時間</b> も違う<br>
-        <span style="font-size:19px">半加算器のトランジスタ数（目安）<br>AND/OR/NOT利用：6 + 6 + 2 + 6 = <b>20個</b><br>XOR/AND利用：12 + 6 = <b>18個</b></span></div>
-      <div class="point frag" style="background:#dcfce7;border-left-color:var(--green)">回路の速さ・大きさは「<b>ゲートの数</b>」だけでなく「<b>どのゲートを使うか</b>」でも決まる<br><span style="font-size:19px">実際の集積回路では、少ないトランジスタで作れる NAND・NOR を基本にすることが多い</span></div>
+      <div class="point blue frag" style="margin-top:0;font-size:19px">教科書の比較は「<b>1個のゲートの実行時間が同じ</b>」という仮定の上での話。実際は、ゲートごとに <b>必要なトランジスタの数</b> も <b>計算時間</b> も違う<br>
+        <span style="font-size:17px">半加算器のトランジスタ数（目安）：AND/OR/NOT利用 <b>20個</b>、XOR/AND利用 <b>18個</b></span></div>
+      <div class="point frag" style="background:#dcfce7;border-left-color:var(--green);font-size:19px">回路の速さ・大きさは「<b>ゲートの数</b>」だけでなく「<b>どのゲートを使うか</b>」でも決まる<br><span style="font-size:17px">実際の集積回路では、少ないトランジスタで作れる NAND・NOR を基本にすることが多い</span></div>
+      <div class="point frag" style="background:#ede9fe;border-left-color:#7c3aed;font-size:19px"><b style="color:#6d28d9">量子コンピュータでも同じ</b>ことが言える<br>
+        <span style="font-size:17px">1量子ビットゲートと2量子ビットゲート（CNOT など）では実行時間や誤りの起こりやすさが違う。量子回路も「ゲートの数」だけでなく「どのゲートを何個使うか」「段数（深さ）」で評価する</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -515,17 +517,23 @@ body.overview #ui,body.overview #progress{display:none}
 <section class="slide">
   <div class="chap">追加内容 ／ 全加算器</div>
   <h2>全加算器の回路を動かしてみる<small>半加算器 × 2 ＋ OR</small></h2>
-  <div class="body cols wide">
-    <div class="card pop">
-      <svg class="circ" id="cFa"></svg>
-      <div class="btns"><button class="b" id="pFa">▶ 自動再生</button></div>
-      <div class="hint">ゲート5個（XOR×2, AND×2, OR×1）。S は 2段、C<sub>out</sub> は 3段で確定します。</div>
+  <div class="body cols wide" style="align-items:start">
+    <div>
+      <div class="card pop" style="padding:10px 18px">
+        <svg class="circ" id="cFa"></svg>
+        <div class="btns" style="margin-top:4px"><button class="b" id="pFa">▶ 自動再生</button>
+          <span class="hint" style="margin:0;align-self:center">ゲート5個（XOR×2, AND×2, OR×1）。S は 2段、C<sub>out</sub> は 3段で確定</span></div>
+      </div>
+      <div class="point blue frag" style="font-size:18px;margin-top:10px"><b>S（和・この桁の出力ビット）</b>：A と B を半加算した和 <b>P</b> を、さらに繰り上がり C<sub>in</sub> と半加算した和
+        <span class="formula" style="font-size:18px;padding:0 8px">S = P ⊕ C<sub>in</sub> = A ⊕ B ⊕ C<sub>in</sub></span></div>
+      <div class="point frag" style="font-size:18px;margin-top:10px"><b>C<sub>out</sub>（繰り上がりビット）</b>：次のどちらかなら 1（OR でまとめる）<br>
+        ① A と B の半加算で <b>繰り上がりがあった</b>（A·B = 1）→ そのまま C<sub>out</sub> = 1<br>
+        ② A と B の半加算の和 P が 1 で、<b>C<sub>in</sub> も 1</b>（半加算器②で繰り上がり）→ C<sub>out</sub> = 1
+        <span class="formula" style="font-size:18px;padding:0 8px">C<sub>out</sub> = A·B + P·C<sub>in</sub></span></div>
     </div>
     <div>
       <div class="ttcap pop" style="--d:.1s">全加算器の真理値表</div>
       <table class="tt small pop" style="--d:.1s" id="tFa"></table>
-      <div class="point blue frag" style="font-size:19px">①で A + B、②で P + C<sub>in</sub> を計算し、2つの繰り上がりを OR でまとめる<br>
-        <span class="formula" style="font-size:20px;padding:2px 10px">C<sub>out</sub> = A·B + (A ⊕ B)·C<sub>in</sub></span></div>
       <div class="hint frag">1 + 1 + 1 = 11₂ の行（入力すべて 1）を選んで、2つの半加算器の動きを確かめよう</div>
     </div>
   </div>
@@ -536,6 +544,7 @@ body.overview #ui,body.overview #progress{display:none}
 <section class="slide" data-id="ripple">
   <div class="chap">追加内容 ／ 多ビット加算器</div>
   <h2>リップルキャリー加算器（繰り上がりのさざ波加算器）<small>全加算器 × 4</small></h2>
+  <p class="pop" style="margin:-12px 0 8px;font-size:19px">図の <b>FA</b> は <b class="k">全加算器（Full Adder）</b> のこと。FA<sub>i</sub> は i 桁目の全加算器</p>
   <div class="body">
     <div class="card pop" style="padding:10px 18px">
       <svg class="circ" id="rippleSvg" style="height:300px"></svg>
