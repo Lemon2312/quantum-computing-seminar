@@ -59,6 +59,16 @@ button.b.playing{background:var(--blue);color:#fff}
 @keyframes pop{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
 
 /* ---------- truth tables ---------- */
+.ttcap{text-align:center;font-size:18px;font-weight:800;color:#334155;margin:0 0 6px}
+.bitex{display:flex;gap:10px;margin:6px 0 4px;flex-wrap:wrap}
+.bitex span{background:#fff;border-radius:10px;padding:4px 12px;font-size:18px;box-shadow:0 2px 8px rgba(15,23,42,.08)}
+.bitex small{display:block;font-size:12px;color:var(--muted)}
+.bitex b{color:var(--accent-d);font-family:Consolas,Menlo,monospace}
+.quote{display:block;background:#fff;border-left:6px solid var(--blue);border-radius:8px;padding:6px 14px;box-shadow:0 2px 8px rgba(15,23,42,.08)}
+.quote small{display:block;text-align:right;font-size:15px;color:var(--muted)}
+.mapline{text-align:center;font-size:20px;margin-top:4px;font-family:Consolas,Menlo,monospace}
+.mapline b{color:var(--blue);font-size:24px}
+.mapline b.o{color:var(--accent-d)}
 table.tt{border-collapse:collapse;font-size:22px;text-align:center;background:#fff;border-radius:12px;overflow:hidden;
   box-shadow:0 4px 16px rgba(15,23,42,.08);margin:0 auto}
 table.tt th,table.tt td{padding:6px 16px;border:1px solid var(--line)}
@@ -189,10 +199,10 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
 <section class="slide" data-id="title">
   <div class="title-wrap">
     <div>
-      <div class="chap pop">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路</div>
+      <div class="chap pop">『量子コンピュータの頭の中』 第2章 ／ 2.8 論理式を実現する古典回路</div>
       <h1 class="pop" style="--d:.1s">論理式を実現する<br>古典回路</h1>
       <div class="sub pop" style="--d:.2s">― 半加算器から全加算器へ ―</div>
-      <div class="meta pop" style="--d:.3s">ゼミ発表資料<br>発表者：＿＿＿＿＿＿</div>
+      <div class="meta pop" style="--d:.3s">教科書：『量子コンピュータの頭の中』<br>ゼミ発表資料<br>発表者：＿＿＿＿＿＿</div>
     </div>
     <div class="card pop" style="--d:.4s">
       <svg class="circ" id="titleCirc"></svg>
@@ -207,10 +217,10 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
   <h2>本日の流れ</h2>
   <div class="body cols even">
     <ul class="agenda">
-      <li class="pop" style="--d:.05s"><span class="num">1</span>古典回路と真理値表（AND / OR / NOT）</li>
+      <li class="pop" style="--d:.05s"><span class="num">1</span>古典回路と真理値表（AND / OR / NOT / XOR）</li>
       <li class="pop" style="--d:.15s"><span class="num">2</span>半加算器：1ビット同士の足し算</li>
-      <li class="pop" style="--d:.25s"><span class="num">3</span>XOR による回路の簡略化</li>
-      <li class="pop" style="--d:.35s"><span class="num new">4</span>全加算器：桁上げを含む足し算 <span class="tag">追加</span></li>
+      <li class="pop" style="--d:.25s"><span class="num">3</span>XOR による半加算器の簡略化</li>
+      <li class="pop" style="--d:.35s"><span class="num new">4</span>全加算器：繰り上がりを含む足し算 <span class="tag">追加</span></li>
       <li class="pop" style="--d:.45s"><span class="num new">5</span>多ビット加算器と量子回路への展望 <span class="tag">追加</span></li>
     </ul>
     <div class="card pop" style="--d:.5s">
@@ -233,15 +243,22 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
   <div class="body cols">
     <div>
       <ul>
-        <li class="pop">古典コンピュータは情報を <b class="k">0 と 1 のビット</b> で表現する</li>
-        <li class="pop" style="--d:.1s">ビットに対する基本的な演算を組み合わせて<br><b class="k">古典回路</b>（classical circuit）を構成し、計算を行う</li>
-        <li class="frag">量子コンピュータも同様に、<b class="kb">量子回路</b>（quantum circuit）という形式で計算を表現する</li>
-        <li class="frag">→ 古典回路の基礎を理解しておくと、<b>量子回路の理解にも役立つ</b></li>
+        <li class="pop" style="font-size:21px">古典コンピュータは情報を <b class="k">0 と 1 のビット</b> で表現する
+          <div class="bitex">
+            <span><small>数</small>5 → <b>101</b></span>
+            <span><small>文字（ASCII）</small>A → <b>01000001</b></span>
+            <span><small>スイッチ</small>OFF / ON → <b>0 / 1</b></span>
+          </div>
+        </li>
+        <li class="pop" style="--d:.1s;font-size:21px">ビットに対する基本的な演算を組み合わせて <b class="k">古典回路</b>（classical circuit）を構成し、計算を行う</li>
+        <li class="frag" style="font-size:21px"><span class="quote">「古典回路は<b>ビット列からビット列への写像</b>である。」<small>by しむさん</small></span></li>
+        <li class="frag" style="font-size:21px">このような、基本的な演算を組み合わせて計算を表現する <b class="kb">「回路」という考え方は、量子コンピュータにも共通する</b></li>
       </ul>
     </div>
     <div class="card pop" style="--d:.2s">
       <div class="muted" style="font-size:17px;font-weight:700">図2.13：古典回路の例</div>
       <svg class="circ" id="c213"></svg>
+      <div class="mapline" id="map213"></div>
       <div class="hint">入力の丸をクリックしてみよう。この回路が何をしているかは後半で分かります。</div>
     </div>
   </div>
@@ -258,6 +275,7 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
       <div class="btns"><button class="b" id="pAnd">▶ 自動再生</button></div>
     </div>
     <div>
+      <div class="ttcap pop" style="--d:.1s">AND の真理値表</div>
       <table class="tt pop" style="--d:.1s" id="tAnd"></table>
       <div class="point frag">入力が <b>両方とも 1 のときだけ</b> 出力が 1<br>かけ算と同じ → <b class="k">論理積</b>　<span class="formula" style="font-size:24px;padding:2px 12px">A · B</span></div>
     </div>
@@ -275,6 +293,7 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
       <div class="btns"><button class="b" id="pOr">▶ 自動再生</button></div>
     </div>
     <div>
+      <div class="ttcap pop" style="--d:.1s">OR の真理値表</div>
       <table class="tt pop" style="--d:.1s" id="tOr"></table>
       <div class="point frag">入力の <b>どちらか一方でも 1</b> なら出力が 1<br>足し算に似ている → <b class="k">論理和</b>　<span class="formula" style="font-size:24px;padding:2px 12px">A + B</span></div>
       <div class="point blue frag" style="font-size:19px">注意：論理和では <b>1 + 1 = 1</b>。普通の足し算（1 + 1 = 2）とは少し違うので「足し算と似た演算」と表現している</div>
@@ -293,6 +312,7 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
       <div class="btns"><button class="b" id="pNot">▶ 自動再生</button></div>
     </div>
     <div>
+      <div class="ttcap pop" style="--d:.1s">NOT の真理値表</div>
       <table class="tt pop" style="--d:.1s" id="tNot"></table>
       <div class="point frag">ビットを <b>反転</b> させる演算（0 と 1 を入れ替える）<br>記号の先端の <b>小さな丸</b> が「反転」を表す</div>
       <div class="point blue frag" style="font-size:19px">古典回路では、左側の線から値を入力し、演算結果を右側の線から出力する</div>
@@ -301,39 +321,64 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
   <div class="pageno"></div>
 </section>
 
-<!-- 7. 組み合わせ -->
+<!-- XOR -->
 <section class="slide">
-  <div class="chap">2.8 論理式を実現する古典回路 ／ ゲートの組み合わせ</div>
-  <h2>ゲートを組み合わせる<small>図2.17</small></h2>
-  <div class="body cols wide">
+  <div class="chap">2.8 論理式を実現する古典回路 ／ 基本ゲート ④</div>
+  <h2>XOR（排他的論理和）<small>表2.7・図2.19</small></h2>
+  <div class="body cols">
     <div class="card pop">
-      <div style="text-align:center"><span class="formula">NOT( (A AND B) OR C )</span></div>
-      <svg class="circ" id="cComb"></svg>
-      <div class="btns"><button class="b" id="pComb">▶ 自動再生</button></div>
-      <div class="hint">途中の値（灰色の文字）も一緒に変化します。信号が1段ずつ伝わる様子に注目。</div>
+      <svg class="circ" id="cXor"></svg>
+      <div class="btns"><button class="b" id="pXor">▶ 自動再生</button></div>
     </div>
     <div>
-      <table class="tt small pop" style="--d:.1s" id="tComb"></table>
+      <div class="ttcap pop" style="--d:.1s">XOR の真理値表</div>
+      <table class="tt pop" style="--d:.1s" id="tXor"></table>
+      <div class="point blue frag">どちらか <b>片方だけ</b> が 1 のとき 1 → <b class="kb">排他的論理和</b>（exclusive or）<span class="formula" style="font-size:24px;padding:2px 12px">A ⊕ B</span></div>
+      <div class="point frag"><b>2 を法とした和</b>（mod 2 の足し算）<br>
+        <span class="formula" style="font-size:24px;padding:2px 12px">A ⊕ B = (A + B) mod 2</span><br>
+        <span style="font-size:19px">1 + 1 = 2 ≡ <b>0</b> (mod 2) … OR の「両方 1」の部分を 0 に変えた演算</span></div>
     </div>
   </div>
   <div class="pageno"></div>
 </section>
 
-<!-- 8. 半加算器の真理値表 -->
+<!-- 半加算器の導入（1ビットの筆算） -->
+<section class="slide" data-id="coladd1">
+  <div class="chap">2.8 論理式を実現する古典回路 ／ 半加算器</div>
+  <h2>1ビット同士の足し算を筆算で考える</h2>
+  <div class="body cols">
+    <div class="card pop">
+      <div class="ca-grid" id="ca1Grid"></div>
+      <div class="ca-msg" id="ca1Msg"></div>
+      <div class="btns" style="justify-content:center">
+        <button class="b" data-case="0">0 + 0</button>
+        <button class="b" data-case="1">0 + 1</button>
+        <button class="b" data-case="2">1 + 0</button>
+        <button class="b" data-case="3">1 + 1</button>
+        <button class="b" id="ca1Auto">▶ 4通りを自動再生</button>
+      </div>
+    </div>
+    <div>
+      <p class="pop" style="margin-top:0">1ビット A と 1ビット B を足すと…</p>
+      <div class="point frag">0 + 0, 0 + 1, 1 + 0 は <b>1桁に収まる</b></div>
+      <div class="point blue frag">1 + 1 = 2 = <b>10₂</b> は1桁に収まらず、<b>上の桁へ繰り上がる</b></div>
+      <div class="point frag" style="background:#dcfce7;border-left-color:var(--green)">答えは「<b>繰り上がり</b>」と「<b>和</b>」の <b>2ビット</b> で表せる<br>→ これを計算する回路が <b style="color:var(--green)">半加算器</b></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 半加算器の真理値表 -->
 <section class="slide">
   <div class="chap">2.8 論理式を実現する古典回路 ／ 半加算器</div>
   <h2>半加算器（half adder）<small>表2.6</small></h2>
   <div class="body">
-    <p class="pop" style="margin:0 0 8px">「2個の1ビットデータの足し算」を行う回路。<b>桁上げも考慮</b>するので、出力は <b>2ビット</b>。</p>
-    <div class="tiles">
-      <div class="tile pop" style="--d:.1s">0 + 0 = <b>00</b><small>桁上げなし</small></div>
-      <div class="tile pop" style="--d:.2s">0 + 1 = <b>01</b><small>桁上げなし</small></div>
-      <div class="tile pop" style="--d:.3s">1 + 0 = <b>01</b><small>桁上げなし</small></div>
-      <div class="tile pop" style="--d:.4s">1 + 1 = <b>10</b><small>桁上げあり！</small></div>
-    </div>
+    <p class="pop" style="margin:0 0 18px">「2個の1ビットデータの足し算」を行う回路。<b>繰り上がりも考慮</b>するので、出力は <b>2ビット</b>。</p>
     <div class="cols even" style="height:auto;align-items:start">
-      <table class="tt pop" style="--d:.5s">
-        <thead><tr><th>入力1</th><th>入力2</th><th class="out">出力1<br>(桁上げ)</th><th class="out">出力2<br>(和)</th><th>対応する計算</th></tr></thead>
+      <div>
+      <div class="ttcap pop" style="--d:.1s">半加算器の真理値表</div>
+      <table class="tt pop" style="--d:.1s">
+        <thead><tr><th>入力1</th><th>入力2</th><th class="out">出力1<br>(繰り上がり)</th><th class="out">出力2<br>(和)</th><th>対応する計算</th></tr></thead>
         <tbody>
           <tr><td>0</td><td>0</td><td class="out">0</td><td class="out">0</td><td class="calc">0+0=00</td></tr>
           <tr><td>0</td><td>1</td><td class="out">0</td><td class="out one">1</td><td class="calc">0+1=01</td></tr>
@@ -341,9 +386,11 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
           <tr><td>1</td><td>1</td><td class="out one">1</td><td class="out">0</td><td class="calc">1+1=10</td></tr>
         </tbody>
       </table>
+      </div>
       <div>
-        <div class="point frag" style="margin-top:0">出力1（桁上げ）の列 <span class="chips"><span class="chip ok">0</span><span class="chip ok">0</span><span class="chip ok">0</span><span class="chip ok">1</span></span><br>→ <b>AND と完全に同じ！</b></div>
+        <div class="point frag" style="margin-top:0">出力1（繰り上がり）の列 <span class="chips"><span class="chip ok">0</span><span class="chip ok">0</span><span class="chip ok">0</span><span class="chip ok">1</span></span><br>→ <b>AND と完全に同じ！</b></div>
         <div class="point blue frag">出力2（和）の列 <span class="chips"><span class="chip ok">0</span><span class="chip ok">1</span><span class="chip ok">1</span><span class="chip ng">0</span></span><br>→ OR（0,1,1,<b>1</b>）に似ているが、<b>両方 1 のときだけ違う</b></div>
+        <div class="point frag" style="background:#dcfce7;border-left-color:var(--green)">出力2（和）は、前に見た <b style="color:var(--green)">XOR（2 を法とした和）</b> と同じ！<br><span style="font-size:19px">まずは AND・OR・NOT だけで作ってみる → 次のページ</span></div>
       </div>
     </div>
   </div>
@@ -362,26 +409,9 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
     <div>
       <p class="pop" style="margin-top:0;font-size:21px">出力2（和）＝「OR だけど、両方 1 のときは除く」</p>
       <div class="formula pop" style="--d:.1s;font-size:21px">出力2 = (入力1 OR 入力2)<br>　　AND NOT(入力1 AND 入力2)</div>
-      <table class="tt small pop" style="--d:.2s;margin-top:14px" id="tHa4"></table>
+      <div class="ttcap pop" style="--d:.2s;margin-top:14px">半加算器の真理値表</div>
+      <table class="tt small pop" style="--d:.2s" id="tHa4"></table>
       <div class="point frag" style="font-size:19px">ゲート <b>4個</b>。和が出るまでに <b>3段</b>（AND → NOT → AND）かかる</div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 10. XOR -->
-<section class="slide">
-  <div class="chap">2.8 論理式を実現する古典回路 ／ XOR</div>
-  <h2>XOR（排他的論理和）<small>表2.7・図2.19</small></h2>
-  <div class="body cols">
-    <div class="card pop">
-      <svg class="circ" id="cXor"></svg>
-      <div class="btns"><button class="b" id="pXor">▶ 自動再生</button></div>
-    </div>
-    <div>
-      <table class="tt pop" style="--d:.1s" id="tXor"></table>
-      <div class="point frag">OR の「入力が両方 1」の部分を 0 に変えた演算<br>= 1ビット同士を足して <b>桁上げを気にせず下の桁だけ</b> 見たもの</div>
-      <div class="point blue frag">どちらか <b>片方だけ</b> が 1 のとき 1 → <b class="kb">排他的論理和</b>（exclusive or）<span class="formula" style="font-size:24px;padding:2px 12px">A ⊕ B</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -398,7 +428,8 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
       <div class="hint">図2.13 と同じ回路です（出力の番号付けだけ逆）</div>
     </div>
     <div>
-      <div class="formula pop" style="font-size:24px">和 = A ⊕ B　　桁上げ = A · B</div>
+      <div class="formula pop" style="font-size:24px">和 = A ⊕ B　　繰り上がり = A · B</div>
+      <div class="hint pop" style="--d:.1s;font-size:17px">表2.6 の出力2（和）と表2.7 の XOR が一致：XOR は「繰り上がりを気にせず下の桁だけ見た足し算」</div>
       <div class="card pop" style="--d:.15s;margin-top:16px">
         <div style="font-weight:700;font-size:18px;margin-bottom:4px">ゲート数</div>
         <div class="barrow"><span>図2.18（AND/OR/NOT）</span><div class="bar-bg"><div class="bar-fill o" style="--w:100%">4個</div></div></div>
@@ -430,8 +461,8 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
     <div>
       <p class="pop" style="margin-top:0">4ビットの足し算 <b>1011₂ (11) + 0111₂ (7)</b> を筆算してみる</p>
       <div class="point frag">1桁目（最下位）は <b>A₀ + B₀</b> の2入力<br>→ 半加算器で OK</div>
-      <div class="point blue frag">2桁目以降は <b>A<sub>i</sub> + B<sub>i</sub> + 下の桁からの桁上げ</b> の <b>3入力</b><br>→ 半加算器では計算できない！</div>
-      <div class="point frag" style="background:#dcfce7;border-left-color:var(--green)">3つのビットを足して「和」と「桁上げ」を出す回路<br>＝ <b style="color:var(--green)">全加算器（full adder）</b></div>
+      <div class="point blue frag">2桁目以降は <b>A<sub>i</sub> + B<sub>i</sub> + 下の桁からの繰り上がり</b> の <b>3入力</b><br>→ 半加算器では計算できない！</div>
+      <div class="point frag" style="background:#dcfce7;border-left-color:var(--green)">3つのビットを足して「和」と「繰り上がり」を出す回路<br>＝ <b style="color:var(--green)">全加算器（full adder）</b></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -443,12 +474,13 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
   <h2>全加算器の真理値表</h2>
   <div class="body cols">
     <div>
+      <div class="ttcap pop">全加算器の真理値表</div>
       <table class="tt pop" id="tFaBig"></table>
     </div>
     <div>
-      <p class="pop" style="margin-top:0">入力：A, B, <b>C<sub>in</sub></b>（下の桁からの桁上げ）<br>出力：<b>C<sub>out</sub></b>（上の桁への桁上げ）, <b>S</b>（和）</p>
+      <p class="pop" style="margin-top:0">入力：A, B, <b>C<sub>in</sub></b>（下の桁からの繰り上がり）<br>出力：<b>C<sub>out</sub></b>（上の桁への繰り上がり）, <b>S</b>（和）</p>
       <div class="point blue frag" data-slide-class="show-s"><b>S（和）</b>：入力の 1 の個数が <b>奇数</b> のとき 1<br><span class="formula" style="font-size:24px;padding:2px 12px">S = A ⊕ B ⊕ C<sub>in</sub></span></div>
-      <div class="point frag" data-slide-class="show-c"><b>C<sub>out</sub>（桁上げ）</b>：1 が <b>2個以上</b> のとき 1（多数決）<br><span class="formula" style="font-size:22px;padding:2px 12px">C<sub>out</sub> = A·B + B·C<sub>in</sub> + A·C<sub>in</sub></span></div>
+      <div class="point frag" data-slide-class="show-c"><b>C<sub>out</sub>（繰り上がり）</b>：1 が <b>2個以上</b> のとき 1（多数決）<br><span class="formula" style="font-size:22px;padding:2px 12px">C<sub>out</sub> = A·B + B·C<sub>in</sub> + A·C<sub>in</sub></span></div>
       <div class="hint frag">行をクリックするとハイライトされます</div>
     </div>
   </div>
@@ -464,10 +496,10 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
       <svg class="circ" id="blockDiag" style="width:780px"></svg>
     </div>
     <div class="cols even" style="height:auto;align-items:start;gap:24px">
-      <div class="point frag" style="margin-top:0">① 半加算器で <b>A + B</b> を計算<br>　→ 和 <b>P = A ⊕ B</b>、桁上げ <b>A · B</b></div>
-      <div class="point frag" style="margin-top:0">② 半加算器で <b>P + C<sub>in</sub></b> を計算<br>　→ 和 <b>S = P ⊕ C<sub>in</sub></b>、桁上げ <b>P · C<sub>in</sub></b></div>
+      <div class="point frag" style="margin-top:0">① 半加算器で <b>A + B</b> を計算<br>　→ 和 <b>P = A ⊕ B</b>、繰り上がり <b>A · B</b></div>
+      <div class="point frag" style="margin-top:0">② 半加算器で <b>P + C<sub>in</sub></b> を計算<br>　→ 和 <b>S = P ⊕ C<sub>in</sub></b>、繰り上がり <b>P · C<sub>in</sub></b></div>
     </div>
-    <div class="point blue frag">③ 2つの桁上げは <b>同時に 1 にならない</b>（A·B = 1 なら P = 0）ので、OR でまとめれば良い<br>
+    <div class="point blue frag">③ 2つの繰り上がりは <b>同時に 1 にならない</b>（A·B = 1 なら P = 0）ので、OR でまとめれば良い<br>
       <span class="formula" style="font-size:24px;padding:2px 12px">C<sub>out</sub> = A·B + (A ⊕ B)·C<sub>in</sub></span></div>
   </div>
   <div class="pageno"></div>
@@ -484,6 +516,7 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
       <div class="hint">ゲート5個（XOR×2, AND×2, OR×1）。S は 2段、C<sub>out</sub> は 3段で確定します。</div>
     </div>
     <div>
+      <div class="ttcap pop" style="--d:.1s">全加算器の真理値表</div>
       <table class="tt small pop" style="--d:.1s" id="tFa"></table>
       <div class="point frag" style="font-size:19px">1 + 1 + 1 = 11₂ の行（入力すべて 1）を選んで、2つの半加算器の動きを確かめよう</div>
     </div>
@@ -500,12 +533,12 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
       <svg class="circ" id="rippleSvg" style="height:300px"></svg>
       <div class="readout" id="rippleOut"></div>
       <div class="btns" style="justify-content:center">
-        <button class="b" id="rpReplay">▶ 桁上げの伝搬を再生</button>
-        <button class="b" id="rpMax">1111 + 0001（最長の桁上げ）</button>
+        <button class="b" id="rpReplay">▶ 繰り上がりの伝搬を再生</button>
+        <button class="b" id="rpMax">1111 + 0001（最長の繰り上がり）</button>
         <button class="b" id="rpRand">ランダム</button>
       </div>
     </div>
-    <div class="point frag" style="font-size:20px">桁上げ C が <b>右（下位）から左（上位）へ波のように伝わる</b>（ripple = さざ波）。n ビットなら最悪 n 個分の全加算器を順番に待つ必要がある → ビット数が増えると遅い</div>
+    <div class="point frag" style="font-size:20px">繰り上がり C が <b>右（下位）から左（上位）へ波のように伝わる</b>（ripple = さざ波）。n ビットなら最悪 n 個分の全加算器を順番に待つ必要がある → ビット数が増えると遅い</div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -539,9 +572,9 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
   <div class="body">
     <ul>
       <li class="pop">古典回路は <b>AND / OR / NOT</b> などの基本演算（ゲート）を組み合わせて計算する。動作は <b>真理値表</b> で表せる</li>
-      <li class="pop" style="--d:.1s"><b>半加算器</b>：1ビット + 1ビット → <b class="k">和 = A ⊕ B</b>、<b class="k">桁上げ = A · B</b></li>
+      <li class="pop" style="--d:.1s"><b>半加算器</b>：1ビット + 1ビット → <b class="k">和 = A ⊕ B</b>、<b class="k">繰り上がり = A · B</b></li>
       <li class="pop" style="--d:.2s">同じ結果を出す回路は複数ある。<b>ゲート数・段数が少ない回路の方が速い</b>（4個・3段 → 2個・1段）</li>
-      <li class="pop" style="--d:.3s"><b>全加算器</b>：下の桁からの桁上げを含む3入力の足し算。<b>半加算器 × 2 + OR</b> で作れる<br>
+      <li class="pop" style="--d:.3s"><b>全加算器</b>：下の桁からの繰り上がりを含む3入力の足し算。<b>半加算器 × 2 + OR</b> で作れる<br>
         <span class="formula" style="font-size:24px;padding:2px 12px">S = A ⊕ B ⊕ C<sub>in</sub>,　C<sub>out</sub> = A·B + (A ⊕ B)·C<sub>in</sub></span></li>
       <li class="pop" style="--d:.4s">全加算器を並べれば <b>任意ビットの加算器</b> になる（リップルキャリー加算器）</li>
       <li class="pop" style="--d:.5s">量子回路でも <b>可逆なゲート（CNOT・トフォリ）</b> で同じ計算が実現できる</li>
@@ -558,10 +591,10 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
     <details class="pop"><summary>Q1. 全加算器の和 S（A + B + C<sub>in</sub> の下の桁）を XOR ゲートだけで作るには、XOR が何個必要？</summary>
       <div>2個。S = (A ⊕ B) ⊕ C<sub>in</sub>。XOR は結合法則が成り立つので、順番に XOR していけば良い。</div></details>
     <details class="pop" style="--d:.1s"><summary>Q2. 4ビットのリップルキャリー加算器に必要なゲート数は？</summary>
-      <div>全加算器 4個 × 5ゲート = <b>20個</b>。最下位桁は桁上げ入力が無いので半加算器（2ゲート）にすれば 2 + 15 = <b>17個</b>。</div></details>
-    <details class="pop" style="--d:.2s"><summary>Q3. 全加算器の桁上げ C<sub>out</sub> は C<sub>in</sub> から何段で出る？ n ビット加算器ではどうなる？</summary>
-      <div>C<sub>in</sub> → AND → OR の <b>2段</b>。n ビットでは桁上げが最大 n 個の全加算器を通るので約 <b>2n 段</b>。ビット数に比例して遅くなる。
-        改善策として、桁上げを先回りして計算する <b>キャリールックアヘッド加算器</b> がある。</div></details>
+      <div>全加算器 4個 × 5ゲート = <b>20個</b>。最下位桁は繰り上がり入力が無いので半加算器（2ゲート）にすれば 2 + 15 = <b>17個</b>。</div></details>
+    <details class="pop" style="--d:.2s"><summary>Q3. 全加算器の繰り上がり C<sub>out</sub> は C<sub>in</sub> から何段で出る？ n ビット加算器ではどうなる？</summary>
+      <div>C<sub>in</sub> → AND → OR の <b>2段</b>。n ビットでは繰り上がりが最大 n 個の全加算器を通るので約 <b>2n 段</b>。ビット数に比例して遅くなる。
+        改善策として、繰り上がりを先回りして計算する <b>キャリールックアヘッド加算器</b> がある。</div></details>
     <details class="pop" style="--d:.3s"><summary>Q4. 引き算（A − B）を全加算器で行うにはどうすればよい？</summary>
       <div>2の補数を使う：B の各ビットを NOT で反転し、最下位の C<sub>in</sub> に 1 を入れて加算すると A + (−B) = A − B になる。</div></details>
   </div>
@@ -761,7 +794,7 @@ function singleGate(id, type, outLabel) {
 }
 
 function halfAdderXor(id, sLabel, cLabel, delay) {
-  const c = new Circuit(id, { viewBox: '-80 40 700 200', delay });
+  const c = new Circuit(id, { viewBox: '-80 40 730 200', delay });
   c.input('A', 50, 110, '入力1'); c.input('B', 50, 170, '入力2');
   c.gate('x', 'XOR', 220, 80, ['A', 'B']);
   c.gate('a', 'AND', 220, 200, ['A', 'B']);
@@ -774,12 +807,16 @@ function halfAdderXor(id, sLabel, cLabel, delay) {
 
 const circuits = {};
 {
-  const c = halfAdderXor('titleCirc', '和', '桁上げ', 380);
+  const c = halfAdderXor('titleCirc', '和', '繰り上がり', 380);
   c.set({}, false);
   setInterval(() => c.setIndex((c.index() + 1) % 4), 2200);
 }
 {
   const c = halfAdderXor('c213', '出力1', '出力2');
+  c.onChange(() => {
+    const v = c.inputVals, s = c.sig;
+    $('#map213').innerHTML = `入力ビット列 <b>${v.A}${v.B}</b> ↦ 出力ビット列 <b class="o">${s.x}${s.a}</b>`;
+  });
   c.set({}, false);
 }
 {
@@ -798,23 +835,7 @@ const circuits = {};
   autoplay('pNot', c); c.set({}, false);
 }
 {
-  const c = new Circuit('cComb', { viewBox: '-20 40 700 200' });
-  c.input('A', 60, 80); c.input('B', 60, 120); c.input('C', 60, 200);
-  c.gate('g1', 'AND', 180, 100, ['A', 'B']);
-  c.gate('g2', 'OR', 320, 150, ['g1', 'C']);
-  c.gate('g3', 'NOT', 430, 150, ['g2']);
-  c.link('A', 'g1.in0', 140); c.link('B', 'g1.in1', 140);
-  c.link('g1', 'g2.in0', 285); c.link('C', 'g2.in1', 300);
-  c.link('g2', 'g3.in0');
-  c.output('Q', 560, 150, 'g3', '出力');
-  c.link('g3', 'Q');
-  c.probe('g1', 250, 86, 'A AND B');
-  c.probe('g2', 330, 222, '(A AND B) OR C');
-  truthTable('tComb', c, [['A', 'A'], ['B', 'B'], ['C', 'C']], [['g3', '出力']]);
-  autoplay('pComb', c); c.set({}, false);
-}
-{
-  const c = new Circuit('cHa4', { viewBox: '-80 40 840 200' });
+  const c = new Circuit('cHa4', { viewBox: '-80 40 880 200' });
   c.input('A', 50, 120, '入力1'); c.input('B', 50, 160, '入力2');
   c.gate('o', 'OR', 200, 80, ['A', 'B']);
   c.gate('a', 'AND', 200, 200, ['A', 'B']);
@@ -825,22 +846,23 @@ const circuits = {};
   c.link('a', 'n.in0', 290);
   c.link('o', 'f.in0', 340); c.link('n', 'f.in1', 395);
   c.output('S', 580, 100, 'f', '出力2 (和)');
-  c.output('C', 580, 200, 'a', '出力1 (桁上げ)');
+  c.output('C', 580, 200, 'a', '出力1 (繰り上がり)');
   c.link('f', 'S'); c.link('a', 'C'); c.dot(290, 200, 'a');
   truthTable('tHa4', c, [['A', '入力1'], ['B', '入力2']], [['a', '出力1'], ['f', '出力2']]);
   autoplay('pHa4', c); c.set({}, false);
 }
 {
   const c = singleGate('cXor', 'XOR', 'A XOR B');
-  truthTable('tXor', c, [['A', 'A'], ['B', 'B']], [['g', 'A XOR B']]);
+  truthTable('tXor', c, [['A', 'A'], ['B', 'B']], [['g', 'A XOR B']],
+    ['(A + B) mod 2', (v, s) => `${v.A + v.B} mod 2 = ${s.g}`]);
   autoplay('pXor', c); c.set({}, false);
 }
 {
-  const c = halfAdderXor('cHa2', '出力2 (和)', '出力1 (桁上げ)');
+  const c = halfAdderXor('cHa2', '出力2 (和)', '出力1 (繰り上がり)');
   autoplay('pHa2', c); c.set({}, false);
 }
 function fullAdder(id) {
-  const c = new Circuit(id, { viewBox: '-80 10 920 300' });
+  const c = new Circuit(id, { viewBox: '-80 10 980 300' });
   c.input('Cin', 50, 40, 'C_{in}'); c.input('A', 50, 128); c.input('B', 50, 175);
   c.box(150, 100, 105, 192, '半加算器①');
   c.box(362, 48, 100, 162, '半加算器②');
@@ -855,7 +877,7 @@ function fullAdder(id) {
   c.link('x1', 'x2.in1', 300); c.link('x1', 'a2.in1', 300); c.dot(300, 140, 'x1');
   c.link('a2', 'o.in0', 480); c.link('a1', 'o.in1', 500);
   c.output('S', 680, 80, 'x2', 'S (和)');
-  c.output('Cout', 680, 220, 'o', 'C_{out} (桁上げ)');
+  c.output('Cout', 680, 220, 'o', 'C_{out} (繰り上がり)');
   c.link('x2', 'S'); c.link('o', 'Cout');
   c.probe('x1', 262, 162, 'P');
   c.probe('a1', 340, 280, 'A·B');
@@ -906,59 +928,69 @@ function fullAdder(id) {
 }
 
 /* ---------- 筆算アニメーション ---------- */
+function columnAdder(grid, msg, A, B, describe) {
+  const n = A.length;
+  let c, S, cells, step;
+  const build = () => {
+    c = [0]; S = [];
+    for (let i = 0; i < n; i++) { const t = A[i] + B[i] + c[i]; S[i] = t & 1; c[i + 1] = t >> 1; }
+    S[n] = c[n];
+    grid.style.gridTemplateColumns = `130px repeat(${n + 1}, 72px)`;
+    grid.innerHTML = '';
+    cells = { carry: [], a: [], b: [], s: [] };
+    const row = (label, key, fn, cls = '') => {
+      const l = document.createElement('div'); l.className = 'rl'; l.textContent = label; grid.appendChild(l);
+      for (let bit = n; bit >= 0; bit--) {
+        const d = document.createElement('div'); d.className = cls;
+        d.innerHTML = fn(bit);
+        grid.appendChild(d); cells[key][bit] = d;
+      }
+    };
+    row('繰り上がり', 'carry', bit => bit > 0 && c[bit] ? '<span>1</span>' : '<span></span>', 'carry');
+    row('A', 'a', bit => bit < n ? A[bit] : '');
+    row('+ B', 'b', bit => bit < n ? B[bit] : '');
+    const bar = document.createElement('div'); bar.className = 'bar'; grid.appendChild(bar);
+    row('和', 's', bit => `<span>${S[bit]}</span>`, 'sum');
+    step = 0;
+  };
+  const api = {
+    reset() { build(); msg.innerHTML = describe.start; },
+    setOperands(a, b) { A = a; B = b; api.reset(); },
+    get done() { return step > n; },
+    next() {
+      if (step > n) return;
+      Object.values(cells).flat().forEach(d => d.classList.remove('hl'));
+      const k = step;
+      ['carry', 'a', 'b', 's'].forEach(r => cells[r][k].classList.add('hl'));
+      cells.s[k].classList.add('show');
+      if (k < n && c[k + 1]) cells.carry[k + 1].classList.add('show');
+      msg.innerHTML = k < n ? describe.step(k, A, B, c, S) : describe.end(A, B, c, S);
+      step++;
+    },
+  };
+  api.reset();
+  return api;
+}
 {
-  const A = [1, 1, 0, 1], B = [1, 1, 1, 0];
-  const c = [0]; const S = [];
-  for (let i = 0; i < 4; i++) { const t = A[i] + B[i] + c[i]; S[i] = t & 1; c[i + 1] = t >> 1; }
-  S[4] = c[4];
-  const grid = $('#caGrid');
-  const cells = { carry: [], a: [], b: [], s: [] };
-  const row = (label, key, fn, cls = '') => {
-    const l = document.createElement('div'); l.className = 'rl'; l.textContent = label; grid.appendChild(l);
-    for (let j = 0; j < 5; j++) {
-      const bit = 4 - j;
-      const d = document.createElement('div'); d.className = cls;
-      d.innerHTML = fn(bit);
-      grid.appendChild(d); cells[key][bit] = d;
-    }
-  };
-  row('桁上げ', 'carry', bit => bit > 0 && c[bit] ? '<span>1</span>' : '<span></span>', 'carry');
-  row('A', 'a', bit => bit < 4 ? A[bit] : '');
-  row('+ B', 'b', bit => bit < 4 ? B[bit] : '');
-  const bar = document.createElement('div'); bar.className = 'bar'; grid.appendChild(bar);
-  row('和', 's', bit => `<span>${S[bit]}</span>`, 'sum');
-  const msg = $('#caMsg');
-  let step = 0, timer = null;
-  const all = () => Object.values(cells).flat();
-  const reset = () => {
-    step = 0; all().forEach(d => d.classList.remove('show', 'hl'));
-    msg.innerHTML = '右端（1桁目）から順に足していきます';
-    stopAuto();
-  };
-  const next = () => {
-    if (step > 4) return;
-    all().forEach(d => d.classList.remove('hl'));
-    const k = step;
-    ['carry', 'a', 'b', 's'].forEach(r => cells[r][k].classList.add('hl'));
-    cells.s[k].classList.add('show');
-    if (k < 4) {
-      if (c[k + 1]) cells.carry[k + 1].classList.add('show');
-      const terms = k === 0 ? `${A[k]} + ${B[k]}` : `${A[k]} + ${B[k]} + <b style="color:var(--accent)">${c[k]}</b>(桁上げ)`;
+  const ca = columnAdder($('#caGrid'), $('#caMsg'), [1, 1, 0, 1], [1, 1, 1, 0], {
+    start: '右端（1桁目）から順に足していきます',
+    step(k, A, B, c, S) {
+      const terms = k === 0 ? `${A[k]} + ${B[k]}` : `${A[k]} + ${B[k]} + <b style="color:var(--accent)">${c[k]}</b>(繰り上がり)`;
       const note = k === 0 ? '<span class="muted">入力2つ → 半加算器でOK</span>' : '<b style="color:var(--blue)">入力3つ → 全加算器が必要！</b>';
-      msg.innerHTML = `${k + 1}桁目：${terms} = ${c[k + 1]}${S[k]}₂ → 和 <b>${S[k]}</b>、桁上げ <b>${c[k + 1]}</b><br>${note}`;
-    } else {
-      msg.innerHTML = `最後の桁上げがそのまま最上位へ<br>結果：<b>1011₂ (11) + 0111₂ (7) = 10010₂ (18)</b>`;
-    }
-    step++;
-    if (step > 4) stopAuto();
-  };
+      return `${k + 1}桁目：${terms} = ${c[k + 1]}${S[k]}₂ → 和 <b>${S[k]}</b>、繰り上がり <b>${c[k + 1]}</b><br>${note}`;
+    },
+    end: () => '最後の繰り上がりがそのまま最上位へ<br>結果：<b>1011₂ (11) + 0111₂ (7) = 10010₂ (18)</b>',
+  });
+  let timer = null;
+  const next = () => { ca.next(); if (ca.done) stopAuto(); };
+  const reset = () => { ca.reset(); stopAuto(); };
   function stopAuto() { clearInterval(timer); timer = null; $('#caAuto').textContent = '▶ 自動'; $('#caAuto').classList.remove('playing'); }
   $('#caNext').onclick = e => { e.currentTarget.blur(); next(); };
   $('#caReset').onclick = e => { e.currentTarget.blur(); reset(); };
   $('#caAuto').onclick = e => {
     e.currentTarget.blur();
     if (timer) return stopAuto();
-    if (step > 4) reset();
+    if (ca.done) reset();
     $('#caAuto').textContent = '■ 停止'; $('#caAuto').classList.add('playing');
     next(); timer = setInterval(next, 2200);
   };
@@ -966,6 +998,38 @@ function fullAdder(id) {
   reset();
   window.onEnter = window.onEnter || {};
   onEnter.coladd = reset;
+}
+{
+  const cases = [[0, 0], [0, 1], [1, 0], [1, 1]];
+  const ca = columnAdder($('#ca1Grid'), $('#ca1Msg'), [0], [0], {
+    start: '下のボタンで足し算の組み合わせを選んでください',
+    step: (k, A, B, c, S) => `${A[0]} + ${B[0]} = ${c[1]}${S[0]}₂ → 和 <b>${S[0]}</b>、繰り上がり <b>${c[1]}</b><br>` +
+      (c[1] ? '<b style="color:var(--blue)">1桁に収まらないので、上の桁へ繰り上がる！</b>' : '<span class="muted">1桁に収まる（繰り上がりなし）</span>'),
+    end: (A, B, c, S) => `結果：${A[0]} + ${B[0]} = <b>${c[1]}${S[0]}₂</b><br>（繰り上がり <b>${c[1]}</b>・和 <b>${S[0]}</b> の2ビット）`,
+  });
+  const btns = [...document.querySelectorAll('[data-case]')];
+  const auto = $('#ca1Auto');
+  let timers = [], autoOn = false;
+  const clear = () => { timers.forEach(clearTimeout); timers = []; };
+  const play = (i, onDone) => {
+    clear();
+    btns.forEach((b, j) => b.classList.toggle('playing', j === i));
+    ca.setOperands([cases[i][0]], [cases[i][1]]);
+    timers.push(setTimeout(() => ca.next(), 400));
+    timers.push(setTimeout(() => ca.next(), 1700));
+    if (onDone) timers.push(setTimeout(onDone, 3400));
+  };
+  const stopAuto = () => { clear(); autoOn = false; auto.textContent = '▶ 4通りを自動再生'; auto.classList.remove('playing'); };
+  btns.forEach((b, i) => b.addEventListener('click', () => { b.blur(); stopAuto(); play(i); }));
+  auto.addEventListener('click', () => {
+    auto.blur();
+    if (autoOn) return stopAuto();
+    autoOn = true; auto.textContent = '■ 停止'; auto.classList.add('playing');
+    const loop = i => play(i, () => loop((i + 1) % 4));
+    loop(0);
+  });
+  stoppers.push(stopAuto);
+  onEnter.coladd1 = () => { stopAuto(); btns.forEach(b => b.classList.remove('playing')); ca.setOperands([0], [0]); };
 }
 
 /* ---------- リップルキャリー加算器 ---------- */
@@ -1105,7 +1169,7 @@ function fullAdder(id) {
     text(gT, 616, y + 7, label, { class: 'lbl' });
     return [g, t];
   };
-  const o0 = out(60, 'a'), o1 = out(130, 'a⊕b = 和'), o2 = out(200, 'a·b = 桁上げ');
+  const o0 = out(60, 'a'), o1 = out(130, 'a⊕b = 和'), o2 = out(200, 'a·b = 繰り上がり');
   function upd() {
     const s = a ^ b, c = a & b;
     ga.classList.toggle('on', !!a); ta.textContent = a;
