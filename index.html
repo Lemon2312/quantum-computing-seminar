@@ -543,7 +543,6 @@ body.overview #ui,body.overview #progress{display:none}
 <section class="slide" data-id="ripple">
   <div class="chap">追加内容 ／ 多ビット加算器</div>
   <h2>リップルキャリー加算器（繰り上がりのさざ波加算器）<small>全加算器 × 4</small></h2>
-  <p class="pop" style="margin:-12px 0 8px;font-size:19px">図の <b>FA</b> は <b class="k">全加算器（Full Adder）</b> のこと。FA<sub>i</sub> は i 桁目の全加算器</p>
   <div class="body">
     <div class="card pop" style="padding:10px 18px">
       <svg class="circ" id="rippleSvg" style="height:300px"></svg>
@@ -1035,7 +1034,7 @@ function columnAdder(grid, msg, A, B, describe) {
     if (i < 3) text(gT, x - 45, 178, `C_{${i + 1}}`, { class: 'probe', 'text-anchor': 'middle' });
     const g = el('g', { class: 'fa' }, gB);
     el('rect', { x, y: 140, width: 150, height: 100, rx: 14 }, g);
-    text(g, x + 75, 168, `FA_{${i}}`, { class: 't1' });
+    text(g, x + 75, 168, '全加算器', { class: 't1' });
     P.t2[i] = el('text', { x: x + 75, y: 198, class: 't2' }, g);
     P.t3[i] = el('text', { x: x + 75, y: 226, class: 't3' }, g);
     P.box[i] = g;
