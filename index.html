@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>論理式を実現する古典回路 ― 半加算器から全加算器へ</title>
+<style>
+:root{
+  --ink:#0f172a; --muted:#64748b; --line:#cbd5e1; --bg:#eef2f7;
+  --accent:#f97316; --accent-d:#c2410c; --accent-l:#ffedd5;
+  --blue:#2563eb; --blue-l:#dbeafe; --green:#16a34a;
+  --off:#94a3b8;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#1e293b;overflow:hidden;
+  font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;color:var(--ink)}
+#viewport{position:fixed;inset:0}
+#stage{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform-origin:center center;
+  background:var(--bg);box-shadow:0 20px 60px rgba(0,0,0,.4);overflow:hidden}
+
+/* ---------- slides ---------- */
+.slide{position:absolute;inset:0;padding:44px 64px 50px;opacity:0;pointer-events:none;
+  transform:translateX(60px);transition:opacity .55s ease,transform .55s ease;display:flex;flex-direction:column}
+.slide.past{transform:translateX(-60px)}
+.slide.active{opacity:1;transform:none;pointer-events:auto}
+.slide::before{content:"";position:absolute;left:0;top:0;right:0;height:6px;
+  background:linear-gradient(90deg,var(--accent),#facc15 50%,var(--blue))}
+.chap{font-size:15px;color:var(--muted);letter-spacing:.05em}
+h2{font-size:38px;margin:6px 0 22px;padding-left:16px;border-left:10px solid var(--accent);line-height:1.25}
+h2 small{font-size:22px;color:var(--muted);font-weight:500;margin-left:12px}
+.pageno{position:absolute;right:30px;bottom:16px;font-size:14px;color:var(--muted)}
+.body{flex:1;min-height:0}
+p,li{font-size:23px;line-height:1.6}
+ul{margin:0;padding-left:1.2em}
+li{margin:6px 0}
+b.k{color:var(--accent-d)}
+b.kb{color:var(--blue)}
+.muted{color:var(--muted)}
+.cols{display:grid;grid-template-columns:1.25fr 1fr;gap:30px;align-items:center;height:100%}
+.cols.even{grid-template-columns:1fr 1fr}
+.cols.wide{grid-template-columns:1.7fr 1fr}
+.card{background:#fff;border-radius:18px;box-shadow:0 6px 24px rgba(15,23,42,.08);padding:18px 22px}
+.point{background:var(--accent-l);border-left:7px solid var(--accent);padding:12px 18px;border-radius:10px;font-size:22px;line-height:1.55;margin-top:14px}
+.point.blue{background:var(--blue-l);border-left-color:var(--blue)}
+.hint{font-size:16px;color:var(--muted);margin-top:6px}
+.formula{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:30px;background:#fff;border-radius:12px;
+  padding:10px 20px;display:inline-block;box-shadow:0 3px 12px rgba(15,23,42,.08)}
+sub{font-size:.65em}
+.center{display:flex;justify-content:center;align-items:center}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+button.b{font:inherit;font-size:16px;padding:7px 16px;border-radius:999px;border:2px solid var(--blue);background:#fff;color:var(--blue);cursor:pointer;font-weight:700}
+button.b:hover{background:var(--blue-l)}
+button.b.playing{background:var(--blue);color:#fff}
+
+/* fragments & entrance animations */
+.frag{opacity:0;transform:translateY(18px);transition:opacity .45s ease,transform .45s ease}
+.frag.vis{opacity:1;transform:none}
+.slide.active .pop{animation:pop .6s cubic-bezier(.2,.8,.3,1.2) both;animation-delay:var(--d,0s)}
+@keyframes pop{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+
+/* ---------- truth tables ---------- */
+table.tt{border-collapse:collapse;font-size:22px;text-align:center;background:#fff;border-radius:12px;overflow:hidden;
+  box-shadow:0 4px 16px rgba(15,23,42,.08);margin:0 auto}
+table.tt th,table.tt td{padding:6px 16px;border:1px solid var(--line)}
+table.tt th{background:#e2e8f0;font-size:18px;white-space:nowrap}
+table.tt th.out{background:#fde7d3}
+table.tt td.calc{font-family:Consolas,Menlo,monospace;color:var(--muted);font-size:19px}
+table.tt td.out.one{color:var(--accent-d);font-weight:800}
+table.tt tbody tr{cursor:pointer;transition:background .2s}
+table.tt tbody tr:hover td{background:#f8fafc}
+table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(250,204,21,.38)}
+table.tt.small{font-size:18px}
+table.tt.small th,table.tt.small td{padding:3px 12px}
+table.tt.small th{font-size:15px}
+table.tt td{transition:background .3s,color .3s}
+.slide.show-s table.tt td.s1{background:var(--blue-l);color:var(--blue);font-weight:800}
+.slide.show-c table.tt td.c1{background:#fed7aa;color:var(--accent-d);font-weight:800}
+
+/* ---------- circuits (SVG) ---------- */
+svg.circ{width:100%;height:auto;display:block;user-select:none}
+.wire{fill:none;stroke:var(--off);stroke-width:4;stroke-linejoin:round;stroke-linecap:round;transition:stroke .25s}
+.wire.on{stroke:var(--accent)}
+.flow{fill:none;stroke:#fff;stroke-width:2.2;stroke-dasharray:4 12;stroke-linecap:round;opacity:0;transition:opacity .25s}
+.flow.on{opacity:.95;animation:flow .55s linear infinite}
+@keyframes flow{from{stroke-dashoffset:16}to{stroke-dashoffset:0}}
+.dot{fill:var(--off);transition:fill .25s}
+.dot.on{fill:var(--accent)}
+.gate path,.gate circle{fill:#fff;stroke:#1e293b;stroke-width:3;transition:fill .3s,stroke .3s}
+.gate path.xorback{fill:none}
+.gate.on path:not(.xorback),.gate.on circle{fill:var(--accent-l);stroke:var(--accent-d)}
+.gate.on path.xorback{stroke:var(--accent-d)}
+.gate.on{filter:drop-shadow(0 0 6px rgba(249,115,22,.55))}
+.glabel{font-size:11px;fill:var(--muted);text-anchor:middle;font-weight:700;pointer-events:none}
+.inp{cursor:pointer}
+.inp circle{fill:#fff;stroke:var(--blue);stroke-width:3;transition:fill .2s}
+.inp:hover circle{fill:var(--blue-l)}
+.inp.on circle{fill:var(--blue);stroke:var(--blue)}
+.inp .val{fill:var(--blue)}
+.inp.on .val{fill:#fff}
+.val{font-size:19px;font-weight:800;text-anchor:middle;pointer-events:none;font-family:Consolas,Menlo,monospace}
+.lbl{font-size:20px;font-weight:700;fill:var(--ink)}
+.lamp circle{fill:#f1f5f9;stroke:#475569;stroke-width:3;transition:fill .3s,stroke .3s}
+.lamp .val{fill:#475569}
+.lamp.on circle{fill:#facc15;stroke:var(--accent-d);filter:drop-shadow(0 0 10px rgba(250,204,21,.9))}
+.lamp.on .val{fill:#7c2d12}
+.probe{font-size:15px;font-weight:700;fill:var(--muted);font-family:Consolas,Menlo,monospace;transition:fill .3s}
+.probe.on{fill:var(--accent-d)}
+.habox{fill:rgba(37,99,235,.05);stroke:var(--blue);stroke-width:2;stroke-dasharray:7 6}
+.halbl{font-size:15px;font-weight:700;fill:var(--blue)}
+
+/* ripple adder */
+.fa rect{fill:#fff;stroke:#1e293b;stroke-width:3;transition:fill .3s,stroke .3s}
+.fa.active rect{fill:#fef3c7;stroke:var(--accent);filter:drop-shadow(0 0 12px rgba(249,115,22,.7))}
+.fa.done rect{fill:#f8fafc}
+.fa .t1{font-size:22px;font-weight:800;text-anchor:middle}
+.fa .t2{font-size:18px;text-anchor:middle;fill:var(--muted);font-family:Consolas,Menlo,monospace}
+.fa .t3{font-size:20px;text-anchor:middle;fill:var(--accent-d);font-weight:800;font-family:Consolas,Menlo,monospace}
+.wait .val{fill:#94a3b8}
+.wire.wait{stroke:#cbd5e1;stroke-dasharray:6 6}
+.readout{font-size:26px;text-align:center;margin-top:6px;font-family:Consolas,Menlo,monospace}
+.readout .eq{color:var(--accent-d);font-weight:800}
+
+/* column addition */
+.ca-grid{display:grid;grid-template-columns:110px repeat(5,72px);gap:6px 6px;justify-content:center;font-family:Consolas,Menlo,monospace}
+.ca-grid div{height:64px;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700;border-radius:10px;transition:background .3s}
+.ca-grid .rl{font-size:18px;font-family:inherit;color:var(--muted);justify-content:flex-end;padding-right:10px;font-weight:700}
+.ca-grid .carry{font-size:26px;color:var(--accent);height:44px}
+.ca-grid .carry span,.ca-grid .sum span{opacity:0;transform:translateY(-20px);transition:all .5s cubic-bezier(.2,.8,.3,1.3)}
+.ca-grid .carry.show span,.ca-grid .sum.show span{opacity:1;transform:none}
+.ca-grid .sum{color:var(--blue)}
+.ca-grid .hl{background:#fef3c7}
+.ca-grid .bar{grid-column:1/-1;height:4px;background:var(--ink);border-radius:2px}
+.ca-msg{min-height:80px;font-size:23px;margin-top:16px;line-height:1.5;text-align:center}
+
+/* bars */
+.barrow{display:grid;grid-template-columns:190px 1fr;align-items:center;gap:10px;margin:8px 0;font-size:18px}
+.bar-bg{background:#e2e8f0;border-radius:8px;height:30px;overflow:hidden}
+.bar-fill{height:100%;width:0;border-radius:8px;transition:width 1.2s cubic-bezier(.2,.8,.3,1);display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-weight:800}
+.slide.active .bar-fill{width:var(--w)}
+.bar-fill.o{background:var(--off)}
+.bar-fill.a{background:var(--accent)}
+
+/* bit tiles */
+.tiles{display:flex;gap:14px;justify-content:center;margin:6px 0 16px}
+.tile{background:#fff;border-radius:14px;padding:10px 18px;font-family:Consolas,Menlo,monospace;font-size:28px;box-shadow:0 4px 14px rgba(15,23,42,.08);text-align:center}
+.tile b{color:var(--accent-d)}
+.tile small{display:block;font-size:14px;color:var(--muted);font-family:inherit}
+.chips{display:inline-flex;gap:6px;vertical-align:middle}
+.chip{display:inline-block;width:34px;text-align:center;border-radius:6px;background:#fff;font-family:Consolas,monospace;font-weight:800;border:2px solid var(--line)}
+.chip.ng{border-color:#dc2626;color:#dc2626;background:#fee2e2}
+.chip.ok{border-color:var(--green);color:var(--green)}
+
+/* title */
+.title-wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:30px;align-items:center;height:100%}
+.title-wrap h1{font-size:54px;line-height:1.25;margin:0 0 14px}
+.title-wrap .sub{font-size:30px;color:var(--accent-d);font-weight:700;margin-bottom:34px}
+.title-wrap .meta{font-size:20px;color:var(--muted);line-height:1.8}
+.agenda li{font-size:27px;margin:16px 0;list-style:none;display:flex;align-items:center;gap:16px}
+.agenda .num{width:46px;height:46px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;flex:none}
+.agenda .new{background:var(--accent)}
+.tag{font-size:15px;background:var(--accent);color:#fff;border-radius:999px;padding:2px 12px;font-weight:700}
+details{background:#fff;border-radius:12px;padding:10px 18px;margin:10px 0;box-shadow:0 3px 12px rgba(15,23,42,.06);font-size:22px}
+details summary{cursor:pointer;font-weight:700}
+details[open] summary{color:var(--accent-d)}
+details div{margin-top:8px;line-height:1.6;color:#334155}
+
+/* ---------- UI ---------- */
+#ui{position:fixed;left:0;right:0;bottom:0;height:40px;display:flex;align-items:center;gap:10px;padding:0 14px;
+  color:#cbd5e1;font-size:14px;opacity:.25;transition:opacity .3s;z-index:10}
+#ui:hover{opacity:1}
+#ui button{background:#334155;color:#fff;border:0;border-radius:6px;padding:5px 12px;cursor:pointer;font:inherit}
+#progress{position:fixed;left:0;bottom:0;height:4px;background:var(--accent);transition:width .4s;z-index:11}
+
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{overflow:visible;background:#fff}
+  #viewport{position:static}
+  #stage{position:static;transform:none!important;box-shadow:none;width:auto;height:auto;overflow:visible;background:none}
+  .slide{position:relative;width:1280px;height:720px;opacity:1;transform:none;page-break-after:always;background:var(--bg)}
+  .frag{opacity:1;transform:none}
+  #ui,#progress,.btns,.hint{display:none}
+}
+</style>
+</head>
+<body>
+<div id="viewport"><div id="stage">
+
+<!-- 1. タイトル -->
+<section class="slide" data-id="title">
+  <div class="title-wrap">
+    <div>
+      <div class="chap pop">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路</div>
+      <h1 class="pop" style="--d:.1s">論理式を実現する<br>古典回路</h1>
+      <div class="sub pop" style="--d:.2s">― 半加算器から全加算器へ ―</div>
+      <div class="meta pop" style="--d:.3s">ゼミ発表資料<br>発表者：＿＿＿＿＿＿</div>
+    </div>
+    <div class="card pop" style="--d:.4s">
+      <svg class="circ" id="titleCirc"></svg>
+      <div class="hint" style="text-align:center">信号の流れ（オレンジ = 1）を見ながら進めます</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. 本日の流れ -->
+<section class="slide">
+  <div class="chap">Agenda</div>
+  <h2>本日の流れ</h2>
+  <div class="body cols even">
+    <ul class="agenda">
+      <li class="pop" style="--d:.05s"><span class="num">1</span>古典回路と真理値表（AND / OR / NOT）</li>
+      <li class="pop" style="--d:.15s"><span class="num">2</span>半加算器：1ビット同士の足し算</li>
+      <li class="pop" style="--d:.25s"><span class="num">3</span>XOR による回路の簡略化</li>
+      <li class="pop" style="--d:.35s"><span class="num new">4</span>全加算器：桁上げを含む足し算 <span class="tag">追加</span></li>
+      <li class="pop" style="--d:.45s"><span class="num new">5</span>多ビット加算器と量子回路への展望 <span class="tag">追加</span></li>
+    </ul>
+    <div class="card pop" style="--d:.5s">
+      <p style="margin:0 0 8px;font-weight:700">このスライドの使い方</p>
+      <ul>
+        <li style="font-size:19px">回路の <b class="kb">青い丸（入力）</b> をクリックすると 0 / 1 が切り替わります</li>
+        <li style="font-size:19px">真理値表の行をクリックすると、その入力が回路に入ります</li>
+        <li style="font-size:19px">信号は1段ずつ遅れて伝わるので、<b class="k">回路の段数（遅さ）</b>も目で見えます</li>
+        <li style="font-size:19px">← → キー / スペースでページ送り、F キーで全画面</li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 3. 古典回路とは -->
+<section class="slide">
+  <div class="chap">2.8 論理式を実現する古典回路</div>
+  <h2>古典回路とは</h2>
+  <div class="body cols">
+    <div>
+      <ul>
+        <li class="pop">古典コンピュータは情報を <b class="k">0 と 1 のビット</b> で表現する</li>
+        <li class="pop" style="--d:.1s">ビットに対する基本的な演算を組み合わせて<br><b class="k">古典回路</b>（classical circuit）を構成し、計算を行う</li>
+        <li class="frag">量子コンピュータも同様に、<b class="kb">量子回路</b>（quantum circuit）という形式で計算を表現する</li>
+        <li class="frag">→ 古典回路の基礎を理解しておくと、<b>量子回路の理解にも役立つ</b></li>
+      </ul>
+    </div>
+    <div class="card pop" style="--d:.2s">
+      <div class="muted" style="font-size:17px;font-weight:700">図2.13：古典回路の例</div>
+      <svg class="circ" id="c213"></svg>
+      <div class="hint">入力の丸をクリックしてみよう。この回路が何をしているかは後半で分かります。</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 4. AND -->
+<section class="slide">
+  <div class="chap">2.8 論理式を実現する古典回路 ／ 基本ゲート ①</div>
+  <h2>AND（論理積）<small>表2.3・図2.14</small></h2>
+  <div class="body cols">
+    <div class="card pop">
+      <svg class="circ" id="cAnd"></svg>
+      <div class="btns"><button class="b" id="pAnd">▶ 自動再生</button></div>
+    </div>
+    <div>
+      <table class="tt pop" style="--d:.1s" id="tAnd"></table>
+      <div class="point frag">入力が <b>両方とも 1 のときだけ</b> 出力が 1<br>かけ算と同じ → <b class="k">論理積</b>　<span class="formula" style="font-size:24px;padding:2px 12px">A · B</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 5. OR -->
+<section class="slide">
+  <div class="chap">2.8 論理式を実現する古典回路 ／ 基本ゲート ②</div>
+  <h2>OR（論理和）<small>表2.4・図2.15</small></h2>
+  <div class="body cols">
+    <div class="card pop">
+      <svg class="circ" id="cOr"></svg>
+      <div class="btns"><button class="b" id="pOr">▶ 自動再生</button></div>
+    </div>
+    <div>
+      <table class="tt pop" style="--d:.1s" id="tOr"></table>
+      <div class="point frag">入力の <b>どちらか一方でも 1</b> なら出力が 1<br>足し算に似ている → <b class="k">論理和</b>　<span class="formula" style="font-size:24px;padding:2px 12px">A + B</span></div>
+      <div class="point blue frag" style="font-size:19px">注意：論理和では <b>1 + 1 = 1</b>。普通の足し算（1 + 1 = 2）とは少し違うので「足し算と似た演算」と表現している</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 6. NOT -->
+<section class="slide">
+  <div class="chap">2.8 論理式を実現する古典回路 ／ 基本ゲート ③</div>
+  <h2>NOT（否定）<small>表2.5・図2.16</small></h2>
+  <div class="body cols">
+    <div class="card pop">
+      <svg class="circ" id="cNot"></svg>
+      <div class="btns"><button class="b" id="pNot">▶ 自動再生</button></div>
+    </div>
+    <div>
+      <table class="tt pop" style="--d:.1s" id="tNot"></table>
+      <div class="point frag">ビットを <b>反転</b> させる演算（0 と 1 を入れ替える）<br>記号の先端の <b>小さな丸</b> が「反転」を表す</div>
+      <div class="point blue frag" style="font-size:19px">古典回路では、左側の線から値を入力し、演算結果を右側の線から出力する</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 7. 組み合わせ -->
+<section class="slide">
+  <div class="chap">2.8 論理式を実現する古典回路 ／ ゲートの組み合わせ</div>
+  <h2>ゲートを組み合わせる<small>図2.17</small></h2>
+  <div class="body cols wide">
+    <div class="card pop">
+      <div style="text-align:center"><span class="formula">NOT( (A AND B) OR C )</span></div>
+      <svg class="circ" id="cComb"></svg>
+      <div class="btns"><button class="b" id="pComb">▶ 自動再生</button></div>
+      <div class="hint">途中の値（灰色の文字）も一緒に変化します。信号が1段ずつ伝わる様子に注目。</div>
+    </div>
+    <div>
+      <table class="tt small pop" style="--d:.1s" id="tComb"></table>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8. 半加算器の真理値表 -->
+<section class="slide">
+  <div class="chap">2.8 論理式を実現する古典回路 ／ 半加算器</div>
+  <h2>半加算器（half adder）<small>表2.6</small></h2>
+  <div class="body">
+    <p class="pop" style="margin:0 0 8px">「2個の1ビットデータの足し算」を行う回路。<b>桁上げも考慮</b>するので、出力は <b>2ビット</b>。</p>
+    <div class="tiles">
+      <div class="tile pop" style="--d:.1s">0 + 0 = <b>00</b><small>桁上げなし</small></div>
+      <div class="tile pop" style="--d:.2s">0 + 1 = <b>01</b><small>桁上げなし</small></div>
+      <div class="tile pop" style="--d:.3s">1 + 0 = <b>01</b><small>桁上げなし</small></div>
+      <div class="tile pop" style="--d:.4s">1 + 1 = <b>10</b><small>桁上げあり！</small></div>
+    </div>
+    <div class="cols even" style="height:auto;align-items:start">
+      <table class="tt pop" style="--d:.5s">
+        <thead><tr><th>入力1</th><th>入力2</th><th class="out">出力1<br>(桁上げ)</th><th class="out">出力2<br>(和)</th><th>対応する計算</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td class="out">0</td><td class="out">0</td><td class="calc">0+0=00</td></tr>
+          <tr><td>0</td><td>1</td><td class="out">0</td><td class="out one">1</td><td class="calc">0+1=01</td></tr>
+          <tr><td>1</td><td>0</td><td class="out">0</td><td class="out one">1</td><td class="calc">1+0=01</td></tr>
+          <tr><td>1</td><td>1</td><td class="out one">1</td><td class="out">0</td><td class="calc">1+1=10</td></tr>
+        </tbody>
+      </table>
+      <div>
+        <div class="point frag" style="margin-top:0">出力1（桁上げ）の列 <span class="chips"><span class="chip ok">0</span><span class="chip ok">0</span><span class="chip ok">0</span><span class="chip ok">1</span></span><br>→ <b>AND と完全に同じ！</b></div>
+        <div class="point blue frag">出力2（和）の列 <span class="chips"><span class="chip ok">0</span><span class="chip ok">1</span><span class="chip ok">1</span><span class="chip ng">0</span></span><br>→ OR（0,1,1,<b>1</b>）に似ているが、<b>両方 1 のときだけ違う</b></div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 9. 半加算器 4ゲート -->
+<section class="slide">
+  <div class="chap">2.8 論理式を実現する古典回路 ／ 半加算器</div>
+  <h2>AND・OR・NOT で半加算器を作る<small>図2.18</small></h2>
+  <div class="body cols wide">
+    <div class="card pop">
+      <svg class="circ" id="cHa4"></svg>
+      <div class="btns"><button class="b" id="pHa4">▶ 自動再生</button></div>
+    </div>
+    <div>
+      <p class="pop" style="margin-top:0;font-size:21px">出力2（和）＝「OR だけど、両方 1 のときは除く」</p>
+      <div class="formula pop" style="--d:.1s;font-size:21px">出力2 = (入力1 OR 入力2)<br>　　AND NOT(入力1 AND 入力2)</div>
+      <table class="tt small pop" style="--d:.2s;margin-top:14px" id="tHa4"></table>
+      <div class="point frag" style="font-size:19px">ゲート <b>4個</b>。和が出るまでに <b>3段</b>（AND → NOT → AND）かかる</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 10. XOR -->
+<section class="slide">
+  <div class="chap">2.8 論理式を実現する古典回路 ／ XOR</div>
+  <h2>XOR（排他的論理和）<small>表2.7・図2.19</small></h2>
+  <div class="body cols">
+    <div class="card pop">
+      <svg class="circ" id="cXor"></svg>
+      <div class="btns"><button class="b" id="pXor">▶ 自動再生</button></div>
+    </div>
+    <div>
+      <table class="tt pop" style="--d:.1s" id="tXor"></table>
+      <div class="point frag">OR の「入力が両方 1」の部分を 0 に変えた演算<br>= 1ビット同士を足して <b>桁上げを気にせず下の桁だけ</b> 見たもの</div>
+      <div class="point blue frag">どちらか <b>片方だけ</b> が 1 のとき 1 → <b class="kb">排他的論理和</b>（exclusive or）<span class="formula" style="font-size:24px;padding:2px 12px">A ⊕ B</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 11. XOR 半加算器 -->
+<section class="slide">
+  <div class="chap">2.8 論理式を実現する古典回路 ／ 半加算器の簡略化</div>
+  <h2>XOR を使った半加算器<small>図2.20</small></h2>
+  <div class="body cols">
+    <div class="card pop">
+      <svg class="circ" id="cHa2"></svg>
+      <div class="btns"><button class="b" id="pHa2">▶ 自動再生</button></div>
+      <div class="hint">図2.13 と同じ回路です（出力の番号付けだけ逆）</div>
+    </div>
+    <div>
+      <div class="formula pop" style="font-size:24px">和 = A ⊕ B　　桁上げ = A · B</div>
+      <div class="card pop" style="--d:.15s;margin-top:16px">
+        <div style="font-weight:700;font-size:18px;margin-bottom:4px">ゲート数</div>
+        <div class="barrow"><span>図2.18（AND/OR/NOT）</span><div class="bar-bg"><div class="bar-fill o" style="--w:100%">4個</div></div></div>
+        <div class="barrow"><span>図2.20（XOR 利用）</span><div class="bar-bg"><div class="bar-fill a" style="--w:50%;transition-delay:.4s">2個</div></div></div>
+        <div style="font-weight:700;font-size:18px;margin:10px 0 4px">出力までの段数（遅延）</div>
+        <div class="barrow"><span>図2.18</span><div class="bar-bg"><div class="bar-fill o" style="--w:100%;transition-delay:.8s">3段</div></div></div>
+        <div class="barrow"><span>図2.20</span><div class="bar-bg"><div class="bar-fill a" style="--w:33%;transition-delay:1.2s">1段</div></div></div>
+      </div>
+      <div class="point frag" style="font-size:19px">同じ結果を出す回路は複数ある。1個のゲートの実行時間が同じなら、<b>ゲート数が少ない・並列化できる回路の方が速い</b></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 12. 半加算器の限界 -->
+<section class="slide" data-id="coladd">
+  <div class="chap">ここから追加内容 ／ 全加算器</div>
+  <h2>半加算器だけでは足りない？<small>多ビットの筆算</small></h2>
+  <div class="body cols">
+    <div class="card pop">
+      <div class="ca-grid" id="caGrid"></div>
+      <div class="ca-msg" id="caMsg"></div>
+      <div class="btns" style="justify-content:center">
+        <button class="b" id="caNext">次の桁 ▶</button>
+        <button class="b" id="caAuto">▶ 自動</button>
+        <button class="b" id="caReset">リセット</button>
+      </div>
+    </div>
+    <div>
+      <p class="pop" style="margin-top:0">4ビットの足し算 <b>1011₂ (11) + 0111₂ (7)</b> を筆算してみる</p>
+      <div class="point frag">1桁目（最下位）は <b>A₀ + B₀</b> の2入力<br>→ 半加算器で OK</div>
+      <div class="point blue frag">2桁目以降は <b>A<sub>i</sub> + B<sub>i</sub> + 下の桁からの桁上げ</b> の <b>3入力</b><br>→ 半加算器では計算できない！</div>
+      <div class="point frag" style="background:#dcfce7;border-left-color:var(--green)">3つのビットを足して「和」と「桁上げ」を出す回路<br>＝ <b style="color:var(--green)">全加算器（full adder）</b></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 13. 全加算器 真理値表 -->
+<section class="slide">
+  <div class="chap">追加内容 ／ 全加算器</div>
+  <h2>全加算器の真理値表</h2>
+  <div class="body cols">
+    <div>
+      <table class="tt pop" id="tFaBig"></table>
+    </div>
+    <div>
+      <p class="pop" style="margin-top:0">入力：A, B, <b>C<sub>in</sub></b>（下の桁からの桁上げ）<br>出力：<b>C<sub>out</sub></b>（上の桁への桁上げ）, <b>S</b>（和）</p>
+      <div class="point blue frag" data-slide-class="show-s"><b>S（和）</b>：入力の 1 の個数が <b>奇数</b> のとき 1<br><span class="formula" style="font-size:24px;padding:2px 12px">S = A ⊕ B ⊕ C<sub>in</sub></span></div>
+      <div class="point frag" data-slide-class="show-c"><b>C<sub>out</sub>（桁上げ）</b>：1 が <b>2個以上</b> のとき 1（多数決）<br><span class="formula" style="font-size:22px;padding:2px 12px">C<sub>out</sub> = A·B + B·C<sub>in</sub> + A·C<sub>in</sub></span></div>
+      <div class="hint frag">行をクリックするとハイライトされます</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 14. 全加算器の構成 -->
+<section class="slide">
+  <div class="chap">追加内容 ／ 全加算器</div>
+  <h2>全加算器 ＝ 半加算器 × 2 ＋ OR</h2>
+  <div class="body">
+    <div class="center pop" style="margin-bottom:4px">
+      <svg class="circ" id="blockDiag" style="width:780px"></svg>
+    </div>
+    <div class="cols even" style="height:auto;align-items:start;gap:24px">
+      <div class="point frag" style="margin-top:0">① 半加算器で <b>A + B</b> を計算<br>　→ 和 <b>P = A ⊕ B</b>、桁上げ <b>A · B</b></div>
+      <div class="point frag" style="margin-top:0">② 半加算器で <b>P + C<sub>in</sub></b> を計算<br>　→ 和 <b>S = P ⊕ C<sub>in</sub></b>、桁上げ <b>P · C<sub>in</sub></b></div>
+    </div>
+    <div class="point blue frag">③ 2つの桁上げは <b>同時に 1 にならない</b>（A·B = 1 なら P = 0）ので、OR でまとめれば良い<br>
+      <span class="formula" style="font-size:24px;padding:2px 12px">C<sub>out</sub> = A·B + (A ⊕ B)·C<sub>in</sub></span></div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 15. 全加算器 回路 -->
+<section class="slide">
+  <div class="chap">追加内容 ／ 全加算器</div>
+  <h2>全加算器の回路を動かしてみる</h2>
+  <div class="body cols wide">
+    <div class="card pop">
+      <svg class="circ" id="cFa"></svg>
+      <div class="btns"><button class="b" id="pFa">▶ 自動再生</button></div>
+      <div class="hint">ゲート5個（XOR×2, AND×2, OR×1）。S は 2段、C<sub>out</sub> は 3段で確定します。</div>
+    </div>
+    <div>
+      <table class="tt small pop" style="--d:.1s" id="tFa"></table>
+      <div class="point frag" style="font-size:19px">1 + 1 + 1 = 11₂ の行（入力すべて 1）を選んで、2つの半加算器の動きを確かめよう</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 16. リップルキャリー -->
+<section class="slide" data-id="ripple">
+  <div class="chap">追加内容 ／ 多ビット加算器</div>
+  <h2>全加算器をつなげて 4ビット加算器<small>リップルキャリー加算器</small></h2>
+  <div class="body">
+    <div class="card pop" style="padding:10px 18px">
+      <svg class="circ" id="rippleSvg" style="height:300px"></svg>
+      <div class="readout" id="rippleOut"></div>
+      <div class="btns" style="justify-content:center">
+        <button class="b" id="rpReplay">▶ 桁上げの伝搬を再生</button>
+        <button class="b" id="rpMax">1111 + 0001（最長の桁上げ）</button>
+        <button class="b" id="rpRand">ランダム</button>
+      </div>
+    </div>
+    <div class="point frag" style="font-size:20px">桁上げ C が <b>右（下位）から左（上位）へ波のように伝わる</b>（ripple = さざ波）。n ビットなら最悪 n 個分の全加算器を順番に待つ必要がある → ビット数が増えると遅い</div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 17. 量子回路へ -->
+<section class="slide">
+  <div class="chap">発展 ／ 量子回路への展望</div>
+  <h2>量子回路で足し算するには？<small>次章への予告</small></h2>
+  <div class="body cols">
+    <div class="card pop">
+      <svg class="circ" id="qCirc"></svg>
+      <div class="hint">a, b をクリックして切り替え（計算基底 |0⟩, |1⟩ を入力した場合）</div>
+    </div>
+    <div>
+      <ul>
+        <li class="pop" style="font-size:21px">AND は出力が 0 だと入力が分からない → <b>不可逆</b></li>
+        <li class="pop" style="--d:.1s;font-size:21px">量子回路のゲートは <b class="kb">可逆</b> でなければならない</li>
+        <li class="frag" style="font-size:21px"><b>CNOT</b>：|a, b⟩ → |a, a⊕b⟩ … XOR の役割</li>
+        <li class="frag" style="font-size:21px"><b>トフォリ（CCNOT）</b>：|a, b, c⟩ → |a, b, c⊕ab⟩<br>c = 0 なら AND の役割</li>
+      </ul>
+      <div class="point frag" style="font-size:20px">入力を残したまま計算できるので、<b>半加算器・全加算器も量子回路で作れる</b>。古典回路の考え方がそのまま活きる</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 18. まとめ -->
+<section class="slide">
+  <div class="chap">Summary</div>
+  <h2>まとめ</h2>
+  <div class="body">
+    <ul>
+      <li class="pop">古典回路は <b>AND / OR / NOT</b> などの基本演算（ゲート）を組み合わせて計算する。動作は <b>真理値表</b> で表せる</li>
+      <li class="pop" style="--d:.1s"><b>半加算器</b>：1ビット + 1ビット → <b class="k">和 = A ⊕ B</b>、<b class="k">桁上げ = A · B</b></li>
+      <li class="pop" style="--d:.2s">同じ結果を出す回路は複数ある。<b>ゲート数・段数が少ない回路の方が速い</b>（4個・3段 → 2個・1段）</li>
+      <li class="pop" style="--d:.3s"><b>全加算器</b>：下の桁からの桁上げを含む3入力の足し算。<b>半加算器 × 2 + OR</b> で作れる<br>
+        <span class="formula" style="font-size:24px;padding:2px 12px">S = A ⊕ B ⊕ C<sub>in</sub>,　C<sub>out</sub> = A·B + (A ⊕ B)·C<sub>in</sub></span></li>
+      <li class="pop" style="--d:.4s">全加算器を並べれば <b>任意ビットの加算器</b> になる（リップルキャリー加算器）</li>
+      <li class="pop" style="--d:.5s">量子回路でも <b>可逆なゲート（CNOT・トフォリ）</b> で同じ計算が実現できる</li>
+    </ul>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 19. 演習 -->
+<section class="slide">
+  <div class="chap">Discussion</div>
+  <h2>演習・ディスカッション<small>クリックで解答</small></h2>
+  <div class="body">
+    <details class="pop"><summary>Q1. 全加算器の和 S（A + B + C<sub>in</sub> の下の桁）を XOR ゲートだけで作るには、XOR が何個必要？</summary>
+      <div>2個。S = (A ⊕ B) ⊕ C<sub>in</sub>。XOR は結合法則が成り立つので、順番に XOR していけば良い。</div></details>
+    <details class="pop" style="--d:.1s"><summary>Q2. 4ビットのリップルキャリー加算器に必要なゲート数は？</summary>
+      <div>全加算器 4個 × 5ゲート = <b>20個</b>。最下位桁は桁上げ入力が無いので半加算器（2ゲート）にすれば 2 + 15 = <b>17個</b>。</div></details>
+    <details class="pop" style="--d:.2s"><summary>Q3. 全加算器の桁上げ C<sub>out</sub> は C<sub>in</sub> から何段で出る？ n ビット加算器ではどうなる？</summary>
+      <div>C<sub>in</sub> → AND → OR の <b>2段</b>。n ビットでは桁上げが最大 n 個の全加算器を通るので約 <b>2n 段</b>。ビット数に比例して遅くなる。
+        改善策として、桁上げを先回りして計算する <b>キャリールックアヘッド加算器</b> がある。</div></details>
+    <details class="pop" style="--d:.3s"><summary>Q4. 引き算（A − B）を全加算器で行うにはどうすればよい？</summary>
+      <div>2の補数を使う：B の各ビットを NOT で反転し、最下位の C<sub>in</sub> に 1 を入れて加算すると A + (−B) = A − B になる。</div></details>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+</div></div>
+
+<div id="ui">
+  <button id="btnPrev">◀</button><span id="counter"></span><button id="btnNext">▶</button>
+  <button id="btnFs">全画面 (F)</button>
+  <span>← → / Space でページ送り</span>
+</div>
+<div id="progress"></div>
+
+<script>
+const NS = 'http://www.w3.org/2000/svg';
+const $ = s => document.querySelector(s);
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+// "C_{in}" 形式の下付き文字に対応した SVG テキスト
+function rich(t, str) {
+  t.textContent = '';
+  str.split(/(_\{[^}]*\})/).forEach(part => {
+    if (!part) return;
+    const m = part.match(/^_\{([^}]*)\}$/);
+    if (m) {
+      el('tspan', { dy: 6, 'font-size': '70%' }, t).textContent = m[1];
+      el('tspan', { dy: -6 }, t).textContent = '\u200b';
+    } else {
+      el('tspan', {}, t).textContent = part;
+    }
+  });
+  return t;
+}
+function text(parent, x, y, str, attrs = {}) { return rich(el('text', { x, y, ...attrs }, parent), str); }
+
+const OPS = { AND: (a, b) => a & b, OR: (a, b) => a | b, XOR: (a, b) => a ^ b, NOT: a => a ^ 1 };
+const stoppers = [];
+
+class Circuit {
+  constructor(svg, { delay = 330, viewBox } = {}) {
+    this.svg = typeof svg === 'string' ? document.getElementById(svg) : svg;
+    if (viewBox) this.svg.setAttribute('viewBox', viewBox);
+    this.delay = delay;
+    this.pins = {}; this.depth = {}; this.gates = []; this.inputs = [];
+    this.inputVals = {}; this.sig = {}; this.items = []; this.listeners = []; this.timers = [];
+    this.gDeco = el('g', {}, this.svg);
+    this.gWire = el('g', {}, this.svg);
+    this.gBody = el('g', {}, this.svg);
+    this.gTop = el('g', {}, this.svg);
+  }
+  reg(sig, node, txt, fmt) { this.items.push({ sig, node, txt, fmt }); }
+  input(name, x, y, label) {
+    this.inputs.push(name); this.inputVals[name] = 0; this.depth[name] = 0;
+    const g = el('g', { class: 'inp' }, this.gTop);
+    el('circle', { cx: x, cy: y, r: 17 }, g);
+    const t = el('text', { x, y: y + 7, class: 'val' }, g);
+    text(g, x - 26, y + 7, label ?? name, { class: 'lbl', 'text-anchor': 'end' });
+    g.addEventListener('click', () => this.set({ [name]: this.inputVals[name] ^ 1 }));
+    this.pins[name] = { x: x + 17, y };
+    this.reg(name, g, t);
+  }
+  output(name, x, y, src, label) {
+    const g = el('g', { class: 'lamp' }, this.gTop);
+    el('circle', { cx: x, cy: y, r: 17 }, g);
+    const t = el('text', { x, y: y + 7, class: 'val' }, g);
+    text(g, x + 26, y + 7, label ?? name, { class: 'lbl' });
+    this.pins[name] = { x: x - 17, y };
+    this.reg(src, g, t);
+  }
+  gate(id, type, x, cy, ins, showLabel = true) {
+    this.depth[id] = Math.max(...ins.map(s => this.depth[s])) + 1;
+    this.gates.push({ id, type, ins });
+    const g = el('g', { class: 'gate' }, this.gBody);
+    if (type === 'NOT') {
+      el('path', { d: `M${x},${cy - 18} L${x + 44},${cy} L${x},${cy + 18} Z` }, g);
+      el('circle', { cx: x + 49, cy, r: 5 }, g);
+      this.pins[id + '.in0'] = { x, y: cy };
+      this.pins[id] = { x: x + 54, y: cy };
+      if (showLabel) el('text', { x: x + 16, y: cy + 4, class: 'glabel' }, g).textContent = 'NOT';
+    } else {
+      if (type === 'AND') el('path', { d: `M${x},${cy - 24} H${x + 40} A24,24 0 0 1 ${x + 40},${cy + 24} H${x} Z` }, g);
+      else el('path', { d: `M${x},${cy - 24} Q${x + 40},${cy - 24} ${x + 64},${cy} Q${x + 40},${cy + 24} ${x},${cy + 24} Q${x + 16},${cy} ${x},${cy - 24} Z` }, g);
+      if (type === 'XOR') el('path', { class: 'xorback', d: `M${x - 9},${cy + 24} Q${x + 7},${cy} ${x - 9},${cy - 24}` }, g);
+      const inset = type === 'AND' ? 0 : 8;
+      this.pins[id + '.in0'] = { x: x + inset, y: cy - 12 };
+      this.pins[id + '.in1'] = { x: x + inset, y: cy + 12 };
+      this.pins[id] = { x: x + 64, y: cy };
+      if (showLabel) el('text', { x: x + (type === 'AND' ? 28 : 32), y: cy + 4, class: 'glabel' }, g).textContent = type;
+    }
+    this.reg(id, g);
+  }
+  wire(sig, pts) {
+    const d = 'M' + pts.map(p => p.join(',')).join(' L');
+    this.reg(sig, el('path', { d, class: 'wire' }, this.gWire));
+    this.reg(sig, el('path', { d, class: 'flow' }, this.gWire));
+  }
+  pt(p) { return typeof p === 'string' ? this.pins[p] : { x: p[0], y: p[1] }; }
+  link(from, to, mx, sig) {
+    const a = this.pt(from), b = this.pt(to);
+    sig = sig ?? from;
+    if (a.y === b.y) return this.wire(sig, [[a.x, a.y], [b.x, b.y]]);
+    mx = mx ?? (a.x + b.x) / 2;
+    this.wire(sig, [[a.x, a.y], [mx, a.y], [mx, b.y], [b.x, b.y]]);
+  }
+  dot(x, y, sig) { this.reg(sig, el('circle', { cx: x, cy: y, r: 6, class: 'dot' }, this.gWire)); }
+  probe(sig, x, y, label, anchor = 'start') {
+    const t = el('text', { x, y, class: 'probe', 'text-anchor': anchor }, this.gTop);
+    this.reg(sig, t, t, v => `${label}=${v}`);
+  }
+  box(x, y, w, h, label) {
+    el('rect', { x, y, width: w, height: h, rx: 10, class: 'habox' }, this.gDeco);
+    el('text', { x: x + w / 2, y: y - 7, class: 'halbl', 'text-anchor': 'middle' }, this.gDeco).textContent = label;
+  }
+  compute(vals) {
+    const s = { ...vals };
+    for (const g of this.gates) s[g.id] = OPS[g.type](...g.ins.map(i => s[i]));
+    return s;
+  }
+  onChange(f) { this.listeners.push(f); }
+  set(vals = {}, animate = true) {
+    Object.assign(this.inputVals, vals);
+    this.sig = this.compute(this.inputVals);
+    this.timers.forEach(clearTimeout); this.timers = [];
+    for (const it of this.items) {
+      const v = this.sig[it.sig];
+      const apply = () => {
+        it.node.classList.toggle('on', !!v);
+        if (it.txt) it.txt.textContent = it.fmt ? it.fmt(v) : v;
+      };
+      const t = animate ? this.depth[it.sig] * this.delay : 0;
+      if (t) this.timers.push(setTimeout(apply, t)); else apply();
+    }
+    this.listeners.forEach(f => f(this));
+  }
+  index() { return this.inputs.reduce((a, s) => a * 2 + this.inputVals[s], 0); }
+  setIndex(n) {
+    const k = this.inputs.length, v = {};
+    this.inputs.forEach((s, j) => v[s] = (n >> (k - 1 - j)) & 1);
+    this.set(v);
+  }
+}
+
+function truthTable(id, c, ins, outs, extra) {
+  const table = document.getElementById(id);
+  const k = ins.length;
+  let html = '<thead><tr>' + ins.map(i => `<th>${i[1]}</th>`).join('') +
+    outs.map(o => `<th class="out">${o[1]}</th>`).join('') + (extra ? `<th>${extra[0]}</th>` : '') + '</tr></thead><tbody>';
+  for (let n = 0; n < (1 << k); n++) {
+    const vals = {};
+    ins.forEach((inp, j) => vals[inp[0]] = (n >> (k - 1 - j)) & 1);
+    const s = c.compute(vals);
+    html += '<tr>' + ins.map(i => `<td>${vals[i[0]]}</td>`).join('') +
+      outs.map(o => `<td class="out${s[o[0]] ? ' one' : ''}${o[2] ? ' ' + o[2] + s[o[0]] : ''}">${s[o[0]]}</td>`).join('') +
+      (extra ? `<td class="calc">${extra[1](vals, s)}</td>` : '') + '</tr>';
+  }
+  table.innerHTML = html + '</tbody>';
+  const trs = [...table.querySelectorAll('tbody tr')];
+  trs.forEach((tr, n) => tr.addEventListener('click', () => c.setIndex(n)));
+  c.onChange(() => { const n = c.index(); trs.forEach((tr, i) => tr.classList.toggle('cur', i === n)); });
+}
+
+function autoplay(btnId, c, interval = 1900) {
+  const btn = document.getElementById(btnId);
+  let t = null;
+  const stop = () => { clearInterval(t); t = null; btn.textContent = '▶ 自動再生'; btn.classList.remove('playing'); };
+  btn.addEventListener('click', () => {
+    btn.blur();
+    if (t) return stop();
+    btn.textContent = '■ 停止'; btn.classList.add('playing');
+    const step = () => c.setIndex((c.index() + 1) % (1 << c.inputs.length));
+    step(); t = setInterval(step, interval);
+  });
+  stoppers.push(stop);
+}
+
+/* ---------- 回路の定義 ---------- */
+function singleGate(id, type, outLabel) {
+  const c = new Circuit(id, { viewBox: '-10 40 560 180' });
+  if (type === 'NOT') {
+    c.input('A', 60, 130);
+    c.gate('g', 'NOT', 200, 130, ['A'], false);
+    c.link('A', 'g.in0');
+  } else {
+    c.input('A', 60, 95); c.input('B', 60, 165);
+    c.gate('g', type, 200, 130, ['A', 'B'], false);
+    c.link('A', 'g.in0', 140); c.link('B', 'g.in1', 140);
+  }
+  c.output('Q', 380, 130, 'g', outLabel);
+  c.link('g', 'Q');
+  return c;
+}
+
+function halfAdderXor(id, sLabel, cLabel, delay) {
+  const c = new Circuit(id, { viewBox: '-80 40 700 200', delay });
+  c.input('A', 50, 110, '入力1'); c.input('B', 50, 170, '入力2');
+  c.gate('x', 'XOR', 220, 80, ['A', 'B']);
+  c.gate('a', 'AND', 220, 200, ['A', 'B']);
+  c.link('A', 'x.in0', 140); c.link('A', 'a.in0', 140); c.dot(140, 110, 'A');
+  c.link('B', 'x.in1', 170); c.link('B', 'a.in1', 170); c.dot(170, 170, 'B');
+  c.output('S', 420, 80, 'x', sLabel); c.output('C', 420, 200, 'a', cLabel);
+  c.link('x', 'S'); c.link('a', 'C');
+  return c;
+}
+
+const circuits = {};
+{
+  const c = halfAdderXor('titleCirc', '和', '桁上げ', 380);
+  c.set({}, false);
+  setInterval(() => c.setIndex((c.index() + 1) % 4), 2200);
+}
+{
+  const c = halfAdderXor('c213', '出力1', '出力2');
+  c.set({}, false);
+}
+{
+  const c = singleGate('cAnd', 'AND', 'A AND B');
+  truthTable('tAnd', c, [['A', 'A'], ['B', 'B']], [['g', 'A AND B']]);
+  autoplay('pAnd', c); c.set({}, false);
+}
+{
+  const c = singleGate('cOr', 'OR', 'A OR B');
+  truthTable('tOr', c, [['A', 'A'], ['B', 'B']], [['g', 'A OR B']]);
+  autoplay('pOr', c); c.set({}, false);
+}
+{
+  const c = singleGate('cNot', 'NOT', 'NOT A');
+  truthTable('tNot', c, [['A', 'A']], [['g', 'NOT A']]);
+  autoplay('pNot', c); c.set({}, false);
+}
+{
+  const c = new Circuit('cComb', { viewBox: '-20 40 700 200' });
+  c.input('A', 60, 80); c.input('B', 60, 120); c.input('C', 60, 200);
+  c.gate('g1', 'AND', 180, 100, ['A', 'B']);
+  c.gate('g2', 'OR', 320, 150, ['g1', 'C']);
+  c.gate('g3', 'NOT', 430, 150, ['g2']);
+  c.link('A', 'g1.in0', 140); c.link('B', 'g1.in1', 140);
+  c.link('g1', 'g2.in0', 285); c.link('C', 'g2.in1', 300);
+  c.link('g2', 'g3.in0');
+  c.output('Q', 560, 150, 'g3', '出力');
+  c.link('g3', 'Q');
+  c.probe('g1', 250, 86, 'A AND B');
+  c.probe('g2', 330, 222, '(A AND B) OR C');
+  truthTable('tComb', c, [['A', 'A'], ['B', 'B'], ['C', 'C']], [['g3', '出力']]);
+  autoplay('pComb', c); c.set({}, false);
+}
+{
+  const c = new Circuit('cHa4', { viewBox: '-80 40 840 200' });
+  c.input('A', 50, 120, '入力1'); c.input('B', 50, 160, '入力2');
+  c.gate('o', 'OR', 200, 80, ['A', 'B']);
+  c.gate('a', 'AND', 200, 200, ['A', 'B']);
+  c.gate('n', 'NOT', 320, 140, ['a']);
+  c.gate('f', 'AND', 420, 100, ['o', 'n']);
+  c.link('A', 'o.in0', 130); c.link('A', 'a.in0', 130); c.dot(130, 120, 'A');
+  c.link('B', 'o.in1', 160); c.link('B', 'a.in1', 160); c.dot(160, 160, 'B');
+  c.link('a', 'n.in0', 290);
+  c.link('o', 'f.in0', 340); c.link('n', 'f.in1', 395);
+  c.output('S', 580, 100, 'f', '出力2 (和)');
+  c.output('C', 580, 200, 'a', '出力1 (桁上げ)');
+  c.link('f', 'S'); c.link('a', 'C'); c.dot(290, 200, 'a');
+  truthTable('tHa4', c, [['A', '入力1'], ['B', '入力2']], [['a', '出力1'], ['f', '出力2']]);
+  autoplay('pHa4', c); c.set({}, false);
+}
+{
+  const c = singleGate('cXor', 'XOR', 'A XOR B');
+  truthTable('tXor', c, [['A', 'A'], ['B', 'B']], [['g', 'A XOR B']]);
+  autoplay('pXor', c); c.set({}, false);
+}
+{
+  const c = halfAdderXor('cHa2', '出力2 (和)', '出力1 (桁上げ)');
+  autoplay('pHa2', c); c.set({}, false);
+}
+function fullAdder(id) {
+  const c = new Circuit(id, { viewBox: '-80 10 920 300' });
+  c.input('Cin', 50, 40, 'C_{in}'); c.input('A', 50, 128); c.input('B', 50, 175);
+  c.box(150, 100, 105, 192, '半加算器①');
+  c.box(362, 48, 100, 162, '半加算器②');
+  c.gate('x1', 'XOR', 170, 140, ['A', 'B']);
+  c.gate('a1', 'AND', 170, 260, ['A', 'B']);
+  c.gate('x2', 'XOR', 380, 80, ['Cin', 'x1']);
+  c.gate('a2', 'AND', 380, 180, ['Cin', 'x1']);
+  c.gate('o', 'OR', 520, 220, ['a2', 'a1']);
+  c.link('A', 'x1.in0'); c.link('A', 'a1.in0', 110); c.dot(110, 128, 'A');
+  c.link('B', 'x1.in1', 135); c.link('B', 'a1.in1', 135); c.dot(135, 175, 'B');
+  c.link('Cin', 'x2.in0', 330); c.link('Cin', 'a2.in0', 330); c.dot(330, 68, 'Cin');
+  c.link('x1', 'x2.in1', 300); c.link('x1', 'a2.in1', 300); c.dot(300, 140, 'x1');
+  c.link('a2', 'o.in0', 480); c.link('a1', 'o.in1', 500);
+  c.output('S', 680, 80, 'x2', 'S (和)');
+  c.output('Cout', 680, 220, 'o', 'C_{out} (桁上げ)');
+  c.link('x2', 'S'); c.link('o', 'Cout');
+  c.probe('x1', 262, 162, 'P');
+  c.probe('a1', 340, 280, 'A·B');
+  c.probe('a2', 452, 170, 'P·Cin');
+  return c;
+}
+{
+  const c = fullAdder('cFa');
+  const calc = (v, s) => `${v.A}+${v.B}+${v.Cin}=${s.o}${s.x2}`;
+  truthTable('tFa', c, [['A', 'A'], ['B', 'B'], ['Cin', 'C<sub>in</sub>']], [['o', 'C<sub>out</sub>'], ['x2', 'S']], ['計算', calc]);
+  autoplay('pFa', c); c.set({}, false);
+  const big = fullAdder(document.createElementNS(NS, 'svg'));
+  truthTable('tFaBig', big, [['A', 'A'], ['B', 'B'], ['Cin', 'C<sub>in</sub>']],
+    [['o', '出力1<br>C<sub>out</sub>', 'c'], ['x2', '出力2<br>S', 's']], ['対応する計算', calc]);
+  big.set({}, false);
+  $('#tFaBig').querySelectorAll('tbody tr').forEach(r => r.classList.remove('cur'));
+}
+
+/* ---------- ブロック図 ---------- */
+{
+  const svg = $('#blockDiag');
+  svg.setAttribute('viewBox', '0 0 780 230');
+  const gw = el('g', {}, svg), gb = el('g', {}, svg);
+  const w = pts => {
+    const d = 'M' + pts.map(p => p.join(',')).join(' L');
+    el('path', { d, class: 'wire on' }, gw); el('path', { d, class: 'flow on' }, gw);
+  };
+  const blk = (x, y, ww, h, t, fill) => {
+    el('rect', { x, y, width: ww, height: h, rx: 12, fill, stroke: '#1e293b', 'stroke-width': 3 }, gb);
+    text(gb, x + ww / 2, y + h / 2 + 8, t, { 'text-anchor': 'middle', 'font-size': 22, 'font-weight': 800 });
+  };
+  w([[60, 70], [140, 70]]); w([[60, 120], [140, 120]]);
+  w([[260, 70], [400, 70]]);
+  w([[460, 8], [460, 40]]);
+  w([[520, 70], [700, 70]]);
+  w([[520, 120], [560, 120], [560, 165], [600, 165]]);
+  w([[260, 120], [290, 120], [290, 200], [600, 200]]);
+  w([[680, 182], [700, 182]]);
+  blk(140, 40, 120, 110, '半加算器①', '#eff6ff');
+  blk(400, 40, 120, 110, '半加算器②', '#eff6ff');
+  blk(600, 150, 80, 64, 'OR', '#fff7ed');
+  const lb = (x, y, t, a = 'start', col = '#0f172a') => text(gb, x, y, t, { 'font-size': 20, 'font-weight': 700, 'text-anchor': a, fill: col });
+  lb(50, 77, 'A', 'end'); lb(50, 127, 'B', 'end'); lb(450, 26, 'C_{in}', 'end');
+  lb(278, 60, 'P = A⊕B', 'start', '#c2410c');
+  lb(300, 222, 'A·B', 'start', '#c2410c');
+  lb(530, 108, 'P·C_{in}', 'start', '#c2410c');
+  lb(710, 77, 'S'); lb(710, 189, 'C_{out}');
+}
+
+/* ---------- 筆算アニメーション ---------- */
+{
+  const A = [1, 1, 0, 1], B = [1, 1, 1, 0];
+  const c = [0]; const S = [];
+  for (let i = 0; i < 4; i++) { const t = A[i] + B[i] + c[i]; S[i] = t & 1; c[i + 1] = t >> 1; }
+  S[4] = c[4];
+  const grid = $('#caGrid');
+  const cells = { carry: [], a: [], b: [], s: [] };
+  const row = (label, key, fn, cls = '') => {
+    const l = document.createElement('div'); l.className = 'rl'; l.textContent = label; grid.appendChild(l);
+    for (let j = 0; j < 5; j++) {
+      const bit = 4 - j;
+      const d = document.createElement('div'); d.className = cls;
+      d.innerHTML = fn(bit);
+      grid.appendChild(d); cells[key][bit] = d;
+    }
+  };
+  row('桁上げ', 'carry', bit => bit > 0 && c[bit] ? '<span>1</span>' : '<span></span>', 'carry');
+  row('A', 'a', bit => bit < 4 ? A[bit] : '');
+  row('+ B', 'b', bit => bit < 4 ? B[bit] : '');
+  const bar = document.createElement('div'); bar.className = 'bar'; grid.appendChild(bar);
+  row('和', 's', bit => `<span>${S[bit]}</span>`, 'sum');
+  const msg = $('#caMsg');
+  let step = 0, timer = null;
+  const all = () => Object.values(cells).flat();
+  const reset = () => {
+    step = 0; all().forEach(d => d.classList.remove('show', 'hl'));
+    msg.innerHTML = '右端（1桁目）から順に足していきます';
+    stopAuto();
+  };
+  const next = () => {
+    if (step > 4) return;
+    all().forEach(d => d.classList.remove('hl'));
+    const k = step;
+    ['carry', 'a', 'b', 's'].forEach(r => cells[r][k].classList.add('hl'));
+    cells.s[k].classList.add('show');
+    if (k < 4) {
+      if (c[k + 1]) cells.carry[k + 1].classList.add('show');
+      const terms = k === 0 ? `${A[k]} + ${B[k]}` : `${A[k]} + ${B[k]} + <b style="color:var(--accent)">${c[k]}</b>(桁上げ)`;
+      const note = k === 0 ? '<span class="muted">入力2つ → 半加算器でOK</span>' : '<b style="color:var(--blue)">入力3つ → 全加算器が必要！</b>';
+      msg.innerHTML = `${k + 1}桁目：${terms} = ${c[k + 1]}${S[k]}₂ → 和 <b>${S[k]}</b>、桁上げ <b>${c[k + 1]}</b><br>${note}`;
+    } else {
+      msg.innerHTML = `最後の桁上げがそのまま最上位へ<br>結果：<b>1011₂ (11) + 0111₂ (7) = 10010₂ (18)</b>`;
+    }
+    step++;
+    if (step > 4) stopAuto();
+  };
+  function stopAuto() { clearInterval(timer); timer = null; $('#caAuto').textContent = '▶ 自動'; $('#caAuto').classList.remove('playing'); }
+  $('#caNext').onclick = e => { e.currentTarget.blur(); next(); };
+  $('#caReset').onclick = e => { e.currentTarget.blur(); reset(); };
+  $('#caAuto').onclick = e => {
+    e.currentTarget.blur();
+    if (timer) return stopAuto();
+    if (step > 4) reset();
+    $('#caAuto').textContent = '■ 停止'; $('#caAuto').classList.add('playing');
+    next(); timer = setInterval(next, 2200);
+  };
+  stoppers.push(stopAuto);
+  reset();
+  window.onEnter = window.onEnter || {};
+  onEnter.coladd = reset;
+}
+
+/* ---------- リップルキャリー加算器 ---------- */
+{
+  const svg = $('#rippleSvg');
+  svg.setAttribute('viewBox', '0 0 1140 380');
+  const gW = el('g', {}, svg), gB = el('g', {}, svg), gT = el('g', {}, svg);
+  const A = [1, 1, 0, 1], B = [1, 1, 1, 0]; let cin = 0;
+  const X = i => 870 - i * 240;
+  const D = 750;
+  const P = { box: [], t2: [], t3: [], sL: [], sT: [], sW: [], cW: [], aG: [], aT: [], bG: [], bT: [], aW: [], bW: [] };
+  let cinG, cinT, cinW, coutG, coutT;
+  const wire = d => {
+    const base = el('path', { d, class: 'wire' }, gW), flow = el('path', { d, class: 'flow' }, gW);
+    return { set(on, wait) { base.classList.toggle('on', !!on); flow.classList.toggle('on', !!on); base.classList.toggle('wait', !!wait); } };
+  };
+  const toggle = (x, y, label, ly, onClick) => {
+    const g = el('g', { class: 'inp' }, gT);
+    el('circle', { cx: x, cy: y, r: 17 }, g);
+    const t = el('text', { x, y: y + 7, class: 'val' }, g);
+    text(gT, x, ly, label, { class: 'lbl', 'text-anchor': 'middle' });
+    g.addEventListener('click', onClick);
+    return [g, t];
+  };
+  const lamp = (x, y, label, ly) => {
+    const g = el('g', { class: 'lamp' }, gT);
+    el('circle', { cx: x, cy: y, r: 17 }, g);
+    const t = el('text', { x, y: y + 7, class: 'val' }, g);
+    text(gT, x, ly, label, { class: 'lbl', 'text-anchor': 'middle' });
+    return [g, t];
+  };
+  for (let i = 0; i < 4; i++) {
+    const x = X(i);
+    P.aW[i] = wire(`M${x + 40},77 V140`);
+    P.bW[i] = wire(`M${x + 110},77 V140`);
+    P.sW[i] = wire(`M${x + 75},240 V303`);
+    P.cW[i + 1] = wire(`M${x},190 H${i < 3 ? X(i + 1) + 150 : 87}`);
+    if (i < 3) text(gT, x - 45, 178, `C_{${i + 1}}`, { class: 'probe', 'text-anchor': 'middle' });
+    const g = el('g', { class: 'fa' }, gB);
+    el('rect', { x, y: 140, width: 150, height: 100, rx: 14 }, g);
+    text(g, x + 75, 168, `FA_{${i}}`, { class: 't1' });
+    P.t2[i] = el('text', { x: x + 75, y: 198, class: 't2' }, g);
+    P.t3[i] = el('text', { x: x + 75, y: 226, class: 't3' }, g);
+    P.box[i] = g;
+    [P.aG[i], P.aT[i]] = toggle(x + 40, 60, `A_{${i}}`, 30, () => { A[i] ^= 1; run(); });
+    [P.bG[i], P.bT[i]] = toggle(x + 110, 60, `B_{${i}}`, 30, () => { B[i] ^= 1; run(); });
+    [P.sL[i], P.sT[i]] = lamp(x + 75, 320, `S_{${i}}`, 366);
+  }
+  cinW = wire('M1063,190 H1020');
+  [cinG, cinT] = toggle(1080, 190, 'C_{0}', 160, () => { cin ^= 1; run(); });
+  [coutG, coutT] = lamp(70, 190, 'C_{out}', 236);
+  text(gT, 70, 258, '(= S_{4})', { class: 'probe', 'text-anchor': 'middle' });
+
+  let timers = [];
+  const out = $('#rippleOut');
+  const bin = arr => arr.slice().reverse().join('');
+  const val = arr => arr.reduce((a, b, i) => a + (b << i), 0);
+  function run() {
+    timers.forEach(clearTimeout); timers = [];
+    const c = [cin], s = [];
+    for (let i = 0; i < 4; i++) { const t = A[i] + B[i] + c[i]; s[i] = t & 1; c[i + 1] = t >> 1; }
+    for (let i = 0; i < 4; i++) {
+      P.aG[i].classList.toggle('on', !!A[i]); P.aT[i].textContent = A[i]; P.aW[i].set(A[i]);
+      P.bG[i].classList.toggle('on', !!B[i]); P.bT[i].textContent = B[i]; P.bW[i].set(B[i]);
+      P.box[i].classList.remove('active', 'done');
+      P.t2[i].textContent = ''; P.t3[i].textContent = '';
+      P.sL[i].classList.remove('on'); P.sL[i].classList.add('wait'); P.sT[i].textContent = '?';
+      P.sW[i].set(0, true); P.cW[i + 1].set(0, true);
+    }
+    cinG.classList.toggle('on', !!cin); cinT.textContent = cin; cinW.set(cin);
+    coutG.classList.remove('on'); coutG.classList.add('wait'); coutT.textContent = '?';
+    out.innerHTML = '<span class="muted">計算中…</span>';
+    for (let i = 0; i < 4; i++) {
+      timers.push(setTimeout(() => {
+        if (i > 0) { P.box[i - 1].classList.remove('active'); P.box[i - 1].classList.add('done'); }
+        P.box[i].classList.add('active');
+        P.t2[i].textContent = `${A[i]}+${B[i]}+${c[i]}`;
+        P.t3[i].textContent = `= ${c[i + 1]}${s[i]}`;
+        P.sL[i].classList.remove('wait'); P.sL[i].classList.toggle('on', !!s[i]); P.sT[i].textContent = s[i];
+        P.sW[i].set(s[i]); P.cW[i + 1].set(c[i + 1]);
+        if (i === 3) { coutG.classList.remove('wait'); coutG.classList.toggle('on', !!c[4]); coutT.textContent = c[4]; }
+      }, 250 + i * D));
+    }
+    timers.push(setTimeout(() => {
+      P.box[3].classList.remove('active'); P.box[3].classList.add('done');
+      const sum = [...s, c[4]];
+      out.innerHTML = `${bin(A)}₂ (${val(A)}) + ${bin(B)}₂ (${val(B)})${cin ? ' + 1' : ''} = <span class="eq">${bin(sum)}₂ (${val(sum)})</span>`;
+    }, 250 + 4 * D));
+  }
+  const btn = (id, f) => $(id).addEventListener('click', e => { e.currentTarget.blur(); f(); run(); });
+  btn('#rpReplay', () => {});
+  btn('#rpMax', () => { A.splice(0, 4, 1, 1, 1, 1); B.splice(0, 4, 1, 0, 0, 0); cin = 0; });
+  btn('#rpRand', () => { for (let i = 0; i < 4; i++) { A[i] = Math.random() < .5 ? 1 : 0; B[i] = Math.random() < .5 ? 1 : 0; } });
+  window.onEnter = window.onEnter || {};
+  onEnter.ripple = run;
+  run();
+}
+
+/* ---------- 量子半加算器 ---------- */
+{
+  const svg = $('#qCirc');
+  svg.setAttribute('viewBox', '-20 0 820 250');
+  const gW = el('g', {}, svg), gB = el('g', {}, svg), gT = el('g', {}, svg);
+  let a = 1, b = 1;
+  const seg = d => {
+    const base = el('path', { d, class: 'wire' }, gW), flow = el('path', { d, class: 'flow' }, gW);
+    return on => { base.classList.toggle('on', !!on); flow.classList.toggle('on', !!on); };
+  };
+  const q0 = seg('M77,60 H560'), q1a = seg('M77,130 H400'), q1b = seg('M400,130 H573');
+  const q2a = seg('M77,200 H250'), q2b = seg('M250,200 H573');
+  const ctrl = (x, y1, y2) => {
+    el('line', { x1: x, y1, x2: x, y2: y2 + 16, stroke: '#1e293b', 'stroke-width': 3 }, gB);
+  };
+  ctrl(250, 60, 200); ctrl(400, 60, 130);
+  [[250, 60], [250, 130], [400, 60]].forEach(([x, y]) => el('circle', { cx: x, cy: y, r: 8, fill: '#1e293b' }, gB));
+  [[250, 200], [400, 130]].forEach(([x, y]) => {
+    el('circle', { cx: x, cy: y, r: 16, fill: '#fff', stroke: '#1e293b', 'stroke-width': 3 }, gB);
+    el('path', { d: `M${x - 16},${y} H${x + 16} M${x},${y - 16} V${y + 16}`, stroke: '#1e293b', 'stroke-width': 3 }, gB);
+  });
+  text(gB, 250, 28, 'トフォリ (CCNOT)', { class: 'halbl', 'text-anchor': 'middle' });
+  text(gB, 400, 28, 'CNOT', { class: 'halbl', 'text-anchor': 'middle' });
+  const tog = (y, label, f) => {
+    const g = el('g', { class: 'inp' }, gT);
+    el('circle', { cx: 60, cy: y, r: 17 }, g);
+    const t = el('text', { x: 60, y: y + 7, class: 'val' }, g);
+    text(gT, 34, y + 7, label, { class: 'lbl', 'text-anchor': 'end' });
+    if (f) g.addEventListener('click', f); else g.style.cursor = 'default';
+    return [g, t];
+  };
+  const [ga, ta] = tog(60, 'a', () => { a ^= 1; upd(); });
+  const [gb2, tb] = tog(130, 'b', () => { b ^= 1; upd(); });
+  tog(200, '|0⟩')[1].textContent = '0';
+  const out = (y, label) => {
+    const g = el('g', { class: 'lamp' }, gT);
+    el('circle', { cx: 590, cy: y, r: 17 }, g);
+    const t = el('text', { x: 590, y: y + 7, class: 'val' }, g);
+    text(gT, 616, y + 7, label, { class: 'lbl' });
+    return [g, t];
+  };
+  const o0 = out(60, 'a'), o1 = out(130, 'a⊕b = 和'), o2 = out(200, 'a·b = 桁上げ');
+  function upd() {
+    const s = a ^ b, c = a & b;
+    ga.classList.toggle('on', !!a); ta.textContent = a;
+    gb2.classList.toggle('on', !!b); tb.textContent = b;
+    q0(a); q1a(b); q1b(s); q2a(0); q2b(c);
+    [[o0, a], [o1, s], [o2, c]].forEach(([[g, t], v]) => { g.classList.toggle('on', !!v); t.textContent = v; });
+  }
+  upd();
+}
+
+/* ---------- スライド制御 ---------- */
+const stage = $('#stage');
+function fit() {
+  const s = Math.min(innerWidth / 1280, innerHeight / 720);
+  stage.style.transform = `translate(-50%,-50%) scale(${s})`;
+}
+addEventListener('resize', fit); fit();
+
+const slides = [...document.querySelectorAll('.slide')];
+slides.forEach((s, i) => { const p = s.querySelector('.pageno'); if (p) p.textContent = `${i + 1} / ${slides.length}`; });
+let cur = 0;
+const frags = s => [...s.querySelectorAll('.frag')];
+function showFrag(f, on) {
+  f.classList.toggle('vis', on);
+  if (f.dataset.slideClass) f.closest('.slide').classList.toggle(f.dataset.slideClass, on);
+}
+function go(n, showAll = false) {
+  if (n < 0 || n >= slides.length) return;
+  stoppers.forEach(f => f());
+  cur = n;
+  slides.forEach((s, i) => { s.classList.toggle('active', i === n); s.classList.toggle('past', i < n); });
+  frags(slides[n]).forEach(f => showFrag(f, showAll));
+  $('#counter').textContent = `${n + 1} / ${slides.length}`;
+  $('#progress').style.width = `${(n + 1) / slides.length * 100}%`;
+  history.replaceState(null, '', '#' + (n + 1));
+  const id = slides[n].dataset.id;
+  if (window.onEnter && onEnter[id]) onEnter[id]();
+}
+function next() {
+  const f = frags(slides[cur]).find(x => !x.classList.contains('vis'));
+  if (f) showFrag(f, true); else go(cur + 1);
+}
+function prev() {
+  const v = frags(slides[cur]).filter(x => x.classList.contains('vis'));
+  if (v.length) showFrag(v[v.length - 1], false); else go(cur - 1, true);
+}
+function fullscreen() {
+  if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen();
+}
+addEventListener('keydown', e => {
+  if (e.target.tagName === 'SUMMARY') return;
+  if (['ArrowRight', 'PageDown', ' ', 'Enter', 'ArrowDown'].includes(e.key)) { e.preventDefault(); next(); }
+  else if (['ArrowLeft', 'PageUp', 'Backspace', 'ArrowUp'].includes(e.key)) { e.preventDefault(); prev(); }
+  else if (e.key === 'Home') go(0);
+  else if (e.key === 'End') go(slides.length - 1);
+  else if (e.key === 'f' || e.key === 'F') fullscreen();
+});
+let tx = null;
+addEventListener('touchstart', e => tx = e.touches[0].clientX, { passive: true });
+addEventListener('touchend', e => {
+  if (tx === null) return;
+  const dx = e.changedTouches[0].clientX - tx; tx = null;
+  if (Math.abs(dx) > 60) dx < 0 ? next() : prev();
+});
+$('#btnNext').onclick = e => { e.currentTarget.blur(); next(); };
+$('#btnPrev').onclick = e => { e.currentTarget.blur(); prev(); };
+$('#btnFs').onclick = e => { e.currentTarget.blur(); fullscreen(); };
+addEventListener('beforeprint', () => slides.forEach(s => frags(s).forEach(f => showFrag(f, true))));
+go(Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1)) || 1) - 1)));
+</script>
+</body>
+</html>
