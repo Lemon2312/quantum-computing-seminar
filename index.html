@@ -219,7 +219,7 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
       <li class="pop" style="--d:.15s"><span class="num">2</span>半加算器：1ビット同士の足し算</li>
       <li class="pop" style="--d:.25s"><span class="num">3</span>XOR による半加算器の簡略化</li>
       <li class="pop" style="--d:.35s"><span class="num new">4</span>全加算器：繰り上がりを含む足し算 <span class="tag">追加</span></li>
-      <li class="pop" style="--d:.45s"><span class="num new">5</span>多ビット加算器と量子回路への展望 <span class="tag">追加</span></li>
+      <li class="pop" style="--d:.45s"><span class="num new">5</span>多ビット加算器（リップルキャリー加算器） <span class="tag">追加</span></li>
     </ul>
     <div class="card pop" style="--d:.5s">
       <p style="margin:0 0 8px;font-weight:700">このスライドの使い方</p>
@@ -330,9 +330,9 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
       <div class="ttcap pop" style="--d:.1s">XOR の真理値表</div>
       <table class="tt pop" style="--d:.1s" id="tXor"></table>
       <div class="point blue frag">どちらか <b>片方だけ</b> が 1 のとき 1 → <b class="kb">排他的論理和</b>（exclusive or）<span class="formula" style="font-size:24px;padding:2px 12px">A ⊕ B</span></div>
-      <div class="point frag"><b>2 を法とした和</b>（mod 2 の足し算）<br>
+      <div class="point frag"><b>2 を法とした和</b>（mod 2 の足し算）＝ <b class="k">繰り上がりを考慮しない足し算</b><br>
         <span class="formula" style="font-size:24px;padding:2px 12px">A ⊕ B = (A + B) mod 2</span><br>
-        <span style="font-size:19px">1 + 1 = 2 ≡ <b>0</b> (mod 2) … OR の「両方 1」の部分を 0 に変えた演算</span></div>
+        <span style="font-size:19px">1 + 1 = 2 ≡ <b>0</b> (mod 2)</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -364,47 +364,18 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
   <div class="pageno"></div>
 </section>
 
-<!-- 半加算器の真理値表 -->
+<!-- 半加算器 4ゲート -->
 <section class="slide">
   <div class="chap">2.8 論理式を実現する古典回路 ／ 半加算器</div>
-  <h2>半加算器（half adder）<small>表2.6</small></h2>
-  <div class="body">
-    <p class="pop" style="margin:0 0 18px">「2個の1ビットデータの足し算」を行う回路。<b>繰り上がりも考慮</b>するので、出力は <b>2ビット</b>。</p>
-    <div class="cols even" style="height:auto;align-items:start">
-      <div>
-      <div class="ttcap pop" style="--d:.1s">半加算器の真理値表</div>
-      <table class="tt pop" style="--d:.1s">
-        <thead><tr><th>入力1</th><th>入力2</th><th class="out">出力1<br>(繰り上がり)</th><th class="out">出力2<br>(和)</th><th>対応する計算</th></tr></thead>
-        <tbody>
-          <tr><td>0</td><td>0</td><td class="out">0</td><td class="out">0</td><td class="calc">0+0=00</td></tr>
-          <tr><td>0</td><td>1</td><td class="out">0</td><td class="out one">1</td><td class="calc">0+1=01</td></tr>
-          <tr><td>1</td><td>0</td><td class="out">0</td><td class="out one">1</td><td class="calc">1+0=01</td></tr>
-          <tr><td>1</td><td>1</td><td class="out one">1</td><td class="out">0</td><td class="calc">1+1=10</td></tr>
-        </tbody>
-      </table>
-      </div>
-      <div>
-        <div class="point frag" style="margin-top:0">出力1（繰り上がり）の列 <span class="chips"><span class="chip ok">0</span><span class="chip ok">0</span><span class="chip ok">0</span><span class="chip ok">1</span></span><br>→ <b>AND と完全に同じ！</b></div>
-        <div class="point blue frag">出力2（和）の列 <span class="chips"><span class="chip ok">0</span><span class="chip ok">1</span><span class="chip ok">1</span><span class="chip ng">0</span></span><br>→ OR（0,1,1,<b>1</b>）に似ているが、<b>両方 1 のときだけ違う</b></div>
-        <div class="point frag" style="background:#dcfce7;border-left-color:var(--green)">出力2（和）は、前に見た <b style="color:var(--green)">XOR（2 を法とした和）</b> と同じ！<br><span style="font-size:19px">まずは AND・OR・NOT だけで作ってみる → 次のページ</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 9. 半加算器 4ゲート -->
-<section class="slide">
-  <div class="chap">2.8 論理式を実現する古典回路 ／ 半加算器</div>
-  <h2>AND・OR・NOT で半加算器を作る<small>図2.18</small></h2>
+  <h2>AND・OR・NOT（積・和・否定）で半加算器を作る<small>図2.18</small></h2>
   <div class="body cols wide">
     <div class="card pop">
       <svg class="circ" id="cHa4"></svg>
       <div class="btns"><button class="b" id="pHa4">▶ 自動再生</button></div>
     </div>
     <div>
-      <p class="pop" style="margin-top:0;font-size:21px">出力2（和）＝「OR だけど、両方 1 のときは除く」</p>
-      <div class="formula pop" style="--d:.1s;font-size:21px">出力2 = (入力1 OR 入力2)<br>　　AND NOT(入力1 AND 入力2)</div>
+      <div class="point pop" style="margin-top:0;font-size:20px">出力1（繰り上がり）＝「<b>両方 1 のときに繰り上げる</b>」<br><span style="font-size:17px">→ AND そのもの</span></div>
+      <div class="point blue pop" style="--d:.1s;font-size:20px">出力2（和）＝「<b>OR だけど、両方 1 のときは除く</b>」<br><span style="font-size:17px">→ OR と NOT(AND) を AND でつなぐ</span></div>
       <div class="ttcap pop" style="--d:.2s;margin-top:14px">半加算器の真理値表</div>
       <table class="tt small pop" style="--d:.2s" id="tHa4"></table>
       <div class="point frag" style="font-size:19px">ゲート <b>4個</b>。和が出るまでに <b>3段</b>（AND → NOT → AND）かかる</div>
@@ -428,13 +399,45 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
       <div class="hint pop" style="--d:.1s;font-size:17px">表2.6 の出力2（和）と表2.7 の XOR が一致：XOR は「繰り上がりを気にせず下の桁だけ見た足し算」</div>
       <div class="card pop" style="--d:.15s;margin-top:16px">
         <div style="font-weight:700;font-size:18px;margin-bottom:4px">ゲート数</div>
-        <div class="barrow"><span>図2.18（AND/OR/NOT）</span><div class="bar-bg"><div class="bar-fill o" style="--w:100%">4個</div></div></div>
-        <div class="barrow"><span>図2.20（XOR 利用）</span><div class="bar-bg"><div class="bar-fill a" style="--w:50%;transition-delay:.4s">2個</div></div></div>
+        <div class="barrow"><span>AND/OR/NOT利用</span><div class="bar-bg"><div class="bar-fill o" style="--w:100%">4個</div></div></div>
+        <div class="barrow"><span>XOR/AND利用</span><div class="bar-bg"><div class="bar-fill a" style="--w:50%;transition-delay:.4s">2個</div></div></div>
         <div style="font-weight:700;font-size:18px;margin:10px 0 4px">出力までの段数（遅延）</div>
-        <div class="barrow"><span>図2.18</span><div class="bar-bg"><div class="bar-fill o" style="--w:100%;transition-delay:.8s">3段</div></div></div>
-        <div class="barrow"><span>図2.20</span><div class="bar-bg"><div class="bar-fill a" style="--w:33%;transition-delay:1.2s">1段</div></div></div>
+        <div class="barrow"><span>AND/OR/NOT利用</span><div class="bar-bg"><div class="bar-fill o" style="--w:100%;transition-delay:.8s">3段</div></div></div>
+        <div class="barrow"><span>XOR/AND利用</span><div class="bar-bg"><div class="bar-fill a" style="--w:33%;transition-delay:1.2s">1段</div></div></div>
       </div>
       <div class="point frag" style="font-size:19px">同じ結果を出す回路は複数ある。1個のゲートの実行時間が同じなら、<b>ゲート数が少ない・並列化できる回路の方が速い</b></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- ゲートごとのコスト -->
+<section class="slide">
+  <div class="chap">補足 ／ 基本論理ゲートのコスト</div>
+  <h2>ゲートの種類でトランジスタ数・計算時間は違う</h2>
+  <div class="body cols">
+    <div class="card pop">
+      <div style="font-weight:700;font-size:18px;margin-bottom:6px">1ゲートあたりのトランジスタ数（CMOS の代表的な構成）</div>
+      <div class="barrow"><span>NOT</span><div class="bar-bg"><div class="bar-fill a" style="--w:16.7%">2</div></div></div>
+      <div class="barrow"><span>NAND / NOR</span><div class="bar-bg"><div class="bar-fill a" style="--w:33.3%;transition-delay:.2s">4</div></div></div>
+      <div class="barrow"><span>AND / OR</span><div class="bar-bg"><div class="bar-fill a" style="--w:50%;transition-delay:.4s">6</div></div></div>
+      <div class="barrow"><span>XOR</span><div class="bar-bg"><div class="bar-fill o" style="--w:100%;transition-delay:.6s">8〜12</div></div></div>
+      <table class="tt small" style="margin-top:14px;width:100%">
+        <thead><tr><th>ゲート</th><th>作り方</th><th>計算時間（目安）</th></tr></thead>
+        <tbody>
+          <tr><td>NOT</td><td>トランジスタ 2個</td><td>最も速い</td></tr>
+          <tr><td>NAND / NOR</td><td>トランジスタ 4個</td><td>速い</td></tr>
+          <tr><td>AND / OR</td><td>NAND / NOR ＋ NOT</td><td>約 2段分</td></tr>
+          <tr><td>XOR</td><td>複数段の組み合わせ</td><td>遅め</td></tr>
+        </tbody>
+      </table>
+      <div class="hint">値は回路方式によって変わる目安です</div>
+    </div>
+    <div>
+      <div class="point frag" style="margin-top:0">教科書の比較は「<b>1個のゲートの実行時間が同じ</b>」という仮定の上での話</div>
+      <div class="point blue frag">実際は、ゲートごとに <b>必要なトランジスタの数</b> も <b>計算時間</b> も違う<br>
+        <span style="font-size:19px">半加算器のトランジスタ数（目安）<br>AND/OR/NOT利用：6 + 6 + 2 + 6 = <b>20個</b><br>XOR/AND利用：12 + 6 = <b>18個</b></span></div>
+      <div class="point frag" style="background:#dcfce7;border-left-color:var(--green)">回路の速さ・大きさは「<b>ゲートの数</b>」だけでなく「<b>どのゲートを使うか</b>」でも決まる<br><span style="font-size:19px">実際の集積回路では、少ないトランジスタで作れる NAND・NOR を基本にすることが多い</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -483,28 +486,10 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
   <div class="pageno"></div>
 </section>
 
-<!-- 14. 全加算器の構成 -->
-<section class="slide">
-  <div class="chap">追加内容 ／ 全加算器</div>
-  <h2>全加算器 ＝ 半加算器 × 2 ＋ OR</h2>
-  <div class="body">
-    <div class="center pop" style="margin-bottom:4px">
-      <svg class="circ" id="blockDiag" style="width:780px"></svg>
-    </div>
-    <div class="cols even" style="height:auto;align-items:start;gap:24px">
-      <div class="point frag" style="margin-top:0">① 半加算器で <b>A + B</b> を計算<br>　→ 和 <b>P = A ⊕ B</b>、繰り上がり <b>A · B</b></div>
-      <div class="point frag" style="margin-top:0">② 半加算器で <b>P + C<sub>in</sub></b> を計算<br>　→ 和 <b>S = P ⊕ C<sub>in</sub></b>、繰り上がり <b>P · C<sub>in</sub></b></div>
-    </div>
-    <div class="point blue frag">③ 2つの繰り上がりは <b>同時に 1 にならない</b>（A·B = 1 なら P = 0）ので、OR でまとめれば良い<br>
-      <span class="formula" style="font-size:24px;padding:2px 12px">C<sub>out</sub> = A·B + (A ⊕ B)·C<sub>in</sub></span></div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
 <!-- 15. 全加算器 回路 -->
 <section class="slide">
   <div class="chap">追加内容 ／ 全加算器</div>
-  <h2>全加算器の回路を動かしてみる</h2>
+  <h2>全加算器の回路を動かしてみる<small>半加算器 × 2 ＋ OR</small></h2>
   <div class="body cols wide">
     <div class="card pop">
       <svg class="circ" id="cFa"></svg>
@@ -514,7 +499,9 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
     <div>
       <div class="ttcap pop" style="--d:.1s">全加算器の真理値表</div>
       <table class="tt small pop" style="--d:.1s" id="tFa"></table>
-      <div class="point frag" style="font-size:19px">1 + 1 + 1 = 11₂ の行（入力すべて 1）を選んで、2つの半加算器の動きを確かめよう</div>
+      <div class="point blue frag" style="font-size:19px">①で A + B、②で P + C<sub>in</sub> を計算し、2つの繰り上がりを OR でまとめる<br>
+        <span class="formula" style="font-size:20px;padding:2px 10px">C<sub>out</sub> = A·B + (A ⊕ B)·C<sub>in</sub></span></div>
+      <div class="hint frag">1 + 1 + 1 = 11₂ の行（入力すべて 1）を選んで、2つの半加算器の動きを確かめよう</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -523,7 +510,7 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
 <!-- 16. リップルキャリー -->
 <section class="slide" data-id="ripple">
   <div class="chap">追加内容 ／ 多ビット加算器</div>
-  <h2>全加算器をつなげて 4ビット加算器<small>リップルキャリー加算器</small></h2>
+  <h2>リップルキャリー加算器（繰り上がりのさざ波加算器）<small>全加算器 × 4</small></h2>
   <div class="body">
     <div class="card pop" style="padding:10px 18px">
       <svg class="circ" id="rippleSvg" style="height:300px"></svg>
@@ -535,28 +522,6 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
       </div>
     </div>
     <div class="point frag" style="font-size:20px">繰り上がり C が <b>右（下位）から左（上位）へ波のように伝わる</b>（ripple = さざ波）。n ビットなら最悪 n 個分の全加算器を順番に待つ必要がある → ビット数が増えると遅い</div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 17. 量子回路へ -->
-<section class="slide">
-  <div class="chap">発展 ／ 量子回路への展望</div>
-  <h2>量子回路で足し算するには？<small>次章への予告</small></h2>
-  <div class="body cols">
-    <div class="card pop">
-      <svg class="circ" id="qCirc"></svg>
-      <div class="hint">a, b をクリックして切り替え（計算基底 |0⟩, |1⟩ を入力した場合）</div>
-    </div>
-    <div>
-      <ul>
-        <li class="pop" style="font-size:21px">AND は出力が 0 だと入力が分からない → <b>不可逆</b></li>
-        <li class="pop" style="--d:.1s;font-size:21px">量子回路のゲートは <b class="kb">可逆</b> でなければならない</li>
-        <li class="frag" style="font-size:21px"><b>CNOT</b>：|a, b⟩ → |a, a⊕b⟩ … XOR の役割</li>
-        <li class="frag" style="font-size:21px"><b>トフォリ（CCNOT）</b>：|a, b, c⟩ → |a, b, c⊕ab⟩<br>c = 0 なら AND の役割</li>
-      </ul>
-      <div class="point frag" style="font-size:20px">入力を残したまま計算できるので、<b>半加算器・全加算器も量子回路で作れる</b>。古典回路の考え方がそのまま活きる</div>
-    </div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -573,26 +538,8 @@ details div{margin-top:8px;line-height:1.6;color:#334155}
       <li class="pop" style="--d:.3s"><b>全加算器</b>：下の桁からの繰り上がりを含む3入力の足し算。<b>半加算器 × 2 + OR</b> で作れる<br>
         <span class="formula" style="font-size:24px;padding:2px 12px">S = A ⊕ B ⊕ C<sub>in</sub>,　C<sub>out</sub> = A·B + (A ⊕ B)·C<sub>in</sub></span></li>
       <li class="pop" style="--d:.4s">全加算器を並べれば <b>任意ビットの加算器</b> になる（リップルキャリー加算器）</li>
-      <li class="pop" style="--d:.5s">量子回路でも <b>可逆なゲート（CNOT・トフォリ）</b> で同じ計算が実現できる</li>
+      <li class="pop" style="--d:.5s">実際の基本論理ゲートは、種類ごとに <b>必要なトランジスタの数や計算時間が違う</b></li>
     </ul>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 19. 演習 -->
-<section class="slide">
-  <div class="chap">Discussion</div>
-  <h2>演習・ディスカッション<small>クリックで解答</small></h2>
-  <div class="body">
-    <details class="pop"><summary>Q1. 全加算器の和 S（A + B + C<sub>in</sub> の下の桁）を XOR ゲートだけで作るには、XOR が何個必要？</summary>
-      <div>2個。S = (A ⊕ B) ⊕ C<sub>in</sub>。XOR は結合法則が成り立つので、順番に XOR していけば良い。</div></details>
-    <details class="pop" style="--d:.1s"><summary>Q2. 4ビットのリップルキャリー加算器に必要なゲート数は？</summary>
-      <div>全加算器 4個 × 5ゲート = <b>20個</b>。最下位桁は繰り上がり入力が無いので半加算器（2ゲート）にすれば 2 + 15 = <b>17個</b>。</div></details>
-    <details class="pop" style="--d:.2s"><summary>Q3. 全加算器の繰り上がり C<sub>out</sub> は C<sub>in</sub> から何段で出る？ n ビット加算器ではどうなる？</summary>
-      <div>C<sub>in</sub> → AND → OR の <b>2段</b>。n ビットでは繰り上がりが最大 n 個の全加算器を通るので約 <b>2n 段</b>。ビット数に比例して遅くなる。
-        改善策として、繰り上がりを先回りして計算する <b>キャリールックアヘッド加算器</b> がある。</div></details>
-    <details class="pop" style="--d:.3s"><summary>Q4. 引き算（A − B）を全加算器で行うにはどうすればよい？</summary>
-      <div>2の補数を使う：B の各ビットを NOT で反転し、最下位の C<sub>in</sub> に 1 を入れて加算すると A + (−B) = A − B になる。</div></details>
   </div>
   <div class="pageno"></div>
 </section>
@@ -892,37 +839,6 @@ function fullAdder(id) {
   $('#tFaBig').querySelectorAll('tbody tr').forEach(r => r.classList.remove('cur'));
 }
 
-/* ---------- ブロック図 ---------- */
-{
-  const svg = $('#blockDiag');
-  svg.setAttribute('viewBox', '0 0 780 230');
-  const gw = el('g', {}, svg), gb = el('g', {}, svg);
-  const w = pts => {
-    const d = 'M' + pts.map(p => p.join(',')).join(' L');
-    el('path', { d, class: 'wire on' }, gw); el('path', { d, class: 'flow on' }, gw);
-  };
-  const blk = (x, y, ww, h, t, fill) => {
-    el('rect', { x, y, width: ww, height: h, rx: 12, fill, stroke: '#1e293b', 'stroke-width': 3 }, gb);
-    text(gb, x + ww / 2, y + h / 2 + 8, t, { 'text-anchor': 'middle', 'font-size': 22, 'font-weight': 800 });
-  };
-  w([[60, 70], [140, 70]]); w([[60, 120], [140, 120]]);
-  w([[260, 70], [400, 70]]);
-  w([[460, 8], [460, 40]]);
-  w([[520, 70], [700, 70]]);
-  w([[520, 120], [560, 120], [560, 165], [600, 165]]);
-  w([[260, 120], [290, 120], [290, 200], [600, 200]]);
-  w([[680, 182], [700, 182]]);
-  blk(140, 40, 120, 110, '半加算器①', '#eff6ff');
-  blk(400, 40, 120, 110, '半加算器②', '#eff6ff');
-  blk(600, 150, 80, 64, 'OR', '#fff7ed');
-  const lb = (x, y, t, a = 'start', col = '#0f172a') => text(gb, x, y, t, { 'font-size': 20, 'font-weight': 700, 'text-anchor': a, fill: col });
-  lb(50, 77, 'A', 'end'); lb(50, 127, 'B', 'end'); lb(450, 26, 'C_{in}', 'end');
-  lb(278, 60, 'P = A⊕B', 'start', '#c2410c');
-  lb(300, 222, 'A·B', 'start', '#c2410c');
-  lb(530, 108, 'P·C_{in}', 'start', '#c2410c');
-  lb(710, 77, 'S'); lb(710, 189, 'C_{out}');
-}
-
 /* ---------- 筆算アニメーション ---------- */
 function columnAdder(grid, msg, A, B, describe) {
   const n = A.length;
@@ -1122,58 +1038,6 @@ function columnAdder(grid, msg, A, B, describe) {
   window.onEnter = window.onEnter || {};
   onEnter.ripple = run;
   run();
-}
-
-/* ---------- 量子半加算器 ---------- */
-{
-  const svg = $('#qCirc');
-  svg.setAttribute('viewBox', '-20 0 820 250');
-  const gW = el('g', {}, svg), gB = el('g', {}, svg), gT = el('g', {}, svg);
-  let a = 1, b = 1;
-  const seg = d => {
-    const base = el('path', { d, class: 'wire' }, gW), flow = el('path', { d, class: 'flow' }, gW);
-    return on => { base.classList.toggle('on', !!on); flow.classList.toggle('on', !!on); };
-  };
-  const q0 = seg('M77,60 H560'), q1a = seg('M77,130 H400'), q1b = seg('M400,130 H573');
-  const q2a = seg('M77,200 H250'), q2b = seg('M250,200 H573');
-  const ctrl = (x, y1, y2) => {
-    el('line', { x1: x, y1, x2: x, y2: y2 + 16, stroke: '#1e293b', 'stroke-width': 3 }, gB);
-  };
-  ctrl(250, 60, 200); ctrl(400, 60, 130);
-  [[250, 60], [250, 130], [400, 60]].forEach(([x, y]) => el('circle', { cx: x, cy: y, r: 8, fill: '#1e293b' }, gB));
-  [[250, 200], [400, 130]].forEach(([x, y]) => {
-    el('circle', { cx: x, cy: y, r: 16, fill: '#fff', stroke: '#1e293b', 'stroke-width': 3 }, gB);
-    el('path', { d: `M${x - 16},${y} H${x + 16} M${x},${y - 16} V${y + 16}`, stroke: '#1e293b', 'stroke-width': 3 }, gB);
-  });
-  text(gB, 250, 28, 'トフォリ (CCNOT)', { class: 'halbl', 'text-anchor': 'middle' });
-  text(gB, 400, 28, 'CNOT', { class: 'halbl', 'text-anchor': 'middle' });
-  const tog = (y, label, f) => {
-    const g = el('g', { class: 'inp' }, gT);
-    el('circle', { cx: 60, cy: y, r: 17 }, g);
-    const t = el('text', { x: 60, y: y + 7, class: 'val' }, g);
-    text(gT, 34, y + 7, label, { class: 'lbl', 'text-anchor': 'end' });
-    if (f) g.addEventListener('click', f); else g.style.cursor = 'default';
-    return [g, t];
-  };
-  const [ga, ta] = tog(60, 'a', () => { a ^= 1; upd(); });
-  const [gb2, tb] = tog(130, 'b', () => { b ^= 1; upd(); });
-  tog(200, '|0⟩')[1].textContent = '0';
-  const out = (y, label) => {
-    const g = el('g', { class: 'lamp' }, gT);
-    el('circle', { cx: 590, cy: y, r: 17 }, g);
-    const t = el('text', { x: 590, y: y + 7, class: 'val' }, g);
-    text(gT, 616, y + 7, label, { class: 'lbl' });
-    return [g, t];
-  };
-  const o0 = out(60, 'a'), o1 = out(130, 'a⊕b = 和'), o2 = out(200, 'a·b = 繰り上がり');
-  function upd() {
-    const s = a ^ b, c = a & b;
-    ga.classList.toggle('on', !!a); ta.textContent = a;
-    gb2.classList.toggle('on', !!b); tb.textContent = b;
-    q0(a); q1a(b); q1b(s); q2a(0); q2b(c);
-    [[o0, a], [o1, s], [o2, c]].forEach(([[g, t], v]) => { g.classList.toggle('on', !!v); t.textContent = v; });
-  }
-  upd();
 }
 
 /* ---------- スライド制御 ---------- */
