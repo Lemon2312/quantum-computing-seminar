@@ -1318,7 +1318,8 @@ $('#btnOv').onclick = e => { e.currentTarget.blur(); toggleOverview(true); };
 $('#btnOvClose').onclick = e => { e.currentTarget.blur(); toggleOverview(false); };
 addEventListener('beforeprint', () => slides.forEach(s => frags(s).forEach(f => showFrag(f, true))));
 /* ---------- レーザーポインター ----------
-   Apple Pencil のペン先を画面に当てている間だけ赤く光る点を表示し、なぞった軌跡は約1秒で消える（書き込みは残らない）。
+   Apple Pencil のペン先を画面に当てている間だけ赤く光る点を表示し、なぞった軌跡を光らせる（書き込みは残らない）。
+   軌跡はペンを離してから約1秒で消える。消えきる前にもう一度ペンを当てると、それまでの軌跡は消えずに残り続ける。
    軽いタップは今までどおり回路の入力やボタンのクリックとして扱う。 */
 const laser = (() => {
   const W = 1280, H = 720, LIFE = 1000;
@@ -1326,7 +1327,8 @@ const laser = (() => {
   canvas.id = 'laser';
   stage.appendChild(canvas);
   const ctx = canvas.getContext('2d');
-  let trail = [], down = null, raf = 0, sid = 0;
+  // trail は線ごとの点の配列。fadeFrom はペンを離した時刻（ペンを当てている間は null）
+  let trail = [], down = null, raf = 0, fadeFrom = null;
 
   function resize() {
     const k = Math.min(4096 / W, stage.getBoundingClientRect().width / W * (devicePixelRatio || 1));
@@ -1337,26 +1339,20 @@ const laser = (() => {
     const r = stage.getBoundingClientRect();
     return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H];
   }
+  const level = () => fadeFrom === null ? 1 : Math.max(0, 1 - (performance.now() - fadeFrom) / LIFE);
   function frame() {
     raf = 0;
-    const now = performance.now(), k = canvas.width / W;
-    trail = trail.filter(p => now - p.t < LIFE);
+    const k = canvas.width / W, f = level();
+    if (!f) trail = [];
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.setTransform(k, 0, 0, k, 0, 0);
-    ctx.lineCap = 'round'; ctx.shadowColor = 'rgba(255,30,60,.9)';
-    // 軌跡：新しい部分ほど太く濃く、古い部分は細く薄くして消していく
-    // （区間ごとに描くと半透明の重なりが粒に見えるので、古さを8段階に分けて段階ごとに1本の線で描く）
-    ctx.lineJoin = 'round';
-    for (let i = 1; i < trail.length;) {
-      const lv = Math.ceil((1 - (now - trail[i].t) / LIFE) * 8), s0 = trail[i].sid;
-      ctx.beginPath(); ctx.moveTo(trail[i - 1].x, trail[i - 1].y);
-      for (; i < trail.length && trail[i].sid === s0 && trail[i - 1].sid === s0 &&
-        Math.ceil((1 - (now - trail[i].t) / LIFE) * 8) === lv; i++) ctx.lineTo(trail[i].x, trail[i].y);
-      if (i < trail.length && (trail[i].sid !== s0 || trail[i - 1].sid !== s0)) i++;
-      const f = lv / 8;
-      ctx.strokeStyle = `rgba(255,40,70,${.75 * f})`; ctx.lineWidth = 2 + 6 * f; ctx.shadowBlur = 14 * f * k;
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.shadowColor = 'rgba(255,30,60,.9)';
+    ctx.strokeStyle = `rgba(255,40,70,${.75 * f})`; ctx.lineWidth = 2 + 6 * f; ctx.shadowBlur = 14 * f * k;
+    trail.forEach(line => {
+      ctx.beginPath(); ctx.moveTo(line[0][0], line[0][1]);
+      line.forEach(q => ctx.lineTo(q[0], q[1]));
       ctx.stroke();
-    }
+    });
     if (down) {
       const [x, y] = down.pos, g = ctx.createRadialGradient(x, y, 0, x, y, 13);
       g.addColorStop(0, '#fff'); g.addColorStop(.35, '#ff5a6e'); g.addColorStop(1, 'rgba(255,30,60,0)');
@@ -1364,16 +1360,18 @@ const laser = (() => {
       ctx.beginPath(); ctx.arc(x, y, 13, 0, Math.PI * 2); ctx.fill();
     }
     ctx.shadowBlur = 0;
-    if (down || trail.length) kick();
+    if (fadeFrom !== null && trail.length) kick();
   }
   function kick() { if (!raf) raf = requestAnimationFrame(frame); }
-  function add(q) { trail.push({ x: q[0], y: q[1], t: performance.now(), sid }); down.pos = q; }
+  function add(q) { trail[trail.length - 1].push(q); down.pos = q; }
 
   stage.addEventListener('pointerdown', e => {
     if (overview || e.pointerType !== 'pen' || down) return;
     e.preventDefault();
-    sid++; down = { id: e.pointerId, pos: null };
-    add(toStage(e)); kick();
+    // 前の軌跡が消えきっていなければ残したまま続ける
+    if (!level()) trail = [];
+    fadeFrom = null; down = { id: e.pointerId, pos: null };
+    trail.push([]); add(toStage(e)); kick();
   });
   addEventListener('pointermove', e => {
     if (!down || e.pointerId !== down.id) return;
@@ -1382,7 +1380,7 @@ const laser = (() => {
     (evs.length ? evs : [e]).forEach(ev => add(toStage(ev)));
     kick();
   }, { passive: false });
-  const up = e => { if (down && e.pointerId === down.id) { down = null; kick(); } };
+  const up = e => { if (down && e.pointerId === down.id) { down = null; fadeFrom = performance.now(); kick(); } };
   addEventListener('pointerup', up);
   addEventListener('pointercancel', up);
   addEventListener('resize', resize);
