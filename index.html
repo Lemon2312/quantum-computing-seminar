@@ -1038,9 +1038,12 @@ function truthTable(id, c, ins, outs, extra) {
   const k = ins.length;
   let html = '<thead><tr>' + ins.map(i => `<th>${i[1]}</th>`).join('') +
     outs.map(o => `<th class="out">${o[1]}</th>`).join('') + (extra ? `<th>${extra[0]}</th>` : '') + '</tr></thead><tbody>';
+  // 行は ins に書いた列の順（左の列が上位ビット）で並べ、各行の入力値を覚えておく
+  const rows = [];
   for (let n = 0; n < (1 << k); n++) {
     const vals = {};
     ins.forEach((inp, j) => vals[inp[0]] = (n >> (k - 1 - j)) & 1);
+    rows.push(vals);
     const s = c.compute(vals);
     html += '<tr>' + ins.map(i => `<td>${vals[i[0]]}</td>`).join('') +
       outs.map(o => `<td class="out${s[o[0]] ? ' one' : ''}${o[2] ? ' ' + o[2] + s[o[0]] : ''}">${s[o[0]]}</td>`).join('') +
@@ -1048,8 +1051,9 @@ function truthTable(id, c, ins, outs, extra) {
   }
   table.innerHTML = html + '</tbody>';
   const trs = [...table.querySelectorAll('tbody tr')];
-  trs.forEach((tr, n) => tr.addEventListener('click', () => c.setIndex(n)));
-  c.onChange(() => { const n = c.index(); trs.forEach((tr, i) => tr.classList.toggle('cur', i === n)); });
+  trs.forEach((tr, n) => tr.addEventListener('click', () => c.set(rows[n])));
+  c.onChange(() => trs.forEach((tr, i) =>
+    tr.classList.toggle('cur', ins.every(([name]) => rows[i][name] === c.inputVals[name]))));
 }
 
 function autoplay(btnId, c, interval = 1900) {
@@ -1142,7 +1146,7 @@ function halfAdder4(id) {
 }
 {
   const c = halfAdder4('cHa4');
-  truthTable('tHa4', c, [['A', '入力1'], ['B', '入力2']], [['a', '出力2'], ['f', '出力1']]);
+  truthTable('tHa4', c, [['B', '入力2'], ['A', '入力1']], [['a', '出力2'], ['f', '出力1']]);
   autoplay('pHa4', c); c.set({}, false);
 }
 {
@@ -1152,7 +1156,7 @@ function halfAdder4(id) {
 }
 {
   const c = halfAdderXor('cHa2', '出力1 (和)', '出力2 (繰り上がり)');
-  truthTable('tHa2', c, [['A', '入力1'], ['B', '入力2']], [['a', '出力2<br>(繰り上がり)'], ['x', '出力1<br>(和)']]);
+  truthTable('tHa2', c, [['B', '入力2'], ['A', '入力1']], [['a', '出力2<br>(繰り上がり)'], ['x', '出力1<br>(和)']]);
   autoplay('pHa2', c); c.set({}, false);
 }
 {
