@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>デザイン比較</title>
+<style>
+:root{--bg:#f1f5f9;--ink:#0f172a;--muted:#64748b;--card:#fff;--edge:#e2e8f0;--accent:#f97316}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1020;--ink:#e2e8f0;--muted:#94a3b8;--card:#141b2e;--edge:#26324d}}
+:root[data-theme="dark"]{--bg:#0b1020;--ink:#e2e8f0;--muted:#94a3b8;--card:#141b2e;--edge:#26324d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic UI",Meiryo,sans-serif}
+header{position:sticky;top:0;z-index:2;display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--edge)}
+h1{font-size:18px;margin:0}
+.nav{display:flex;align-items:center;gap:8px;margin-left:auto}
+.nav button{font:inherit;font-weight:700;border:1px solid var(--edge);background:var(--bg);color:var(--ink);border-radius:8px;padding:6px 14px;cursor:pointer}
+.nav input{width:60px;font:inherit;text-align:center;padding:5px;border:1px solid var(--edge);border-radius:8px;background:var(--bg);color:var(--ink)}
+.note{width:100%;font-size:13px;color:var(--muted)}
+main{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr));gap:16px;padding:16px}
+figure{margin:0;background:var(--card);border:1px solid var(--edge);border-radius:14px;overflow:hidden}
+figcaption{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;font-weight:700}
+figcaption span{font-size:13px;color:var(--muted);font-weight:400}
+figcaption a{font-size:13px;color:var(--accent);text-decoration:none;white-space:nowrap}
+iframe{display:block;width:100%;aspect-ratio:16/9;border:0;background:#000}
+</style>
+</head>
+<body>
+<header>
+  <h1>デザイン比較</h1>
+  <div class="nav">
+    <button id="prev">◀ 前</button>
+    <span>スライド <input id="num" type="number" min="1" value="1"> / <span id="total">16</span></span>
+    <button id="next">次 ▶</button>
+  </div>
+  <div class="note">4つのデザインで同じスライドを並べて表示します。各スライド内の回路は直接クリックして操作できます。「全画面で開く」でそのデザインを単独で表示します。</div>
+</header>
+<main id="grid"></main>
+<script>
+const designs = [
+  ['現在のデザイン', '変更なし', '../index.html'],
+  ['案A ダーク×ネオン', '光る信号・SF感', 'neon.html'],
+  ['案B 明るいポップ', '太い枠線・弾むアニメ', 'pop.html'],
+  ['案C ミニマル', '余白と大きな文字', 'minimal.html'],
+];
+const TOTAL = 16;
+document.getElementById('total').textContent = TOTAL;
+const grid = document.getElementById('grid'), num = document.getElementById('num');
+const frames = designs.map(([name, desc, url]) => {
+  const f = document.createElement('figure');
+  f.innerHTML = `<figcaption><div>${name} <span>${desc}</span></div><a target="_blank" href="${url}">全画面で開く ↗</a></figcaption><iframe title="${name}" loading="lazy"></iframe>`;
+  grid.appendChild(f);
+  return [f.querySelector('iframe'), f.querySelector('a'), url];
+});
+function show(n) {
+  n = Math.max(1, Math.min(TOTAL, n | 0)); num.value = n;
+  frames.forEach(([ifr, a, url]) => { ifr.src = `${url}?s=${n}#${n}`; a.href = `${url}#${n}`; });
+}
+document.getElementById('prev').onclick = () => show(+num.value - 1);
+document.getElementById('next').onclick = () => show(+num.value + 1);
+num.onchange = () => show(+num.value);
+show(1);
+</script>
+</body>
+</html>
