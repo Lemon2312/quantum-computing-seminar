@@ -346,7 +346,7 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .qb-eq .nb{color:var(--blue);font-weight:700}
 .qb-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:6px}
 .qb-sum{font-size:21px}
-.qb-row .qverdict{margin-top:0;font-size:17px;padding:3px 10px;white-space:nowrap}
+.qb-row .qverdict{margin-top:0;font-size:17px;padding:3px 10px;white-space:nowrap;flex:none;width:200px;box-sizing:border-box}
 .qb-row .pgauge{flex:1;margin:0 0 14px}
 /* 確率のゲージ：太枠の箱がちょうど「確率 1」。足りない分は灰色の斜線、はみ出した分は赤の斜線 */
 .pgauge{position:relative;height:28px}
@@ -967,7 +967,7 @@ body.overview #ink,body.overview #penbar{display:none}
 <section class="slide" data-id="qbuild">
   <div class="chap">第3章 量子コンピュータの基本ルール ／ 3.2 量子ビット</div>
   <h2>量子状態<small>定義（pp.85–86）</small></h2>
-  <div class="body cols" style="grid-template-columns:1fr 1.2fr">
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)">
     <div>
       <div class="defbox pop">複素数 <span class="math">a, b</span> が <span class="math" style="white-space:nowrap">|a|² + |b|² = 1</span> という条件を満たすとき、<span class="math" style="white-space:nowrap">a|0⟩ + b|1⟩</span> の形をしたベクトルを <b class="k">量子状態</b>（quantum state）という</div>
       <div class="point blue frag" style="font-size:17px;padding:8px 14px;margin-top:12px">📌 予告：<b><span class="math">|a|²</span></b> は測定で <span class="math">|0⟩</span> を得る確率、<b><span class="math">|b|²</span></b> は <span class="math">|1⟩</span> を得る確率<br>
