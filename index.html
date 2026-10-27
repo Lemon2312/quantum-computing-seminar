@@ -329,6 +329,24 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .pd-bg .eq{font-size:84px;gap:20px}
 .pd-bg .vec{border-width:5px;border-radius:40px;padding:4px 26px;line-height:1.15}
 
+/* 量子状態をつくってみる（ベクトルの足し算） */
+.qbuild{display:grid;grid-template-columns:1fr 200px;gap:10px;align-items:center}
+.qbuild svg{width:100%;height:auto;display:block;user-select:none}
+.qb-side{display:flex;flex-direction:column;gap:10px}
+.qb-side button.b{width:100%}
+.qslider{display:grid;grid-template-columns:22px 1fr 52px;align-items:center;gap:6px;font-weight:800}
+.qslider .qs-name{font-family:"Cambria Math","Times New Roman",serif;font-size:24px;font-style:italic}
+.qslider .qs-name.la{color:#e04e00}
+.qslider .qs-name.lb{color:var(--blue)}
+.qslider .qs-val{font-family:Consolas,Menlo,monospace;font-size:17px;text-align:right}
+.qslider input{width:100%;accent-color:var(--ink);height:28px;touch-action:none}
+.qb-eq{font-size:22px;margin-top:4px}
+.qb-eq .na{color:#e04e00;font-weight:700}
+.qb-eq .nb{color:var(--blue);font-weight:700}
+.qb-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:6px}
+.qb-sum{font-size:21px}
+.qb-row .qverdict{margin-top:0;font-size:18px;padding:3px 12px}
+
 /* 章の扉スライド */
 .door-wrap{position:relative;display:grid;grid-template-columns:auto 1fr;gap:64px;align-items:center;height:100%;padding:0 40px}
 .door-num{width:210px;height:210px;border-radius:46px;background:var(--c);color:#fff;border:5px solid var(--ink);box-shadow:10px 10px 0 var(--ink);
@@ -847,26 +865,32 @@ body.overview #laser{display:none}
 </section>
 
 <!-- 量子状態の定義 -->
-<section class="slide">
+<section class="slide" data-id="qbuild">
   <div class="chap">第3章 量子コンピュータの基本ルール ／ 3.2 量子ビット</div>
   <h2>量子状態<small>定義（pp.85–86）</small></h2>
-  <div class="body cols even">
+  <div class="body cols" style="grid-template-columns:1fr 1.2fr">
     <div>
-      <div class="defbox pop">複素数 <span class="math">a, b</span> が <span class="math">|a|² + |b|² = 1</span> という条件を満たすとき、<br>
-        <span class="math">a|0⟩ + b|1⟩</span> の形をしたベクトルを <b class="k">量子状態</b>（quantum state）という</div>
-      <ul style="margin-top:16px">
-        <li class="frag" style="font-size:19px"><span class="math">|a|, |b|</span> は複素数の絶対値。難しく感じたら、実数の絶対値（符号をプラスにしたもの）をイメージ</li>
-        <li class="frag" style="font-size:19px">量子状態をベクトルの形で表したものを <b class="k">状態ベクトル</b>（state vector）という</li>
+      <div class="defbox pop">複素数 <span class="math">a, b</span> が <span class="math" style="white-space:nowrap">|a|² + |b|² = 1</span> という条件を満たすとき、<span class="math" style="white-space:nowrap">a|0⟩ + b|1⟩</span> の形をしたベクトルを <b class="k">量子状態</b>（quantum state）という</div>
+      <ul style="margin-top:14px">
+        <li class="frag" style="font-size:18px"><span class="math">|a|, |b|</span> は複素数の絶対値。難しく感じたら、実数の絶対値（符号をプラスにしたもの）をイメージ</li>
+        <li class="frag" style="font-size:18px">量子状態をベクトルの形で表したものを <b class="k">状態ベクトル</b>（state vector）という</li>
       </ul>
+      <div class="point frag" style="font-size:17px;padding:8px 14px">集合で書くと（量子状態全体の集合 Q）
+        <div class="eq" style="font-size:22px"><span class="math">Q :=</span><span class="brace">{</span><span class="vec"><span>a</span><span>b</span></span><span class="math">∈ ℂ²</span><span class="bar"></span><span class="math">|a|² + |b|² = 1</span><span class="brace">}</span></div></div>
     </div>
-    <div class="card pop" style="--d:.2s">
-      <div class="muted" style="font-size:16px;font-weight:700">ベクトルで書くと</div>
-      <div class="eq" style="margin:6px 0 14px"><span class="math">a|0⟩ + b|1⟩ = a</span><span class="vec"><span>1</span><span>0</span></span><span class="math">+ b</span><span class="vec"><span>0</span><span>1</span></span><span class="math">=</span><span class="vec"><span>a</span><span>b</span></span></div>
-      <div class="frag">
-        <div class="muted" style="font-size:16px;font-weight:700">同じ定義を集合で書くと（量子状態全体の集合 Q）</div>
-        <div class="eq" style="margin-top:6px"><span class="math">Q :=</span><span class="brace">{</span><span class="vec"><span>a</span><span>b</span></span><span class="math">∈ ℂ²</span><span class="bar"></span><span class="math">|a|² + |b|² = 1</span><span class="brace">}</span></div>
-        <div class="hint" style="text-align:center">「複素数を成分とした2次元のベクトルで、|a|² + |b|² = 1 を満たすもの」</div>
+    <div class="card pop" style="--d:.2s;padding:12px 18px">
+      <div class="qbuild">
+        <svg id="qVecSvg" viewBox="0 0 300 250" aria-label="a|0⟩ と b|1⟩ を足してできるベクトル"></svg>
+        <div class="qb-side">
+          <label class="qslider"><span class="qs-name la">a</span><input type="range" id="qA" min="-1" max="1" step="any"><span class="qs-val" id="qAv"></span></label>
+          <label class="qslider"><span class="qs-name lb">b</span><input type="range" id="qB" min="-1" max="1" step="any"><span class="qs-val" id="qBv"></span></label>
+          <button class="b" id="qNorm">⭕ 円の上にのせる</button>
+          <button class="b" id="qbAuto" data-autoplay>▶ 自動再生</button>
+        </div>
       </div>
+      <div class="eq qb-eq" id="qbEq"></div>
+      <div class="qb-row"><div class="eq qb-sum" id="qbSum"></div><div class="qverdict" id="qbVerdict"></div></div>
+      <div class="hint" style="margin-top:4px">スライダーで a, b を動かしてみよう。|a|² + |b|² = 1 のとき、矢印の先が点線の円（半径 1）の上にくる<br>※ 係数を実数に限った場合のイメージ図</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1476,6 +1500,91 @@ function columnAdder(grid, msg, A, B, describe) {
   run();
 }
 
+/* ---------- 量子状態をつくってみる（a|0⟩ + b|1⟩ を矢印の足し算で見せる） ---------- */
+{
+  const svg = $('#qVecSvg'), NS = 'http://www.w3.org/2000/svg';
+  const OX = 150, OY = 125, U = 88;  // 原点と、長さ 1 の大きさ
+  const mk = (tag, attrs, parent = svg) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    parent.appendChild(e); return e;
+  };
+  const defs = mk('defs', {});
+  [['qhA', '#ff6b1a'], ['qhB', '#3b6cff'], ['qhS', '#1f1a3d']].forEach(([id, c]) => {
+    const m = mk('marker', { id, viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 5, markerHeight: 5, orient: 'auto-start-reverse' }, defs);
+    mk('path', { d: 'M0,0 L10,5 L0,10 z', fill: c }, m);
+  });
+  mk('line', { x1: 20, y1: OY, x2: 280, y2: OY, stroke: '#d9d4ea', 'stroke-width': 2 });
+  mk('line', { x1: OX, y1: 8, x2: OX, y2: 242, stroke: '#d9d4ea', 'stroke-width': 2 });
+  const ring = mk('circle', { cx: OX, cy: OY, r: U, fill: 'none', stroke: '#1f1a3d', 'stroke-width': 2.5, 'stroke-dasharray': '6 6' });
+  const t = (x, y, s, c) => { const e = mk('text', { x, y, 'text-anchor': 'middle', 'font-size': 15, 'font-weight': 800, fill: c, 'font-family': 'Cambria Math,Times New Roman,serif' }); e.textContent = s; return e; };
+  t(OX + U + 26, OY - 8, '|0⟩', '#6b6790'); t(OX + 20, OY - U - 8, '|1⟩', '#6b6790');
+  const arA = mk('line', { x1: OX, y1: OY, stroke: '#ff6b1a', 'stroke-width': 6, 'stroke-linecap': 'round', 'marker-end': 'url(#qhA)' });
+  const arB = mk('line', { stroke: '#3b6cff', 'stroke-width': 6, 'stroke-linecap': 'round', 'marker-end': 'url(#qhB)' });
+  const arS = mk('line', { x1: OX, y1: OY, stroke: '#1f1a3d', 'stroke-width': 3.5, 'stroke-dasharray': '2 6', 'stroke-linecap': 'round', 'marker-end': 'url(#qhS)' });
+  const tip = mk('circle', { r: 9, stroke: '#1f1a3d', 'stroke-width': 3 });
+  const lA = t(0, 0, '', '#e04e00'), lB = t(0, 0, '', '#3b6cff');
+
+  const sa = $('#qA'), sb = $('#qB');
+  let a = 1, b = 0, anim = 0;
+  const f2 = x => (Math.abs(x) < .005 ? 0 : x).toFixed(2);
+  const vec = (x, y, cx = '', cy = '') => `<span class="vec"><span class="${cx}">${x}</span><span class="${cy}">${y}</span></span>`;
+  function draw() {
+    const xa = OX + U * a, yb = OY - U * b;
+    const vis = (e, on) => e.setAttribute('visibility', on ? 'visible' : 'hidden');
+    arA.setAttribute('x2', xa); arA.setAttribute('y2', OY); vis(arA, Math.abs(a) > .03);
+    arB.setAttribute('x1', xa); arB.setAttribute('y1', OY); arB.setAttribute('x2', xa); arB.setAttribute('y2', yb); vis(arB, Math.abs(b) > .03);
+    arS.setAttribute('x2', xa); arS.setAttribute('y2', yb); vis(arS, Math.abs(a) > .03 && Math.abs(b) > .03);
+    tip.setAttribute('cx', xa); tip.setAttribute('cy', yb);
+    lA.setAttribute('x', OX + U * a / 2); lA.setAttribute('y', OY + (b < 0 ? -10 : 20)); lA.textContent = Math.abs(a) > .15 ? 'a|0⟩' : '';
+    lB.setAttribute('x', xa + (a < 0 ? -24 : 24)); lB.setAttribute('y', OY - U * b / 2 + 5); lB.textContent = Math.abs(b) > .15 ? 'b|1⟩' : '';
+    const sum = a * a + b * b, ok = sum.toFixed(2) === '1.00';
+    tip.setAttribute('fill', ok ? '#ffd53d' : '#fff');
+    ring.setAttribute('stroke', ok ? '#14a35a' : '#1f1a3d');
+    sa.value = a; sb.value = b;
+    $('#qAv').textContent = f2(a); $('#qBv').textContent = f2(b);
+    const A = `<span class="na">${f2(a)}</span>`, B = `<span class="nb">${f2(b)}</span>`;
+    $('#qbEq').innerHTML = `<span class="math">${A}|0⟩ + ${B}|1⟩ = ${A}</span>${vec(1, 0)}<span class="math">+ ${B}</span>${vec(0, 1)}<span class="math">=</span>${vec(f2(a), f2(b), 'na', 'nb')}`;
+    $('#qbSum').innerHTML = `<span class="math">|a|² + |b|² = ${(a * a).toFixed(2)} + ${(b * b).toFixed(2)} = <b>${sum.toFixed(2)}</b></span>`;
+    const v = $('#qbVerdict');
+    v.className = 'qverdict ' + (ok ? 'ok' : 'ng');
+    v.textContent = ok ? '✓ 量子状態' : '✗ 量子状態ではない';
+  }
+  function tween(ta, tb) {
+    cancelAnimationFrame(anim);
+    const a0 = a, b0 = b, t0 = performance.now();
+    const step = now => {
+      const k = Math.min(1, (now - t0) / 650), e = 1 - Math.pow(1 - k, 3);
+      a = a0 + (ta - a0) * e; b = b0 + (tb - b0) * e; draw();
+      if (k < 1) anim = requestAnimationFrame(step);
+    };
+    anim = requestAnimationFrame(step);
+  }
+  const auto = $('#qbAuto');
+  let timer = null, pi = 0;
+  const r2 = Math.SQRT1_2;
+  // 量子状態の例と、そうでない例（|a|² + |b|² が 1 より小さい・大きい）を順に見せる
+  const presets = [[1, 0], [.6, .8], [0, 1], [-.8, .6], [.5, .5], [1, 1], [r2, -r2]];
+  function stop() { clearInterval(timer); timer = null; auto.textContent = '▶ 自動再生'; auto.classList.remove('playing'); }
+  auto.addEventListener('click', () => {
+    auto.blur();
+    if (timer) return stop();
+    auto.textContent = '■ 停止'; auto.classList.add('playing');
+    timer = setInterval(() => { pi = (pi + 1) % presets.length; tween(...presets[pi]); }, 2400);
+  });
+  stoppers.push(stop);
+  sa.addEventListener('input', () => { stop(); cancelAnimationFrame(anim); a = +sa.value; draw(); });
+  sb.addEventListener('input', () => { stop(); cancelAnimationFrame(anim); b = +sb.value; draw(); });
+  $('#qNorm').addEventListener('click', e => {
+    e.currentTarget.blur(); stop();
+    const len = Math.hypot(a, b);
+    if (len < 1e-6) tween(1, 0); else tween(a / len, b / len);
+  });
+  window.onEnter = window.onEnter || {};
+  onEnter.qbuild = () => { pi = 0; cancelAnimationFrame(anim); a = 1; b = 0; draw(); };
+  draw();
+}
+
 /* ---------- 量子状態のチェック（第4章） ---------- */
 {
   const F = (n, d) => `<span class="frac"><span>${n}</span><span>${d}</span></span>`;
@@ -1676,7 +1785,7 @@ addEventListener('keydown', e => {
     }
     return;
   }
-  if (e.target.tagName === 'SUMMARY') return;
+  if (e.target.tagName === 'SUMMARY' || e.target.tagName === 'INPUT') return;
   if (e.key === 'o' || e.key === 'O') return toggleOverview(true);
   if (['ArrowRight', 'PageDown', ' ', 'Enter', 'ArrowDown'].includes(e.key)) { e.preventDefault(); next(); }
   else if (['ArrowLeft', 'PageUp', 'Backspace', 'ArrowUp'].includes(e.key)) { e.preventDefault(); prev(); }
@@ -1685,7 +1794,8 @@ addEventListener('keydown', e => {
   else if (e.key === 'f' || e.key === 'F') fullscreen();
 });
 let tx = null;
-addEventListener('touchstart', e => tx = laser.blocksSwipe(e.touches[0]) ? null : e.touches[0].clientX, { passive: true });
+// スライダー操作や Apple Pencil のタッチはスワイプのページ送りに使わない
+addEventListener('touchstart', e => tx = laser.blocksSwipe(e.touches[0]) || e.target.closest('input') ? null : e.touches[0].clientX, { passive: true });
 addEventListener('touchend', e => {
   if (tx === null || overview) return;
   const dx = e.changedTouches[0].clientX - tx; tx = null;
@@ -1746,7 +1856,7 @@ const laser = (() => {
   function add(q) { trail[trail.length - 1].push(q); down.pos = q; }
 
   stage.addEventListener('pointerdown', e => {
-    if (overview || e.pointerType !== 'pen' || down) return;
+    if (overview || e.pointerType !== 'pen' || down || e.target.closest('input')) return;
     e.preventDefault();
     // 前の軌跡が消えきっていなければ残したまま続ける
     if (!level()) trail = [];
