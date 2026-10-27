@@ -220,7 +220,7 @@ body.overview #ui,body.overview #progress{display:none}
 <section class="slide" data-id="title">
   <div class="title-wrap">
     <div>
-      <div class="chap pop">『量子コンピュータの頭の中』 第2章 ／ 2.8 論理式を実現する古典回路</div>
+      <div class="chap pop">『量子コンピュータの頭の中』 第2章 ／ 2.8 論理式を実現する古典回路<br>教科書 pp.76–81</div>
       <h1 class="pop" style="--d:.1s">論理式を実現する<br>古典回路</h1>
       <div class="sub pop" style="--d:.2s">― 半加算器から全加算器へ ―</div>    </div>
     <div class="card pop" style="--d:.4s">
@@ -258,7 +258,7 @@ body.overview #ui,body.overview #progress{display:none}
 <!-- 3. 古典回路とは -->
 <section class="slide">
   <div class="chap">2.8 論理式を実現する古典回路</div>
-  <h2>古典回路とは</h2>
+  <h2>古典回路とは<small>図2.13（p.76）</small></h2>
   <div class="body cols">
     <div>
       <ul>
@@ -287,7 +287,7 @@ body.overview #ui,body.overview #progress{display:none}
 <!-- 4. AND -->
 <section class="slide">
   <div class="chap">2.8 論理式を実現する古典回路 ／ 基本ゲート ①</div>
-  <h2>AND（論理積）<small>表2.3・図2.14</small></h2>
+  <h2>AND（論理積）<small>表2.3（p.77）・図2.14（p.78）</small></h2>
   <div class="body cols">
     <div class="card pop">
       <svg class="circ" id="cAnd"></svg>
@@ -305,7 +305,7 @@ body.overview #ui,body.overview #progress{display:none}
 <!-- 5. OR -->
 <section class="slide">
   <div class="chap">2.8 論理式を実現する古典回路 ／ 基本ゲート ②</div>
-  <h2>OR（論理和）<small>表2.4・図2.15</small></h2>
+  <h2>OR（論理和）<small>表2.4（p.77）・図2.15（p.78）</small></h2>
   <div class="body cols">
     <div class="card pop">
       <svg class="circ" id="cOr"></svg>
@@ -324,7 +324,7 @@ body.overview #ui,body.overview #progress{display:none}
 <!-- 6. NOT -->
 <section class="slide">
   <div class="chap">2.8 論理式を実現する古典回路 ／ 基本ゲート ③</div>
-  <h2>NOT（否定）<small>表2.5・図2.16</small></h2>
+  <h2>NOT（否定）<small>表2.5（p.77）・図2.16（p.78）</small></h2>
   <div class="body cols">
     <div class="card pop">
       <svg class="circ" id="cNot"></svg>
@@ -341,7 +341,7 @@ body.overview #ui,body.overview #progress{display:none}
 <!-- XOR -->
 <section class="slide">
   <div class="chap">2.8 論理式を実現する古典回路 ／ 基本ゲート ④</div>
-  <h2>XOR（排他的論理和）<small>表2.7・図2.19</small></h2>
+  <h2>XOR（排他的論理和）<small>表2.7（p.80）・図2.19（p.81）</small></h2>
   <div class="body cols">
     <div class="card pop">
       <svg class="circ" id="cXor"></svg>
@@ -362,7 +362,7 @@ body.overview #ui,body.overview #progress{display:none}
 <!-- 半加算器の導入（1ビットの筆算） -->
 <section class="slide" data-id="coladd1">
   <div class="chap">2.8 論理式を実現する古典回路 ／ 半加算器</div>
-  <h2>1ビット同士の足し算を筆算で考える</h2>
+  <h2>1ビット同士の足し算を筆算で考える<small>表2.6（p.79）</small></h2>
   <div class="body cols">
     <div class="card pop">
       <div class="ca-grid" id="ca1Grid"></div>
@@ -388,7 +388,7 @@ body.overview #ui,body.overview #progress{display:none}
 <!-- 半加算器 4ゲート -->
 <section class="slide">
   <div class="chap">2.8 論理式を実現する古典回路 ／ 半加算器</div>
-  <h2>AND・OR・NOT（積・和・否定）で半加算器を作る<small>図2.18</small></h2>
+  <h2>AND・OR・NOT（積・和・否定）で半加算器を作る<small>図2.18（p.80）</small></h2>
   <div class="body cols wide">
     <div class="card pop">
       <svg class="circ" id="cHa4"></svg>
@@ -408,7 +408,7 @@ body.overview #ui,body.overview #progress{display:none}
 <!-- 11. XOR 半加算器 -->
 <section class="slide">
   <div class="chap">2.8 論理式を実現する古典回路 ／ 半加算器の簡略化</div>
-  <h2>XOR を使った半加算器<small>図2.20</small></h2>
+  <h2>XOR を使った半加算器<small>図2.20（p.81）</small></h2>
   <div class="body cols">
     <div class="card pop">
       <svg class="circ" id="cHa2"></svg>
@@ -428,7 +428,7 @@ body.overview #ui,body.overview #progress{display:none}
 <!-- ゲート数・段数の比較 -->
 <section class="slide" data-id="hacmp">
   <div class="chap">2.8 論理式を実現する古典回路 ／ 半加算器の簡略化</div>
-  <h2>2つの半加算器を比べる<small>ゲート数と段数</small></h2>
+  <h2>2つの半加算器を比べる<small>ゲート数と段数（p.81）</small></h2>
   <div class="body cols">
     <div class="card pop" style="padding:12px 18px">
       <div class="muted" style="font-size:16px;font-weight:700">AND/OR/NOT利用（図2.18）</div>
