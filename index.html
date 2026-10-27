@@ -433,7 +433,7 @@ body.overview #laser{display:none}
     <div>
       <div class="ttcap pop" style="--d:.1s">NOT の真理値表</div>
       <table class="tt pop" style="--d:.1s" id="tNot"></table>
-      <div class="point logic frag"><div><b>「A でない」</b>：A が真なら偽、偽なら真<br><span class="formula" style="font-size:20px;padding:0 8px">¬A</span><br><span class="muted" style="font-size:16px">Ā とも書く</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#ffbf8f"/><circle cx="66" cy="42" r="26" fill="#fff"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="66" cy="42" r="26"/></g><text x="66" y="48" text-anchor="middle" font-size="16" font-weight="800" fill="#1f1a3d">A</text></svg></div>
+      <div class="point logic frag"><div><b>「A でない」</b>：A が真なら偽、偽なら真<br><span class="formula" style="font-size:20px;padding:0 8px">¬A</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#ffbf8f"/><circle cx="66" cy="42" r="26" fill="#fff"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="66" cy="42" r="26"/></g><text x="66" y="48" text-anchor="middle" font-size="16" font-weight="800" fill="#1f1a3d">A</text></svg></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -451,8 +451,8 @@ body.overview #laser{display:none}
       <div class="ttcap pop" style="--d:.1s">XOR の真理値表</div>
       <table class="tt pop" style="--d:.1s" id="tXor"></table>
       <div class="point blue logic frag" style="font-size:20px"><div><b>「A か B の一方だけ」</b>：<b>ちょうど一方だけ</b> が真なら真<br><b class="kb">排他的論理和</b> <span class="formula" style="font-size:20px;padding:0 8px">A ⊕ B</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#fff"/><path d="M28,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0 M52,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0" fill="#ffbf8f" fill-rule="evenodd"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="54" cy="42" r="26"/><circle cx="78" cy="42" r="26"/></g><g font-size="16" font-weight="800" fill="#1f1a3d" text-anchor="middle"><text x="42" y="48">A</text><text x="90" y="48">B</text></g></svg></div>
-      <div class="point frag" style="font-size:19px">「A または B」かつ「A かつ B ではない」<br><span class="formula" style="font-size:20px;padding:0 8px">A ⊕ B = (A ∨ B) ∧ ¬(A ∧ B)</span></div>
-      <div class="hint frag">※ 結果は 1ビット同士の足し算の「下の桁」と一致する（半加算器で使う性質）</div>
+      <div class="point frag" style="font-size:20px"><b>2 を法とした和</b> ＝ <b class="k">繰り上がりを考慮しない足し算</b><br>
+        <span class="formula" style="font-size:21px;padding:0 10px">A ⊕ B = (A + B) mod 2</span>　1 + 1 = 2 ≡ <b>0</b> (mod 2)</div>
     </div>
   </div>
   <div class="pageno"></div>
