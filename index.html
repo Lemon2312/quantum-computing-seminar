@@ -347,8 +347,18 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .qb-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:6px}
 .qb-sum{font-size:21px}
 .qb-row .qverdict{margin-top:0;font-size:17px;padding:3px 10px;white-space:nowrap}
-.qb-row .qb-pbar{flex:1;margin:0;height:24px}
-.qb-pbar .qbar-a,.qb-pbar .qbar-b{transition:none}
+.qb-row .pgauge{flex:1;margin:0 0 14px}
+/* 確率のゲージ：太枠の箱がちょうど「確率 1」。足りない分は灰色の斜線、はみ出した分は赤の斜線 */
+.pgauge{position:relative;height:28px}
+.pg-box{position:absolute;left:0;top:0;bottom:0;width:60%;border:3px solid var(--ink);border-radius:8px;box-shadow:3px 3px 0 var(--ink);background:#fff;z-index:0}
+.pg-seg,.pg-gap,.pg-over{position:absolute;top:3px;bottom:3px;z-index:1;transition:left .3s,width .3s}
+.pg-seg.a{background:var(--accent);border-radius:5px 0 0 5px}
+.pg-seg.b{background:var(--blue)}
+.pg-gap{background:repeating-linear-gradient(45deg,#cfc7e6 0 5px,transparent 5px 10px)}
+.pg-over{top:0;bottom:0;background:repeating-linear-gradient(45deg,rgba(214,31,69,.75) 0 5px,rgba(214,31,69,.15) 5px 10px);
+  border:2.5px dashed #d61f45;border-left:0;border-radius:0 8px 8px 0;z-index:2}
+.pg-tick{position:absolute;top:100%;margin-top:3px;transform:translateX(-50%);font:800 13px Consolas,Menlo,monospace;color:var(--ink)}
+.pgauge.instant .pg-seg,.pgauge.instant .pg-gap,.pgauge.instant .pg-over{transition:none}
 .qb-sum{font-size:18px;font-weight:700}
 
 /* 2 を法とした和：1 を足し続けると 0, 1 がくり返す */
@@ -981,8 +991,8 @@ body.overview #ink,body.overview #penbar{display:none}
       </div>
       <div class="eq qb-eq" id="qbEq"></div>
       <div class="eq qb-sum" id="qbSum"></div>
-      <div class="qb-row"><div class="qbar qb-pbar"><div class="qbar-a" id="qbPA"></div><div class="qbar-b" id="qbPB"></div><div class="qbar-one"></div></div><div class="qverdict" id="qbVerdict"></div></div>
-      <div class="hint" style="margin-top:2px">横棒：<span style="color:#e04e00;font-weight:800">|0⟩ の確率</span>と<span style="color:#3b6cff;font-weight:800">|1⟩ の確率</span>（点線が合計 1 の位置）。合計がちょうど 1 のとき、矢印の先が点線の円の上にくる。※ 係数を実数に限ったイメージ図</div>
+      <div class="qb-row"><div class="pgauge" id="qbGauge"></div><div class="qverdict" id="qbVerdict"></div></div>
+      <div class="hint" style="margin-top:2px"><span style="color:#e04e00;font-weight:800">■ |0⟩ の確率</span>　<span style="color:#3b6cff;font-weight:800">■ |1⟩ の確率</span>　※ 係数を実数に限ったイメージ図</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1001,8 +1011,8 @@ body.overview #ink,body.overview #penbar{display:none}
     <div class="card pop" style="--d:.15s">
       <div class="eq qstate" id="qState"></div>
       <div class="eq qcalc" id="qCalc"></div>
-      <div class="qbar"><div class="qbar-a" id="qBarA"></div><div class="qbar-b" id="qBarB"></div><div class="qbar-one"><span>1</span></div></div>
-      <div class="qlegend"><span class="la">|0⟩ の確率 |a|²</span><span class="lb">|1⟩ の確率 |b|²</span><span class="muted">縦線が合計 1 の位置</span></div>
+      <div class="pgauge" id="qGauge" style="margin:14px 0 24px"></div>
+      <div class="qlegend"><span class="la">|0⟩ の確率 |a|²</span><span class="lb">|1⟩ の確率 |b|²</span></div>
       <div class="qverdict" id="qVerdict"></div>
     </div>
   </div>
@@ -1777,6 +1787,21 @@ function columnAdder(grid, msg, A, B, describe) {
   setInterval(() => { n = (n + 1) % N; show(); }, 1000);
 }
 
+/* 確率のゲージ。太枠の箱の幅がちょうど確率 1（全体の 60%）で、箱の外は合計が 1 を超えた分 */
+function probGauge(el) {
+  const BOX = 60, MAX = 100 / BOX;  // 表示できる合計の上限（約 1.67）
+  el.innerHTML = '<div class="pg-box"></div><div class="pg-seg a"></div><div class="pg-seg b"></div><div class="pg-gap"></div><div class="pg-over"></div>' +
+    `<span class="pg-tick" style="left:0">0</span><span class="pg-tick" style="left:${BOX}%">1</span>`;
+  const [sa, sb] = el.querySelectorAll('.pg-seg'), gap = el.querySelector('.pg-gap'), over = el.querySelector('.pg-over');
+  const pos = (e, from, to) => { e.style.left = `${from * BOX}%`; e.style.width = `${Math.max(0, to - from) * BOX}%`; };
+  return (a2, b2) => {
+    const A = Math.min(a2, MAX), S = Math.min(a2 + b2, MAX);
+    pos(sa, 0, A); pos(sb, A, S);
+    pos(gap, Math.min(S, 1), 1);   // 1 に足りない分（箱の中の空き）
+    pos(over, 1, Math.max(S, 1));  // 1 を超えた分（箱からはみ出す）
+  };
+}
+
 /* ---------- 量子状態をつくってみる（a|0⟩ + b|1⟩ を矢印の足し算で見せる） ---------- */
 {
   const svg = $('#qVecSvg'), NS = 'http://www.w3.org/2000/svg';
@@ -1803,6 +1828,8 @@ function columnAdder(grid, msg, A, B, describe) {
   const lA = t(0, 0, '', '#e04e00'), lB = t(0, 0, '', '#3b6cff');
 
   const sa = $('#qA'), sb = $('#qB');
+  const gEl = $('#qbGauge'), gauge = probGauge(gEl);
+  gEl.classList.add('instant');  // スライダーに遅れずついてくるように
   let a = 1, b = 0, anim = 0;
   const f2 = x => (Math.abs(x) < .005 ? 0 : x).toFixed(2);
   const vec = (x, y, cx = '', cy = '') => `<span class="vec"><span class="${cx}">${x}</span><span class="${cy}">${y}</span></span>`;
@@ -1824,9 +1851,7 @@ function columnAdder(grid, msg, A, B, describe) {
     $('#qbEq').innerHTML = `<span class="math">${A}|0⟩ + ${B}|1⟩ = ${A}</span>${vec(1, 0)}<span class="math">+ ${B}</span>${vec(0, 1)}<span class="math">=</span>${vec(f2(a), f2(b), 'na', 'nb')}`;
     $('#qbSum').innerHTML = `<span style="color:#e04e00">|0⟩ の確率 <span class="math">|a|²</span></span> ＋ <span style="color:#3b6cff">|1⟩ の確率 <span class="math">|b|²</span></span>` +
       `<span class="math">= ${(a * a).toFixed(2)} + ${(b * b).toFixed(2)} = <b>${sum.toFixed(2)}</b></span>`;
-    // 横棒の全長を 2 とし、縦の点線（中央）が合計 1 の位置
-    $('#qbPA').style.width = `${Math.min(a * a, 2) / 2 * 100}%`;
-    $('#qbPB').style.width = `${Math.min(b * b, 2) / 2 * 100}%`;
+    gauge(a * a, b * b);
     const v = $('#qbVerdict');
     v.className = 'qverdict ' + (ok ? 'ok' : 'ng');
     v.textContent = ok ? '✓ 量子状態' : '✗ 量子状態ではない';
@@ -1986,6 +2011,7 @@ const measureOnce = () => (Math.random() < P0 ? 0 : 1);
     { st: M('|0⟩ + |1⟩'), calc: M('|a|² + |b|² = |1|² + |1|² = 1 + 1 = 2 ≠ 1'), a2: 1, b2: 1 },
   ];
   const ok = c => Math.abs(c.a2 + c.b2 - 1) < 1e-9;
+  const gauge = probGauge($('#qGauge'));
   const list = $('#qCases');
   const btns = cases.map((c, i) => {
     const b = document.createElement('button');
@@ -2002,9 +2028,7 @@ const measureOnce = () => (Math.random() < P0 ? 0 : 1);
     btns[i].classList.add('seen');
     $('#qState').innerHTML = c.st;
     $('#qCalc').innerHTML = c.calc;
-    // 横棒の全長を 2 とし、縦の点線（中央）が 1 の位置
-    $('#qBarA').style.width = `${c.a2 / 2 * 100}%`;
-    $('#qBarB').style.width = `${c.b2 / 2 * 100}%`;
+    gauge(c.a2, c.b2);
     const v = $('#qVerdict');
     v.className = 'qverdict ' + (ok(c) ? 'ok' : 'ng');
     v.textContent = ok(c) ? '✓ |a|² + |b|² = 1 なので量子状態' : '✗ |a|² + |b|² ≠ 1 なので量子状態ではない';
