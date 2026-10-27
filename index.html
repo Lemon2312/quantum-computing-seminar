@@ -81,6 +81,8 @@ table.tt tbody tr{cursor:pointer;transition:background .2s}
 table.tt tbody tr:hover td{background:#f8fafc}
 table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(250,204,21,.38)}
 table.tt.small{font-size:18px}
+.point.logic{display:flex;align-items:center;gap:14px}
+.venn{width:112px;flex:none}
 table.tt.small th,table.tt.small td{padding:3px 12px}
 table.tt.small th{font-size:15px}
 table.tt td{transition:background .3s,color .3s}
@@ -387,7 +389,7 @@ body.overview #laser{display:none}
 <section class="slide">
   <div class="chap">2.8 論理式を実現する古典回路 ／ 論理ゲート ①</div>
   <h2>AND（論理積）<small>表2.3（p.77）・図2.14（p.78）</small></h2>
-  <div class="body cols">
+  <div class="body cols" style="grid-template-columns:1fr 1.15fr">
     <div class="card pop">
       <svg class="circ" id="cAnd"></svg>
       <div class="btns"><button class="b" id="pAnd" data-autoplay>▶ 自動再生</button></div>
@@ -395,7 +397,8 @@ body.overview #laser{display:none}
     <div>
       <div class="ttcap pop" style="--d:.1s">AND の真理値表</div>
       <table class="tt pop" style="--d:.1s" id="tAnd"></table>
-      <div class="point frag">入力が <b>両方とも 1 のときだけ</b> 出力が 1<br>かけ算と同じ → <b class="k">論理積</b>　<span class="formula" style="font-size:24px;padding:2px 12px">A · B</span></div>
+      <div class="point logic frag"><div><b>「A かつ B」</b>：A も B も <b>真（1）のときだけ</b> 真（1）<br>論理学の <b>連言</b> → <b class="k">論理積</b> <span class="formula" style="font-size:20px;padding:0 8px">A ∧ B</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#fff"/><defs><clipPath id="vennB"><circle cx="78" cy="42" r="26"/></clipPath></defs><circle cx="54" cy="42" r="26" fill="#ffbf8f" clip-path="url(#vennB)"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="54" cy="42" r="26"/><circle cx="78" cy="42" r="26"/></g><g font-size="16" font-weight="800" fill="#1f1a3d" text-anchor="middle"><text x="42" y="48">A</text><text x="90" y="48">B</text></g></svg></div>
+      <div class="point blue frag" style="font-size:19px">「積」＝ A が真の場合と B が真の場合の <b>共通部分（積集合 A ∩ B）</b><br><span class="muted" style="font-size:16px">1 を真、0 を偽として読む。A · B とも書く</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -405,7 +408,7 @@ body.overview #laser{display:none}
 <section class="slide">
   <div class="chap">2.8 論理式を実現する古典回路 ／ 論理ゲート ②</div>
   <h2>OR（論理和）<small>表2.4（p.77）・図2.15（p.78）</small></h2>
-  <div class="body cols">
+  <div class="body cols" style="grid-template-columns:1fr 1.15fr">
     <div class="card pop">
       <svg class="circ" id="cOr"></svg>
       <div class="btns"><button class="b" id="pOr" data-autoplay>▶ 自動再生</button></div>
@@ -413,8 +416,8 @@ body.overview #laser{display:none}
     <div>
       <div class="ttcap pop" style="--d:.1s">OR の真理値表</div>
       <table class="tt pop" style="--d:.1s" id="tOr"></table>
-      <div class="point frag">入力の <b>どちらか一方でも 1</b> なら出力が 1<br>足し算に似ている → <b class="k">論理和</b>　<span class="formula" style="font-size:24px;padding:2px 12px">A + B</span></div>
-      <div class="point blue frag" style="font-size:19px">注意：論理和では <b>1 + 1 = 1</b>。普通の足し算（1 + 1 = 2）とは少し違うので「足し算と似た演算」と表現している</div>
+      <div class="point logic frag"><div><b>「A または B」</b>：<b>少なくとも一方が真</b> なら真<br>論理学の <b>選言</b> → <b class="k">論理和</b> <span class="formula" style="font-size:20px;padding:0 8px">A ∨ B</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#fff"/><path d="M28,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0 M52,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0" fill="#ffbf8f"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="54" cy="42" r="26"/><circle cx="78" cy="42" r="26"/></g><g font-size="16" font-weight="800" fill="#1f1a3d" text-anchor="middle"><text x="42" y="48">A</text><text x="90" y="48">B</text></g></svg></div>
+      <div class="point blue frag" style="font-size:19px">「和」＝ A が真の場合と B が真の場合を <b>合わせた範囲（和集合 A ∪ B）</b><br>両方とも真でも、範囲に入るだけなので <b>真（1）のまま</b><span class="muted" style="font-size:16px">（A + B とも書く）</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -424,7 +427,7 @@ body.overview #laser{display:none}
 <section class="slide">
   <div class="chap">2.8 論理式を実現する古典回路 ／ 論理ゲート ③</div>
   <h2>NOT（否定）<small>表2.5（p.77）・図2.16（p.78）</small></h2>
-  <div class="body cols">
+  <div class="body cols" style="grid-template-columns:1fr 1.15fr">
     <div class="card pop">
       <svg class="circ" id="cNot"></svg>
       <div class="btns"><button class="b" id="pNot" data-autoplay>▶ 自動再生</button></div>
@@ -432,7 +435,8 @@ body.overview #laser{display:none}
     <div>
       <div class="ttcap pop" style="--d:.1s">NOT の真理値表</div>
       <table class="tt pop" style="--d:.1s" id="tNot"></table>
-      <div class="point frag">ビットを <b>反転</b> させる演算（0 と 1 を入れ替える）<br>記号の先端の <b>小さな丸</b> が「反転」を表す</div>    </div>
+      <div class="point logic frag"><div><b>「A でない」</b>：A が真なら偽、偽なら真<br>論理学の <b>否定</b> → <span class="formula" style="font-size:20px;padding:0 8px">¬A</span><br><span class="muted" style="font-size:16px">Ā とも書く</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#ffbf8f"/><circle cx="66" cy="42" r="26" fill="#fff"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="66" cy="42" r="26"/></g><text x="66" y="48" text-anchor="middle" font-size="16" font-weight="800" fill="#1f1a3d">A</text></svg></div>
+      <div class="point blue frag" style="font-size:19px">集合で見ると、A が真になる場合 <b>以外のすべて（補集合）</b><br>記号の先端の <b>小さな丸</b> が「否定」を表す</div>    </div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -441,18 +445,18 @@ body.overview #laser{display:none}
 <section class="slide">
   <div class="chap">2.8 論理式を実現する古典回路 ／ 論理ゲート ④</div>
   <h2>XOR（排他的論理和）<small>表2.7（p.80）・図2.19（p.81）</small></h2>
-  <div class="body cols">
+  <div class="body cols" style="grid-template-columns:1fr 1.15fr">
     <div class="card pop">
       <svg class="circ" id="cXor"></svg>
       <div class="btns"><button class="b" id="pXor" data-autoplay>▶ 自動再生</button></div>
     </div>
     <div>
       <div class="ttcap pop" style="--d:.1s">XOR の真理値表</div>
-      <table class="tt small pop" style="--d:.1s" id="tXor"></table>
-      <div class="point blue frag" style="font-size:20px"><b>片方だけ</b> が 1 のとき 1 → <b class="kb">排他的論理和</b>（exclusive or）<span class="formula" style="font-size:21px;padding:0 10px">A ⊕ B</span><br>
-        ＝ OR の入力が <b>両方 1 のときに出力が 1 にならないようにした</b> ゲート</div>
-      <div class="point frag" style="font-size:20px"><b>2 を法とした和</b> ＝ <b class="k">繰り上がりを考慮しない足し算</b><br>
-        <span class="formula" style="font-size:21px;padding:0 10px">A ⊕ B = (A + B) mod 2</span>　1 + 1 = 2 ≡ <b>0</b> (mod 2)</div>
+      <table class="tt pop" style="--d:.1s" id="tXor"></table>
+      <div class="point blue logic frag" style="font-size:20px"><div><b>「A か B の一方だけ」</b>：<b>ちょうど一方だけ</b> が真なら真<br>論理学の <b>排他的選言</b> → <b class="kb">排他的論理和</b> <span class="formula" style="font-size:20px;padding:0 8px">A ⊕ B</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#fff"/><path d="M28,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0 M52,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0" fill="#ffbf8f" fill-rule="evenodd"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="54" cy="42" r="26"/><circle cx="78" cy="42" r="26"/></g><g font-size="16" font-weight="800" fill="#1f1a3d" text-anchor="middle"><text x="42" y="48">A</text><text x="90" y="48">B</text></g></svg></div>
+      <div class="point frag" style="font-size:19px">「A または B」かつ「A かつ B ではない」<br><span class="formula" style="font-size:20px;padding:0 8px">A ⊕ B = (A ∨ B) ∧ ¬(A ∧ B)</span><br>
+        <span class="muted" style="font-size:16px">集合で見ると、和集合から共通部分を除いた部分（対称差）</span></div>
+      <div class="hint frag">※ 結果は 1ビット同士の足し算の「下の桁」と一致する（半加算器で使う性質）</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -960,8 +964,7 @@ function halfAdder4(id) {
 }
 {
   const c = singleGate('cXor', 'XOR', 'A XOR B');
-  truthTable('tXor', c, [['A', 'A'], ['B', 'B']], [['g', 'A XOR B']],
-    ['(A + B) mod 2', (v, s) => `${v.A + v.B} mod 2 = ${s.g}`]);
+  truthTable('tXor', c, [['A', 'A'], ['B', 'B']], [['g', 'A XOR B']]);
   autoplay('pXor', c); c.set({}, false);
 }
 {
