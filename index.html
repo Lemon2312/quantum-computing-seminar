@@ -397,8 +397,7 @@ body.overview #laser{display:none}
     <div>
       <div class="ttcap pop" style="--d:.1s">AND の真理値表</div>
       <table class="tt pop" style="--d:.1s" id="tAnd"></table>
-      <div class="point logic frag"><div><b>「A かつ B」</b>：A も B も <b>真（1）のときだけ</b> 真（1）<br>論理学の <b>連言</b> → <b class="k">論理積</b> <span class="formula" style="font-size:20px;padding:0 8px">A ∧ B</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#fff"/><defs><clipPath id="vennB"><circle cx="78" cy="42" r="26"/></clipPath></defs><circle cx="54" cy="42" r="26" fill="#ffbf8f" clip-path="url(#vennB)"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="54" cy="42" r="26"/><circle cx="78" cy="42" r="26"/></g><g font-size="16" font-weight="800" fill="#1f1a3d" text-anchor="middle"><text x="42" y="48">A</text><text x="90" y="48">B</text></g></svg></div>
-      <div class="point blue frag" style="font-size:19px">「積」＝ A が真の場合と B が真の場合の <b>共通部分（積集合 A ∩ B）</b><br><span class="muted" style="font-size:16px">1 を真、0 を偽として読む。A · B とも書く</span></div>
+      <div class="point logic frag"><div><b>「A かつ B」</b>：A も B も <b>真（1）のときだけ</b> 真（1）<br><b class="k">論理積</b> <span class="formula" style="font-size:20px;padding:0 8px">A ∧ B</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#fff"/><defs><clipPath id="vennB"><circle cx="78" cy="42" r="26"/></clipPath></defs><circle cx="54" cy="42" r="26" fill="#ffbf8f" clip-path="url(#vennB)"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="54" cy="42" r="26"/><circle cx="78" cy="42" r="26"/></g><g font-size="16" font-weight="800" fill="#1f1a3d" text-anchor="middle"><text x="42" y="48">A</text><text x="90" y="48">B</text></g></svg></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -416,8 +415,7 @@ body.overview #laser{display:none}
     <div>
       <div class="ttcap pop" style="--d:.1s">OR の真理値表</div>
       <table class="tt pop" style="--d:.1s" id="tOr"></table>
-      <div class="point logic frag"><div><b>「A または B」</b>：<b>少なくとも一方が真</b> なら真<br>論理学の <b>選言</b> → <b class="k">論理和</b> <span class="formula" style="font-size:20px;padding:0 8px">A ∨ B</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#fff"/><path d="M28,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0 M52,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0" fill="#ffbf8f"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="54" cy="42" r="26"/><circle cx="78" cy="42" r="26"/></g><g font-size="16" font-weight="800" fill="#1f1a3d" text-anchor="middle"><text x="42" y="48">A</text><text x="90" y="48">B</text></g></svg></div>
-      <div class="point blue frag" style="font-size:19px">「和」＝ A が真の場合と B が真の場合を <b>合わせた範囲（和集合 A ∪ B）</b><br>両方とも真でも、範囲に入るだけなので <b>真（1）のまま</b><span class="muted" style="font-size:16px">（A + B とも書く）</span></div>
+      <div class="point logic frag"><div><b>「A または B」</b>：<b>少なくとも一方が真</b> なら真<br><b class="k">論理和</b> <span class="formula" style="font-size:20px;padding:0 8px">A ∨ B</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#fff"/><path d="M28,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0 M52,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0" fill="#ffbf8f"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="54" cy="42" r="26"/><circle cx="78" cy="42" r="26"/></g><g font-size="16" font-weight="800" fill="#1f1a3d" text-anchor="middle"><text x="42" y="48">A</text><text x="90" y="48">B</text></g></svg></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -435,8 +433,7 @@ body.overview #laser{display:none}
     <div>
       <div class="ttcap pop" style="--d:.1s">NOT の真理値表</div>
       <table class="tt pop" style="--d:.1s" id="tNot"></table>
-      <div class="point logic frag"><div><b>「A でない」</b>：A が真なら偽、偽なら真<br>論理学の <b>否定</b> → <span class="formula" style="font-size:20px;padding:0 8px">¬A</span><br><span class="muted" style="font-size:16px">Ā とも書く</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#ffbf8f"/><circle cx="66" cy="42" r="26" fill="#fff"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="66" cy="42" r="26"/></g><text x="66" y="48" text-anchor="middle" font-size="16" font-weight="800" fill="#1f1a3d">A</text></svg></div>
-      <div class="point blue frag" style="font-size:19px">集合で見ると、A が真になる場合 <b>以外のすべて（補集合）</b><br>記号の先端の <b>小さな丸</b> が「否定」を表す</div>    </div>
+      <div class="point logic frag"><div><b>「A でない」</b>：A が真なら偽、偽なら真<br><span class="formula" style="font-size:20px;padding:0 8px">¬A</span><br><span class="muted" style="font-size:16px">Ā とも書く</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#ffbf8f"/><circle cx="66" cy="42" r="26" fill="#fff"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="66" cy="42" r="26"/></g><text x="66" y="48" text-anchor="middle" font-size="16" font-weight="800" fill="#1f1a3d">A</text></svg></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -453,9 +450,8 @@ body.overview #laser{display:none}
     <div>
       <div class="ttcap pop" style="--d:.1s">XOR の真理値表</div>
       <table class="tt pop" style="--d:.1s" id="tXor"></table>
-      <div class="point blue logic frag" style="font-size:20px"><div><b>「A か B の一方だけ」</b>：<b>ちょうど一方だけ</b> が真なら真<br>論理学の <b>排他的選言</b> → <b class="kb">排他的論理和</b> <span class="formula" style="font-size:20px;padding:0 8px">A ⊕ B</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#fff"/><path d="M28,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0 M52,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0" fill="#ffbf8f" fill-rule="evenodd"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="54" cy="42" r="26"/><circle cx="78" cy="42" r="26"/></g><g font-size="16" font-weight="800" fill="#1f1a3d" text-anchor="middle"><text x="42" y="48">A</text><text x="90" y="48">B</text></g></svg></div>
-      <div class="point frag" style="font-size:19px">「A または B」かつ「A かつ B ではない」<br><span class="formula" style="font-size:20px;padding:0 8px">A ⊕ B = (A ∨ B) ∧ ¬(A ∧ B)</span><br>
-        <span class="muted" style="font-size:16px">集合で見ると、和集合から共通部分を除いた部分（対称差）</span></div>
+      <div class="point blue logic frag" style="font-size:20px"><div><b>「A か B の一方だけ」</b>：<b>ちょうど一方だけ</b> が真なら真<br><b class="kb">排他的論理和</b> <span class="formula" style="font-size:20px;padding:0 8px">A ⊕ B</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#fff"/><path d="M28,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0 M52,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0" fill="#ffbf8f" fill-rule="evenodd"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="54" cy="42" r="26"/><circle cx="78" cy="42" r="26"/></g><g font-size="16" font-weight="800" fill="#1f1a3d" text-anchor="middle"><text x="42" y="48">A</text><text x="90" y="48">B</text></g></svg></div>
+      <div class="point frag" style="font-size:19px">「A または B」かつ「A かつ B ではない」<br><span class="formula" style="font-size:20px;padding:0 8px">A ⊕ B = (A ∨ B) ∧ ¬(A ∧ B)</span></div>
       <div class="hint frag">※ 結果は 1ビット同士の足し算の「下の桁」と一致する（半加算器で使う性質）</div>
     </div>
   </div>
