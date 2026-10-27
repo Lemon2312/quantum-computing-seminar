@@ -346,7 +346,10 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .qb-eq .nb{color:var(--blue);font-weight:700}
 .qb-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:6px}
 .qb-sum{font-size:21px}
-.qb-row .qverdict{margin-top:0;font-size:18px;padding:3px 12px}
+.qb-row .qverdict{margin-top:0;font-size:17px;padding:3px 10px;white-space:nowrap}
+.qb-row .qb-pbar{flex:1;margin:0;height:24px}
+.qb-pbar .qbar-a,.qb-pbar .qbar-b{transition:none}
+.qb-sum{font-size:18px;font-weight:700}
 
 /* 2 を法とした和：1 を足し続けると 0, 1 がくり返す */
 .m2strip{border-collapse:collapse;margin-top:6px;font-family:Consolas,Menlo,monospace;font-size:16px;text-align:center}
@@ -958,9 +961,11 @@ body.overview #ink,body.overview #penbar{display:none}
   <div class="body cols" style="grid-template-columns:1fr 1.2fr">
     <div>
       <div class="defbox pop">複素数 <span class="math">a, b</span> が <span class="math" style="white-space:nowrap">|a|² + |b|² = 1</span> という条件を満たすとき、<span class="math" style="white-space:nowrap">a|0⟩ + b|1⟩</span> の形をしたベクトルを <b class="k">量子状態</b>（quantum state）という</div>
-      <ul style="margin-top:14px">
-        <li class="frag" style="font-size:18px"><span class="math">|a|, |b|</span> は複素数の絶対値。難しく感じたら、実数の絶対値（符号をプラスにしたもの）をイメージ</li>
-        <li class="frag" style="font-size:18px">量子状態をベクトルの形で表したものを <b class="k">状態ベクトル</b>（state vector）という</li>
+      <div class="point blue frag" style="font-size:17px;padding:8px 14px;margin-top:12px">📌 予告：<b><span class="math">|a|²</span></b> は測定で <span class="math">|0⟩</span> を得る確率、<b><span class="math">|b|²</span></b> は <span class="math">|1⟩</span> を得る確率（→ PART 5 測定）<br>
+        だから <b><span class="math">|a|² + |b|² = 1</span></b>（確率を全部足すと 1）</div>
+      <ul style="margin-top:8px">
+        <li class="frag" style="font-size:16px;margin:2px 0"><span class="math">|a|, |b|</span> は複素数の絶対値。難しく感じたら、実数の絶対値（符号をプラスにしたもの）をイメージ</li>
+        <li class="frag" style="font-size:16px;margin:2px 0">量子状態をベクトルの形で表したものを <b class="k">状態ベクトル</b>（state vector）という</li>
       </ul>
       <div class="point frag" style="font-size:17px;padding:8px 14px">集合で書くと（量子状態全体の集合 Q）
         <div class="eq" style="font-size:22px"><span class="math">Q :=</span><span class="brace">{</span><span class="vec"><span>a</span><span>b</span></span><span class="math">∈ ℂ²</span><span class="bar"></span><span class="math">|a|² + |b|² = 1</span><span class="brace">}</span></div></div>
@@ -976,8 +981,9 @@ body.overview #ink,body.overview #penbar{display:none}
         </div>
       </div>
       <div class="eq qb-eq" id="qbEq"></div>
-      <div class="qb-row"><div class="eq qb-sum" id="qbSum"></div><div class="qverdict" id="qbVerdict"></div></div>
-      <div class="hint" style="margin-top:4px">スライダーで a, b を動かしてみよう。|a|² + |b|² = 1 のとき、矢印の先が点線の円（半径 1）の上にくる<br>※ 係数を実数に限った場合のイメージ図</div>
+      <div class="eq qb-sum" id="qbSum"></div>
+      <div class="qb-row"><div class="qbar qb-pbar"><div class="qbar-a" id="qbPA"></div><div class="qbar-b" id="qbPB"></div><div class="qbar-one"></div></div><div class="qverdict" id="qbVerdict"></div></div>
+      <div class="hint" style="margin-top:2px">横棒：<span style="color:#e04e00;font-weight:800">|0⟩ の確率</span>と<span style="color:#3b6cff;font-weight:800">|1⟩ の確率</span>（点線が合計 1 の位置）。合計がちょうど 1 のとき、矢印の先が点線の円の上にくる。※ 係数を実数に限ったイメージ図</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -997,7 +1003,7 @@ body.overview #ink,body.overview #penbar{display:none}
       <div class="eq qstate" id="qState"></div>
       <div class="eq qcalc" id="qCalc"></div>
       <div class="qbar"><div class="qbar-a" id="qBarA"></div><div class="qbar-b" id="qBarB"></div><div class="qbar-one"><span>1</span></div></div>
-      <div class="qlegend"><span class="la">|a|²</span><span class="lb">|b|²</span><span class="muted">縦線が 1 の位置</span></div>
+      <div class="qlegend"><span class="la">|0⟩ の確率 |a|²</span><span class="lb">|1⟩ の確率 |b|²</span><span class="muted">縦線が合計 1 の位置</span></div>
       <div class="qverdict" id="qVerdict"></div>
     </div>
   </div>
@@ -1817,7 +1823,11 @@ function columnAdder(grid, msg, A, B, describe) {
     $('#qAv').textContent = f2(a); $('#qBv').textContent = f2(b);
     const A = `<span class="na">${f2(a)}</span>`, B = `<span class="nb">${f2(b)}</span>`;
     $('#qbEq').innerHTML = `<span class="math">${A}|0⟩ + ${B}|1⟩ = ${A}</span>${vec(1, 0)}<span class="math">+ ${B}</span>${vec(0, 1)}<span class="math">=</span>${vec(f2(a), f2(b), 'na', 'nb')}`;
-    $('#qbSum').innerHTML = `<span class="math">|a|² + |b|² = ${(a * a).toFixed(2)} + ${(b * b).toFixed(2)} = <b>${sum.toFixed(2)}</b></span>`;
+    $('#qbSum').innerHTML = `<span style="color:#e04e00">|0⟩ の確率 <span class="math">|a|²</span></span> ＋ <span style="color:#3b6cff">|1⟩ の確率 <span class="math">|b|²</span></span>` +
+      `<span class="math">= ${(a * a).toFixed(2)} + ${(b * b).toFixed(2)} = <b>${sum.toFixed(2)}</b></span>`;
+    // 横棒の全長を 2 とし、縦の点線（中央）が合計 1 の位置
+    $('#qbPA').style.width = `${Math.min(a * a, 2) / 2 * 100}%`;
+    $('#qbPB').style.width = `${Math.min(b * b, 2) / 2 * 100}%`;
     const v = $('#qbVerdict');
     v.className = 'qverdict ' + (ok ? 'ok' : 'ng');
     v.textContent = ok ? '✓ 量子状態' : '✗ 量子状態ではない';
