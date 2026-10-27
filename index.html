@@ -290,29 +290,10 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .qcells{display:flex;gap:26px;align-items:center}
 .qbit{width:56px;height:56px;border:3px solid var(--ink);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;font-family:Consolas,Menlo,monospace;box-shadow:3px 3px 0 var(--ink);background:#fff}
 .qarrow{margin:14px 0 14px 126px;color:var(--muted);font-weight:700}
-.qcases{display:flex;flex-direction:column;gap:9px}
-.qcases button{font:inherit;color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:54px;background:#fff;
   border:2.5px solid var(--ink);border-radius:14px;padding:2px 16px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);font-size:22px}
-.qcases button.on{background:var(--accent-l);transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
-.qcases .mk{font-size:15px;font-weight:800;border-radius:999px;padding:1px 10px;border:2px solid currentColor;opacity:0;transition:opacity .3s}
-.qcases button.seen .mk{opacity:1}
-.qcases .mk.ok{color:var(--green)}
-.qcases .mk.ng{color:#d61f45}
-.qstate{font-size:28px;min-height:62px}
-.qcalc{font-size:22px;min-height:84px;margin-top:4px;align-content:center}
-.qnote{width:100%;text-align:center;font-size:15px;color:var(--muted)}
-.qbar{position:relative;height:30px;border:2.5px solid var(--ink);border-radius:10px;background:#ece6ff;margin:12px 0 4px;display:flex;overflow:hidden}
-.qbar-a{background:var(--accent);transition:width .6s cubic-bezier(.3,1.3,.5,1)}
-.qbar-b{background:var(--blue);transition:width .6s cubic-bezier(.3,1.3,.5,1)}
-.qbar-one{position:absolute;left:50%;top:0;bottom:0;border-left:3px dashed var(--ink)}
-.qlegend{display:flex;gap:16px;font-size:15px;font-weight:700}
-.qlegend .la::before,.qlegend .lb::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;background:var(--accent)}
-.qlegend .lb::before{background:var(--blue)}
 .qverdict{margin-top:12px;text-align:center;font-size:24px;font-weight:900;padding:6px;border-radius:12px;border:2.5px solid var(--ink)}
 .qverdict.ok{background:#d9f7e6;color:var(--green)}
 .qverdict.ng{background:#ffe0e6;color:#d61f45}
-.qsupval{font-size:21px;margin-top:2px}
-.qsuplab{text-align:center;font-weight:900;font-size:21px;margin-top:2px}
 
 /* 目次の教科書の章見出し */
 .agenda li.agroup{font-size:17px;font-weight:900;color:var(--pink);letter-spacing:.06em;margin:14px 0 -4px;border-bottom:2.5px dashed #e3dcf2;padding-bottom:4px}
@@ -928,7 +909,7 @@ body.overview #ink,body.overview #penbar{display:none}
       <div class="door-label pop"><span class="door-book">第3章 量子コンピュータの基本ルール</span>PART 4</div>
       <h1 class="pop" style="--d:.1s">量子ビット</h1>
       <p class="door-lead pop" style="--d:.2s">量子状態と重ね合わせ</p>
-      <div class="door-topics pop" style="--d:.3s"><span>量子ビット |0⟩, |1⟩</span><span>量子状態</span><span>状態ベクトル</span><span>内積による表し方</span><span>重ね合わせ状態</span></div>
+      <div class="door-topics pop" style="--d:.3s"><span>量子ビット |0⟩, |1⟩</span><span>量子状態</span><span>状態ベクトル</span><span>内積による表し方</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -998,27 +979,6 @@ body.overview #ink,body.overview #penbar{display:none}
   <div class="pageno"></div>
 </section>
 
-<!-- 量子状態の例 -->
-<section class="slide" data-id="qcheck">
-  <div class="chap">第3章 量子コンピュータの基本ルール ／ 3.2 量子ビット</div>
-  <h2>量子状態かどうか確かめよう<small>p.86</small></h2>
-  <div class="body cols even">
-    <div class="card pop">
-      <div class="muted" style="font-size:16px;font-weight:700;margin-bottom:6px">例をクリック</div>
-      <div class="qcases" id="qCases"></div>
-      <div class="btns"><button class="b" id="qAuto" data-autoplay>▶ 自動再生</button></div>
-    </div>
-    <div class="card pop" style="--d:.15s">
-      <div class="eq qstate" id="qState"></div>
-      <div class="eq qcalc" id="qCalc"></div>
-      <div class="pgauge" id="qGauge" style="margin:14px 0 24px"></div>
-      <div class="qlegend"><span class="la">|0⟩ の確率 |a|²</span><span class="lb">|1⟩ の確率 |b|²</span></div>
-      <div class="qverdict" id="qVerdict"></div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
 <!-- 内積で表す -->
 <section class="slide">
   <div class="chap">第3章 量子コンピュータの基本ルール ／ 3.2 量子ビット</div>
@@ -1041,31 +1001,6 @@ body.overview #ink,body.overview #penbar{display:none}
   </div>
   <div class="pageno"></div>
 </section>
-
-<!-- 重ね合わせ状態 -->
-<section class="slide" data-id="qsup">
-  <div class="chap">第3章 量子コンピュータの基本ルール ／ 3.2.1 「重ね合わせ状態」とは？</div>
-  <h2>「重ね合わせ状態」とは？<small>3.2.1（p.87）</small></h2>
-  <div class="body cols even">
-    <div>
-      <div class="point pop" style="margin-top:0;font-size:20px">
-        <span class="eq inline"><span class="frac"><span>1</span><span>√5</span></span><span class="math">|0⟩ +</span><span class="frac"><span>2</span><span>√5</span></span><span class="math">|1⟩</span></span> のように、<b>係数が 0 でない</b> 複数の量子ビットの和で表される量子状態を <b class="k">重ね合わせ状態</b>（superposition）と呼ぶ</div>
-      <ul style="margin-top:14px">
-        <li class="frag" style="font-size:20px">1量子ビットの量子状態は、<span class="math">|0⟩</span> と <span class="math">|1⟩</span> という2種類の量子ビットの重ね合わせ状態を表せる</li>
-      </ul>
-      <div class="point blue frag" style="font-size:20px">古典ビットは重ね合わせ状態にできない<br>→ <b>古典ビットと量子ビットで大きく異なる点</b></div>
-    </div>
-    <div class="card pop" style="--d:.2s">
-      <svg class="circ" id="qCircle" viewBox="0 0 360 300" style="cursor:pointer;height:250px;width:auto;margin:0 auto"></svg>
-      <div class="eq qsupval" id="qSupVal"></div>
-      <div class="qsuplab" id="qSupLab"></div>
-      <div class="btns"><button class="b" id="qSupAuto" data-autoplay>▶ 自動再生</button></div>
-      <div class="hint">円をクリックすると点が動きます。※ 係数を実数に限った場合のイメージ図（横軸が |0⟩ の係数 a、縦軸が |1⟩ の係数 b）</div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
 
 <!-- 扉：PART 5 測定 -->
 <section class="slide door" style="--c:var(--accent)">
@@ -1994,128 +1929,6 @@ const measureOnce = () => (Math.random() < P0 ? 0 : 1);
   t(x + 10, OY - U * b - 4, '|φ⟩', '#ff6b1a'); t(x + 10, OY + U * b + 14, '|ψ⟩', '#3b6cff');
   t(OX + U + 6, OY - 6, '|0⟩', '#6b6790'); t(OX + 6, 16, '|1⟩', '#6b6790'); t(OX + 6, 244, '−|1⟩', '#6b6790');
   t(x + 8, OY - 40, '+2/√5', '#ff6b1a'); t(x + 8, OY + 50, '−2/√5', '#3b6cff');
-}
-
-/* ---------- 量子状態のチェック（第4章） ---------- */
-{
-  const F = (n, d) => `<span class="frac"><span>${n}</span><span>${d}</span></span>`;
-  const M = t => `<span class="math">${t}</span>`;
-  const cases = [
-    { st: M('|0⟩'), calc: M('|a|² + |b|² = |1|² + |0|² = 1 + 0 = 1'), a2: 1, b2: 0 },
-    { st: M('|1⟩'), calc: M('|a|² + |b|² = |0|² + |1|² = 0 + 1 = 1'), a2: 0, b2: 1 },
-    { st: F(1, '√5') + M('|0⟩ +') + F(2, '√5') + M('|1⟩'),
-      calc: M('|a|² + |b|² =') + F(1, 5) + M('+') + F(4, 5) + M('= 1'), a2: 1 / 5, b2: 4 / 5 },
-    { st: M('−') + F(1, '√3') + M('|0⟩ +') + F('1 + i', '√3') + M('|1⟩'),
-      calc: M('|a|² + |b|² =') + F(1, 3) + M('+') + F(2, 3) + M('= 1') +
-        '<span class="qnote">|1 + i|² = 1² + 1² = 2</span>', a2: 1 / 3, b2: 2 / 3 },
-    { st: M('|0⟩ + |1⟩'), calc: M('|a|² + |b|² = |1|² + |1|² = 1 + 1 = 2 ≠ 1'), a2: 1, b2: 1 },
-  ];
-  const ok = c => Math.abs(c.a2 + c.b2 - 1) < 1e-9;
-  const gauge = probGauge($('#qGauge'));
-  const list = $('#qCases');
-  const btns = cases.map((c, i) => {
-    const b = document.createElement('button');
-    b.innerHTML = `<span class="eq inline">${c.st}</span><span class="mk ${ok(c) ? 'ok' : 'ng'}">${ok(c) ? '✓ 量子状態' : '✗ 違う'}</span>`;
-    b.addEventListener('click', () => { b.blur(); show(i); });
-    list.appendChild(b);
-    return b;
-  });
-  let cur = 0;
-  function show(i) {
-    cur = i;
-    const c = cases[i];
-    btns.forEach((b, j) => b.classList.toggle('on', j === i));
-    btns[i].classList.add('seen');
-    $('#qState').innerHTML = c.st;
-    $('#qCalc').innerHTML = c.calc;
-    gauge(c.a2, c.b2);
-    const v = $('#qVerdict');
-    v.className = 'qverdict ' + (ok(c) ? 'ok' : 'ng');
-    v.textContent = ok(c) ? '✓ |a|² + |b|² = 1 なので量子状態' : '✗ |a|² + |b|² ≠ 1 なので量子状態ではない';
-  }
-  const auto = $('#qAuto');
-  let t = null;
-  const stop = () => { clearInterval(t); t = null; auto.textContent = '▶ 自動再生'; auto.classList.remove('playing'); };
-  auto.addEventListener('click', () => {
-    auto.blur();
-    if (t) return stop();
-    auto.textContent = '■ 停止'; auto.classList.add('playing');
-    t = setInterval(() => show((cur + 1) % cases.length), 2600);
-  });
-  stoppers.push(stop);
-  window.onEnter = window.onEnter || {};
-  onEnter.qcheck = () => { btns.forEach(b => b.classList.remove('seen')); show(0); };
-  show(0);
-}
-
-/* ---------- 重ね合わせ状態の円（係数を実数に限ったイメージ） ---------- */
-{
-  const svg = $('#qCircle'), NS = 'http://www.w3.org/2000/svg';
-  const CX = 180, CY = 150, R = 110;
-  const mk = (tag, attrs, parent = svg) => {
-    const e = document.createElementNS(NS, tag);
-    for (const k in attrs) e.setAttribute(k, attrs[k]);
-    parent.appendChild(e); return e;
-  };
-  mk('line', { x1: 40, y1: CY, x2: 330, y2: CY, stroke: '#b9b5d0', 'stroke-width': 2.5 });
-  mk('line', { x1: CX, y1: 22, x2: CX, y2: 282, stroke: '#b9b5d0', 'stroke-width': 2.5 });
-  mk('circle', { cx: CX, cy: CY, r: R, fill: 'none', stroke: '#1f1a3d', 'stroke-width': 3, 'stroke-dasharray': '7 6' });
-  const lbl = (x, y, t, a = 'middle') => { const e = mk('text', { x, y, 'text-anchor': a, 'font-size': 18, 'font-weight': 800, fill: '#1f1a3d', 'font-family': 'Cambria Math,Times New Roman,serif' }); e.textContent = t; };
-  lbl(CX + R + 8, CY - 8, '|0⟩', 'start'); lbl(CX + 8, CY - R - 8, '|1⟩', 'start');
-  lbl(CX - R - 8, CY - 8, '−|0⟩', 'end'); lbl(CX + 8, CY + R + 22, '−|1⟩', 'start');
-  const pa = mk('line', { stroke: '#ff6b1a', 'stroke-width': 4, 'stroke-linecap': 'round' });
-  const pb = mk('line', { stroke: '#3b6cff', 'stroke-width': 4, 'stroke-linecap': 'round' });
-  const ray = mk('line', { x1: CX, y1: CY, stroke: '#1f1a3d', 'stroke-width': 3, 'stroke-dasharray': '4 5' });
-  const dot = mk('circle', { r: 12, fill: '#ffd53d', stroke: '#1f1a3d', 'stroke-width': 3 });
-
-  const presets = [0, 30, Math.atan2(2, 1) * 180 / Math.PI, 90, 135, 180, 240, 300];
-  let deg = 0, anim = 0, pi = 0;
-  const fmt = x => (Math.abs(x) < 5e-3 ? 0 : x).toFixed(2);
-  function draw(d) {
-    const r = d * Math.PI / 180, a = Math.cos(r), b = Math.sin(r);
-    const x = CX + R * a, y = CY - R * b;
-    dot.setAttribute('cx', x); dot.setAttribute('cy', y);
-    ray.setAttribute('x2', x); ray.setAttribute('y2', y);
-    // 横の太線が a（|0⟩ の係数）、縦の太線が b（|1⟩ の係数）
-    pa.setAttribute('x1', CX); pa.setAttribute('y1', CY); pa.setAttribute('x2', x); pa.setAttribute('y2', CY);
-    pb.setAttribute('x1', x); pb.setAttribute('y1', CY); pb.setAttribute('x2', x); pb.setAttribute('y2', y);
-    const A = fmt(a), B = fmt(Math.abs(b)), neg = b < 0 && +B;
-    $('#qSupVal').innerHTML = `<span class="math"><span style="color:#e04e00">${A}</span>|0⟩ ${neg ? '−' : '+'} <span style="color:#3b6cff">${B}</span>|1⟩　→　|a|² + |b|² = ${(a * a).toFixed(2)} + ${(b * b).toFixed(2)} = 1</span>`;
-    const sup = +A !== 0 && +B !== 0;
-    const l = $('#qSupLab');
-    l.textContent = sup ? '重ね合わせ状態（係数がどちらも 0 でない）' : '重ね合わせではない（係数の一方が 0）';
-    l.style.color = sup ? '#e04e00' : '#6b6790';
-  }
-  function moveTo(target, instant) {
-    cancelAnimationFrame(anim);
-    const from = deg, diff = ((target - from + 540) % 360) - 180, t0 = performance.now();
-    if (instant) { deg = target; return draw(deg); }
-    const step = now => {
-      const k = Math.min(1, (now - t0) / 600), e = 1 - Math.pow(1 - k, 3);
-      deg = from + diff * e; draw(deg);
-      if (k < 1) anim = requestAnimationFrame(step); else deg = (target + 360) % 360;
-    };
-    anim = requestAnimationFrame(step);
-  }
-  svg.addEventListener('click', e => {
-    stop();
-    const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(svg.getScreenCTM().inverse());
-    const d = Math.atan2(CY - p.y, p.x - CX) * 180 / Math.PI;
-    moveTo((Math.round(d / 5) * 5 + 360) % 360);
-  });
-  const auto = $('#qSupAuto');
-  let t = null;
-  function stop() { clearInterval(t); t = null; auto.textContent = '▶ 自動再生'; auto.classList.remove('playing'); }
-  auto.addEventListener('click', () => {
-    auto.blur();
-    if (t) return stop();
-    auto.textContent = '■ 停止'; auto.classList.add('playing');
-    t = setInterval(() => { pi = (pi + 1) % presets.length; moveTo(presets[pi]); }, 2200);
-  });
-  stoppers.push(stop);
-  window.onEnter = window.onEnter || {};
-  onEnter.qsup = () => { pi = 0; moveTo(0, true); };
-  draw(0);
 }
 
 /* ---------- スライド制御 ---------- */
