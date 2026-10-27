@@ -354,7 +354,7 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
   <div class="body cols">
     <div class="card pop">
       <svg class="circ" id="cAnd"></svg>
-      <div class="btns"><button class="b" id="pAnd">▶ 自動再生</button></div>
+      <div class="btns"><button class="b" id="pAnd" data-autoplay>▶ 自動再生</button></div>
     </div>
     <div>
       <div class="ttcap pop" style="--d:.1s">AND の真理値表</div>
@@ -372,7 +372,7 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
   <div class="body cols">
     <div class="card pop">
       <svg class="circ" id="cOr"></svg>
-      <div class="btns"><button class="b" id="pOr">▶ 自動再生</button></div>
+      <div class="btns"><button class="b" id="pOr" data-autoplay>▶ 自動再生</button></div>
     </div>
     <div>
       <div class="ttcap pop" style="--d:.1s">OR の真理値表</div>
@@ -391,7 +391,7 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
   <div class="body cols">
     <div class="card pop">
       <svg class="circ" id="cNot"></svg>
-      <div class="btns"><button class="b" id="pNot">▶ 自動再生</button></div>
+      <div class="btns"><button class="b" id="pNot" data-autoplay>▶ 自動再生</button></div>
     </div>
     <div>
       <div class="ttcap pop" style="--d:.1s">NOT の真理値表</div>
@@ -408,7 +408,7 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
   <div class="body cols">
     <div class="card pop">
       <svg class="circ" id="cXor"></svg>
-      <div class="btns"><button class="b" id="pXor">▶ 自動再生</button></div>
+      <div class="btns"><button class="b" id="pXor" data-autoplay>▶ 自動再生</button></div>
     </div>
     <div>
       <div class="ttcap pop" style="--d:.1s">XOR の真理値表</div>
@@ -435,7 +435,7 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
         <button class="b" data-case="1">0 + 1</button>
         <button class="b" data-case="2">1 + 0</button>
         <button class="b" data-case="3">1 + 1</button>
-        <button class="b" id="ca1Auto">▶ 4通りを自動再生</button>
+        <button class="b" id="ca1Auto" data-autoplay>▶ 4通りを自動再生</button>
       </div>
     </div>
     <div>
@@ -455,7 +455,7 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
   <div class="body cols wide">
     <div class="card pop">
       <svg class="circ" id="cHa4"></svg>
-      <div class="btns"><button class="b" id="pHa4">▶ 自動再生</button></div>
+      <div class="btns"><button class="b" id="pHa4" data-autoplay>▶ 自動再生</button></div>
     </div>
     <div>
       <div class="point pop" style="margin-top:0;font-size:20px">出力1（繰り上がり）＝「<b>両方 1 のときだけ繰り上がる</b>」<br><span style="font-size:17px">→ AND そのもの</span></div>
@@ -475,7 +475,7 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
   <div class="body cols">
     <div class="card pop">
       <svg class="circ" id="cHa2"></svg>
-      <div class="btns"><button class="b" id="pHa2">▶ 自動再生</button></div>
+      <div class="btns"><button class="b" id="pHa2" data-autoplay>▶ 自動再生</button></div>
       <div class="hint">図2.13 と同じ回路です（出力の番号付けだけ逆）</div>
     </div>
     <div>
@@ -498,7 +498,7 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
       <svg class="circ" id="cmpHa4"></svg>
       <div class="muted" style="font-size:16px;font-weight:700;margin-top:6px">XOR/AND利用（図2.20）</div>
       <svg class="circ" id="cmpHa2" style="width:78%"></svg>
-      <div class="btns"><button class="b" id="cmpStep">▶ 同じ入力を同時に入れる</button><button class="b" id="cmpAuto">▶ 自動再生</button></div>
+      <div class="btns"><button class="b" id="cmpStep">▶ 同じ入力を同時に入れる</button><button class="b" id="cmpAuto" data-autoplay>▶ 自動再生</button></div>
       <div class="hint">XOR/AND利用の方が先に出力が確定する様子に注目</div>
     </div>
     <div>
@@ -562,7 +562,7 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
       <div class="ca-msg" id="caMsg"></div>
       <div class="btns" style="justify-content:center">
         <button class="b" id="caNext">次の桁 ▶</button>
-        <button class="b" id="caAuto">▶ 自動</button>
+        <button class="b" id="caAuto" data-autoplay>▶ 自動</button>
         <button class="b" id="caReset">リセット</button>
       </div>
     </div>
@@ -584,7 +584,7 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
     <div>
       <div class="card pop" style="padding:10px 18px">
         <svg class="circ" id="cFa"></svg>
-        <div class="btns" style="margin-top:4px"><button class="b" id="pFa">▶ 自動再生</button>
+        <div class="btns" style="margin-top:4px"><button class="b" id="pFa" data-autoplay>▶ 自動再生</button>
           <span class="hint" style="margin:0;align-self:center">ゲート5個（XOR×2, AND×2, OR×1）。S は 2段、C<sub>out</sub> は 3段で確定</span></div>
       </div>
       <div class="point blue frag" style="font-size:18px;margin-top:10px"><b>S（和・この桁の出力ビット）</b>：A と B を半加算した和 <b>P</b> を、さらに繰り上がり C<sub>in</sub> と半加算した和
@@ -1182,6 +1182,8 @@ function go(n, showAll = false) {
   history.replaceState(null, '', '#' + (n + 1));
   const id = slides[n].dataset.id;
   if (window.onEnter && onEnter[id]) onEnter[id]();
+  // 自動再生ボタンのあるスライドは、開いた時点で再生を始める（ボタンで停止できる）
+  slides[n].querySelectorAll('[data-autoplay]').forEach(b => b.click());
 }
 function next() {
   const f = frags(slides[cur]).find(x => !x.classList.contains('vis'));
