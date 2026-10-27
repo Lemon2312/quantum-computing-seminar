@@ -279,6 +279,23 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
   font-family:Consolas,Menlo,monospace;pointer-events:none}
 #progress{height:6px;background:linear-gradient(90deg,var(--accent),var(--pink),var(--blue))}
 
+/* ---------- 手書き（Apple Pencil / ペンモード） ---------- */
+#stage{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body:not(.overview) #stage{touch-action:none}
+#ink{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none;z-index:5}
+#inkbar{position:fixed;right:12px;top:50%;transform:translateY(-50%);z-index:20;display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:#fff;border:3px solid var(--ink);border-radius:24px;box-shadow:4px 4px 0 var(--ink);padding:6px;touch-action:manipulation}
+#inkbar button{width:44px;height:44px;border-radius:14px;border:2px solid transparent;background:none;font:inherit;font-size:22px;line-height:1;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink);padding:0}
+#inkbar button.on{background:var(--accent-l);border-color:var(--ink)}
+#inkbar .tools{display:none;flex-direction:column;align-items:center;gap:6px}
+#inkbar.open .tools{display:flex}
+#inkbar .colors{display:grid;grid-template-columns:repeat(2,32px);gap:6px}
+#inkbar button.sw{width:32px;height:32px;border-radius:50%;background:var(--sw);border:3px solid #fff;box-shadow:0 0 0 2px var(--ink)}
+#inkbar button.sw.on{background:var(--sw);border-color:#fff;box-shadow:0 0 0 2px var(--ink),0 0 0 5px var(--yellow)}
+#inkbar .sep{width:30px;height:2px;border-radius:1px;background:#d9d4ea}
+body.overview #ink,body.overview #inkbar{display:none}
+
 @media print{
   @page{size:1280px 720px;margin:0}
   html,body{overflow:visible;background:#fff}
@@ -286,7 +303,7 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
   #stage{position:static;transform:none!important;box-shadow:none;width:auto;height:auto;overflow:visible;background:none}
   .slide{position:relative;width:1280px;height:720px;opacity:1;transform:none;page-break-after:always;background:var(--bg)}
   .frag{opacity:1;transform:none}
-  #ui,#progress,.btns,.hint{display:none}
+  #ui,#progress,.btns,.hint,#ink,#inkbar{display:none}
 }
 </style>
 </head>
@@ -706,6 +723,24 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
   <span>← → / Space でページ送り</span>
 </div>
 <div id="progress"></div>
+<div id="inkbar">
+  <button id="inkToggle" title="手書き (P)">✏️</button>
+  <div class="tools">
+    <button data-tool="pen" class="on" title="ペン">🖊️</button>
+    <button data-tool="marker" title="マーカー">🖍️</button>
+    <button data-tool="eraser" title="消しゴム（なぞった線を消す）">🧽</button>
+    <span class="sep"></span>
+    <div class="colors">
+      <button class="sw on" data-color="#e5383b" style="--sw:#e5383b" title="赤"></button>
+      <button class="sw" data-color="#3b6cff" style="--sw:#3b6cff" title="青"></button>
+      <button class="sw" data-color="#1f1a3d" style="--sw:#1f1a3d" title="黒"></button>
+      <button class="sw" data-color="#14a35a" style="--sw:#14a35a" title="緑"></button>
+    </div>
+    <span class="sep"></span>
+    <button id="inkUndo" title="元に戻す (Z)">↩️</button>
+    <button id="inkClear" title="このスライドの書き込みを全部消す">🗑️</button>
+  </div>
+</div>
 
 <script>
 const NS = 'http://www.w3.org/2000/svg';
@@ -1243,6 +1278,7 @@ function go(n, showAll = false) {
   if (window.onEnter && onEnter[id]) onEnter[id]();
   // 自動再生ボタンのあるスライドは、開いた時点で再生を始める（ボタンで停止できる）
   slides[n].querySelectorAll('[data-autoplay]').forEach(b => b.click());
+  ink.render();
 }
 function next() {
   const f = frags(slides[cur]).find(x => !x.classList.contains('vis'));
@@ -1292,6 +1328,8 @@ addEventListener('keydown', e => {
     return;
   }
   if (e.target.tagName === 'SUMMARY') return;
+  if (e.key === 'p' || e.key === 'P') return ink.setOpen();
+  if (e.key === 'z' || e.key === 'Z') return ink.undo();
   if (e.key === 'o' || e.key === 'O') return toggleOverview(true);
   if (['ArrowRight', 'PageDown', ' ', 'Enter', 'ArrowDown'].includes(e.key)) { e.preventDefault(); next(); }
   else if (['ArrowLeft', 'PageUp', 'Backspace', 'ArrowUp'].includes(e.key)) { e.preventDefault(); prev(); }
@@ -1300,7 +1338,7 @@ addEventListener('keydown', e => {
   else if (e.key === 'f' || e.key === 'F') fullscreen();
 });
 let tx = null;
-addEventListener('touchstart', e => tx = e.touches[0].clientX, { passive: true });
+addEventListener('touchstart', e => tx = ink.blocksSwipe(e.touches[0]) ? null : e.touches[0].clientX, { passive: true });
 addEventListener('touchend', e => {
   if (tx === null || overview) return;
   const dx = e.changedTouches[0].clientX - tx; tx = null;
@@ -1312,6 +1350,133 @@ $('#btnFs').onclick = e => { e.currentTarget.blur(); fullscreen(); };
 $('#btnOv').onclick = e => { e.currentTarget.blur(); toggleOverview(true); };
 $('#btnOvClose').onclick = e => { e.currentTarget.blur(); toggleOverview(false); };
 addEventListener('beforeprint', () => slides.forEach(s => frags(s).forEach(f => showFrag(f, true))));
+/* ---------- 手書き ----------
+   Apple Pencil はいつでもそのまま書ける。マウス・指は ✏️（P キー）で手書きモードにしたときだけ書ける。
+   Apple Pencil を一度使ったら、指は書き込みに使わない（手のひらの誤反応を防ぎ、指はスワイプやタップに使う）。
+   ペンで軽くタップしただけのときは線を残さず、ボタンや入力の丸のクリックとして扱う。
+   書き込みはスライドごとに保持し、ページを戻ると再表示される（再読み込みで消える）。 */
+const ink = (() => {
+  const W = 1280, H = 720;
+  const canvas = document.createElement('canvas');
+  canvas.id = 'ink';
+  stage.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  const bar = $('#inkbar');
+  const pages = slides.map(() => ({ strokes: [], undo: [] }));
+  let open = false, penSeen = false, tool = 'pen', color = '#e5383b', active = null;
+
+  function resize() {
+    const k = Math.min(4096 / W, stage.getBoundingClientRect().width / W * (devicePixelRatio || 1));
+    canvas.width = Math.round(W * k); canvas.height = Math.round(H * k);
+    render();
+  }
+  function drawStroke(st) {
+    const p = st.pts;
+    ctx.strokeStyle = st.color; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    if (st.tool === 'marker') {
+      ctx.globalAlpha = .35; ctx.lineWidth = 22;
+      ctx.beginPath(); ctx.moveTo(p[0][0], p[0][1]);
+      for (let i = 1; i < p.length; i++) ctx.lineTo(p[i][0], p[i][1]);
+      ctx.stroke(); ctx.globalAlpha = 1;
+      return;
+    }
+    // ペンは筆圧で太さを変え、点の中点を結ぶ曲線でなめらかにする
+    const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+    for (let i = 1; i < p.length; i++) {
+      const m0 = i === 1 ? p[0] : mid(p[i - 1], p[i]);
+      const m1 = i === p.length - 1 ? p[i] : mid(p[i], p[i + 1]);
+      ctx.lineWidth = 4.5 * (.4 + p[i][2] * 1.2);
+      ctx.beginPath(); ctx.moveTo(m0[0], m0[1]); ctx.quadraticCurveTo(p[i][0], p[i][1], m1[0], m1[1]); ctx.stroke();
+    }
+  }
+  function render() {
+    const k = canvas.width / W;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    pages[cur].strokes.forEach(drawStroke);
+    if (active && active.stroke) drawStroke(active.stroke);
+  }
+  function toStage(e) {
+    const r = stage.getBoundingClientRect();
+    // マウス・指は筆圧が取れないので 0.5 として扱う
+    const pr = e.pointerType === 'pen' && e.pressure > 0 ? e.pressure : .5;
+    return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H, pr];
+  }
+  function snapshot() { const pg = pages[cur]; pg.undo.push(pg.strokes.slice()); if (pg.undo.length > 100) pg.undo.shift(); }
+  function segDist(q, a, b) {
+    const dx = b[0] - a[0], dy = b[1] - a[1], L = dx * dx + dy * dy;
+    const t = L ? Math.max(0, Math.min(1, ((q[0] - a[0]) * dx + (q[1] - a[1]) * dy) / L)) : 0;
+    return Math.hypot(q[0] - a[0] - t * dx, q[1] - a[1] - t * dy);
+  }
+  function eraseAt(q) {
+    const pg = pages[cur];
+    const keep = pg.strokes.filter(st => !st.pts.some((pt, i) =>
+      segDist(q, st.pts[Math.max(0, i - 1)], pt) < (st.tool === 'marker' ? 24 : 14)));
+    if (keep.length === pg.strokes.length) return;
+    if (!active.erased) { snapshot(); active.erased = true; }
+    pg.strokes = keep; render();
+  }
+
+  stage.addEventListener('pointerdown', e => {
+    if (overview || active) return;
+    if (e.pointerType === 'pen') { penSeen = true; if (!open) setOpen(true); }
+    else if (!open || (e.pointerType === 'touch' && penSeen) || e.button !== 0) return;
+    e.preventDefault();
+    const q = toStage(e);
+    // ペンの消しゴム側（対応ペンのみ）は消しゴムとして扱う
+    const t = e.button === 5 ? 'eraser' : tool;
+    active = { id: e.pointerId, start: q, moved: 0, stroke: t === 'eraser' ? null : { tool: t, color, pts: [q] } };
+    if (t === 'eraser') eraseAt(q);
+  });
+  addEventListener('pointermove', e => {
+    if (!active || e.pointerId !== active.id) return;
+    e.preventDefault();
+    const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [];
+    for (const ev of evs.length ? evs : [e]) {
+      const q = toStage(ev);
+      active.moved = Math.max(active.moved, Math.hypot(q[0] - active.start[0], q[1] - active.start[1]));
+      if (active.stroke) active.stroke.pts.push(q); else eraseAt(q);
+    }
+    if (active.stroke) render();
+  }, { passive: false });
+  function end(e) {
+    if (!active || e.pointerId !== active.id) return;
+    const st = active.stroke;
+    // ほとんど動かさなかったペン先はタップ（クリック）として扱い、線は残さない
+    if (st && active.moved >= 4) { snapshot(); pages[cur].strokes.push(st); }
+    active = null; render();
+  }
+  addEventListener('pointerup', end);
+  addEventListener('pointercancel', end);
+
+  function setOpen(on = !open) {
+    open = on;
+    bar.classList.toggle('open', on);
+    $('#inkToggle').classList.toggle('on', on);
+  }
+  function undo() { const pg = pages[cur]; if (pg.undo.length) { pg.strokes = pg.undo.pop(); render(); } }
+  $('#inkToggle').onclick = e => { e.currentTarget.blur(); setOpen(); };
+  bar.querySelectorAll('[data-tool]').forEach(b => b.onclick = () => {
+    tool = b.dataset.tool;
+    bar.querySelectorAll('[data-tool]').forEach(x => x.classList.toggle('on', x === b));
+  });
+  bar.querySelectorAll('[data-color]').forEach(b => b.onclick = () => {
+    color = b.dataset.color;
+    bar.querySelectorAll('[data-color]').forEach(x => x.classList.toggle('on', x === b));
+    if (tool === 'eraser') bar.querySelector('[data-tool="pen"]').click();
+  });
+  $('#inkUndo').onclick = undo;
+  $('#inkClear').onclick = () => { if (pages[cur].strokes.length) { snapshot(); pages[cur].strokes = []; render(); } };
+  addEventListener('resize', resize);
+
+  return {
+    render, undo, setOpen, resize,
+    // Apple Pencil の線や、指で書き込み中のタッチはスワイプのページ送りに使わない
+    blocksSwipe: t => t.touchType === 'stylus' || (open && !penSeen) || !!active,
+  };
+})();
+ink.resize();
+
 go(Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1)) || 1) - 1)));
 </script>
 </body>
