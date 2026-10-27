@@ -239,6 +239,8 @@ table.tt th,table.tt td{border:0;border-right:1.5px solid #d9d4ea;border-bottom:
 table.tt th{background:#ece6ff;border-bottom:2.5px solid var(--ink)}
 table.tt th.out{background:#ffe1c7}
 table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
+table.tt.logic{width:100%;white-space:nowrap;font-size:17px}
+table.tt.logic th,table.tt.logic td{padding:5px 8px}
 
 .wire{stroke-width:5}
 .gate path,.gate circle{stroke:var(--ink);stroke-width:3.5}
@@ -346,7 +348,7 @@ body.overview #laser{display:none}
       <div class="door-label pop">CHAPTER 1</div>
       <h1 class="pop" style="--d:.1s">論理ゲート</h1>
       <p class="door-lead pop" style="--d:.2s">AND / OR / NOT / XOR</p>
-      <div class="door-topics pop" style="--d:.3s"><span>古典回路とは</span><span>AND</span><span>OR</span><span>NOT</span><span>XOR</span></div>
+      <div class="door-topics pop" style="--d:.3s"><span>古典回路とは</span><span>論理学から見た論理ゲート</span><span>AND</span><span>OR</span><span>NOT</span><span>XOR</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -378,6 +380,39 @@ body.overview #laser{display:none}
       <div class="mapline" id="map213"></div>
       <div class="btns"><button class="b" id="p213" data-autoplay>▶ 自動再生</button></div>
       <div class="hint">入力の丸をクリックしてみよう。この回路が何をしているかは後半で分かります。</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 論理ゲートとは（論理学の観点から） -->
+<section class="slide">
+  <div class="chap">2.8 論理式を実現する古典回路 ／ 論理学から見た論理ゲート</div>
+  <h2>論理ゲートとは<small>論理学の観点から</small></h2>
+  <div class="body cols" style="grid-template-columns:1.3fr 1fr">
+    <div>
+      <ul>
+        <li class="pop" style="font-size:20px">論理学では、真か偽かが決まる文を <b class="k">命題</b> と呼ぶ<br>
+          <span class="muted" style="font-size:17px">例：P「今日は土曜日だ」　Q「今日は晴れている」</span></li>
+        <li class="pop" style="--d:.1s;font-size:20px">命題を「かつ」「または」「でない」でつないで新しい命題を作る操作が <b class="k">論理演算</b><br>
+          <span class="muted" style="font-size:17px">例：P かつ Q「土曜日で、しかも晴れている」→ P も Q も真のときだけ真</span></li>
+        <li class="frag" style="font-size:20px"><b class="kb">真 = 1、偽 = 0</b> と対応させると、論理演算は 0 と 1 の計算になる（ブール代数）</li>
+      </ul>
+      <div class="point frag" style="font-size:20px">論理ゲート ＝ 論理演算を<b style="white-space:nowrap">電気信号の 0 / 1 で実行する部品</b><br>
+        → 論理式をゲートの組み合わせで作ったものが<b style="white-space:nowrap">古典回路</b></div>
+    </div>
+    <div class="card pop" style="--d:.2s">
+      <div class="ttcap">論理学の言葉と論理ゲートの対応</div>
+      <table class="tt small logic">
+        <thead><tr><th>日本語</th><th>論理学</th><th>記号</th><th>ゲート</th></tr></thead>
+        <tbody>
+          <tr><td>P かつ Q</td><td>連言</td><td>P ∧ Q</td><td>AND</td></tr>
+          <tr><td>P または Q</td><td>選言</td><td>P ∨ Q</td><td>OR</td></tr>
+          <tr><td>P でない</td><td>否定</td><td>¬P</td><td>NOT</td></tr>
+          <tr><td>P か Q の一方だけ</td><td>排他的選言</td><td>P ⊕ Q</td><td>XOR</td></tr>
+        </tbody>
+      </table>
+      <div class="hint">論理学の「または」は、P と Q が両方とも真のときも真（OR）。片方だけが真のときに限るのが XOR。</div>
     </div>
   </div>
   <div class="pageno"></div>
