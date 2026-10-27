@@ -290,7 +290,6 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .qcells{display:flex;gap:26px;align-items:center}
 .qbit{width:56px;height:56px;border:3px solid var(--ink);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;font-family:Consolas,Menlo,monospace;box-shadow:3px 3px 0 var(--ink);background:#fff}
 .qarrow{margin:14px 0 14px 126px;color:var(--muted);font-weight:700}
-  border:2.5px solid var(--ink);border-radius:14px;padding:2px 16px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);font-size:22px}
 .qverdict{margin-top:12px;text-align:center;font-size:24px;font-weight:900;padding:6px;border-radius:12px;border:2.5px solid var(--ink)}
 .qverdict.ok{background:#d9f7e6;color:var(--green)}
 .qverdict.ng{background:#ffe0e6;color:#d61f45}
@@ -950,15 +949,16 @@ body.overview #ink,body.overview #penbar{display:none}
   <h2>量子状態<small>定義（pp.85–86）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)">
     <div>
-      <div class="defbox pop">複素数 <span class="math">a, b</span> が <span class="math" style="white-space:nowrap">|a|² + |b|² = 1</span> という条件を満たすとき、<span class="math" style="white-space:nowrap">a|0⟩ + b|1⟩</span> の形をしたベクトルを <b class="k">量子状態</b>（quantum state）という</div>
-      <div class="point blue frag" style="font-size:17px;padding:8px 14px;margin-top:12px">📌 予告：<b><span class="math">|a|²</span></b> は測定で <span class="math">|0⟩</span> を得る確率、<b><span class="math">|b|²</span></b> は <span class="math">|1⟩</span> を得る確率<br>
+      <div class="defbox pop" style="font-size:18px;padding:14px 16px 10px">複素数 <span class="math">a, b</span> が <span class="math" style="white-space:nowrap">|a|² + |b|² = 1</span> という条件を満たすとき、<span class="math" style="white-space:nowrap">a|0⟩ + b|1⟩</span> の形をしたベクトルを <b class="k">量子状態</b>（quantum state）という</div>
+      <div class="point frag" style="font-size:16px;padding:6px 14px;margin-top:10px"><span class="math">a|0⟩ + b|1⟩</span> は <b class="k">|0⟩ と |1⟩ の重ね合わせ</b>。a, b がどちらも 0 でないとき <b class="k">重ね合わせ状態</b>（superposition）という</div>
+      <div class="point blue frag" style="font-size:16px;padding:6px 14px;margin-top:10px">📌 予告：<b><span class="math">|a|²</span></b> は測定で <span class="math">|0⟩</span> を得る確率、<b><span class="math">|b|²</span></b> は <span class="math">|1⟩</span> を得る確率<br>
         だから <b><span class="math">|a|² + |b|² = 1</span></b>（確率を全部足すと 1）</div>
       <ul style="margin-top:8px">
-        <li class="frag" style="font-size:16px;margin:2px 0"><span class="math">|a|, |b|</span> は複素数の絶対値。難しく感じたら、実数の絶対値（符号をプラスにしたもの）をイメージ</li>
-        <li class="frag" style="font-size:16px;margin:2px 0">量子状態をベクトルの形で表したものを <b class="k">状態ベクトル</b>（state vector）という</li>
+        <li class="frag" style="font-size:15px;margin:0;line-height:1.5"><span class="math">|a|, |b|</span> は複素数の絶対値（実数なら符号をプラスにしたもの）</li>
+        <li class="frag" style="font-size:15px;margin:0;line-height:1.5">量子状態をベクトルの形で表したものを <b class="k">状態ベクトル</b>（state vector）という</li>
       </ul>
-      <div class="point frag" style="font-size:17px;padding:8px 14px">集合で書くと（量子状態全体の集合 Q）
-        <div class="eq" style="font-size:22px"><span class="math">Q :=</span><span class="brace">{</span><span class="vec"><span>a</span><span>b</span></span><span class="math">∈ ℂ²</span><span class="bar"></span><span class="math">|a|² + |b|² = 1</span><span class="brace">}</span></div></div>
+      <div class="point frag" style="font-size:15px;padding:4px 14px;margin-top:8px">集合で書くと（量子状態全体の集合 Q）
+        <div class="eq" style="font-size:18px"><span class="math">Q :=</span><span class="brace">{</span><span class="vec"><span>a</span><span>b</span></span><span class="math">∈ ℂ²</span><span class="bar"></span><span class="math">|a|² + |b|² = 1</span><span class="brace">}</span></div></div>
     </div>
     <div class="card pop" style="--d:.2s;padding:12px 18px">
       <div class="qbuild">
@@ -1761,6 +1761,8 @@ function probGauge(el) {
   const arS = mk('line', { x1: OX, y1: OY, stroke: '#1f1a3d', 'stroke-width': 3.5, 'stroke-dasharray': '2 6', 'stroke-linecap': 'round', 'marker-end': 'url(#qhS)' });
   const tip = mk('circle', { r: 9, stroke: '#1f1a3d', 'stroke-width': 3 });
   const lA = t(0, 0, '', '#e04e00'), lB = t(0, 0, '', '#3b6cff');
+  const lSup = t(8, 244, '', '#e04e00');
+  lSup.setAttribute('text-anchor', 'start'); lSup.setAttribute('font-family', 'inherit');
 
   const sa = $('#qA'), sb = $('#qB');
   const gEl = $('#qbGauge'), gauge = probGauge(gEl);
@@ -1779,6 +1781,10 @@ function probGauge(el) {
     lB.setAttribute('x', xa + (a < 0 ? -24 : 24)); lB.setAttribute('y', OY - U * b / 2 + 5); lB.textContent = Math.abs(b) > .15 ? 'b|1⟩' : '';
     const sum = a * a + b * b, ok = sum.toFixed(2) === '1.00';
     tip.setAttribute('fill', ok ? '#ffd53d' : '#fff');
+    // a, b がどちらも 0 でなければ |0⟩ と |1⟩ の重ね合わせ
+    const sup = Math.abs(a) >= .005 && Math.abs(b) >= .005;
+    lSup.textContent = sup ? '|0⟩ と |1⟩ の重ね合わせ' : Math.abs(b) < .005 ? '|0⟩ の成分だけ' : '|1⟩ の成分だけ';
+    lSup.setAttribute('fill', sup ? '#e04e00' : '#6b6790');
     ring.setAttribute('stroke', ok ? '#14a35a' : '#1f1a3d');
     sa.value = a; sb.value = b;
     $('#qAv').textContent = f2(a); $('#qBv').textContent = f2(b);
