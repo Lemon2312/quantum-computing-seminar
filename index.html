@@ -258,7 +258,12 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .bar-fill.a{background:linear-gradient(90deg,var(--accent),var(--pink))}
 
 .title-wrap h1{font-size:64px;background:linear-gradient(transparent 70%,#ffe58a 70%) no-repeat;display:inline;line-height:1.3;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-.title-wrap .sub{color:var(--pink);margin-top:18px}
+.title-wrap .sub{color:var(--pink);margin-top:18px;margin-bottom:22px;font-size:23px;white-space:nowrap}
+.tchaps{display:flex;flex-direction:column;gap:12px}
+.tchap{display:flex;align-items:center;gap:12px;background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:3px 3px 0 var(--ink);padding:6px 14px 6px 6px}
+.tchap .tno{background:var(--c);color:#fff;font-weight:900;border:2px solid var(--ink);border-radius:10px;padding:2px 10px;font-size:18px;flex:none}
+.tchap .tname{font-weight:900;font-size:21px}
+.tchap .tsec{margin-left:auto;font-size:14px;color:var(--muted);font-weight:700;white-space:nowrap}
 .agenda .num{border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);background:var(--blue)}
 .agenda li:nth-child(3) .num{background:var(--pink)}
 .agenda li:nth-child(4) .num{background:var(--green)}
@@ -331,6 +336,7 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .slide.active .door-num{animation:doorIn .9s cubic-bezier(.3,1.6,.5,1) both}
 @keyframes doorIn{from{opacity:0;transform:rotate(-120deg) scale(.3)}to{opacity:1;transform:rotate(-6deg)}}
 .door-label{font-size:22px;font-weight:900;letter-spacing:.14em;color:var(--c)}
+.door-label .door-book{display:block;font-size:16px;letter-spacing:.04em;color:var(--muted);margin-bottom:2px}
 .door-label .tag{font-size:15px;letter-spacing:0;vertical-align:middle;margin-left:8px}
 .door h1{font-size:80px;line-height:1.15;margin:6px 0 4px}
 .door-lead{font-size:32px;font-weight:700;color:var(--muted);margin:0 0 30px}
@@ -365,9 +371,14 @@ body.overview #laser{display:none}
 <section class="slide" data-id="title">
   <div class="title-wrap">
     <div>
-      <div class="chap pop">『量子コンピュータの頭の中』<br>第2章 量子コンピュータ入門以前 ／ 2.8（pp.76–81）<br>第3章 量子コンピュータの基本ルール ／ 3.1〜3.2.1（pp.84–87）</div>
+      <div class="chap pop">『量子コンピュータの頭の中』 ゼミ資料</div>
       <h1 class="pop" style="--d:.1s">論理式を実現する<br>古典回路</h1>
-      <div class="sub pop" style="--d:.2s">― 半加算器から全加算器へ ―</div>    </div>
+      <div class="sub pop" style="--d:.2s">― 半加算器から全加算器、そして量子ビットへ ―</div>
+      <div class="tchaps">
+        <div class="tchap pop" style="--d:.3s;--c:var(--blue)"><span class="tno">第2章</span><span class="tname">量子コンピュータ入門以前</span><span class="tsec">2.8（pp.76–81）＋ 全加算器</span></div>
+        <div class="tchap pop" style="--d:.4s;--c:var(--purple)"><span class="tno">第3章</span><span class="tname">量子コンピュータの基本ルール</span><span class="tsec">3.1〜3.2.1（pp.84–87）</span></div>
+      </div>
+    </div>
     <div class="card pop" style="--d:.4s">
       <svg class="circ" id="titleCirc"></svg>
       <div class="hint" style="text-align:center">信号の流れ（オレンジ = 1）を見ながら進めます</div>
@@ -419,7 +430,7 @@ body.overview #laser{display:none}
   <div class="door-wrap">
     <div class="door-num">1</div>
     <div>
-      <div class="door-label pop">CHAPTER 1</div>
+      <div class="door-label pop"><span class="door-book">第2章 量子コンピュータ入門以前</span>PART 1</div>
       <h1 class="pop" style="--d:.1s">論理ゲート</h1>
       <p class="door-lead pop" style="--d:.2s">AND / OR / NOT / XOR</p>
       <div class="door-topics pop" style="--d:.3s"><span>古典回路とは</span><span>AND</span><span>OR</span><span>NOT</span><span>XOR</span></div>
@@ -430,7 +441,7 @@ body.overview #laser{display:none}
 
 <!-- 3. 古典回路とは -->
 <section class="slide">
-  <div class="chap">2.8 論理式を実現する古典回路</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路</div>
   <h2>古典回路とは<small>図2.13（p.76）</small></h2>
   <div class="body cols">
     <div>
@@ -461,7 +472,7 @@ body.overview #laser{display:none}
 
 <!-- 4. AND -->
 <section class="slide">
-  <div class="chap">2.8 論理式を実現する古典回路 ／ 論理ゲート ①</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路 ／ 論理ゲート ①</div>
   <h2>AND（論理積）<small>表2.3（p.77）・図2.14（p.78）</small></h2>
   <div class="body cols" style="grid-template-columns:1fr 1.15fr">
     <div class="card pop">
@@ -479,7 +490,7 @@ body.overview #laser{display:none}
 
 <!-- 5. OR -->
 <section class="slide">
-  <div class="chap">2.8 論理式を実現する古典回路 ／ 論理ゲート ②</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路 ／ 論理ゲート ②</div>
   <h2>OR（論理和）<small>表2.4（p.77）・図2.15（p.78）</small></h2>
   <div class="body cols" style="grid-template-columns:1fr 1.15fr">
     <div class="card pop">
@@ -497,7 +508,7 @@ body.overview #laser{display:none}
 
 <!-- 6. NOT -->
 <section class="slide">
-  <div class="chap">2.8 論理式を実現する古典回路 ／ 論理ゲート ③</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路 ／ 論理ゲート ③</div>
   <h2>NOT（否定）<small>表2.5（p.77）・図2.16（p.78）</small></h2>
   <div class="body cols" style="grid-template-columns:1fr 1.15fr">
     <div class="card pop">
@@ -514,7 +525,7 @@ body.overview #laser{display:none}
 
 <!-- XOR -->
 <section class="slide">
-  <div class="chap">2.8 論理式を実現する古典回路 ／ 論理ゲート ④</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路 ／ 論理ゲート ④</div>
   <h2>XOR（排他的論理和）<small>表2.7（p.80）・図2.19（p.81）</small></h2>
   <div class="body cols" style="grid-template-columns:1fr 1.15fr">
     <div class="card pop">
@@ -538,7 +549,7 @@ body.overview #laser{display:none}
   <div class="door-wrap">
     <div class="door-num">2</div>
     <div>
-      <div class="door-label pop">CHAPTER 2</div>
+      <div class="door-label pop"><span class="door-book">第2章 量子コンピュータ入門以前</span>PART 2</div>
       <h1 class="pop" style="--d:.1s">半加算器</h1>
       <p class="door-lead pop" style="--d:.2s">1ビット同士の足し算</p>
       <div class="door-topics pop" style="--d:.3s"><span>1ビットの筆算</span><span>AND・OR・NOT 版</span><span>XOR 版</span><span>ゲート数・段数の比較</span><span>ゲートのコスト（補足）</span></div>
@@ -549,7 +560,7 @@ body.overview #laser{display:none}
 
 <!-- 半加算器の導入（1ビットの筆算） -->
 <section class="slide" data-id="coladd1">
-  <div class="chap">2.8 論理式を実現する古典回路 ／ 半加算器</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路 ／ 半加算器</div>
   <h2>1ビット同士の足し算を筆算で考える<small>表2.6（p.79）</small></h2>
   <div class="body cols">
     <div class="card pop">
@@ -575,7 +586,7 @@ body.overview #laser{display:none}
 
 <!-- 半加算器 4ゲート -->
 <section class="slide">
-  <div class="chap">2.8 論理式を実現する古典回路 ／ 半加算器</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路 ／ 半加算器</div>
   <h2>AND・OR・NOT（積・和・否定）で半加算器を作る<small>図2.18（p.80）</small></h2>
   <div class="body cols wide">
     <div class="card pop">
@@ -595,7 +606,7 @@ body.overview #laser{display:none}
 
 <!-- 11. XOR 半加算器 -->
 <section class="slide">
-  <div class="chap">2.8 論理式を実現する古典回路 ／ 半加算器の簡略化</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路 ／ 半加算器の簡略化</div>
   <h2>XOR を使った半加算器<small>図2.20（p.81）</small></h2>
   <div class="body cols">
     <div class="card pop">
@@ -615,7 +626,7 @@ body.overview #laser{display:none}
 
 <!-- ゲート数・段数の比較 -->
 <section class="slide" data-id="hacmp">
-  <div class="chap">2.8 論理式を実現する古典回路 ／ 半加算器の簡略化</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路 ／ 半加算器の簡略化</div>
   <h2>2つの半加算器を比べる<small>ゲート数と段数（p.81）</small></h2>
   <div class="body cols">
     <div class="card pop" style="padding:12px 18px">
@@ -646,7 +657,7 @@ body.overview #laser{display:none}
 
 <!-- ゲートごとのコスト -->
 <section class="slide">
-  <div class="chap">補足 ／ 基本論理ゲートのコスト</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 補足 ／ 基本論理ゲートのコスト</div>
   <h2>ゲートの種類でトランジスタ数・計算時間は違う</h2>
   <div class="body cols">
     <div class="card pop">
@@ -683,7 +694,7 @@ body.overview #laser{display:none}
   <div class="door-wrap">
     <div class="door-num">3</div>
     <div>
-      <div class="door-label pop">CHAPTER 3 <span class="tag">追加</span></div>
+      <div class="door-label pop"><span class="door-book">第2章 量子コンピュータ入門以前</span>PART 3 <span class="tag">追加</span></div>
       <h1 class="pop" style="--d:.1s">全加算器</h1>
       <p class="door-lead pop" style="--d:.2s">繰り上がりを受け取る足し算</p>
       <div class="door-topics pop" style="--d:.3s"><span>多ビットの筆算</span><span>全加算器の回路</span><span>リップルキャリー加算器</span></div>
@@ -694,7 +705,7 @@ body.overview #laser{display:none}
 
 <!-- 12. 半加算器の限界 -->
 <section class="slide" data-id="coladd">
-  <div class="chap">ここから追加内容 ／ 全加算器</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ ここから追加内容 ／ 全加算器</div>
   <h2>半加算器だけでは足りない？<small>多ビットの筆算</small></h2>
   <div class="body cols">
     <div class="card pop">
@@ -718,7 +729,7 @@ body.overview #laser{display:none}
 
 <!-- 15. 全加算器 回路 -->
 <section class="slide">
-  <div class="chap">追加内容 ／ 全加算器</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 追加内容 ／ 全加算器</div>
   <h2>全加算器の回路を動かしてみる<small>半加算器 × 2 ＋ OR</small></h2>
   <div class="body cols wide" style="align-items:start">
     <div>
@@ -744,7 +755,7 @@ body.overview #laser{display:none}
 
 <!-- 16. リップルキャリー -->
 <section class="slide" data-id="ripple">
-  <div class="chap">追加内容 ／ 多ビット加算器</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 追加内容 ／ 多ビット加算器</div>
   <h2 style="font-size:32px">リップルキャリー加算器（繰り上がりのさざ波加算器）<small>全加算器結合加算器</small></h2>
   <div class="body">
     <div class="card pop" style="padding:10px 18px">
@@ -796,9 +807,9 @@ body.overview #laser{display:none}
   <div class="door-wrap">
     <div class="door-num">4</div>
     <div>
-      <div class="door-label pop">CHAPTER 4</div>
+      <div class="door-label pop"><span class="door-book">第3章 量子コンピュータの基本ルール</span>PART 4</div>
       <h1 class="pop" style="--d:.1s">量子ビット</h1>
-      <p class="door-lead pop" style="--d:.2s">量子コンピュータの基本ルール（教科書 第3章）</p>
+      <p class="door-lead pop" style="--d:.2s">量子状態と重ね合わせ</p>
       <div class="door-topics pop" style="--d:.3s"><span>量子ビット |0⟩, |1⟩</span><span>量子状態</span><span>状態ベクトル</span><span>内積による表し方</span><span>重ね合わせ状態</span></div>
     </div>
   </div>
