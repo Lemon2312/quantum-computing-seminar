@@ -9,7 +9,7 @@
   --ink:#1f1a3d; --muted:#6b6790; --line:#1f1a3d; --bg:#fffaf0;
   --accent:#ff6b1a; --accent-d:#e04e00; --accent-l:#fff1c2;
   --blue:#3b6cff; --blue-l:#dfe8ff; --green:#14a35a;
-  --off:#b9b5d0; --pink:#ff4f9a; --yellow:#ffd53d;
+  --off:#b9b5d0; --pink:#ff4f9a; --yellow:#ffd53d; --purple:#8a5cff;
   --hard:4px 4px 0 var(--ink);
 }
 *{box-sizing:border-box}
@@ -262,8 +262,51 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .agenda .num{border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);background:var(--blue)}
 .agenda li:nth-child(2) .num{background:var(--pink)}
 .agenda li:nth-child(3) .num{background:var(--green)}
+.agenda li:nth-child(4) .num{background:var(--purple)}
 .agenda .new{background:var(--accent)}
 .tag{background:var(--pink);border:2px solid var(--ink);white-space:nowrap;flex:none}
+
+/* 量子ビット（第4章）の数式・図 */
+.math,.vec,.frac{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif}
+.eq{display:flex;align-items:center;justify-content:center;gap:8px;font-size:26px;flex-wrap:wrap}
+.eq.inline{display:inline-flex;font-size:inherit;vertical-align:middle;gap:5px}
+.vec{display:inline-grid;text-align:center;padding:1px 10px;border-left:3px solid currentColor;border-right:3px solid currentColor;border-radius:14px;line-height:1.25}
+.vec.row{grid-auto-flow:column;column-gap:14px}
+.eq.inline .vec{line-height:1.05;padding:0 7px;border-width:2px;border-radius:10px;font-size:.85em}
+.frac{display:inline-grid;text-align:center;line-height:1.1;font-size:.85em;vertical-align:middle}
+.frac>span:first-child{border-bottom:2px solid currentColor;padding:0 2px}
+.brace{font-size:2.3em;font-weight:200;line-height:1;transform:scaleX(.7)}
+.bar{width:2px;align-self:stretch;background:currentColor;margin:6px 2px}
+.defbox{position:relative;background:#fff;border:3px solid var(--ink);border-radius:16px;box-shadow:var(--hard);padding:16px 18px 12px;margin-top:18px;font-size:20px;line-height:1.7}
+.defbox::before{content:"定義";position:absolute;left:14px;top:-16px;background:var(--ink);color:#fff;font-weight:800;font-size:15px;border-radius:999px;padding:2px 14px}
+.qrow{display:flex;align-items:center;gap:16px}
+.qlab{width:110px;flex:none;font-weight:800;font-size:19px}
+.qcells{display:flex;gap:26px;align-items:center}
+.qbit{width:56px;height:56px;border:3px solid var(--ink);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;font-family:Consolas,Menlo,monospace;box-shadow:3px 3px 0 var(--ink);background:#fff}
+.qarrow{margin:14px 0 14px 126px;color:var(--muted);font-weight:700}
+.qcases{display:flex;flex-direction:column;gap:9px}
+.qcases button{font:inherit;color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:54px;background:#fff;
+  border:2.5px solid var(--ink);border-radius:14px;padding:2px 16px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);font-size:22px}
+.qcases button.on{background:var(--accent-l);transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.qcases .mk{font-size:15px;font-weight:800;border-radius:999px;padding:1px 10px;border:2px solid currentColor;opacity:0;transition:opacity .3s}
+.qcases button.seen .mk{opacity:1}
+.qcases .mk.ok{color:var(--green)}
+.qcases .mk.ng{color:#d61f45}
+.qstate{font-size:28px;min-height:62px}
+.qcalc{font-size:22px;min-height:84px;margin-top:4px;align-content:center}
+.qnote{width:100%;text-align:center;font-size:15px;color:var(--muted)}
+.qbar{position:relative;height:30px;border:2.5px solid var(--ink);border-radius:10px;background:#ece6ff;margin:12px 0 4px;display:flex;overflow:hidden}
+.qbar-a{background:var(--accent);transition:width .6s cubic-bezier(.3,1.3,.5,1)}
+.qbar-b{background:var(--blue);transition:width .6s cubic-bezier(.3,1.3,.5,1)}
+.qbar-one{position:absolute;left:50%;top:0;bottom:0;border-left:3px dashed var(--ink)}
+.qlegend{display:flex;gap:16px;font-size:15px;font-weight:700}
+.qlegend .la::before,.qlegend .lb::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;background:var(--accent)}
+.qlegend .lb::before{background:var(--blue)}
+.qverdict{margin-top:12px;text-align:center;font-size:24px;font-weight:900;padding:6px;border-radius:12px;border:2.5px solid var(--ink)}
+.qverdict.ok{background:#d9f7e6;color:var(--green)}
+.qverdict.ng{background:#ffe0e6;color:#d61f45}
+.qsupval{font-size:21px;margin-top:2px}
+.qsuplab{text-align:center;font-weight:900;font-size:21px;margin-top:2px}
 
 /* 章の扉スライド */
 .door-wrap{position:relative;display:grid;grid-template-columns:auto 1fr;gap:64px;align-items:center;height:100%;padding:0 40px}
@@ -306,7 +349,7 @@ body.overview #laser{display:none}
 <section class="slide" data-id="title">
   <div class="title-wrap">
     <div>
-      <div class="chap pop">『量子コンピュータの頭の中』 第2章 ／ 2.8 論理式を実現する古典回路<br>教科書 pp.76–81</div>
+      <div class="chap pop">『量子コンピュータの頭の中』 第2章 ／ 2.8 論理式を実現する古典回路<br>教科書 pp.76–81 ＋ 第3章 3.1〜3.2.1（pp.84–87）</div>
       <h1 class="pop" style="--d:.1s">論理式を実現する<br>古典回路</h1>
       <div class="sub pop" style="--d:.2s">― 半加算器から全加算器へ ―</div>    </div>
     <div class="card pop" style="--d:.4s">
@@ -325,6 +368,7 @@ body.overview #laser{display:none}
       <li class="pop" style="--d:.05s"><span class="num">1</span>論理ゲート（AND / OR / NOT / XOR）</li>
       <li class="pop" style="--d:.15s"><span class="num">2</span>半加算器：1ビット同士の足し算</li>
       <li class="pop" style="--d:.25s"><span class="num">3</span>全加算器：繰り上がりを受け取る足し算 <span class="tag">追加</span></li>
+      <li class="pop" style="--d:.35s"><span class="num">4</span>量子ビット：量子コンピュータの基本ルール</li>
     </ul>
     <div class="card pop" style="--d:.5s">
       <p style="margin:0 0 8px;font-weight:700">このスライドの使い方</p>
@@ -686,6 +730,147 @@ body.overview #laser{display:none}
   <div class="pageno"></div>
 </section>
 
+<!-- 扉：第4章 -->
+<section class="slide door" style="--c:var(--purple)">
+  <div class="door-bg">4</div>
+  <div class="door-wrap">
+    <div class="door-num">4</div>
+    <div>
+      <div class="door-label pop">CHAPTER 4</div>
+      <h1 class="pop" style="--d:.1s">量子ビット</h1>
+      <p class="door-lead pop" style="--d:.2s">量子コンピュータの基本ルール（教科書 第3章）</p>
+      <div class="door-topics pop" style="--d:.3s"><span>量子ビット |0⟩, |1⟩</span><span>量子状態</span><span>状態ベクトル</span><span>内積による表し方</span><span>重ね合わせ状態</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 量子ビット |0⟩ と |1⟩ -->
+<section class="slide">
+  <div class="chap">第3章 量子コンピュータの基本ルール ／ 3.2 量子ビット</div>
+  <h2>量子ビット |0⟩ と |1⟩<small>3.1・3.2（pp.84–85）</small></h2>
+  <div class="body cols even">
+    <div>
+      <p class="pop" style="margin:0 0 10px;font-size:21px">ここからは <b class="k">ベクトル</b> などの数式を使って、量子コンピュータの計算ルール（定義）を説明していく</p>
+      <ul>
+        <li class="pop" style="--d:.1s;font-size:20px">古典ビットの 0, 1 に対応する <b class="k">量子ビット</b>（quantum bit, qubit）を <span class="math">|0⟩, |1⟩</span> と書き、<b>ベクトル</b> として定義する</li>
+        <li class="frag" style="font-size:20px"><span class="math">|0⟩</span> は <b>ゼロベクトルではない</b> ことに注意
+          <span class="eq inline"><span class="math">|0⟩ ≠</span><span class="vec"><span>0</span><span>0</span></span></span></li>
+        <li class="frag" style="font-size:20px">古典ビットの状態は 0 か 1 のどちらか。量子ビットの状態は <b class="kb">|0⟩ と |1⟩ 以外もあり得る</b></li>
+      </ul>
+    </div>
+    <div class="card pop" style="--d:.2s">
+      <div class="qrow">
+        <div class="qlab">古典ビット</div>
+        <div class="qcells"><span class="qbit">0</span><span class="qbit">1</span></div>
+      </div>
+      <div class="qarrow">↓ 対応する</div>
+      <div class="qrow">
+        <div class="qlab">量子ビット</div>
+        <div class="qcells">
+          <span class="eq"><span class="math">|0⟩ =</span><span class="vec"><span>1</span><span>0</span></span></span>
+          <span class="eq"><span class="math">|1⟩ =</span><span class="vec"><span>0</span><span>1</span></span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 量子状態の定義 -->
+<section class="slide">
+  <div class="chap">第3章 量子コンピュータの基本ルール ／ 3.2 量子ビット</div>
+  <h2>量子状態<small>定義（pp.85–86）</small></h2>
+  <div class="body cols even">
+    <div>
+      <div class="defbox pop">複素数 <span class="math">a, b</span> が <span class="math">|a|² + |b|² = 1</span> という条件を満たすとき、<br>
+        <span class="math">a|0⟩ + b|1⟩</span> の形をしたベクトルを <b class="k">量子状態</b>（quantum state）という</div>
+      <ul style="margin-top:16px">
+        <li class="frag" style="font-size:19px"><span class="math">|a|, |b|</span> は複素数の絶対値。難しく感じたら、実数の絶対値（符号をプラスにしたもの）をイメージ</li>
+        <li class="frag" style="font-size:19px">量子状態をベクトルの形で表したものを <b class="k">状態ベクトル</b>（state vector）という</li>
+      </ul>
+    </div>
+    <div class="card pop" style="--d:.2s">
+      <div class="muted" style="font-size:16px;font-weight:700">ベクトルで書くと</div>
+      <div class="eq" style="margin:6px 0 14px"><span class="math">a|0⟩ + b|1⟩ = a</span><span class="vec"><span>1</span><span>0</span></span><span class="math">+ b</span><span class="vec"><span>0</span><span>1</span></span><span class="math">=</span><span class="vec"><span>a</span><span>b</span></span></div>
+      <div class="frag">
+        <div class="muted" style="font-size:16px;font-weight:700">同じ定義を集合で書くと（量子状態全体の集合 Q）</div>
+        <div class="eq" style="margin-top:6px"><span class="math">Q :=</span><span class="brace">{</span><span class="vec"><span>a</span><span>b</span></span><span class="math">∈ ℂ²</span><span class="bar"></span><span class="math">|a|² + |b|² = 1</span><span class="brace">}</span></div>
+        <div class="hint" style="text-align:center">「複素数を成分とした2次元のベクトルで、|a|² + |b|² = 1 を満たすもの」</div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 量子状態の例 -->
+<section class="slide" data-id="qcheck">
+  <div class="chap">第3章 量子コンピュータの基本ルール ／ 3.2 量子ビット</div>
+  <h2>量子状態かどうか確かめよう<small>p.86</small></h2>
+  <div class="body cols even">
+    <div class="card pop">
+      <div class="muted" style="font-size:16px;font-weight:700;margin-bottom:6px">例をクリック</div>
+      <div class="qcases" id="qCases"></div>
+      <div class="btns"><button class="b" id="qAuto" data-autoplay>▶ 自動再生</button></div>
+    </div>
+    <div class="card pop" style="--d:.15s">
+      <div class="eq qstate" id="qState"></div>
+      <div class="eq qcalc" id="qCalc"></div>
+      <div class="qbar"><div class="qbar-a" id="qBarA"></div><div class="qbar-b" id="qBarB"></div><div class="qbar-one"><span>1</span></div></div>
+      <div class="qlegend"><span class="la">|a|²</span><span class="lb">|b|²</span><span class="muted">縦線が 1 の位置</span></div>
+      <div class="qverdict" id="qVerdict"></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 内積で表す -->
+<section class="slide">
+  <div class="chap">第3章 量子コンピュータの基本ルール ／ 3.2 量子ビット</div>
+  <h2>内積を使って量子状態を表す<small>pp.86–87</small></h2>
+  <div class="body cols even">
+    <div>
+      <p class="pop" style="margin:0 0 6px;font-size:20px">量子状態 <span class="eq inline"><span class="math">|φ⟩ =</span><span class="vec"><span>a</span><span>b</span></span><span class="math">∈ ℂ²</span></span> の内積 <span class="math">⟨φ|φ⟩</span> を計算すると</p>
+      <div class="card pop" style="--d:.1s;padding:12px 16px">
+        <div class="eq"><span class="math">⟨φ|φ⟩ =</span><span class="vec row"><span>a*</span><span>b*</span></span><span class="vec"><span>a</span><span>b</span></span></div>
+        <div class="eq" style="margin-top:6px"><span class="math">= a*a + b*b = |a|² + |b|²</span></div>
+        <div class="hint" style="text-align:center"><span class="math">a*</span> は a の複素共役（内積は教科書 第2章を参照）</div>
+      </div>
+      <div class="point frag" style="font-size:20px">よって、量子状態全体の集合 Q は
+        <div class="eq" style="margin-top:4px"><span class="math">Q = </span><span class="brace">{</span><span class="math">|φ⟩ ∈ ℂ²</span><span class="bar"></span><span class="math">⟨φ|φ⟩ = 1</span><span class="brace">}</span></div></div>
+    </div>
+    <div>
+      <div class="defbox frag">複素数を成分とした2次元ベクトル <span class="math">|φ⟩</span> が <span class="math">⟨φ|φ⟩ = 1</span> という条件を満たすとき、<span class="math">|φ⟩</span> を <b class="k">量子状態</b> という</div>
+      <div class="point blue frag" style="font-size:19px;margin-top:22px">前のページの定義と <b>同じ量子状態</b> を表している。<br>量子状態を表す方法はいくつかあるので、<b>状況に応じて扱いやすい方法</b> を使う</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 重ね合わせ状態 -->
+<section class="slide" data-id="qsup">
+  <div class="chap">第3章 量子コンピュータの基本ルール ／ 3.2.1 「重ね合わせ状態」とは？</div>
+  <h2>「重ね合わせ状態」とは？<small>3.2.1（p.87）</small></h2>
+  <div class="body cols even">
+    <div>
+      <div class="point pop" style="margin-top:0;font-size:20px">
+        <span class="eq inline"><span class="frac"><span>1</span><span>√5</span></span><span class="math">|0⟩ +</span><span class="frac"><span>2</span><span>√5</span></span><span class="math">|1⟩</span></span> のように、<b>係数が 0 でない</b> 複数の量子ビットの和で表される量子状態を <b class="k">重ね合わせ状態</b>（superposition）と呼ぶ</div>
+      <ul style="margin-top:14px">
+        <li class="frag" style="font-size:20px">1量子ビットの量子状態は、<span class="math">|0⟩</span> と <span class="math">|1⟩</span> という2種類の量子ビットの重ね合わせ状態を表せる</li>
+      </ul>
+      <div class="point blue frag" style="font-size:20px">古典ビットは重ね合わせ状態にできない<br>→ <b>古典ビットと量子ビットで大きく異なる点</b></div>
+    </div>
+    <div class="card pop" style="--d:.2s">
+      <svg class="circ" id="qCircle" viewBox="0 0 360 300" style="cursor:pointer;height:250px;width:auto;margin:0 auto"></svg>
+      <div class="eq qsupval" id="qSupVal"></div>
+      <div class="qsuplab" id="qSupLab"></div>
+      <div class="btns"><button class="b" id="qSupAuto" data-autoplay>▶ 自動再生</button></div>
+      <div class="hint">円をクリックすると点が動きます。※ 係数を実数に限った場合のイメージ図（横軸が |0⟩ の係数 a、縦軸が |1⟩ の係数 b）</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
 <!-- 18. まとめ -->
 <section class="slide">
   <div class="chap">Summary</div>
@@ -699,6 +884,8 @@ body.overview #laser{display:none}
       <li class="pop" style="--d:.3s"><b>全加算器</b>：下の桁からの繰り上がりを含む3入力の足し算。<b>半加算器 × 2 + OR</b> で作れる<br>
         <span class="formula" style="font-size:24px;padding:2px 12px">S = A ⊕ B ⊕ C<sub>in</sub>,　C<sub>out</sub> = A·B + (A ⊕ B)·C<sub>in</sub></span></li>
       <li class="pop" style="--d:.4s">全加算器を並べれば <b>任意ビットの加算器</b> になる（リップルキャリー加算器）</li>
+      <li class="pop" style="--d:.6s"><b>量子ビット</b> |0⟩, |1⟩ はベクトル。<b>|a|² + |b|² = 1</b>（⟨φ|φ⟩ = 1）を満たす a|0⟩ + b|1⟩ が <b class="k">量子状態</b></li>
+      <li class="pop" style="--d:.7s">係数が 0 でない |0⟩ と |1⟩ の和が <b class="k">重ね合わせ状態</b>。古典ビットにはない性質</li>
     </ul>
   </div>
   <div class="pageno"></div>
@@ -1217,6 +1404,129 @@ function columnAdder(grid, msg, A, B, describe) {
   window.onEnter = window.onEnter || {};
   onEnter.ripple = run;
   run();
+}
+
+/* ---------- 量子状態のチェック（第4章） ---------- */
+{
+  const F = (n, d) => `<span class="frac"><span>${n}</span><span>${d}</span></span>`;
+  const M = t => `<span class="math">${t}</span>`;
+  const cases = [
+    { st: M('|0⟩'), calc: M('|a|² + |b|² = |1|² + |0|² = 1 + 0 = 1'), a2: 1, b2: 0 },
+    { st: M('|1⟩'), calc: M('|a|² + |b|² = |0|² + |1|² = 0 + 1 = 1'), a2: 0, b2: 1 },
+    { st: F(1, '√5') + M('|0⟩ +') + F(2, '√5') + M('|1⟩'),
+      calc: M('|a|² + |b|² =') + F(1, 5) + M('+') + F(4, 5) + M('= 1'), a2: 1 / 5, b2: 4 / 5 },
+    { st: M('−') + F(1, '√3') + M('|0⟩ +') + F('1 + i', '√3') + M('|1⟩'),
+      calc: M('|a|² + |b|² =') + F(1, 3) + M('+') + F(2, 3) + M('= 1') +
+        '<span class="qnote">|1 + i|² = 1² + 1² = 2</span>', a2: 1 / 3, b2: 2 / 3 },
+    { st: M('|0⟩ + |1⟩'), calc: M('|a|² + |b|² = |1|² + |1|² = 1 + 1 = 2 ≠ 1'), a2: 1, b2: 1 },
+  ];
+  const ok = c => Math.abs(c.a2 + c.b2 - 1) < 1e-9;
+  const list = $('#qCases');
+  const btns = cases.map((c, i) => {
+    const b = document.createElement('button');
+    b.innerHTML = `<span class="eq inline">${c.st}</span><span class="mk ${ok(c) ? 'ok' : 'ng'}">${ok(c) ? '✓ 量子状態' : '✗ 違う'}</span>`;
+    b.addEventListener('click', () => { b.blur(); show(i); });
+    list.appendChild(b);
+    return b;
+  });
+  let cur = 0;
+  function show(i) {
+    cur = i;
+    const c = cases[i];
+    btns.forEach((b, j) => b.classList.toggle('on', j === i));
+    btns[i].classList.add('seen');
+    $('#qState').innerHTML = c.st;
+    $('#qCalc').innerHTML = c.calc;
+    // 横棒の全長を 2 とし、縦の点線（中央）が 1 の位置
+    $('#qBarA').style.width = `${c.a2 / 2 * 100}%`;
+    $('#qBarB').style.width = `${c.b2 / 2 * 100}%`;
+    const v = $('#qVerdict');
+    v.className = 'qverdict ' + (ok(c) ? 'ok' : 'ng');
+    v.textContent = ok(c) ? '✓ |a|² + |b|² = 1 なので量子状態' : '✗ |a|² + |b|² ≠ 1 なので量子状態ではない';
+  }
+  const auto = $('#qAuto');
+  let t = null;
+  const stop = () => { clearInterval(t); t = null; auto.textContent = '▶ 自動再生'; auto.classList.remove('playing'); };
+  auto.addEventListener('click', () => {
+    auto.blur();
+    if (t) return stop();
+    auto.textContent = '■ 停止'; auto.classList.add('playing');
+    t = setInterval(() => show((cur + 1) % cases.length), 2600);
+  });
+  stoppers.push(stop);
+  window.onEnter = window.onEnter || {};
+  onEnter.qcheck = () => { btns.forEach(b => b.classList.remove('seen')); show(0); };
+  show(0);
+}
+
+/* ---------- 重ね合わせ状態の円（係数を実数に限ったイメージ） ---------- */
+{
+  const svg = $('#qCircle'), NS = 'http://www.w3.org/2000/svg';
+  const CX = 180, CY = 150, R = 110;
+  const mk = (tag, attrs, parent = svg) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    parent.appendChild(e); return e;
+  };
+  mk('line', { x1: 40, y1: CY, x2: 330, y2: CY, stroke: '#b9b5d0', 'stroke-width': 2.5 });
+  mk('line', { x1: CX, y1: 22, x2: CX, y2: 282, stroke: '#b9b5d0', 'stroke-width': 2.5 });
+  mk('circle', { cx: CX, cy: CY, r: R, fill: 'none', stroke: '#1f1a3d', 'stroke-width': 3, 'stroke-dasharray': '7 6' });
+  const lbl = (x, y, t, a = 'middle') => { const e = mk('text', { x, y, 'text-anchor': a, 'font-size': 18, 'font-weight': 800, fill: '#1f1a3d', 'font-family': 'Cambria Math,Times New Roman,serif' }); e.textContent = t; };
+  lbl(CX + R + 8, CY - 8, '|0⟩', 'start'); lbl(CX + 8, CY - R - 8, '|1⟩', 'start');
+  lbl(CX - R - 8, CY - 8, '−|0⟩', 'end'); lbl(CX + 8, CY + R + 22, '−|1⟩', 'start');
+  const pa = mk('line', { stroke: '#ff6b1a', 'stroke-width': 4, 'stroke-linecap': 'round' });
+  const pb = mk('line', { stroke: '#3b6cff', 'stroke-width': 4, 'stroke-linecap': 'round' });
+  const ray = mk('line', { x1: CX, y1: CY, stroke: '#1f1a3d', 'stroke-width': 3, 'stroke-dasharray': '4 5' });
+  const dot = mk('circle', { r: 12, fill: '#ffd53d', stroke: '#1f1a3d', 'stroke-width': 3 });
+
+  const presets = [0, 30, Math.atan2(2, 1) * 180 / Math.PI, 90, 135, 180, 240, 300];
+  let deg = 0, anim = 0, pi = 0;
+  const fmt = x => (Math.abs(x) < 5e-3 ? 0 : x).toFixed(2);
+  function draw(d) {
+    const r = d * Math.PI / 180, a = Math.cos(r), b = Math.sin(r);
+    const x = CX + R * a, y = CY - R * b;
+    dot.setAttribute('cx', x); dot.setAttribute('cy', y);
+    ray.setAttribute('x2', x); ray.setAttribute('y2', y);
+    // 横の太線が a（|0⟩ の係数）、縦の太線が b（|1⟩ の係数）
+    pa.setAttribute('x1', CX); pa.setAttribute('y1', CY); pa.setAttribute('x2', x); pa.setAttribute('y2', CY);
+    pb.setAttribute('x1', x); pb.setAttribute('y1', CY); pb.setAttribute('x2', x); pb.setAttribute('y2', y);
+    const A = fmt(a), B = fmt(Math.abs(b)), neg = b < 0 && +B;
+    $('#qSupVal').innerHTML = `<span class="math"><span style="color:#e04e00">${A}</span>|0⟩ ${neg ? '−' : '+'} <span style="color:#3b6cff">${B}</span>|1⟩　→　|a|² + |b|² = ${(a * a).toFixed(2)} + ${(b * b).toFixed(2)} = 1</span>`;
+    const sup = +A !== 0 && +B !== 0;
+    const l = $('#qSupLab');
+    l.textContent = sup ? '重ね合わせ状態（係数がどちらも 0 でない）' : '重ね合わせではない（係数の一方が 0）';
+    l.style.color = sup ? '#e04e00' : '#6b6790';
+  }
+  function moveTo(target, instant) {
+    cancelAnimationFrame(anim);
+    const from = deg, diff = ((target - from + 540) % 360) - 180, t0 = performance.now();
+    if (instant) { deg = target; return draw(deg); }
+    const step = now => {
+      const k = Math.min(1, (now - t0) / 600), e = 1 - Math.pow(1 - k, 3);
+      deg = from + diff * e; draw(deg);
+      if (k < 1) anim = requestAnimationFrame(step); else deg = (target + 360) % 360;
+    };
+    anim = requestAnimationFrame(step);
+  }
+  svg.addEventListener('click', e => {
+    stop();
+    const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(svg.getScreenCTM().inverse());
+    const d = Math.atan2(CY - p.y, p.x - CX) * 180 / Math.PI;
+    moveTo((Math.round(d / 5) * 5 + 360) % 360);
+  });
+  const auto = $('#qSupAuto');
+  let t = null;
+  function stop() { clearInterval(t); t = null; auto.textContent = '▶ 自動再生'; auto.classList.remove('playing'); }
+  auto.addEventListener('click', () => {
+    auto.blur();
+    if (t) return stop();
+    auto.textContent = '■ 停止'; auto.classList.add('playing');
+    t = setInterval(() => { pi = (pi + 1) % presets.length; moveTo(presets[pi]); }, 2200);
+  });
+  stoppers.push(stop);
+  window.onEnter = window.onEnter || {};
+  onEnter.qsup = () => { pi = 0; moveTo(0, true); };
+  draw(0);
 }
 
 /* ---------- スライド制御 ---------- */
