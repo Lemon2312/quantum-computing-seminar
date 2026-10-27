@@ -382,33 +382,6 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .mhist span{font-family:"Cambria Math","Times New Roman",serif;font-size:15px;border-radius:8px;padding:1px 7px;color:#fff;font-weight:700}
 .mhist .h0{background:var(--accent)}
 .mhist .h1{background:var(--blue)}
-.mstate{font-size:19px;font-weight:800;text-align:center}
-.mstate .eq{font-size:22px}
-.mstate .changed{color:#d61f45}
-.mprob{display:flex;justify-content:center;gap:24px;font-size:17px;margin-top:2px}
-.m2msg{text-align:center;font-weight:800;font-size:16px;min-height:24px;margin-top:4px}
-.msep{border-top:2px dashed #d9d4ea;margin:6px 0}
-.mbars{display:grid;grid-template-columns:30px 1fr 118px;gap:6px 10px;align-items:center;margin:6px 0}
-.mbars .ml{font-family:"Cambria Math","Times New Roman",serif;font-size:20px;font-weight:700}
-.mb-track{position:relative;height:24px;background:#ece6ff;border:2px solid var(--ink);border-radius:8px;overflow:hidden}
-.mb-fill{height:100%;width:0;transition:width .25s}
-.mb-fill.f0{background:var(--accent)}
-.mb-fill.f1{background:var(--blue)}
-.mb-theory{position:absolute;top:0;bottom:0;border-left:3px dashed var(--ink)}
-.mb-txt{font-family:Consolas,Menlo,monospace;font-size:14px}
-.mtable{margin:0 auto;font-size:20px}
-.mtable th,.mtable td{padding:6px 18px}
-.mcharts{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px}
-.mchart{padding:10px 18px 8px}
-.mc-cap{font-size:15px;font-weight:800;text-align:center;margin-bottom:22px}
-.mc-plot{height:150px;display:flex;align-items:flex-end;justify-content:space-around;border-left:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);
-  margin:0 10px 30px;background:repeating-linear-gradient(to top,transparent 0 29px,#e3dcf2 29px 30px)}
-.mc-col{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;width:80px;height:100%}
-.mc-bar{position:relative;width:58px;height:0;background:#6b6790;border:2px solid var(--ink);border-bottom:0;border-radius:6px 6px 0 0;transition:height 1s cubic-bezier(.3,1.3,.5,1)}
-.mc-bar.q{background:var(--purple)}
-.frag.vis .mc-bar,body.overview .mc-bar{height:calc(var(--h) * 148px)}
-.mc-bar span{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-weight:800;font-size:14px}
-.mc-col b{position:absolute;bottom:-28px;font-size:18px}
 .mpair{display:flex;justify-content:center;gap:34px;margin-top:4px;font-size:22px;align-items:flex-end}
 .mmini{display:inline-flex;align-items:flex-end;gap:4px;height:44px;vertical-align:bottom;border-bottom:2px solid var(--ink);padding:0 4px}
 .mmini i{display:block;width:16px;height:calc(var(--h) * 40px);background:#ff6b1a;border:1.5px solid var(--ink);border-bottom:0}
@@ -1011,7 +984,7 @@ body.overview #ink,body.overview #penbar{display:none}
       <div class="door-label pop"><span class="door-book">第3章 量子コンピュータの基本ルール</span>PART 5</div>
       <h1 class="pop" style="--d:.1s">測定</h1>
       <p class="door-lead pop" style="--d:.2s">計算結果を得る（教科書 3.3）</p>
-      <div class="door-topics pop" style="--d:.3s"><span>測定とは</span><span>測定の定義</span><span>古典ビットとの違い</span><span>測定の振舞いが一致する例</span></div>
+      <div class="door-topics pop" style="--d:.3s"><span>測定とは</span><span>測定の振舞いが一致する例</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1045,66 +1018,6 @@ body.overview #ink,body.overview #penbar{display:none}
       <div class="mhist" id="m1Hist"></div>
       <div class="btns" style="justify-content:center"><button class="b" id="m1Btn">🔍 測定してみる</button><button class="b" id="m1Auto" data-autoplay>▶ 自動再生</button></div>
       <div class="hint" style="text-align:center">毎回 <span class="math">(1/√5)|0⟩ + (2/√5)|1⟩</span> を用意して測定（図3.1 のイメージ）</div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 測定の定義 -->
-<section class="slide" data-id="meas2">
-  <div class="chap">第3章 量子コンピュータの基本ルール ／ 3.3 計算結果を得る「測定」</div>
-  <h2>測定のルール<small>定義（p.89）</small></h2>
-  <div class="body cols" style="grid-template-columns:1fr 1.1fr">
-    <div>
-      <div class="defbox pop" style="font-size:18px;padding:14px 16px 10px">量子状態 <span class="math">a|0⟩ + b|1⟩</span> を測定すると、<span class="math">|0⟩</span> または <span class="math">|1⟩</span> を得る（「測定値 |0⟩ を得る」という）
-        <ul style="margin:4px 0">
-          <li style="font-size:18px;margin:2px 0">測定値 <span class="math">|0⟩</span> を得る確率は <b class="k"><span class="math">|a|²</span></b></li>
-          <li style="font-size:18px;margin:2px 0">測定値 <span class="math">|1⟩</span> を得る確率は <b class="kb"><span class="math">|b|²</span></b></li>
-        </ul>
-        測定後の量子状態は、<b>得られた測定値に変化する</b></div>
-      <div class="point frag" style="font-size:18px;margin-top:14px">古典ビットとの大きな違い<br>(1) 得られる測定値は <b>確率によって変わる</b>　(2) 測定によって <b>状態が変化する</b></div>
-      <div class="hint frag" style="font-size:14px">※ 量子力学では測定値は実数（0, 1）。教科書では量子ビットの測定であることを強調するため |0⟩, |1⟩ と表記</div>
-    </div>
-    <div class="card pop" style="--d:.2s;padding:12px 16px">
-      <div class="mstate">いまの状態：<span class="eq inline" id="m2State"></span></div>
-      <div class="mprob">
-        <div><span class="math">|0⟩</span> の確率 <span class="eq inline"><span class="math">=</span><span class="frac"><span>1</span><span>5</span></span></span> = 0.2</div>
-        <div><span class="math">|1⟩</span> の確率 <span class="eq inline"><span class="math">=</span><span class="frac"><span>4</span><span>5</span></span></span> = 0.8</div>
-      </div>
-      <div class="btns" style="justify-content:center;margin-top:6px"><button class="b" id="m2Meas">🔍 測定する</button><button class="b" id="m2Reset">↺ |φ⟩ に戻す</button></div>
-      <div class="m2msg" id="m2Msg"></div>
-      <div class="msep"></div>
-      <div class="muted" style="font-size:15px;font-weight:700">毎回 |φ⟩ を用意して何度も測定すると（<span id="m2N">0</span> 回）</div>
-      <div class="mbars" id="m2Bars"></div>
-      <div class="btns" style="justify-content:center"><button class="b" id="m2Many" data-autoplay>▶ 何度も測定</button><button class="b" id="m2Clear">リセット</button></div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 古典ビットと量子ビットの測定の違い -->
-<section class="slide">
-  <div class="chap">第3章 量子コンピュータの基本ルール ／ 3.3 計算結果を得る「測定」</div>
-  <h2>古典ビットと量子ビットの測定の違い<small>表3.1・図3.2・図3.3（p.90）</small></h2>
-  <div class="body" style="display:flex;flex-direction:column;gap:14px;justify-content:center">
-    <table class="tt pop mtable">
-      <thead><tr><th>比較対象</th><th>古典ビット</th><th class="out">量子ビット</th></tr></thead>
-      <tbody>
-        <tr><td>測定で得られる結果</td><td>同じ操作なら一定</td><td><b>同じ操作でも確率的に変わる</b></td></tr>
-        <tr><td>測定時の状態の変化</td><td>なし</td><td><b>あり</b></td></tr>
-      </tbody>
-    </table>
-    <div class="mcharts">
-      <div class="card frag mchart">
-        <div class="mc-cap">図3.2：古典ビット 0 を測定して得られる値の確率分布</div>
-        <div class="mc-plot"><div class="mc-col"><div class="mc-bar" style="--h:1"><span>1.0</span></div><b>0</b></div><div class="mc-col"><div class="mc-bar" style="--h:0"><span>0.0</span></div><b>1</b></div></div>
-        <div class="hint" style="text-align:center">必ず 0 が得られる</div>
-      </div>
-      <div class="card frag mchart">
-        <div class="mc-cap">図3.3：<span class="eq inline"><span class="math">|φ⟩ =</span><span class="frac"><span>1</span><span>√5</span></span><span class="math">|0⟩ +</span><span class="frac"><span>2</span><span>√5</span></span><span class="math">|1⟩</span></span> を測定して得られる値の確率分布</div>
-        <div class="mc-plot"><div class="mc-col"><div class="mc-bar q" style="--h:.2"><span>0.2</span></div><b class="math">|0⟩</b></div><div class="mc-col"><div class="mc-bar q" style="--h:.8"><span>0.8</span></div><b class="math">|1⟩</b></div></div>
-        <div class="hint" style="text-align:center">|0⟩ が 0.2、|1⟩ が 0.8 の確率で得られる</div>
-      </div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1858,58 +1771,6 @@ const measureOnce = () => (Math.random() < P0 ? 0 : 1);
   stoppers.push(stop);
   window.onEnter = window.onEnter || {};
   onEnter.meas1 = () => { hs = []; hist.innerHTML = ''; res.textContent = '?'; res.className = 'mket mres'; };
-}
-{
-  const F = (n, d) => `<span class="frac"><span>${n}</span><span>${d}</span></span>`;
-  const PHI = `<span class="math">|φ⟩ =</span>${F(1, '√5')}<span class="math">|0⟩ +</span>${F(2, '√5')}<span class="math">|1⟩</span>`;
-  let state = 'phi', c = [0, 0];
-  function showState() {
-    $('#m2State').innerHTML = state === 'phi' ? PHI : `<span class="math changed">|${state}⟩</span><span class="changed" style="font-size:15px">（測定で変化）</span>`;
-  }
-  $('#m2Meas').addEventListener('click', e => {
-    e.currentTarget.blur();
-    const m = $('#m2Msg');
-    if (state === 'phi') {
-      state = measureOnce();
-      m.innerHTML = `測定値 <span class="math">|${state}⟩</span> を得た → 状態は <span class="math">|${state}⟩</span> に変化`;
-    } else {
-      m.innerHTML = `もう一度測定しても <span class="math">|${state}⟩</span>（状態はもう <span class="math">|${state}⟩</span>）`;
-    }
-    m.style.color = state ? '#3b6cff' : '#e04e00';
-    showState();
-  });
-  $('#m2Reset').addEventListener('click', e => { e.currentTarget.blur(); state = 'phi'; $('#m2Msg').textContent = ''; showState(); });
-  const bars = $('#m2Bars');
-  bars.innerHTML = [0, 1].map(v => `<span class="ml">|${v}⟩</span><div class="mb-track"><div class="mb-fill f${v}"></div>` +
-    `<div class="mb-theory" style="left:${(v ? 1 - P0 : P0) * 100}%"></div></div><span class="mb-txt"></span>`).join('');
-  const fills = bars.querySelectorAll('.mb-fill'), txts = bars.querySelectorAll('.mb-txt');
-  function showCounts() {
-    const n = c[0] + c[1];
-    $('#m2N').textContent = n;
-    [0, 1].forEach(v => {
-      const r = n ? c[v] / n : 0;
-      fills[v].style.width = `${r * 100}%`;
-      txts[v].textContent = `${c[v]} 回（${(r * 100).toFixed(0)}%）`;
-    });
-  }
-  const many = $('#m2Many');
-  let t = null;
-  const stop = () => { clearInterval(t); t = null; many.textContent = '▶ 何度も測定'; many.classList.remove('playing'); };
-  many.addEventListener('click', () => {
-    many.blur();
-    if (t) return stop();
-    many.textContent = '■ 停止'; many.classList.add('playing');
-    t = setInterval(() => {
-      for (let i = 0; i < 5; i++) c[measureOnce()]++;
-      showCounts();
-      if (c[0] + c[1] >= 1000) stop();
-    }, 250);
-  });
-  $('#m2Clear').addEventListener('click', e => { e.currentTarget.blur(); stop(); c = [0, 0]; showCounts(); });
-  stoppers.push(stop);
-  window.onEnter = window.onEnter || {};
-  onEnter.meas2 = () => { state = 'phi'; $('#m2Msg').textContent = ''; c = [0, 0]; showState(); showCounts(); };
-  showState(); showCounts();
 }
 /* |φ⟩ と |ψ⟩ の向き（係数を実数に限ったイメージ） */
 {
