@@ -387,6 +387,13 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .mmini i{display:block;width:16px;height:calc(var(--h) * 40px);background:#ff6b1a;border:1.5px solid var(--ink);border-bottom:0}
 .mmini.b i{background:#3b6cff}
 
+/* ブロッホ球 */
+.bpresets{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.bpresets button{font:700 16px "Cambria Math","Times New Roman",serif;color:var(--ink);background:#fff;border:2px solid var(--ink);border-radius:10px;
+  padding:3px 0;cursor:pointer;box-shadow:2px 2px 0 var(--ink)}
+.bpresets button:hover{background:var(--accent-l)}
+.bformula{font-size:19px;margin-top:2px;min-height:34px}
+
 /* 章の扉スライド */
 .door-wrap{position:relative;display:grid;grid-template-columns:auto 1fr;gap:64px;align-items:center;height:100%;padding:0 40px}
 .door-num{width:210px;height:210px;border-radius:46px;background:var(--c);color:#fff;border:5px solid var(--ink);box-shadow:10px 10px 0 var(--ink);
@@ -881,7 +888,7 @@ body.overview #ink,body.overview #penbar{display:none}
       <div class="door-label pop"><span class="door-book">第3章 量子コンピュータの基本ルール</span>PART 4</div>
       <h1 class="pop" style="--d:.1s">量子ビット</h1>
       <p class="door-lead pop" style="--d:.2s">量子状態と重ね合わせ</p>
-      <div class="door-topics pop" style="--d:.3s"><span>量子ビット |0⟩, |1⟩</span><span>量子状態</span><span>状態ベクトル</span><span>内積による表し方</span></div>
+      <div class="door-topics pop" style="--d:.3s"><span>量子ビット |0⟩, |1⟩</span><span>量子状態</span><span>状態ベクトル</span><span>ブロッホ球（補足）</span><span>内積による表し方</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -947,6 +954,40 @@ body.overview #ink,body.overview #penbar{display:none}
       <div class="eq qb-sum" id="qbSum"></div>
       <div class="qb-row"><div class="pgauge" id="qbGauge"></div><div class="qverdict" id="qbVerdict"></div></div>
       <div class="hint" style="margin-top:2px"><span style="color:#e04e00;font-weight:800">■ |0⟩ の確率</span>　<span style="color:#3b6cff;font-weight:800">■ |1⟩ の確率</span>　※ 係数を実数に限ったイメージ図</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- ブロッホ球（教科書外の補足） -->
+<section class="slide" data-id="bloch">
+  <div class="chap">第3章 量子コンピュータの基本ルール ／ 補足（教科書外）</div>
+  <h2>ブロッホ球<small>補足（教科書外）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)">
+    <div>
+      <div class="point pop" style="margin-top:0;font-size:17px;padding:8px 14px">1量子ビットの量子状態は、2つの角度 <span class="math">θ</span>（0〜180°）と <span class="math">φ</span>（0〜360°）を使って
+        <div class="eq" style="font-size:21px;margin:4px 0"><span class="math">|ψ⟩ = cos</span><span class="frac"><span>θ</span><span>2</span></span><span class="math">|0⟩ + e<sup>iφ</sup> sin</span><span class="frac"><span>θ</span><span>2</span></span><span class="math">|1⟩</span></div>
+        と書ける（全体にかかる位相は測定に影響しないので省く）</div>
+      <ul style="margin-top:8px">
+        <li class="pop" style="--d:.1s;font-size:17px;margin:3px 0">θ を緯度、φ を経度とみなすと、量子状態は <b class="k">半径 1 の球面上の 1 点</b> になる → <b class="k">ブロッホ球</b></li>
+        <li class="frag" style="font-size:17px;margin:3px 0"><b>北極が |0⟩、南極が |1⟩</b>。その間はすべて |0⟩ と |1⟩ の重ね合わせ（赤道上は半々）</li>
+        <li class="frag" style="font-size:17px;margin:3px 0"><b>高さ（θ）で測定確率が決まる</b>：|0⟩ の確率 <span class="math">cos²(θ/2)</span>、|1⟩ の確率 <span class="math">sin²(θ/2)</span>。経度 φ（位相）は確率を変えない</li>
+      </ul>
+      <div class="point blue frag" style="font-size:15px;padding:6px 14px;margin-top:8px">24枚目の円とは角度の取り方が違う（係数の角度の <b>2 倍</b> が θ）。そのため、|0⟩ と |1⟩ は円では直角、ブロッホ球では <b>真反対（北極と南極）</b> になる</div>
+    </div>
+    <div class="card pop" style="--d:.2s;padding:10px 16px">
+      <div class="qbuild" style="grid-template-columns:1fr 210px">
+        <svg id="blochSvg" viewBox="0 0 300 290" aria-label="ブロッホ球"></svg>
+        <div class="qb-side">
+          <label class="qslider"><span class="qs-name la">θ</span><input type="range" id="bTh" min="0" max="180" step="any"><span class="qs-val" id="bThv"></span></label>
+          <label class="qslider"><span class="qs-name lb">φ</span><input type="range" id="bPh" min="0" max="360" step="any"><span class="qs-val" id="bPhv"></span></label>
+          <div class="bpresets" id="bPresets"></div>
+          <button class="b" id="bAuto" data-autoplay>▶ 自動再生</button>
+        </div>
+      </div>
+      <div class="eq bformula" id="bFormula"></div>
+      <div class="pgauge" id="bGauge" style="margin:6px 0 18px"></div>
+      <div class="hint" style="margin-top:0"><span style="color:#e04e00;font-weight:800">■ |0⟩ の確率</span>　<span style="color:#3b6cff;font-weight:800">■ |1⟩ の確率</span>　|±⟩ = (|0⟩ ± |1⟩)/√2、|±i⟩ = (|0⟩ ± i|1⟩)/√2</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1742,6 +1783,116 @@ function probGauge(el) {
   });
   window.onEnter = window.onEnter || {};
   onEnter.qbuild = () => { pi = 0; cancelAnimationFrame(anim); a = 1; b = 0; draw(); };
+  draw();
+}
+
+/* ---------- ブロッホ球（教科書外の補足） ---------- */
+{
+  const svg = $('#blochSvg'), NS = 'http://www.w3.org/2000/svg';
+  const CX = 150, CY = 148, R = 105, rad = d => d * Math.PI / 180;
+  const VA = rad(250), VE = rad(20);  // 眺める向き（x 軸が手前、y 軸が右に見える標準的な向き）
+  // 球の上の点 (x, y, z) を画面の座標と奥行き（正なら手前）に変換する
+  function proj(x, y, z) {
+    const x1 = x * Math.cos(VA) - y * Math.sin(VA), y1 = x * Math.sin(VA) + y * Math.cos(VA);
+    return [CX + R * x1, CY - R * (y1 * Math.sin(VE) + z * Math.cos(VE)), -y1 * Math.cos(VE) + z * Math.sin(VE)];
+  }
+  const mk = (tag, attrs, parent = svg) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    parent.appendChild(e); return e;
+  };
+  const defs = mk('defs', {});
+  const g = mk('radialGradient', { id: 'bShade', cx: '38%', cy: '32%', r: '75%' }, defs);
+  mk('stop', { offset: '0%', 'stop-color': '#ffffff' }, g);
+  mk('stop', { offset: '100%', 'stop-color': '#dcd2ff' }, g);
+  const mh = mk('marker', { id: 'bHead', viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 5, markerHeight: 5, orient: 'auto' }, defs);
+  mk('path', { d: 'M0,0 L10,5 L0,10 z', fill: '#1f1a3d' }, mh);
+  mk('circle', { cx: CX, cy: CY, r: R, fill: 'url(#bShade)', stroke: '#1f1a3d', 'stroke-width': 2.5 });
+  // 大円を、手前は実線・奥は点線で描く
+  function circlePaths(fn, front, back) {
+    let f = '', b = '', prev = null;
+    for (let t = 0; t <= 360; t += 3) {
+      const [x, y, d] = proj(...fn(rad(t))), vis = d >= 0;
+      const cmd = (prev === vis ? 'L' : 'M') + x.toFixed(1) + ',' + y.toFixed(1);
+      if (vis) f += cmd; else b += cmd;
+      if (prev !== null && prev !== vis) { if (vis) b += 'L' + x.toFixed(1) + ',' + y.toFixed(1); else f += 'L' + x.toFixed(1) + ',' + y.toFixed(1); }
+      prev = vis;
+    }
+    front.setAttribute('d', f); back.setAttribute('d', b);
+  }
+  const eqB = mk('path', { fill: 'none', stroke: '#8a5cff', 'stroke-width': 1.5, 'stroke-dasharray': '4 4', opacity: .6 });
+  const eqF = mk('path', { fill: 'none', stroke: '#8a5cff', 'stroke-width': 2 });
+  circlePaths(t => [Math.cos(t), Math.sin(t), 0], eqF, eqB);
+  const merB = mk('path', { fill: 'none', stroke: '#b9b5d0', 'stroke-width': 1.5, 'stroke-dasharray': '4 4' });
+  const merF = mk('path', { fill: 'none', stroke: '#b9b5d0', 'stroke-width': 2 });
+  // 軸と、端の状態の名前
+  const axes = [[[0, 0, 1], '|0⟩'], [[0, 0, -1], '|1⟩'], [[1, 0, 0], '|+⟩'], [[-1, 0, 0], '|−⟩'], [[0, 1, 0], '|+i⟩'], [[0, -1, 0], '|−i⟩']];
+  axes.forEach(([v]) => { const [x, y] = proj(...v); mk('line', { x1: CX, y1: CY, x2: x, y2: y, stroke: '#9a93bd', 'stroke-width': 1.5, 'stroke-dasharray': '3 4' }); });
+  axes.forEach(([v, name]) => {
+    const [x, y] = proj(...v.map(c => c * (v[2] ? 1.2 : 1.32)));
+    // 線や球の輪郭と重なっても読めるよう、文字のまわりを白で縁取る
+    const e = mk('text', { x, y: y + 6, 'text-anchor': 'middle', 'font-size': name.length > 3 ? 15 : 18, 'font-weight': 800,
+      fill: v[2] ? '#1f1a3d' : '#6b6790', 'font-family': 'Cambria Math,Times New Roman,serif',
+      stroke: '#fffaf0', 'stroke-width': 4, 'paint-order': 'stroke', 'stroke-linejoin': 'round' });
+    e.textContent = name;
+  });
+  const drop = mk('line', { stroke: '#8a5cff', 'stroke-width': 2.5, 'stroke-dasharray': '4 3' });
+  const foot = mk('line', { stroke: '#8a5cff', 'stroke-width': 2.5, 'stroke-dasharray': '4 3' });
+  const arrow = mk('line', { x1: CX, y1: CY, stroke: '#1f1a3d', 'stroke-width': 4, 'stroke-linecap': 'round', 'marker-end': 'url(#bHead)' });
+  const dot = mk('circle', { r: 9, fill: '#ffd53d', stroke: '#1f1a3d', 'stroke-width': 3 });
+
+  const sTh = $('#bTh'), sPh = $('#bPh'), gEl = $('#bGauge'), gauge = probGauge(gEl);
+  gEl.classList.add('instant');
+  let th = 0, ph = 0, anim = 0;
+  const F = (n, d) => `<span class="frac"><span>${n}</span><span>${d}</span></span>`;
+  function draw() {
+    const x = Math.sin(rad(th)) * Math.cos(rad(ph)), y = Math.sin(rad(th)) * Math.sin(rad(ph)), z = Math.cos(rad(th));
+    const [px, py, pd] = proj(x, y, z), [fx, fy] = proj(x, y, 0);
+    arrow.setAttribute('x2', px); arrow.setAttribute('y2', py); arrow.setAttribute('opacity', pd >= -0.05 ? 1 : .55);
+    dot.setAttribute('cx', px); dot.setAttribute('cy', py); dot.setAttribute('opacity', pd >= -0.05 ? 1 : .6);
+    drop.setAttribute('x1', px); drop.setAttribute('y1', py); drop.setAttribute('x2', fx); drop.setAttribute('y2', fy);
+    foot.setAttribute('x1', CX); foot.setAttribute('y1', CY); foot.setAttribute('x2', fx); foot.setAttribute('y2', fy);
+    // 状態の経度 φ を通る大円（子午線）
+    circlePaths(t => [Math.sin(t) * Math.cos(rad(ph)), Math.sin(t) * Math.sin(rad(ph)), Math.cos(t)], merF, merB);
+    sTh.value = th; sPh.value = ph;
+    $('#bThv').textContent = `${Math.round(th)}°`; $('#bPhv').textContent = `${Math.round(ph) % 360}°`;
+    const c = Math.cos(rad(th / 2)), sn = Math.sin(rad(th / 2));
+    $('#bFormula').innerHTML = `<span class="math">|ψ⟩ = <span style="color:#e04e00">${c.toFixed(2)}</span>|0⟩ + e<sup>i·${Math.round(ph) % 360}°</sup> <span style="color:#3b6cff">${sn.toFixed(2)}</span>|1⟩　→　確率 ${(c * c).toFixed(2)} : ${(sn * sn).toFixed(2)}</span>`;
+    gauge(c * c, sn * sn);
+  }
+  function tween(t2, p2) {
+    cancelAnimationFrame(anim);
+    const t0 = th, p0 = ph, dp = ((p2 - p0) % 360 + 540) % 360 - 180, s0 = performance.now();
+    const step = now => {
+      const k = Math.min(1, (now - s0) / 700), e = 1 - Math.pow(1 - k, 3);
+      th = t0 + (t2 - t0) * e; ph = (p0 + dp * e + 360) % 360; draw();
+      if (k < 1) anim = requestAnimationFrame(step);
+    };
+    anim = requestAnimationFrame(step);
+  }
+  const presets = [['|0⟩', 0, 0], ['|+⟩', 90, 0], ['|+i⟩', 90, 90], ['|−⟩', 90, 180], ['|−i⟩', 90, 270], ['|1⟩', 180, 0]];
+  presets.forEach(([name, t, p]) => {
+    const b = document.createElement('button');
+    b.textContent = name;
+    b.addEventListener('click', () => { b.blur(); stop(); tween(t, p); });
+    $('#bPresets').appendChild(b);
+  });
+  // 自動再生：極から赤道を回って反対の極へ、と順にめぐる
+  const tour = [[0, 0], [60, 30], [90, 0], [90, 90], [90, 180], [120, 240], [90, 270], [180, 270]];
+  const auto = $('#bAuto');
+  let timer = null, ti = 0;
+  function stop() { clearInterval(timer); timer = null; auto.textContent = '▶ 自動再生'; auto.classList.remove('playing'); }
+  auto.addEventListener('click', () => {
+    auto.blur();
+    if (timer) return stop();
+    auto.textContent = '■ 停止'; auto.classList.add('playing');
+    timer = setInterval(() => { ti = (ti + 1) % tour.length; tween(...tour[ti]); }, 2000);
+  });
+  sTh.addEventListener('input', () => { stop(); cancelAnimationFrame(anim); th = +sTh.value; draw(); });
+  sPh.addEventListener('input', () => { stop(); cancelAnimationFrame(anim); ph = +sPh.value; draw(); });
+  stoppers.push(stop);
+  window.onEnter = window.onEnter || {};
+  onEnter.bloch = () => { ti = 0; cancelAnimationFrame(anim); th = 0; ph = 0; draw(); };
   draw();
 }
 
