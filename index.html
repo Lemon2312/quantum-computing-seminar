@@ -260,9 +260,9 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .title-wrap h1{font-size:64px;background:linear-gradient(transparent 70%,#ffe58a 70%) no-repeat;display:inline;line-height:1.3;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .title-wrap .sub{color:var(--pink);margin-top:18px}
 .agenda .num{border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);background:var(--blue)}
-.agenda li:nth-child(2) .num{background:var(--pink)}
-.agenda li:nth-child(3) .num{background:var(--green)}
-.agenda li:nth-child(4) .num{background:var(--purple)}
+.agenda li:nth-child(3) .num{background:var(--pink)}
+.agenda li:nth-child(4) .num{background:var(--green)}
+.agenda li:nth-child(6) .num{background:var(--purple)}
 .agenda .new{background:var(--accent)}
 .tag{background:var(--pink);border:2px solid var(--ink);white-space:nowrap;flex:none}
 
@@ -308,6 +308,22 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .qsupval{font-size:21px;margin-top:2px}
 .qsuplab{text-align:center;font-weight:900;font-size:21px;margin-top:2px}
 
+/* 目次の教科書の章見出し */
+.agenda li.agroup{font-size:17px;font-weight:900;color:var(--pink);letter-spacing:.06em;margin:14px 0 -4px;border-bottom:2.5px dashed #e3dcf2;padding-bottom:4px}
+.agenda li.agroup:first-child{margin-top:0}
+
+/* 教科書の章の扉（本の章扉風） */
+.partdoor .pd-wrap{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-bottom:40px}
+.pd-src{font-size:18px;font-weight:700;color:var(--muted);letter-spacing:.08em}
+.pd-no{margin-top:14px;font-size:30px;font-weight:900;color:#fff;background:var(--c);border:3px solid var(--ink);border-radius:999px;padding:4px 26px;box-shadow:4px 4px 0 var(--ink);letter-spacing:.12em}
+.pd-title{font-size:68px;line-height:1.25;margin:22px 0 26px;background:linear-gradient(transparent 70%,#ffe58a 70%);display:inline;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.pd-secs{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:22px}
+.pd-secs span{background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:4px 18px;font-size:19px;font-weight:700;box-shadow:3px 3px 0 var(--ink)}
+.pd-secs span.add{background:var(--accent-l)}
+.pd-bg{position:absolute;left:0;right:0;bottom:46px;display:flex;justify-content:center;color:var(--c);opacity:.13;font-size:84px;pointer-events:none}
+.pd-bg .eq{font-size:84px;gap:20px}
+.pd-bg .vec{border-width:5px;border-radius:40px;padding:4px 26px;line-height:1.15}
+
 /* 章の扉スライド */
 .door-wrap{position:relative;display:grid;grid-template-columns:auto 1fr;gap:64px;align-items:center;height:100%;padding:0 40px}
 .door-num{width:210px;height:210px;border-radius:46px;background:var(--c);color:#fff;border:5px solid var(--ink);box-shadow:10px 10px 0 var(--ink);
@@ -349,7 +365,7 @@ body.overview #laser{display:none}
 <section class="slide" data-id="title">
   <div class="title-wrap">
     <div>
-      <div class="chap pop">『量子コンピュータの頭の中』 第2章 ／ 2.8 論理式を実現する古典回路<br>教科書 pp.76–81 ＋ 第3章 3.1〜3.2.1（pp.84–87）</div>
+      <div class="chap pop">『量子コンピュータの頭の中』<br>第2章 量子コンピュータ入門以前 ／ 2.8（pp.76–81）<br>第3章 量子コンピュータの基本ルール ／ 3.1〜3.2.1（pp.84–87）</div>
       <h1 class="pop" style="--d:.1s">論理式を実現する<br>古典回路</h1>
       <div class="sub pop" style="--d:.2s">― 半加算器から全加算器へ ―</div>    </div>
     <div class="card pop" style="--d:.4s">
@@ -365,10 +381,12 @@ body.overview #laser{display:none}
   <h2>本日の流れ</h2>
   <div class="body cols" style="grid-template-columns:1.5fr 1fr">
     <ul class="agenda">
+      <li class="agroup pop">第2章 量子コンピュータ入門以前</li>
       <li class="pop" style="--d:.05s"><span class="num">1</span>論理ゲート（AND / OR / NOT / XOR）</li>
       <li class="pop" style="--d:.15s"><span class="num">2</span>半加算器：1ビット同士の足し算</li>
       <li class="pop" style="--d:.25s"><span class="num">3</span>全加算器：繰り上がりを受け取る足し算 <span class="tag">追加</span></li>
-      <li class="pop" style="--d:.35s"><span class="num">4</span>量子ビット：量子コンピュータの基本ルール</li>
+      <li class="agroup pop" style="--d:.3s">第3章 量子コンピュータの基本ルール</li>
+      <li class="pop" style="--d:.35s"><span class="num">4</span>量子ビット：量子状態と重ね合わせ</li>
     </ul>
     <div class="card pop" style="--d:.5s">
       <p style="margin:0 0 8px;font-weight:700">このスライドの使い方</p>
@@ -379,6 +397,18 @@ body.overview #laser{display:none}
         <li style="font-size:19px">← → キー / スペースでページ送り、F キーで全画面</li>
       </ul>
     </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 教科書 第2章の扉 -->
+<section class="slide partdoor" style="--c:var(--blue)">
+  <div class="pd-bg"><span class="math">A ∧ B　A ∨ B　¬A　A ⊕ B</span></div>
+  <div class="pd-wrap">
+    <div class="pd-src pop">『量子コンピュータの頭の中』</div>
+    <div class="pd-no pop" style="--d:.05s">第 2 章</div>
+    <h1 class="pd-title pop" style="--d:.15s">量子コンピュータ入門以前</h1>
+    <div class="pd-secs pop" style="--d:.3s"><span>2.8 論理式を実現する古典回路（pp.76–81）</span><span class="add">＋ 全加算器（追加内容）</span></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -730,6 +760,36 @@ body.overview #laser{display:none}
   <div class="pageno"></div>
 </section>
 
+<!-- 第2章のまとめ -->
+<section class="slide">
+  <div class="chap">Summary ／ 第2章 量子コンピュータ入門以前</div>
+  <h2>まとめ<small>第2章 量子コンピュータ入門以前</small></h2>
+  <div class="body">
+    <ul>
+      <li class="pop">古典回路は <b>AND / OR / NOT / XOR</b> などの論理ゲートを組み合わせて計算する。動作は <b>真理値表</b> で表せる</li>
+      <li class="pop" style="--d:.1s"><b>半加算器</b>：1ビット + 1ビット → <b class="k">和 = A ⊕ B</b>、<b class="k">繰り上がり = A · B</b></li>
+      <li class="pop" style="--d:.2s">同じ結果を出す回路は複数ある。</li>
+      <li class="pop" style="--d:.3s">実際の基本論理ゲートは、種類ごとに <b>必要なトランジスタの数や計算時間が違う</b></li>
+      <li class="pop" style="--d:.4s"><b>全加算器</b>：下の桁からの繰り上がりを含む3入力の足し算。<b>半加算器 × 2 + OR</b> で作れる<br>
+        <span class="formula" style="font-size:24px;padding:2px 12px">S = A ⊕ B ⊕ C<sub>in</sub>,　C<sub>out</sub> = A·B + (A ⊕ B)·C<sub>in</sub></span></li>
+      <li class="pop" style="--d:.5s">全加算器を並べれば <b>任意ビットの加算器</b> になる（リップルキャリー加算器）</li>
+    </ul>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 教科書 第3章の扉 -->
+<section class="slide partdoor" style="--c:var(--purple)">
+  <div class="pd-bg"><span class="eq"><span class="math">|φ⟩ =</span><span class="vec"><span>a</span><span>b</span></span><span class="math">∈ ℂ²</span></span></div>
+  <div class="pd-wrap">
+    <div class="pd-src pop">『量子コンピュータの頭の中』</div>
+    <div class="pd-no pop" style="--d:.05s">第 3 章</div>
+    <h1 class="pd-title pop" style="--d:.15s">量子コンピュータの<br>基本ルール</h1>
+    <div class="pd-secs pop" style="--d:.3s"><span>3.1 この章で学ぶこと</span><span>3.2 量子コンピュータの基礎「量子ビット」（pp.84–87）</span></div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
 <!-- 扉：第4章 -->
 <section class="slide door" style="--c:var(--purple)">
   <div class="door-bg">4</div>
@@ -871,21 +931,18 @@ body.overview #laser{display:none}
   <div class="pageno"></div>
 </section>
 
-<!-- 18. まとめ -->
+
+<!-- 第3章のまとめ -->
 <section class="slide">
-  <div class="chap">Summary</div>
-  <h2>まとめ</h2>
+  <div class="chap">Summary ／ 第3章 量子コンピュータの基本ルール</div>
+  <h2>まとめ<small>第3章 量子コンピュータの基本ルール</small></h2>
   <div class="body">
     <ul>
-      <li class="pop">古典回路は <b>AND / OR / NOT / XOR</b> などの基本演算（ゲート）を組み合わせて計算する。動作は <b>真理値表</b> で表せる</li>
-      <li class="pop" style="--d:.1s"><b>半加算器</b>：1ビット + 1ビット → <b class="k">和 = A ⊕ B</b>、<b class="k">繰り上がり = A · B</b></li>
-      <li class="pop" style="--d:.2s">同じ結果を出す回路は複数ある。</li>
-      <li class="pop" style="--d:.5s">実際の基本論理ゲートは、種類ごとに <b>必要なトランジスタの数や計算時間が違う</b></li>
-      <li class="pop" style="--d:.3s"><b>全加算器</b>：下の桁からの繰り上がりを含む3入力の足し算。<b>半加算器 × 2 + OR</b> で作れる<br>
-        <span class="formula" style="font-size:24px;padding:2px 12px">S = A ⊕ B ⊕ C<sub>in</sub>,　C<sub>out</sub> = A·B + (A ⊕ B)·C<sub>in</sub></span></li>
-      <li class="pop" style="--d:.4s">全加算器を並べれば <b>任意ビットの加算器</b> になる（リップルキャリー加算器）</li>
-      <li class="pop" style="--d:.6s"><b>量子ビット</b> |0⟩, |1⟩ はベクトル。<b>|a|² + |b|² = 1</b>（⟨φ|φ⟩ = 1）を満たす a|0⟩ + b|1⟩ が <b class="k">量子状態</b></li>
-      <li class="pop" style="--d:.7s">係数が 0 でない |0⟩ と |1⟩ の和が <b class="k">重ね合わせ状態</b>。古典ビットにはない性質</li>
+      <li class="pop">古典ビットの 0, 1 に対応する <b class="k">量子ビット</b> は、ベクトル
+        <span class="eq inline"><span class="math">|0⟩ =</span><span class="vec"><span>1</span><span>0</span></span><span class="math">,　|1⟩ =</span><span class="vec"><span>0</span><span>1</span></span></span> で定義される（ゼロベクトルではない）</li>
+      <li class="pop" style="--d:.1s">複素数 a, b が <b>|a|² + |b|² = 1</b> を満たすとき、<span class="math">a|0⟩ + b|1⟩</span> を <b class="k">量子状態</b> という。ベクトルで書いたものが <b>状態ベクトル</b></li>
+      <li class="pop" style="--d:.2s">内積を使うと、量子状態は <b><span class="math">⟨φ|φ⟩ = 1</span></b> を満たす2次元の複素ベクトル <span class="math">|φ⟩</span> とも表せる</li>
+      <li class="pop" style="--d:.3s">係数が 0 でない <span class="math">|0⟩</span> と <span class="math">|1⟩</span> の和が <b class="k">重ね合わせ状態</b>。古典ビットは重ね合わせ状態にできない</li>
     </ul>
   </div>
   <div class="pageno"></div>
