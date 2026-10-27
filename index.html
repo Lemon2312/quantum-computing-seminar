@@ -261,7 +261,22 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .agenda li:nth-child(2) .num{background:var(--pink)}
 .agenda li:nth-child(3) .num{background:var(--green)}
 .agenda .new{background:var(--accent)}
-.tag{background:var(--pink);border:2px solid var(--ink)}
+.tag{background:var(--pink);border:2px solid var(--ink);white-space:nowrap;flex:none}
+
+/* 章の扉スライド */
+.door-wrap{position:relative;display:grid;grid-template-columns:auto 1fr;gap:64px;align-items:center;height:100%;padding:0 40px}
+.door-num{width:210px;height:210px;border-radius:46px;background:var(--c);color:#fff;border:5px solid var(--ink);box-shadow:10px 10px 0 var(--ink);
+  display:flex;align-items:center;justify-content:center;font-size:140px;font-weight:900;font-family:Consolas,Menlo,monospace;transform:rotate(-6deg)}
+.slide.active .door-num{animation:doorIn .9s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes doorIn{from{opacity:0;transform:rotate(-120deg) scale(.3)}to{opacity:1;transform:rotate(-6deg)}}
+.door-label{font-size:22px;font-weight:900;letter-spacing:.14em;color:var(--c)}
+.door-label .tag{font-size:15px;letter-spacing:0;vertical-align:middle;margin-left:8px}
+.door h1{font-size:80px;line-height:1.15;margin:6px 0 4px}
+.door-lead{font-size:32px;font-weight:700;color:var(--muted);margin:0 0 30px}
+.door-topics{display:flex;flex-wrap:wrap;gap:12px}
+.door-topics span{background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:4px 18px;font-size:19px;font-weight:700;box-shadow:3px 3px 0 var(--ink)}
+.door-bg{position:absolute;right:-20px;bottom:-150px;font-size:600px;font-weight:900;line-height:1;color:var(--c);opacity:.09;
+  font-family:Consolas,Menlo,monospace;pointer-events:none}
 #progress{height:6px;background:linear-gradient(90deg,var(--accent),var(--pink),var(--blue))}
 
 @media print{
@@ -297,13 +312,11 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 <section class="slide">
   <div class="chap">Agenda</div>
   <h2>本日の流れ</h2>
-  <div class="body cols even">
+  <div class="body cols" style="grid-template-columns:1.5fr 1fr">
     <ul class="agenda">
-      <li class="pop" style="--d:.05s"><span class="num">1</span>古典回路と真理値表（AND / OR / NOT / XOR）</li>
+      <li class="pop" style="--d:.05s"><span class="num">1</span>基本古典ゲート（AND / OR / NOT / XOR）</li>
       <li class="pop" style="--d:.15s"><span class="num">2</span>半加算器：1ビット同士の足し算</li>
-      <li class="pop" style="--d:.25s"><span class="num">3</span>XOR による半加算器の簡略化</li>
-      <li class="pop" style="--d:.35s"><span class="num new">4</span>全加算器：繰り上がりを含む足し算 <span class="tag">追加</span></li>
-      <li class="pop" style="--d:.45s"><span class="num new">5</span>多ビット加算器（リップルキャリー加算器） <span class="tag">追加</span></li>
+      <li class="pop" style="--d:.25s"><span class="num">3</span>全加算器：繰り上がりを受け取る足し算 <span class="tag">追加</span></li>
     </ul>
     <div class="card pop" style="--d:.5s">
       <p style="margin:0 0 8px;font-weight:700">このスライドの使い方</p>
@@ -313,6 +326,21 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
         <li style="font-size:19px">信号は1段ずつ遅れて伝わるので、<b class="k">回路の段数（遅さ）</b>も目で見えます</li>
         <li style="font-size:19px">← → キー / スペースでページ送り、F キーで全画面</li>
       </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉：第1章 -->
+<section class="slide door" style="--c:var(--blue)">
+  <div class="door-bg">1</div>
+  <div class="door-wrap">
+    <div class="door-num">1</div>
+    <div>
+      <div class="door-label pop">CHAPTER 1</div>
+      <h1 class="pop" style="--d:.1s">基本古典ゲート</h1>
+      <p class="door-lead pop" style="--d:.2s">AND / OR / NOT / XOR</p>
+      <div class="door-topics pop" style="--d:.3s"><span>古典回路とは</span><span>AND</span><span>OR</span><span>NOT</span><span>XOR</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -417,6 +445,21 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
         ＝ OR の入力が <b>両方 1 のときに出力が 1 にならないようにした</b> ゲート</div>
       <div class="point frag" style="font-size:20px"><b>2 を法とした和</b> ＝ <b class="k">繰り上がりを考慮しない足し算</b><br>
         <span class="formula" style="font-size:21px;padding:0 10px">A ⊕ B = (A + B) mod 2</span>　1 + 1 = 2 ≡ <b>0</b> (mod 2)</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉：第2章 -->
+<section class="slide door" style="--c:var(--pink)">
+  <div class="door-bg">2</div>
+  <div class="door-wrap">
+    <div class="door-num">2</div>
+    <div>
+      <div class="door-label pop">CHAPTER 2</div>
+      <h1 class="pop" style="--d:.1s">半加算器</h1>
+      <p class="door-lead pop" style="--d:.2s">1ビット同士の足し算</p>
+      <div class="door-topics pop" style="--d:.3s"><span>1ビットの筆算</span><span>AND・OR・NOT 版</span><span>XOR 版</span><span>ゲート数・段数の比較</span><span>ゲートのコスト（補足）</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -547,6 +590,21 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
       <div class="point frag" style="background:#dcfce7;border-left-color:var(--green);font-size:19px">回路の速さ・大きさは「<b>ゲートの数</b>」だけでなく「<b>どのゲートを使うか</b>」でも決まる<br><span style="font-size:17px">実際の集積回路では、少ないトランジスタで作れる NAND・NOR を基本にすることが多い</span></div>
       <div class="point frag" style="background:#ede9fe;border-left-color:#7c3aed;font-size:19px"><b style="color:#6d28d9">量子コンピュータでも同じ</b>ようなことが言える<br>
         <span style="font-size:17px">実機の方式の違いや量子ゲートの種類などによって実行時間や誤りの起こりやすさが違う。量子回路の効率を考える場合でも「ゲートの数」だけでなく「どのゲートを何個使うか」「段数（深さ）」などでも評価する必要がある。</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉：第3章 -->
+<section class="slide door" style="--c:var(--green)">
+  <div class="door-bg">3</div>
+  <div class="door-wrap">
+    <div class="door-num">3</div>
+    <div>
+      <div class="door-label pop">CHAPTER 3 <span class="tag">追加</span></div>
+      <h1 class="pop" style="--d:.1s">全加算器</h1>
+      <p class="door-lead pop" style="--d:.2s">繰り上がりを受け取る足し算</p>
+      <div class="door-topics pop" style="--d:.3s"><span>多ビットの筆算</span><span>全加算器の回路</span><span>リップルキャリー加算器</span></div>
     </div>
   </div>
   <div class="pageno"></div>
