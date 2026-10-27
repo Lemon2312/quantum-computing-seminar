@@ -350,6 +350,23 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .qb-sum{font-size:21px}
 .qb-row .qverdict{margin-top:0;font-size:18px;padding:3px 12px}
 
+/* 2 を法とした和：1 を足し続けると 0, 1 がくり返す */
+.m2strip{border-collapse:collapse;margin-top:6px;font-family:Consolas,Menlo,monospace;font-size:16px;text-align:center}
+.m2strip th{font-family:inherit;font-size:13px;font-weight:700;color:var(--muted);text-align:right;padding:0 8px 0 0;white-space:nowrap}
+.m2strip td{width:30px;height:24px;border:1.5px solid #d9d4ea;background:#fff;transition:background .25s,transform .25s}
+.m2strip tr.mod td{font-weight:800}
+.m2strip td.cur{background:var(--yellow);border-color:var(--ink)}
+.m2strip tr.mod td.cur{background:var(--accent);color:#fff}
+.m2strip td.more{border:0;background:none;color:var(--muted)}
+.m2loop{width:130px;flex:none}
+.m2loop .node circle{fill:#fff;stroke:#1f1a3d;stroke-width:3;transition:fill .25s}
+.m2loop .node.on circle{fill:#ff6b1a}
+.m2loop .node text{font:800 22px Consolas,Menlo,monospace;text-anchor:middle;fill:#1f1a3d;transition:fill .25s}
+.m2loop .node.on text{fill:#fff}
+.m2loop .arc{fill:none;stroke:#b9b5d0;stroke-width:3;transition:stroke .25s}
+.m2loop .arc.on{stroke:#ff6b1a}
+.m2loop .plus{font:800 14px sans-serif;fill:#6b6790;text-anchor:middle}
+
 /* 章の扉スライド */
 .door-wrap{position:relative;display:grid;grid-template-columns:auto 1fr;gap:64px;align-items:center;height:100%;padding:0 40px}
 .door-num{width:210px;height:210px;border-radius:46px;background:var(--c);color:#fff;border:5px solid var(--ink);box-shadow:10px 10px 0 var(--ink);
@@ -555,10 +572,12 @@ body.overview #laser{display:none}
     </div>
     <div>
       <div class="ttcap pop" style="--d:.1s">XOR の真理値表</div>
-      <table class="tt pop" style="--d:.1s" id="tXor"></table>
+      <table class="tt small pop" style="--d:.1s" id="tXor"></table>
       <div class="point blue logic frag" style="font-size:20px"><div><b>「A か B の一方だけ」</b>：<b>ちょうど一方だけ</b> が真なら真<br><b class="kb">排他的論理和</b> <span class="formula" style="font-size:20px;padding:0 8px">A ⊕ B</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#fff"/><path d="M28,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0 M52,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0" fill="#ffbf8f" fill-rule="evenodd"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="54" cy="42" r="26"/><circle cx="78" cy="42" r="26"/></g><g font-size="16" font-weight="800" fill="#1f1a3d" text-anchor="middle"><text x="42" y="48">A</text><text x="90" y="48">B</text></g></svg></div>
-      <div class="point frag" style="font-size:20px"><b>2 を法とした和</b> ＝ <b class="k">繰り上がりを考慮しない足し算</b><br>
-        <span class="formula" style="font-size:21px;padding:0 10px">A ⊕ B = (A + B) mod 2</span>　1 + 1 = 2 ≡ <b>0</b> (mod 2)</div>
+      <div class="point logic frag" style="font-size:19px;padding:8px 14px"><div><b>2 を法とした和</b> ＝ <b class="k" style="white-space:nowrap">繰り上がりを考慮しない足し算</b><br>
+        <span class="formula" style="font-size:19px;padding:0 8px">A ⊕ B = (A + B) mod 2</span>　1 + 1 = 2 ≡ <b>0</b> (mod 2)
+        <table class="m2strip" id="m2Strip" aria-label="1を足していったときの値と、2で割った余り"></table></div>
+        <svg class="m2loop" id="m2Loop" viewBox="0 0 150 104" aria-hidden="true"></svg></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1476,6 +1495,44 @@ function columnAdder(grid, msg, A, B, describe) {
   window.onEnter = window.onEnter || {};
   onEnter.ripple = run;
   run();
+}
+
+/* ---------- 2 を法とした和：1 を足し続けると 0 → 1 → 0 → 1 とループする ---------- */
+{
+  const N = 6;  // 表に並べる回数（0〜5）
+  const strip = $('#m2Strip');
+  strip.innerHTML =
+    '<tr><th>1 を足した回数</th>' + [...Array(N)].map((_, i) => `<td>${i}</td>`).join('') + '<td class="more">…</td></tr>' +
+    '<tr class="mod"><th>mod 2</th>' + [...Array(N)].map((_, i) => `<td>${i % 2}</td>`).join('') + '<td class="more">…</td></tr>';
+  const cols = [0, 1].map(r => [...strip.rows[r].cells].slice(1, N + 1));
+  const svg = $('#m2Loop'), NS = 'http://www.w3.org/2000/svg';
+  const mk = (tag, attrs, parent = svg) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    parent.appendChild(e); return e;
+  };
+  const m = mk('marker', { id: 'm2h', viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 5, markerHeight: 5, orient: 'auto' }, mk('defs', {}));
+  mk('path', { d: 'M0,0 L10,5 L0,10 z', fill: '#6b6790' }, m);
+  // 上の弧が 0 → 1、下の弧が 1 → 0（どちらも「+1」）
+  const arcs = [mk('path', { class: 'arc', d: 'M40,34 Q75,0 110,34', 'marker-end': 'url(#m2h)' }),
+                mk('path', { class: 'arc', d: 'M110,70 Q75,104 40,70', 'marker-end': 'url(#m2h)' })];
+  mk('text', { class: 'plus', x: 75, y: 14 }).textContent = '+1';
+  mk('text', { class: 'plus', x: 75, y: 100 }).textContent = '+1';
+  const nodes = [30, 120].map((x, v) => {
+    const g = mk('g', { class: 'node' });
+    mk('circle', { cx: x, cy: 52, r: 21 }, g);
+    mk('text', { x, y: 60 }, g).textContent = v;
+    return g;
+  });
+  let n = 0;
+  function show() {
+    cols.forEach(row => row.forEach((td, i) => td.classList.toggle('cur', i === n)));
+    nodes.forEach((g, v) => g.classList.toggle('on', v === n % 2));
+    // 直前に通った矢印を光らせる（0 回目は光らせない）
+    arcs.forEach((a, k) => a.classList.toggle('on', n > 0 && k === (n - 1) % 2));
+  }
+  show();
+  setInterval(() => { n = (n + 1) % N; show(); }, 1000);
 }
 
 /* ---------- 量子状態をつくってみる（a|0⟩ + b|1⟩ を矢印の足し算で見せる） ---------- */
