@@ -218,7 +218,7 @@ h2::before{content:"";position:absolute;left:0;top:50%;width:34px;height:34px;ma
   background:linear-gradient(135deg,var(--yellow),var(--accent) 55%,var(--pink));border:3px solid var(--ink);transform:rotate(-12deg);box-shadow:3px 3px 0 var(--ink)}
 .slide.active h2::before{animation:wiggle 1s cubic-bezier(.3,1.6,.5,1) both}
 @keyframes wiggle{from{transform:rotate(-120deg) scale(.3)}to{transform:rotate(-12deg)}}
-h2 small{background:var(--accent-l);color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:2px 14px;font-size:18px;font-weight:700;vertical-align:middle}
+h2 small{white-space:nowrap;background:var(--accent-l);color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:2px 14px;font-size:18px;font-weight:700;vertical-align:middle}
 b.k{color:var(--accent-d);background:linear-gradient(transparent 62%,#ffe58a 62%)}
 b.kb{color:var(--blue);background:linear-gradient(transparent 62%,#cfe0ff 62%)}
 .card{border:3px solid var(--ink);border-radius:22px;box-shadow:6px 6px 0 var(--ink)}
@@ -369,6 +369,7 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
       <div class="muted" style="font-size:17px;font-weight:700">図2.13：古典回路の例</div>
       <svg class="circ" id="c213"></svg>
       <div class="mapline" id="map213"></div>
+      <div class="btns"><button class="b" id="p213" data-autoplay>▶ 自動再生</button></div>
       <div class="hint">入力の丸をクリックしてみよう。この回路が何をしているかは後半で分かります。</div>
     </div>
   </div>
@@ -663,7 +664,7 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 <!-- 16. リップルキャリー -->
 <section class="slide" data-id="ripple">
   <div class="chap">追加内容 ／ 多ビット加算器</div>
-  <h2>リップルキャリー加算器（繰り上がりのさざ波加算器）<small>全加算器 × 4</small></h2>
+  <h2 style="font-size:32px">リップルキャリー加算器（繰り上がりのさざ波加算器）<small>全加算器結合加算器</small></h2>
   <div class="body">
     <div class="card pop" style="padding:10px 18px">
       <svg class="circ" id="rippleSvg" style="height:300px"></svg>
@@ -913,7 +914,7 @@ const circuits = {};
     const v = c.inputVals, s = c.sig;
     $('#map213').innerHTML = `入力ビット列 <b>${v.A}${v.B}</b> ↦ 出力ビット列 <b class="o">${s.x}${s.a}</b>`;
   });
-  c.set({}, false);
+  autoplay('p213', c); c.set({}, false);
 }
 {
   const c = singleGate('cAnd', 'AND', 'A AND B');
