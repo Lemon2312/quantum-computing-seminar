@@ -509,8 +509,8 @@ body.overview #laser{display:none}
       <div class="btns"><button class="b" id="pHa4" data-autoplay>▶ 自動再生</button></div>
     </div>
     <div>
-      <div class="point pop" style="margin-top:0;font-size:20px">出力1（繰り上がり）＝「<b>両方 1 のときだけ繰り上がる</b>」<br><span style="font-size:17px">→ AND そのもの</span></div>
-      <div class="point blue pop" style="--d:.1s;font-size:20px">出力2（和）＝「<b>OR だけど、両方 1 のときは除く</b>」</div>
+      <div class="point pop" style="margin-top:0;font-size:20px">出力2（繰り上がり）＝「<b>両方 1 のときだけ繰り上がる</b>」<br><span style="font-size:17px">→ AND そのもの</span></div>
+      <div class="point blue pop" style="--d:.1s;font-size:20px">出力1（和）＝「<b>OR だけど、両方 1 のときは除く</b>」</div>
       <div class="ttcap pop" style="--d:.2s;margin-top:14px">半加算器の真理値表</div>
       <table class="tt small pop" style="--d:.2s" id="tHa4"></table>
       <div class="point frag" style="font-size:19px">ゲート <b>4個</b>。和が出るまでに <b>3段</b>（AND → NOT → AND）かかる</div>
@@ -527,7 +527,7 @@ body.overview #laser{display:none}
     <div class="card pop">
       <svg class="circ" id="cHa2"></svg>
       <div class="btns"><button class="b" id="pHa2" data-autoplay>▶ 自動再生</button></div>
-      <div class="hint">図2.13 と同じ回路です（出力の番号付けだけ逆）</div>
+      <div class="hint">図2.13 と同じ回路です</div>
     </div>
     <div>
       <div class="formula pop" style="font-size:24px">和 = A ⊕ B　　繰り上がり = A · B</div>
@@ -948,14 +948,14 @@ function halfAdder4(id) {
   c.link('B', 'o.in1', 160); c.link('B', 'a.in1', 160); c.dot(160, 160, 'B');
   c.link('a', 'n.in0', 290);
   c.link('o', 'f.in0', 340); c.link('n', 'f.in1', 395);
-  c.output('S', 580, 100, 'f', '出力2 (和)');
-  c.output('C', 580, 200, 'a', '出力1 (繰り上がり)');
+  c.output('S', 580, 100, 'f', '出力1 (和)');
+  c.output('C', 580, 200, 'a', '出力2 (繰り上がり)');
   c.link('f', 'S'); c.link('a', 'C'); c.dot(290, 200, 'a');
   return c;
 }
 {
   const c = halfAdder4('cHa4');
-  truthTable('tHa4', c, [['A', '入力1'], ['B', '入力2']], [['a', '出力1'], ['f', '出力2']]);
+  truthTable('tHa4', c, [['A', '入力1'], ['B', '入力2']], [['a', '出力2'], ['f', '出力1']]);
   autoplay('pHa4', c); c.set({}, false);
 }
 {
@@ -964,13 +964,13 @@ function halfAdder4(id) {
   autoplay('pXor', c); c.set({}, false);
 }
 {
-  const c = halfAdderXor('cHa2', '出力2 (和)', '出力1 (繰り上がり)');
-  truthTable('tHa2', c, [['A', '入力1'], ['B', '入力2']], [['a', '出力1<br>(繰り上がり)'], ['x', '出力2<br>(和)']]);
+  const c = halfAdderXor('cHa2', '出力1 (和)', '出力2 (繰り上がり)');
+  truthTable('tHa2', c, [['A', '入力1'], ['B', '入力2']], [['a', '出力2<br>(繰り上がり)'], ['x', '出力1<br>(和)']]);
   autoplay('pHa2', c); c.set({}, false);
 }
 {
   const slow = halfAdder4('cmpHa4');
-  const fast = halfAdderXor('cmpHa2', '出力2 (和)', '出力1 (繰り上がり)');
+  const fast = halfAdderXor('cmpHa2', '出力1 (和)', '出力2 (繰り上がり)');
   const both = n => { slow.setIndex(n); fast.setIndex(n); };
   slow.onChange(() => { if (fast.index() !== slow.index()) fast.setIndex(slow.index()); });
   fast.onChange(() => { if (slow.index() !== fast.index()) slow.setIndex(fast.index()); });
