@@ -6,10 +6,11 @@
 <title>論理式を実現する古典回路 ― 半加算器から全加算器へ</title>
 <style>
 :root{
-  --ink:#0f172a; --muted:#64748b; --line:#cbd5e1; --bg:#eef2f7;
-  --accent:#f97316; --accent-d:#c2410c; --accent-l:#ffedd5;
-  --blue:#2563eb; --blue-l:#dbeafe; --green:#16a34a;
-  --off:#94a3b8;
+  --ink:#1f1a3d; --muted:#6b6790; --line:#1f1a3d; --bg:#fffaf0;
+  --accent:#ff6b1a; --accent-d:#e04e00; --accent-l:#fff1c2;
+  --blue:#3b6cff; --blue-l:#dfe8ff; --green:#14a35a;
+  --off:#b9b5d0; --pink:#ff4f9a; --yellow:#ffd53d;
+  --hard:4px 4px 0 var(--ink);
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:#1e293b;overflow:hidden;
@@ -201,6 +202,100 @@ body.overview .bar-fill{width:var(--w);transition:none}
 body.overview .slide .pageno{font-size:44px;font-weight:800;color:var(--ink);bottom:24px;right:40px}
 body.overview #ui,body.overview #progress{display:none}
 
+/* ---------- ポップ調デザイン（太枠・ずらし影・弾むアニメ） ---------- */
+html,body{background:#2a2350}
+#stage{background:
+  radial-gradient(circle at 92% 8%,#ffd6e8 0 120px,transparent 121px),
+  radial-gradient(circle at 4% 96%,#d4f4ff 0 150px,transparent 151px),
+  radial-gradient(circle at 98% 92%,#fff0b3 0 70px,transparent 71px),
+  radial-gradient(#e9e2cf 1.4px,transparent 1.6px) 0 0/22px 22px,
+  var(--bg)}
+.slide{transition:opacity .45s ease,transform .6s cubic-bezier(.3,1.5,.5,1)}
+.slide::before{height:10px;background:repeating-linear-gradient(90deg,var(--accent) 0 80px,var(--yellow) 80px 160px,var(--pink) 160px 240px,var(--blue) 240px 320px)}
+.chap{font-weight:700;color:var(--pink);letter-spacing:.08em}
+h2{border-left:none;padding-left:54px;position:relative}
+h2::before{content:"";position:absolute;left:0;top:50%;width:34px;height:34px;margin-top:-17px;border-radius:10px;
+  background:linear-gradient(135deg,var(--yellow),var(--accent) 55%,var(--pink));border:3px solid var(--ink);transform:rotate(-12deg);box-shadow:3px 3px 0 var(--ink)}
+.slide.active h2::before{animation:wiggle 1s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes wiggle{from{transform:rotate(-120deg) scale(.3)}to{transform:rotate(-12deg)}}
+h2 small{white-space:nowrap;background:var(--accent-l);color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:2px 14px;font-size:18px;font-weight:700;vertical-align:middle}
+b.k{color:var(--accent-d);background:linear-gradient(transparent 62%,#ffe58a 62%)}
+b.kb{color:var(--blue);background:linear-gradient(transparent 62%,#cfe0ff 62%)}
+.card{border:3px solid var(--ink);border-radius:22px;box-shadow:6px 6px 0 var(--ink)}
+.point{border:2.5px solid var(--ink);border-left:10px solid var(--accent);border-radius:16px;box-shadow:var(--hard)}
+.point.blue{border-left-color:var(--blue)}
+.formula{border:2.5px solid var(--ink);box-shadow:var(--hard)}
+button.b{border:2.5px solid var(--ink);background:var(--yellow);color:var(--ink);box-shadow:3px 3px 0 var(--ink);transition:transform .1s,box-shadow .1s}
+button.b:hover{background:#ffe06b;transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+button.b:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+button.b.playing{background:var(--pink);color:#fff}
+.slide.active .pop{animation:pop .7s cubic-bezier(.3,1.6,.5,1) both;animation-delay:var(--d,0s)}
+@keyframes pop{from{opacity:0;transform:translateY(30px) scale(.85) rotate(-2deg)}to{opacity:1;transform:none}}
+.frag{transform:translateY(18px) scale(.95);transition:opacity .4s ease,transform .5s cubic-bezier(.3,1.6,.5,1)}
+
+.bitex span,.quote,.tile,details{border:2.5px solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
+table.tt{border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);border-collapse:separate;border-spacing:0}
+table.tt th,table.tt td{border:0;border-right:1.5px solid #d9d4ea;border-bottom:1.5px solid #d9d4ea}
+table.tt th{background:#ece6ff;border-bottom:2.5px solid var(--ink)}
+table.tt th.out{background:#ffe1c7}
+table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
+
+.wire{stroke-width:5}
+.gate path,.gate circle{stroke:var(--ink);stroke-width:3.5}
+.gate.on path:not(.xorback),.gate.on circle{fill:#ffe1c7;stroke:var(--ink)}
+.gate.on path.xorback{stroke:var(--ink)}
+.gate.on{filter:drop-shadow(3px 3px 0 var(--accent))}
+.inp circle{stroke-width:3.5}
+.inp.on circle{stroke:var(--ink)}
+.lamp circle{stroke:var(--ink)}
+.lamp.on circle{fill:var(--yellow);stroke:var(--ink);filter:drop-shadow(0 0 12px rgba(255,213,61,.95))}
+.fa rect{stroke:var(--ink);rx:16}
+.fa.active rect{fill:#fff1c2;stroke:var(--ink);filter:drop-shadow(4px 4px 0 var(--accent))}
+.ca-grid .hl{background:#fff1c2;border:2px dashed var(--accent)}
+.bar-bg{background:#ece6ff;border:2px solid var(--ink)}
+.bar-fill.a{background:linear-gradient(90deg,var(--accent),var(--pink))}
+
+.title-wrap h1{font-size:64px;background:linear-gradient(transparent 70%,#ffe58a 70%) no-repeat;display:inline;line-height:1.3;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.title-wrap .sub{color:var(--pink);margin-top:18px}
+.agenda .num{border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);background:var(--blue)}
+.agenda li:nth-child(2) .num{background:var(--pink)}
+.agenda li:nth-child(3) .num{background:var(--green)}
+.agenda .new{background:var(--accent)}
+.tag{background:var(--pink);border:2px solid var(--ink);white-space:nowrap;flex:none}
+
+/* 章の扉スライド */
+.door-wrap{position:relative;display:grid;grid-template-columns:auto 1fr;gap:64px;align-items:center;height:100%;padding:0 40px}
+.door-num{width:210px;height:210px;border-radius:46px;background:var(--c);color:#fff;border:5px solid var(--ink);box-shadow:10px 10px 0 var(--ink);
+  display:flex;align-items:center;justify-content:center;font-size:140px;font-weight:900;font-family:Consolas,Menlo,monospace;transform:rotate(-6deg)}
+.slide.active .door-num{animation:doorIn .9s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes doorIn{from{opacity:0;transform:rotate(-120deg) scale(.3)}to{opacity:1;transform:rotate(-6deg)}}
+.door-label{font-size:22px;font-weight:900;letter-spacing:.14em;color:var(--c)}
+.door-label .tag{font-size:15px;letter-spacing:0;vertical-align:middle;margin-left:8px}
+.door h1{font-size:80px;line-height:1.15;margin:6px 0 4px}
+.door-lead{font-size:32px;font-weight:700;color:var(--muted);margin:0 0 30px}
+.door-topics{display:flex;flex-wrap:wrap;gap:12px}
+.door-topics span{background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:4px 18px;font-size:19px;font-weight:700;box-shadow:3px 3px 0 var(--ink)}
+.door-bg{position:absolute;right:-20px;bottom:-150px;font-size:600px;font-weight:900;line-height:1;color:var(--c);opacity:.09;
+  font-family:Consolas,Menlo,monospace;pointer-events:none}
+#progress{height:6px;background:linear-gradient(90deg,var(--accent),var(--pink),var(--blue))}
+
+/* ---------- 手書き（Apple Pencil / ペンモード） ---------- */
+#stage{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body:not(.overview) #stage{touch-action:none}
+#ink{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none;z-index:5}
+#inkbar{position:fixed;right:12px;top:50%;transform:translateY(-50%);z-index:20;display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:#fff;border:3px solid var(--ink);border-radius:24px;box-shadow:4px 4px 0 var(--ink);padding:6px;touch-action:manipulation}
+#inkbar button{width:44px;height:44px;border-radius:14px;border:2px solid transparent;background:none;font:inherit;font-size:22px;line-height:1;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink);padding:0}
+#inkbar button.on{background:var(--accent-l);border-color:var(--ink)}
+#inkbar .tools{display:none;flex-direction:column;align-items:center;gap:6px}
+#inkbar.open .tools{display:flex}
+#inkbar .colors{display:grid;grid-template-columns:repeat(2,32px);gap:6px}
+#inkbar button.sw{width:32px;height:32px;border-radius:50%;background:var(--sw);border:3px solid #fff;box-shadow:0 0 0 2px var(--ink)}
+#inkbar button.sw.on{background:var(--sw);border-color:#fff;box-shadow:0 0 0 2px var(--ink),0 0 0 5px var(--yellow)}
+#inkbar .sep{width:30px;height:2px;border-radius:1px;background:#d9d4ea}
+body.overview #ink,body.overview #inkbar{display:none}
+
 @media print{
   @page{size:1280px 720px;margin:0}
   html,body{overflow:visible;background:#fff}
@@ -208,7 +303,7 @@ body.overview #ui,body.overview #progress{display:none}
   #stage{position:static;transform:none!important;box-shadow:none;width:auto;height:auto;overflow:visible;background:none}
   .slide{position:relative;width:1280px;height:720px;opacity:1;transform:none;page-break-after:always;background:var(--bg)}
   .frag{opacity:1;transform:none}
-  #ui,#progress,.btns,.hint{display:none}
+  #ui,#progress,.btns,.hint,#ink,#inkbar{display:none}
 }
 </style>
 </head>
@@ -234,13 +329,11 @@ body.overview #ui,body.overview #progress{display:none}
 <section class="slide">
   <div class="chap">Agenda</div>
   <h2>本日の流れ</h2>
-  <div class="body cols even">
+  <div class="body cols" style="grid-template-columns:1.5fr 1fr">
     <ul class="agenda">
-      <li class="pop" style="--d:.05s"><span class="num">1</span>古典回路と真理値表（AND / OR / NOT / XOR）</li>
+      <li class="pop" style="--d:.05s"><span class="num">1</span>基本古典ゲート（AND / OR / NOT / XOR）</li>
       <li class="pop" style="--d:.15s"><span class="num">2</span>半加算器：1ビット同士の足し算</li>
-      <li class="pop" style="--d:.25s"><span class="num">3</span>XOR による半加算器の簡略化</li>
-      <li class="pop" style="--d:.35s"><span class="num new">4</span>全加算器：繰り上がりを含む足し算 <span class="tag">追加</span></li>
-      <li class="pop" style="--d:.45s"><span class="num new">5</span>多ビット加算器（リップルキャリー加算器） <span class="tag">追加</span></li>
+      <li class="pop" style="--d:.25s"><span class="num">3</span>全加算器：繰り上がりを受け取る足し算 <span class="tag">追加</span></li>
     </ul>
     <div class="card pop" style="--d:.5s">
       <p style="margin:0 0 8px;font-weight:700">このスライドの使い方</p>
@@ -250,6 +343,21 @@ body.overview #ui,body.overview #progress{display:none}
         <li style="font-size:19px">信号は1段ずつ遅れて伝わるので、<b class="k">回路の段数（遅さ）</b>も目で見えます</li>
         <li style="font-size:19px">← → キー / スペースでページ送り、F キーで全画面</li>
       </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉：第1章 -->
+<section class="slide door" style="--c:var(--blue)">
+  <div class="door-bg">1</div>
+  <div class="door-wrap">
+    <div class="door-num">1</div>
+    <div>
+      <div class="door-label pop">CHAPTER 1</div>
+      <h1 class="pop" style="--d:.1s">基本古典ゲート</h1>
+      <p class="door-lead pop" style="--d:.2s">AND / OR / NOT / XOR</p>
+      <div class="door-topics pop" style="--d:.3s"><span>古典回路とは</span><span>AND</span><span>OR</span><span>NOT</span><span>XOR</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -278,6 +386,7 @@ body.overview #ui,body.overview #progress{display:none}
       <div class="muted" style="font-size:17px;font-weight:700">図2.13：古典回路の例</div>
       <svg class="circ" id="c213"></svg>
       <div class="mapline" id="map213"></div>
+      <div class="btns"><button class="b" id="p213" data-autoplay>▶ 自動再生</button></div>
       <div class="hint">入力の丸をクリックしてみよう。この回路が何をしているかは後半で分かります。</div>
     </div>
   </div>
@@ -291,7 +400,7 @@ body.overview #ui,body.overview #progress{display:none}
   <div class="body cols">
     <div class="card pop">
       <svg class="circ" id="cAnd"></svg>
-      <div class="btns"><button class="b" id="pAnd">▶ 自動再生</button></div>
+      <div class="btns"><button class="b" id="pAnd" data-autoplay>▶ 自動再生</button></div>
     </div>
     <div>
       <div class="ttcap pop" style="--d:.1s">AND の真理値表</div>
@@ -309,7 +418,7 @@ body.overview #ui,body.overview #progress{display:none}
   <div class="body cols">
     <div class="card pop">
       <svg class="circ" id="cOr"></svg>
-      <div class="btns"><button class="b" id="pOr">▶ 自動再生</button></div>
+      <div class="btns"><button class="b" id="pOr" data-autoplay>▶ 自動再生</button></div>
     </div>
     <div>
       <div class="ttcap pop" style="--d:.1s">OR の真理値表</div>
@@ -328,7 +437,7 @@ body.overview #ui,body.overview #progress{display:none}
   <div class="body cols">
     <div class="card pop">
       <svg class="circ" id="cNot"></svg>
-      <div class="btns"><button class="b" id="pNot">▶ 自動再生</button></div>
+      <div class="btns"><button class="b" id="pNot" data-autoplay>▶ 自動再生</button></div>
     </div>
     <div>
       <div class="ttcap pop" style="--d:.1s">NOT の真理値表</div>
@@ -345,7 +454,7 @@ body.overview #ui,body.overview #progress{display:none}
   <div class="body cols">
     <div class="card pop">
       <svg class="circ" id="cXor"></svg>
-      <div class="btns"><button class="b" id="pXor">▶ 自動再生</button></div>
+      <div class="btns"><button class="b" id="pXor" data-autoplay>▶ 自動再生</button></div>
     </div>
     <div>
       <div class="ttcap pop" style="--d:.1s">XOR の真理値表</div>
@@ -354,6 +463,21 @@ body.overview #ui,body.overview #progress{display:none}
         ＝ OR の入力が <b>両方 1 のときに出力が 1 にならないようにした</b> ゲート</div>
       <div class="point frag" style="font-size:20px"><b>2 を法とした和</b> ＝ <b class="k">繰り上がりを考慮しない足し算</b><br>
         <span class="formula" style="font-size:21px;padding:0 10px">A ⊕ B = (A + B) mod 2</span>　1 + 1 = 2 ≡ <b>0</b> (mod 2)</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉：第2章 -->
+<section class="slide door" style="--c:var(--pink)">
+  <div class="door-bg">2</div>
+  <div class="door-wrap">
+    <div class="door-num">2</div>
+    <div>
+      <div class="door-label pop">CHAPTER 2</div>
+      <h1 class="pop" style="--d:.1s">半加算器</h1>
+      <p class="door-lead pop" style="--d:.2s">1ビット同士の足し算</p>
+      <div class="door-topics pop" style="--d:.3s"><span>1ビットの筆算</span><span>AND・OR・NOT 版</span><span>XOR 版</span><span>ゲート数・段数の比較</span><span>ゲートのコスト（補足）</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -372,7 +496,7 @@ body.overview #ui,body.overview #progress{display:none}
         <button class="b" data-case="1">0 + 1</button>
         <button class="b" data-case="2">1 + 0</button>
         <button class="b" data-case="3">1 + 1</button>
-        <button class="b" id="ca1Auto">▶ 4通りを自動再生</button>
+        <button class="b" id="ca1Auto" data-autoplay>▶ 4通りを自動再生</button>
       </div>
     </div>
     <div>
@@ -392,7 +516,7 @@ body.overview #ui,body.overview #progress{display:none}
   <div class="body cols wide">
     <div class="card pop">
       <svg class="circ" id="cHa4"></svg>
-      <div class="btns"><button class="b" id="pHa4">▶ 自動再生</button></div>
+      <div class="btns"><button class="b" id="pHa4" data-autoplay>▶ 自動再生</button></div>
     </div>
     <div>
       <div class="point pop" style="margin-top:0;font-size:20px">出力1（繰り上がり）＝「<b>両方 1 のときだけ繰り上がる</b>」<br><span style="font-size:17px">→ AND そのもの</span></div>
@@ -412,7 +536,7 @@ body.overview #ui,body.overview #progress{display:none}
   <div class="body cols">
     <div class="card pop">
       <svg class="circ" id="cHa2"></svg>
-      <div class="btns"><button class="b" id="pHa2">▶ 自動再生</button></div>
+      <div class="btns"><button class="b" id="pHa2" data-autoplay>▶ 自動再生</button></div>
       <div class="hint">図2.13 と同じ回路です（出力の番号付けだけ逆）</div>
     </div>
     <div>
@@ -435,7 +559,7 @@ body.overview #ui,body.overview #progress{display:none}
       <svg class="circ" id="cmpHa4"></svg>
       <div class="muted" style="font-size:16px;font-weight:700;margin-top:6px">XOR/AND利用（図2.20）</div>
       <svg class="circ" id="cmpHa2" style="width:78%"></svg>
-      <div class="btns"><button class="b" id="cmpStep">▶ 同じ入力を同時に入れる</button><button class="b" id="cmpAuto">▶ 自動再生</button></div>
+      <div class="btns"><button class="b" id="cmpStep">▶ 同じ入力を同時に入れる</button><button class="b" id="cmpAuto" data-autoplay>▶ 自動再生</button></div>
       <div class="hint">XOR/AND利用の方が先に出力が確定する様子に注目</div>
     </div>
     <div>
@@ -489,6 +613,21 @@ body.overview #ui,body.overview #progress{display:none}
   <div class="pageno"></div>
 </section>
 
+<!-- 扉：第3章 -->
+<section class="slide door" style="--c:var(--green)">
+  <div class="door-bg">3</div>
+  <div class="door-wrap">
+    <div class="door-num">3</div>
+    <div>
+      <div class="door-label pop">CHAPTER 3 <span class="tag">追加</span></div>
+      <h1 class="pop" style="--d:.1s">全加算器</h1>
+      <p class="door-lead pop" style="--d:.2s">繰り上がりを受け取る足し算</p>
+      <div class="door-topics pop" style="--d:.3s"><span>多ビットの筆算</span><span>全加算器の回路</span><span>リップルキャリー加算器</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
 <!-- 12. 半加算器の限界 -->
 <section class="slide" data-id="coladd">
   <div class="chap">ここから追加内容 ／ 全加算器</div>
@@ -499,7 +638,7 @@ body.overview #ui,body.overview #progress{display:none}
       <div class="ca-msg" id="caMsg"></div>
       <div class="btns" style="justify-content:center">
         <button class="b" id="caNext">次の桁 ▶</button>
-        <button class="b" id="caAuto">▶ 自動</button>
+        <button class="b" id="caAuto" data-autoplay>▶ 自動</button>
         <button class="b" id="caReset">リセット</button>
       </div>
     </div>
@@ -521,7 +660,7 @@ body.overview #ui,body.overview #progress{display:none}
     <div>
       <div class="card pop" style="padding:10px 18px">
         <svg class="circ" id="cFa"></svg>
-        <div class="btns" style="margin-top:4px"><button class="b" id="pFa">▶ 自動再生</button>
+        <div class="btns" style="margin-top:4px"><button class="b" id="pFa" data-autoplay>▶ 自動再生</button>
           <span class="hint" style="margin:0;align-self:center">ゲート5個（XOR×2, AND×2, OR×1）。S は 2段、C<sub>out</sub> は 3段で確定</span></div>
       </div>
       <div class="point blue frag" style="font-size:18px;margin-top:10px"><b>S（和・この桁の出力ビット）</b>：A と B を半加算した和 <b>P</b> を、さらに繰り上がり C<sub>in</sub> と半加算した和
@@ -542,7 +681,7 @@ body.overview #ui,body.overview #progress{display:none}
 <!-- 16. リップルキャリー -->
 <section class="slide" data-id="ripple">
   <div class="chap">追加内容 ／ 多ビット加算器</div>
-  <h2>リップルキャリー加算器（繰り上がりのさざ波加算器）<small>全加算器 × 4</small></h2>
+  <h2 style="font-size:32px">リップルキャリー加算器（繰り上がりのさざ波加算器）<small>全加算器結合加算器</small></h2>
   <div class="body">
     <div class="card pop" style="padding:10px 18px">
       <svg class="circ" id="rippleSvg" style="height:300px"></svg>
@@ -584,6 +723,24 @@ body.overview #ui,body.overview #progress{display:none}
   <span>← → / Space でページ送り</span>
 </div>
 <div id="progress"></div>
+<div id="inkbar">
+  <button id="inkToggle" title="手書き (P)">✏️</button>
+  <div class="tools">
+    <button data-tool="pen" class="on" title="ペン">🖊️</button>
+    <button data-tool="marker" title="マーカー">🖍️</button>
+    <button data-tool="eraser" title="消しゴム（なぞった線を消す）">🧽</button>
+    <span class="sep"></span>
+    <div class="colors">
+      <button class="sw on" data-color="#e5383b" style="--sw:#e5383b" title="赤"></button>
+      <button class="sw" data-color="#3b6cff" style="--sw:#3b6cff" title="青"></button>
+      <button class="sw" data-color="#1f1a3d" style="--sw:#1f1a3d" title="黒"></button>
+      <button class="sw" data-color="#14a35a" style="--sw:#14a35a" title="緑"></button>
+    </div>
+    <span class="sep"></span>
+    <button id="inkUndo" title="元に戻す (Z)">↩️</button>
+    <button id="inkClear" title="このスライドの書き込みを全部消す">🗑️</button>
+  </div>
+</div>
 
 <script>
 const NS = 'http://www.w3.org/2000/svg';
@@ -792,7 +949,7 @@ const circuits = {};
     const v = c.inputVals, s = c.sig;
     $('#map213').innerHTML = `入力ビット列 <b>${v.A}${v.B}</b> ↦ 出力ビット列 <b class="o">${s.x}${s.a}</b>`;
   });
-  c.set({}, false);
+  autoplay('p213', c); c.set({}, false);
 }
 {
   const c = singleGate('cAnd', 'AND', 'A AND B');
@@ -1119,6 +1276,9 @@ function go(n, showAll = false) {
   history.replaceState(null, '', '#' + (n + 1));
   const id = slides[n].dataset.id;
   if (window.onEnter && onEnter[id]) onEnter[id]();
+  // 自動再生ボタンのあるスライドは、開いた時点で再生を始める（ボタンで停止できる）
+  slides[n].querySelectorAll('[data-autoplay]').forEach(b => b.click());
+  ink.render();
 }
 function next() {
   const f = frags(slides[cur]).find(x => !x.classList.contains('vis'));
@@ -1168,6 +1328,8 @@ addEventListener('keydown', e => {
     return;
   }
   if (e.target.tagName === 'SUMMARY') return;
+  if (e.key === 'p' || e.key === 'P') return ink.setOpen();
+  if (e.key === 'z' || e.key === 'Z') return ink.undo();
   if (e.key === 'o' || e.key === 'O') return toggleOverview(true);
   if (['ArrowRight', 'PageDown', ' ', 'Enter', 'ArrowDown'].includes(e.key)) { e.preventDefault(); next(); }
   else if (['ArrowLeft', 'PageUp', 'Backspace', 'ArrowUp'].includes(e.key)) { e.preventDefault(); prev(); }
@@ -1176,7 +1338,7 @@ addEventListener('keydown', e => {
   else if (e.key === 'f' || e.key === 'F') fullscreen();
 });
 let tx = null;
-addEventListener('touchstart', e => tx = e.touches[0].clientX, { passive: true });
+addEventListener('touchstart', e => tx = ink.blocksSwipe(e.touches[0]) ? null : e.touches[0].clientX, { passive: true });
 addEventListener('touchend', e => {
   if (tx === null || overview) return;
   const dx = e.changedTouches[0].clientX - tx; tx = null;
@@ -1188,6 +1350,133 @@ $('#btnFs').onclick = e => { e.currentTarget.blur(); fullscreen(); };
 $('#btnOv').onclick = e => { e.currentTarget.blur(); toggleOverview(true); };
 $('#btnOvClose').onclick = e => { e.currentTarget.blur(); toggleOverview(false); };
 addEventListener('beforeprint', () => slides.forEach(s => frags(s).forEach(f => showFrag(f, true))));
+/* ---------- 手書き ----------
+   Apple Pencil はいつでもそのまま書ける。マウス・指は ✏️（P キー）で手書きモードにしたときだけ書ける。
+   Apple Pencil を一度使ったら、指は書き込みに使わない（手のひらの誤反応を防ぎ、指はスワイプやタップに使う）。
+   ペンで軽くタップしただけのときは線を残さず、ボタンや入力の丸のクリックとして扱う。
+   書き込みはスライドごとに保持し、ページを戻ると再表示される（再読み込みで消える）。 */
+const ink = (() => {
+  const W = 1280, H = 720;
+  const canvas = document.createElement('canvas');
+  canvas.id = 'ink';
+  stage.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  const bar = $('#inkbar');
+  const pages = slides.map(() => ({ strokes: [], undo: [] }));
+  let open = false, penSeen = false, tool = 'pen', color = '#e5383b', active = null;
+
+  function resize() {
+    const k = Math.min(4096 / W, stage.getBoundingClientRect().width / W * (devicePixelRatio || 1));
+    canvas.width = Math.round(W * k); canvas.height = Math.round(H * k);
+    render();
+  }
+  function drawStroke(st) {
+    const p = st.pts;
+    ctx.strokeStyle = st.color; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    if (st.tool === 'marker') {
+      ctx.globalAlpha = .35; ctx.lineWidth = 22;
+      ctx.beginPath(); ctx.moveTo(p[0][0], p[0][1]);
+      for (let i = 1; i < p.length; i++) ctx.lineTo(p[i][0], p[i][1]);
+      ctx.stroke(); ctx.globalAlpha = 1;
+      return;
+    }
+    // ペンは筆圧で太さを変え、点の中点を結ぶ曲線でなめらかにする
+    const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+    for (let i = 1; i < p.length; i++) {
+      const m0 = i === 1 ? p[0] : mid(p[i - 1], p[i]);
+      const m1 = i === p.length - 1 ? p[i] : mid(p[i], p[i + 1]);
+      ctx.lineWidth = 4.5 * (.4 + p[i][2] * 1.2);
+      ctx.beginPath(); ctx.moveTo(m0[0], m0[1]); ctx.quadraticCurveTo(p[i][0], p[i][1], m1[0], m1[1]); ctx.stroke();
+    }
+  }
+  function render() {
+    const k = canvas.width / W;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    pages[cur].strokes.forEach(drawStroke);
+    if (active && active.stroke) drawStroke(active.stroke);
+  }
+  function toStage(e) {
+    const r = stage.getBoundingClientRect();
+    // マウス・指は筆圧が取れないので 0.5 として扱う
+    const pr = e.pointerType === 'pen' && e.pressure > 0 ? e.pressure : .5;
+    return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H, pr];
+  }
+  function snapshot() { const pg = pages[cur]; pg.undo.push(pg.strokes.slice()); if (pg.undo.length > 100) pg.undo.shift(); }
+  function segDist(q, a, b) {
+    const dx = b[0] - a[0], dy = b[1] - a[1], L = dx * dx + dy * dy;
+    const t = L ? Math.max(0, Math.min(1, ((q[0] - a[0]) * dx + (q[1] - a[1]) * dy) / L)) : 0;
+    return Math.hypot(q[0] - a[0] - t * dx, q[1] - a[1] - t * dy);
+  }
+  function eraseAt(q) {
+    const pg = pages[cur];
+    const keep = pg.strokes.filter(st => !st.pts.some((pt, i) =>
+      segDist(q, st.pts[Math.max(0, i - 1)], pt) < (st.tool === 'marker' ? 24 : 14)));
+    if (keep.length === pg.strokes.length) return;
+    if (!active.erased) { snapshot(); active.erased = true; }
+    pg.strokes = keep; render();
+  }
+
+  stage.addEventListener('pointerdown', e => {
+    if (overview || active) return;
+    if (e.pointerType === 'pen') { penSeen = true; if (!open) setOpen(true); }
+    else if (!open || (e.pointerType === 'touch' && penSeen) || e.button !== 0) return;
+    e.preventDefault();
+    const q = toStage(e);
+    // ペンの消しゴム側（対応ペンのみ）は消しゴムとして扱う
+    const t = e.button === 5 ? 'eraser' : tool;
+    active = { id: e.pointerId, start: q, moved: 0, stroke: t === 'eraser' ? null : { tool: t, color, pts: [q] } };
+    if (t === 'eraser') eraseAt(q);
+  });
+  addEventListener('pointermove', e => {
+    if (!active || e.pointerId !== active.id) return;
+    e.preventDefault();
+    const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [];
+    for (const ev of evs.length ? evs : [e]) {
+      const q = toStage(ev);
+      active.moved = Math.max(active.moved, Math.hypot(q[0] - active.start[0], q[1] - active.start[1]));
+      if (active.stroke) active.stroke.pts.push(q); else eraseAt(q);
+    }
+    if (active.stroke) render();
+  }, { passive: false });
+  function end(e) {
+    if (!active || e.pointerId !== active.id) return;
+    const st = active.stroke;
+    // ほとんど動かさなかったペン先はタップ（クリック）として扱い、線は残さない
+    if (st && active.moved >= 4) { snapshot(); pages[cur].strokes.push(st); }
+    active = null; render();
+  }
+  addEventListener('pointerup', end);
+  addEventListener('pointercancel', end);
+
+  function setOpen(on = !open) {
+    open = on;
+    bar.classList.toggle('open', on);
+    $('#inkToggle').classList.toggle('on', on);
+  }
+  function undo() { const pg = pages[cur]; if (pg.undo.length) { pg.strokes = pg.undo.pop(); render(); } }
+  $('#inkToggle').onclick = e => { e.currentTarget.blur(); setOpen(); };
+  bar.querySelectorAll('[data-tool]').forEach(b => b.onclick = () => {
+    tool = b.dataset.tool;
+    bar.querySelectorAll('[data-tool]').forEach(x => x.classList.toggle('on', x === b));
+  });
+  bar.querySelectorAll('[data-color]').forEach(b => b.onclick = () => {
+    color = b.dataset.color;
+    bar.querySelectorAll('[data-color]').forEach(x => x.classList.toggle('on', x === b));
+    if (tool === 'eraser') bar.querySelector('[data-tool="pen"]').click();
+  });
+  $('#inkUndo').onclick = undo;
+  $('#inkClear').onclick = () => { if (pages[cur].strokes.length) { snapshot(); pages[cur].strokes = []; render(); } };
+  addEventListener('resize', resize);
+
+  return {
+    render, undo, setOpen, resize,
+    // Apple Pencil の線や、指で書き込み中のタッチはスワイプのページ送りに使わない
+    blocksSwipe: t => t.touchType === 'stylus' || (open && !penSeen) || !!active,
+  };
+})();
+ink.resize();
+
 go(Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1)) || 1) - 1)));
 </script>
 </body>
