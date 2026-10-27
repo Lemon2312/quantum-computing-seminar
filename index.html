@@ -386,6 +386,16 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 body:not(.overview) #stage{touch-action:none}
 #laser{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none;z-index:5}
 body.overview #laser{display:none}
+/* 黒ペン（Apple Pencil で書き込み） */
+#ink{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none;z-index:4}
+#penbar{position:fixed;right:12px;top:14px;z-index:20;display:flex;align-items:center;gap:4px;background:#fff;border:2.5px solid var(--ink);
+  border-radius:999px;box-shadow:3px 3px 0 var(--ink);padding:4px;touch-action:manipulation;opacity:.85}
+#penbar:hover{opacity:1}
+#penbar button{height:38px;min-width:38px;border-radius:999px;border:2px solid transparent;background:none;font:inherit;font-size:14px;font-weight:800;
+  color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;padding:0 10px}
+#penbar button.on{background:var(--accent-l);border-color:var(--ink)}
+#penbar .sep{width:2px;height:24px;background:#e3dcf2;border-radius:1px}
+body.overview #ink,body.overview #penbar{display:none}
 
 @media print{
   @page{size:1280px 720px;margin:0}
@@ -394,7 +404,7 @@ body.overview #laser{display:none}
   #stage{position:static;transform:none!important;box-shadow:none;width:auto;height:auto;overflow:visible;background:none}
   .slide{position:relative;width:1280px;height:720px;opacity:1;transform:none;page-break-after:always;background:var(--bg)}
   .frag{opacity:1;transform:none}
-  #ui,#progress,.btns,.hint,#laser{display:none}
+  #ui,#progress,.btns,.hint,#laser,#penbar{display:none}
 }
 </style>
 </head>
@@ -1009,6 +1019,14 @@ body.overview #laser{display:none}
   <span>← → / Space でページ送り</span>
 </div>
 <div id="progress"></div>
+<div id="penbar" aria-label="ペンの道具">
+  <button data-tool="laser" class="on" title="レーザーポインター（書き込みは残らない）">🔴 レーザー</button>
+  <button data-tool="pen" title="黒ペンで書き込む (P)">✏️ 黒ペン</button>
+  <button data-tool="eraser" title="消しゴム（なぞった線を消す）">🧽 消す</button>
+  <span class="sep"></span>
+  <button id="inkUndo" title="元に戻す (Z)">↩️</button>
+  <button id="inkClear" title="このスライドの書き込みを全部消す">🗑️</button>
+</div>
 <script>
 const NS = 'http://www.w3.org/2000/svg';
 const $ = s => document.querySelector(s);
@@ -1794,6 +1812,7 @@ function go(n, showAll = false) {
   if (window.onEnter && onEnter[id]) onEnter[id]();
   // 自動再生ボタンのあるスライドは、開いた時点で再生を始める（ボタンで停止できる）
   slides[n].querySelectorAll('[data-autoplay]').forEach(b => b.click());
+  ink.render();
 }
 function next() {
   const f = frags(slides[cur]).find(x => !x.classList.contains('vis'));
@@ -1843,6 +1862,8 @@ addEventListener('keydown', e => {
     return;
   }
   if (e.target.tagName === 'SUMMARY' || e.target.tagName === 'INPUT') return;
+  if (e.key === 'p' || e.key === 'P') return ink.setTool(ink.tool() === 'pen' ? 'laser' : 'pen');
+  if (e.key === 'z' || e.key === 'Z') return ink.undo();
   if (e.key === 'o' || e.key === 'O') return toggleOverview(true);
   if (['ArrowRight', 'PageDown', ' ', 'Enter', 'ArrowDown'].includes(e.key)) { e.preventDefault(); next(); }
   else if (['ArrowLeft', 'PageUp', 'Backspace', 'ArrowUp'].includes(e.key)) { e.preventDefault(); prev(); }
@@ -1864,6 +1885,109 @@ $('#btnFs').onclick = e => { e.currentTarget.blur(); fullscreen(); };
 $('#btnOv').onclick = e => { e.currentTarget.blur(); toggleOverview(true); };
 $('#btnOvClose').onclick = e => { e.currentTarget.blur(); toggleOverview(false); };
 addEventListener('beforeprint', () => slides.forEach(s => frags(s).forEach(f => showFrag(f, true))));
+/* ---------- 黒ペン ----------
+   右下の道具で「黒ペン」を選ぶと、Apple Pencil（パソコンではマウス）でスライドに書き込める。指では書かない（指はスワイプやタップに使う）。
+   ペン先で軽くタップしただけのときは線を残さず、ボタンや入力の丸のクリックとして扱う。
+   書き込みはスライドごとに保持し、ページを戻ると再表示される（再読み込みで消える）。 */
+const ink = (() => {
+  const W = 1280, H = 720, COLOR = '#111';
+  const canvas = document.createElement('canvas');
+  canvas.id = 'ink';
+  stage.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  const bar = $('#penbar');
+  const pages = slides.map(() => ({ strokes: [], undo: [] }));
+  let tool = 'laser', active = null;
+
+  function resize() {
+    const k = Math.min(4096 / W, stage.getBoundingClientRect().width / W * (devicePixelRatio || 1));
+    canvas.width = Math.round(W * k); canvas.height = Math.round(H * k);
+    render();
+  }
+  // 筆圧で太さを変え、点の中点を結ぶ曲線でなめらかにする
+  function drawStroke(p) {
+    const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+    ctx.strokeStyle = COLOR; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    for (let i = 1; i < p.length; i++) {
+      const m0 = i === 1 ? p[0] : mid(p[i - 1], p[i]);
+      const m1 = i === p.length - 1 ? p[i] : mid(p[i], p[i + 1]);
+      ctx.lineWidth = 4 * (.4 + p[i][2] * 1.2);
+      ctx.beginPath(); ctx.moveTo(m0[0], m0[1]); ctx.quadraticCurveTo(p[i][0], p[i][1], m1[0], m1[1]); ctx.stroke();
+    }
+  }
+  function render() {
+    const k = canvas.width / W;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    pages[cur].strokes.forEach(drawStroke);
+    if (active && active.pts) drawStroke(active.pts);
+  }
+  function toStage(e) {
+    const r = stage.getBoundingClientRect();
+    // マウスは筆圧が取れないので 0.5 として扱う
+    const pr = e.pointerType === 'pen' && e.pressure > 0 ? e.pressure : .5;
+    return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H, pr];
+  }
+  function snapshot() { const pg = pages[cur]; pg.undo.push(pg.strokes.slice()); if (pg.undo.length > 100) pg.undo.shift(); }
+  function segDist(q, a, b) {
+    const dx = b[0] - a[0], dy = b[1] - a[1], L = dx * dx + dy * dy;
+    const t = L ? Math.max(0, Math.min(1, ((q[0] - a[0]) * dx + (q[1] - a[1]) * dy) / L)) : 0;
+    return Math.hypot(q[0] - a[0] - t * dx, q[1] - a[1] - t * dy);
+  }
+  function eraseAt(q) {
+    const pg = pages[cur];
+    const keep = pg.strokes.filter(st => !st.some((pt, i) => segDist(q, st[Math.max(0, i - 1)], pt) < 14));
+    if (keep.length === pg.strokes.length) return;
+    if (!active.erased) { snapshot(); active.erased = true; }
+    pg.strokes = keep; render();
+  }
+
+  stage.addEventListener('pointerdown', e => {
+    if (overview || active || tool === 'laser' || e.target.closest('input')) return;
+    if (!(e.pointerType === 'pen' || (e.pointerType === 'mouse' && e.button === 0))) return;
+    e.preventDefault();
+    const q = toStage(e);
+    // ペンの消しゴム側（対応ペンのみ）は消しゴムとして扱う
+    const erase = tool === 'eraser' || e.button === 5;
+    active = { id: e.pointerId, start: q, moved: 0, pts: erase ? null : [q] };
+    if (erase) eraseAt(q);
+  });
+  addEventListener('pointermove', e => {
+    if (!active || e.pointerId !== active.id) return;
+    e.preventDefault();
+    const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [];
+    for (const ev of evs.length ? evs : [e]) {
+      const q = toStage(ev);
+      active.moved = Math.max(active.moved, Math.hypot(q[0] - active.start[0], q[1] - active.start[1]));
+      if (active.pts) active.pts.push(q); else eraseAt(q);
+    }
+    if (active.pts) render();
+  }, { passive: false });
+  function end(e) {
+    if (!active || e.pointerId !== active.id) return;
+    // ほとんど動かさなかったペン先はタップ（クリック）として扱い、線は残さない
+    if (active.pts && active.moved >= 4) { snapshot(); pages[cur].strokes.push(active.pts); }
+    active = null; render();
+  }
+  addEventListener('pointerup', end);
+  addEventListener('pointercancel', end);
+
+  function setTool(t) {
+    tool = t;
+    bar.querySelectorAll('[data-tool]').forEach(b => b.classList.toggle('on', b.dataset.tool === t));
+  }
+  function undo() { const pg = pages[cur]; if (pg.undo.length) { pg.strokes = pg.undo.pop(); render(); } }
+  bar.querySelectorAll('[data-tool]').forEach(b => b.onclick = () => { b.blur(); setTool(b.dataset.tool); });
+  $('#inkUndo').onclick = e => { e.currentTarget.blur(); undo(); };
+  $('#inkClear').onclick = e => {
+    e.currentTarget.blur();
+    if (pages[cur].strokes.length) { snapshot(); pages[cur].strokes = []; render(); }
+  };
+  addEventListener('resize', resize);
+  resize();
+  return { render, undo, setTool, tool: () => tool, drawing: () => !!active };
+})();
+
 /* ---------- レーザーポインター ----------
    Apple Pencil のペン先を画面に当てている間だけ赤く光る点を表示し、なぞった軌跡を光らせる（書き込みは残らない）。
    軌跡はペンを離してから約1秒で消える。消えきる前にもう一度ペンを当てると、それまでの軌跡は消えずに残り続ける。
@@ -1913,7 +2037,7 @@ const laser = (() => {
   function add(q) { trail[trail.length - 1].push(q); down.pos = q; }
 
   stage.addEventListener('pointerdown', e => {
-    if (overview || e.pointerType !== 'pen' || down || e.target.closest('input')) return;
+    if (overview || e.pointerType !== 'pen' || down || e.target.closest('input') || ink.tool() !== 'laser') return;
     e.preventDefault();
     // 前の軌跡が消えきっていなければ残したまま続ける
     if (!level()) trail = [];
