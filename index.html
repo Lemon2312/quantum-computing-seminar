@@ -13,6 +13,7 @@
   --hard:4px 4px 0 var(--ink);
 }
 *{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 html,body{margin:0;height:100%;background:#1e293b;overflow:hidden;
   font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;color:var(--ink)}
 #viewport{position:fixed;inset:0}
@@ -191,10 +192,15 @@ body.overview #viewport{position:static;padding:64px 24px 60px}
 body.overview #ovHead{display:flex;position:fixed;left:0;right:0;top:0;height:52px;align-items:center;gap:16px;padding:0 24px;
   background:#0f172a;color:#e2e8f0;font-size:16px;z-index:12}
 body.overview #ovHead b{font-size:18px}
+body.overview #ovHead b,body.overview #ovHead button{white-space:nowrap}
+@media (max-width:900px){body.overview #ovHead span{display:none}}
 body.overview #ovHead button{background:var(--accent);color:#fff;border:0;border-radius:6px;padding:6px 14px;cursor:pointer;font:inherit;font-weight:700;margin-left:auto}
 body.overview #stage{position:static;transform:none!important;width:auto;height:auto;overflow:visible;background:none;box-shadow:none;
-  display:grid;grid-template-columns:repeat(var(--cols,4),1fr);gap:22px}
-body.overview .slide{position:relative;inset:auto;width:1280px;height:720px;zoom:var(--z,.2);opacity:1;transform:none;pointer-events:auto;
+  display:grid;grid-template-columns:repeat(var(--cols,4),var(--ow,256px));gap:22px}
+/* 縮小は zoom ではなく transform で行う（iPad の Safari は zoom の扱いが異なり、中身の位置がずれるため）。
+   transform は並べるときの大きさに影響しないので、負の余白で縮小後の大きさ（--ow × --oh）に合わせる */
+body.overview .slide{position:relative;inset:auto;width:1280px;height:720px;opacity:1;pointer-events:auto;
+  transform:scale(var(--z,.2));transform-origin:0 0;margin:0 calc(var(--ow,256px) - 1280px) calc(var(--oh,144px) - 720px) 0;
   cursor:pointer;background:var(--bg);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);outline:0 solid var(--accent);transition:outline-width .15s}
 body.overview .slide *{pointer-events:none}
 body.overview .slide:hover{outline-width:14px}
@@ -2013,6 +2019,8 @@ function layoutOverview() {
   const w = (document.body.clientWidth - 48 - 22 * (cols - 1)) / cols;
   stage.style.setProperty('--cols', cols);
   stage.style.setProperty('--z', w / 1280);
+  stage.style.setProperty('--ow', `${w}px`);
+  stage.style.setProperty('--oh', `${w * 720 / 1280}px`);
 }
 function markCurrent() { slides.forEach((s, i) => s.classList.toggle('current', i === cur)); }
 function toggleOverview(on = !overview) {
