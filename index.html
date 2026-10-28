@@ -853,9 +853,9 @@ body.overview #ink,body.overview #penbar{display:none}
       </div>
       <div class="point blue frag" style="font-size:18px;margin-top:10px"><b>S（和・この桁の出力ビット）</b>：A と B を半加算した和 <b>P</b> を、さらに繰り上がり C<sub>in</sub> と半加算した和
         <span class="formula" style="font-size:18px;padding:0 8px">S = P ⊕ C<sub>in</sub> = A ⊕ B ⊕ C<sub>in</sub></span></div>
-      <div class="point frag" style="font-size:18px;margin-top:10px"><b>C<sub>out</sub>（繰り上がりビット）</b>：次のどちらかなら 1（OR でまとめる）<br>
-        ① A と B の半加算で <b>繰り上がりがあった</b>（A·B = 1）→ そのまま C<sub>out</sub> = 1<br>
-        ② A と B の半加算の和 P が 1 で、<b>C<sub>in</sub> も 1</b>（半加算器②で繰り上がり）→ C<sub>out</sub> = 1
+      <div class="point frag" style="font-size:18px;margin-top:10px"><b>C<sub>out</sub>（繰り上がりビット）</b>：次の <b>どちらか</b> で繰り上がれば繰り上がる（OR でまとめる）<br>
+        ① <b>A と B の半加算</b>（半加算器①）で繰り上がる<br>
+        ② <b>A と B の和 P と C<sub>in</sub> の半加算</b>（半加算器②）で繰り上がる
         <span class="formula" style="font-size:18px;padding:0 8px">C<sub>out</sub> = A·B + P·C<sub>in</sub></span></div>
     </div>
     <div>
