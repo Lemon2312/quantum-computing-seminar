@@ -1877,22 +1877,32 @@ function probGauge(el) {
     b.addEventListener('click', () => { b.blur(); stop(); tween(t, p); });
     $('#bPresets').appendChild(b);
   });
-  // 自動再生：極から赤道を回って反対の極へ、と順にめぐる
-  const tour = [[0, 0], [60, 30], [90, 0], [90, 90], [90, 180], [120, 240], [90, 270], [180, 270]];
+  // 自動再生：経度 φ をぐるぐる回しながら、緯度 θ も北極近くから南極近くまでゆっくり上下させ、
+  // 軸や赤道の上だけでなく球面のあちこちを通るようにする
   const auto = $('#bAuto');
-  let timer = null, ti = 0;
-  function stop() { clearInterval(timer); timer = null; auto.textContent = '▶ 自動再生'; auto.classList.remove('playing'); }
+  let timer = null;
+  function stop() { cancelAnimationFrame(timer); timer = null; auto.textContent = '▶ 自動再生'; auto.classList.remove('playing'); }
   auto.addEventListener('click', () => {
     auto.blur();
     if (timer) return stop();
     auto.textContent = '■ 停止'; auto.classList.add('playing');
-    timer = setInterval(() => { ti = (ti + 1) % tour.length; tween(...tour[ti]); }, 2000);
+    cancelAnimationFrame(anim);
+    // いまの位置から途切れずに動き出せるよう、θ の上下の位相を今の θ に合わせる
+    const ph0 = ph, t0 = performance.now(), wave0 = Math.asin(Math.max(-1, Math.min(1, (th - 90) / 80)));
+    const step = now => {
+      const sec = (now - t0) / 1000;
+      ph = (ph0 + sec * 40) % 360;                  // 9 秒で 1 周
+      th = 90 + 80 * Math.sin(wave0 + sec * 0.55);  // 約 11 秒で 1 往復（10°〜170°）
+      draw();
+      timer = requestAnimationFrame(step);
+    };
+    timer = requestAnimationFrame(step);
   });
   sTh.addEventListener('input', () => { stop(); cancelAnimationFrame(anim); th = +sTh.value; draw(); });
   sPh.addEventListener('input', () => { stop(); cancelAnimationFrame(anim); ph = +sPh.value; draw(); });
   stoppers.push(stop);
   window.onEnter = window.onEnter || {};
-  onEnter.bloch = () => { ti = 0; cancelAnimationFrame(anim); th = 0; ph = 0; draw(); };
+  onEnter.bloch = () => { cancelAnimationFrame(anim); th = 0; ph = 0; draw(); };
   draw();
 }
 
