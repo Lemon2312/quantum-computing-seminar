@@ -390,6 +390,22 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .bpresets button:hover{background:var(--accent-l)}
 .bformula{font-size:19px;margin-top:2px;min-height:34px}
 
+/* 復習問題：カードをクリックすると答えが出る */
+.quiz{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;gap:12px 16px;align-content:center}
+.qz{display:flex;flex-direction:column;background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:10px 14px;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.qz:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.qz-q{display:flex;gap:10px;align-items:flex-start;font-size:17px;line-height:1.5;font-weight:600}
+.qz-no{flex:none;background:var(--blue);color:#fff;font-weight:900;font-size:14px;border:2px solid var(--ink);border-radius:999px;padding:1px 9px;margin-top:2px}
+.qz-a{margin-top:auto;padding-top:8px;min-height:40px;display:flex;align-items:center;border-top:2px dashed #e3dcf2;font-size:17px;line-height:1.5}
+.qz-hide{color:var(--muted);font-weight:800;font-size:15px}
+.qz-ans{display:none;color:#1f1a3d}
+.qz.open{background:#fffaf0}
+.qz.open .qz-no{background:var(--green)}
+.qz.open .qz-hide{display:none}
+.qz.open .qz-ans{display:inline;animation:qzIn .4s cubic-bezier(.3,1.6,.5,1)}
+@keyframes qzIn{from{opacity:0;transform:translateY(6px) scale(.96)}to{opacity:1;transform:none}}
+h2 .qz-all{font-size:14px;padding:4px 14px;margin-left:16px;vertical-align:middle}
+
 /* 章の扉スライド */
 .door-wrap{position:relative;display:grid;grid-template-columns:auto 1fr;gap:64px;align-items:center;height:100%;padding:0 40px}
 .door-num{width:210px;height:210px;border-radius:46px;background:var(--c);color:#fff;border:5px solid var(--ink);box-shadow:10px 10px 0 var(--ink);
@@ -845,20 +861,17 @@ body.overview #ink,body.overview #penbar{display:none}
   <div class="pageno"></div>
 </section>
 
-<!-- 第2章のまとめ -->
-<section class="slide">
-  <div class="chap">Summary ／ 第2章 量子コンピュータ入門以前</div>
-  <h2>まとめ<small>第2章 量子コンピュータ入門以前</small></h2>
-  <div class="body">
-    <ul>
-      <li class="pop">古典回路は <b>AND / OR / NOT / XOR</b> などの論理ゲートを組み合わせて計算する。動作は <b>真理値表</b> で表せる</li>
-      <li class="pop" style="--d:.1s"><b>半加算器</b>：1ビット + 1ビット → <b class="k">和 = A ⊕ B</b>、<b class="k">繰り上がり = A · B</b></li>
-      <li class="pop" style="--d:.2s">同じ結果を出す回路は複数ある。</li>
-      <li class="pop" style="--d:.3s">実際の基本論理ゲートは、種類ごとに <b>必要なトランジスタの数や計算時間が違う</b></li>
-      <li class="pop" style="--d:.4s"><b>全加算器</b>：下の桁からの繰り上がりを含む3入力の足し算。<b>半加算器 × 2 + OR</b> で作れる<br>
-        <span class="formula" style="font-size:24px;padding:2px 12px">S = A ⊕ B ⊕ C<sub>in</sub>,　C<sub>out</sub> = A·B + (A ⊕ B)·C<sub>in</sub></span></li>
-      <li class="pop" style="--d:.5s">全加算器を並べれば <b>任意ビットの加算器</b> になる（リップルキャリー加算器）</li>
-    </ul>
+<!-- 第2章の復習問題 -->
+<section class="slide" data-id="quiz2">
+  <div class="chap">Review ／ 第2章 量子コンピュータ入門以前</div>
+  <h2>復習問題<small>第2章 量子コンピュータ入門以前</small><button class="b qz-all" data-quiz-all>答えをぜんぶ表示</button></h2>
+  <div class="body quiz">
+      <div class="qz pop" style="--d:0.00s"><div class="qz-q"><span class="qz-no">Q1</span><span>AND・OR・NOT・XOR のうち、「入力が <b>両方とも 1 のときだけ</b> 出力が 1」になるのはどれ？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>AND</b>（論理積）</span></div></div>
+      <div class="qz pop" style="--d:0.06s"><div class="qz-q"><span class="qz-no">Q2</span><span>XOR を「2 を法とした和」で表すと？ また <b>1 ⊕ 1</b> はいくつ？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><span class="math">A ⊕ B = (A + B) mod 2</span>。1 ⊕ 1 = 2 mod 2 = <b>0</b></span></div></div>
+      <div class="qz pop" style="--d:0.12s"><div class="qz-q"><span class="qz-no">Q3</span><span>半加算器の <b>和</b> と <b>繰り上がり</b> を、論理ゲートの式で表すと？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">和 = <span class="math">A ⊕ B</span>（XOR）、繰り上がり = <span class="math">A · B</span>（AND）</span></div></div>
+      <div class="qz pop" style="--d:0.18s"><div class="qz-q"><span class="qz-no">Q4</span><span>AND・OR・NOT 版と XOR 版の半加算器。<b>ゲート数</b> と出力までの <b>段数</b> は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">AND・OR・NOT 版：<b>4個・3段</b>　XOR 版：<b>2個・1段</b></span></div></div>
+      <div class="qz pop" style="--d:0.24s"><div class="qz-q"><span class="qz-no">Q5</span><span><b>全加算器</b> は何を足す回路？ 何を組み合わせると作れる？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">下の桁からの繰り上がりを含む <b>3 ビットの足し算</b>。<b>半加算器 × 2 + OR</b> で作れる</span></div></div>
+      <div class="qz pop" style="--d:0.30s"><div class="qz-q"><span class="qz-no">Q6</span><span>4 ビットどうしの足し算をする回路はどう作る？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">全加算器を <b>4 個つなぐ</b>（繰り上がりを順に渡す <b>リップルキャリー加算器</b>）</span></div></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -1059,20 +1072,17 @@ body.overview #ink,body.overview #penbar{display:none}
   <div class="pageno"></div>
 </section>
 
-<!-- 第3章のまとめ -->
-<section class="slide">
-  <div class="chap">Summary ／ 第3章 量子コンピュータの基本ルール</div>
-  <h2>まとめ<small>第3章 量子コンピュータの基本ルール</small></h2>
-  <div class="body">
-    <ul>
-      <li class="pop">古典ビットの 0, 1 に対応する <b class="k">量子ビット</b> は、ベクトル
-        <span class="eq inline"><span class="math">|0⟩ =</span><span class="vec"><span>1</span><span>0</span></span><span class="math">,　|1⟩ =</span><span class="vec"><span>0</span><span>1</span></span></span> で定義される</li>
-      <li class="pop" style="--d:.1s">複素数 a, b が <b>|a|² + |b|² = 1</b> を満たすとき、<span class="math">a|0⟩ + b|1⟩</span> を <b class="k">量子状態</b> という。ベクトルで書いたものが <b>状態ベクトル</b></li>
-      <li class="pop" style="--d:.2s">内積を使うと、量子状態は <b><span class="math">⟨φ|φ⟩ = 1</span></b> を満たす2次元の複素ベクトル <span class="math">|φ⟩</span> とも表せる</li>
-      <li class="pop" style="--d:.3s">係数が 0 でない <span class="math">|0⟩</span> と <span class="math">|1⟩</span> の和が <b class="k">重ね合わせ状態</b>。古典ビットは重ね合わせ状態にできない</li>
-      <li class="pop" style="--d:.4s"><span class="math">a|0⟩ + b|1⟩</span> を <b class="k">測定</b> すると、確率 <b><span class="math">|a|²</span></b> で <span class="math">|0⟩</span>、確率 <b><span class="math">|b|²</span></b> で <span class="math">|1⟩</span> を得て、状態は得られた測定値に変化する</li>
-      <li class="pop" style="--d:.5s">古典ビットと違い、<b>同じ操作でも測定結果は確率的に変わり</b>、<b>測定で状態が変化する</b></li>
-    </ul>
+<!-- 第3章の復習問題 -->
+<section class="slide" data-id="quiz3">
+  <div class="chap">Review ／ 第3章 量子コンピュータの基本ルール</div>
+  <h2>復習問題<small>第3章 量子コンピュータの基本ルール</small><button class="b qz-all" data-quiz-all>答えをぜんぶ表示</button></h2>
+  <div class="body quiz">
+      <div class="qz pop" style="--d:0.00s"><div class="qz-q"><span class="qz-no">Q1</span><span>量子ビット <span class="math">|0⟩</span> と <span class="math">|1⟩</span> をベクトルで書くと？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><span class="math">|0⟩ =</span><span class="eq inline"><span class="vec"><span>1</span><span>0</span></span></span>、<span class="math">|1⟩ =</span><span class="eq inline"><span class="vec"><span>0</span><span>1</span></span></span></span></div></div>
+      <div class="qz pop" style="--d:0.06s"><div class="qz-q"><span class="qz-no">Q2</span><span><span class="math">a|0⟩ + b|1⟩</span> が <b>量子状態</b> になるための条件は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b><span class="math">|a|² + |b|² = 1</span></b>（内積で書くと <span class="math">⟨φ|φ⟩ = 1</span>）</span></div></div>
+      <div class="qz pop" style="--d:0.12s"><div class="qz-q"><span class="qz-no">Q3</span><span><span class="math">|0⟩ + |1⟩</span> は量子状態？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>量子状態ではない</b>。<span class="math">|1|² + |1|² = 2 ≠ 1</span> のため</span></div></div>
+      <div class="qz pop" style="--d:0.18s"><div class="qz-q"><span class="qz-no">Q4</span><span><span class="eq inline"><span class="frac"><span>1</span><span>√5</span></span></span><span class="math">|0⟩ +</span><span class="eq inline"><span class="frac"><span>2</span><span>√5</span></span></span><span class="math">|1⟩</span> を測定すると、|0⟩ と |1⟩ はそれぞれ何 % で得られる？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>|0⟩ が 20%</b>（1/5）、<b>|1⟩ が 80%</b>（4/5）。測定後の状態は、得られた方に変化する</span></div></div>
+      <div class="qz pop" style="--d:0.24s"><div class="qz-q"><span class="qz-no">Q5</span><span><b>ブロッホ球</b> の北極・南極はどの状態？ 赤道上は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">北極が <b>|0⟩</b>、南極が <b>|1⟩</b>。赤道上は |0⟩ と |1⟩ が <b>半々の重ね合わせ</b></span></div></div>
+      <div class="qz pop" style="--d:0.30s"><div class="qz-q"><span class="qz-no">Q6</span><span>古典ビットと比べた、量子ビットの <b>測定</b> の違いを 2 つ</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">① 同じ操作でも <b>結果が確率的に変わる</b>　② 測定で <b>状態が変化する</b></span></div></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -1898,6 +1908,27 @@ const measureOnce = () => (Math.random() < P0 ? 0 : 1);
   stoppers.push(stop);
   window.onEnter = window.onEnter || {};
   onEnter.meas1 = () => { hs = []; hist.innerHTML = ''; res.textContent = '?'; res.className = 'mket mres'; };
+}
+
+/* ---------- 復習問題：カードをクリックすると答えが出る（もう一度押すと隠れる） ---------- */
+{
+  document.querySelectorAll('.qz').forEach(q => q.addEventListener('click', () => q.classList.toggle('open')));
+  document.querySelectorAll('[data-quiz-all]').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation(); b.blur();
+    const qs = [...b.closest('.slide').querySelectorAll('.qz')], open = !qs.every(q => q.classList.contains('open'));
+    qs.forEach(q => q.classList.toggle('open', open));
+    b.textContent = open ? '答えをぜんぶ隠す' : '答えをぜんぶ表示';
+  }));
+  // スライドを開くたびに答えを隠した状態に戻す
+  const reset = id => () => {
+    const sl = document.querySelector(`.slide[data-id="${id}"]`);
+    sl.querySelectorAll('.qz').forEach(q => q.classList.remove('open'));
+    sl.querySelector('[data-quiz-all]').textContent = '答えをぜんぶ表示';
+  };
+  window.onEnter = window.onEnter || {};
+  onEnter.quiz2 = reset('quiz2'); onEnter.quiz3 = reset('quiz3');
+  // 印刷（配布資料）では答えも見えるようにする
+  addEventListener('beforeprint', () => document.querySelectorAll('.qz').forEach(q => q.classList.add('open')));
 }
 
 /* ---------- スライド制御 ---------- */
