@@ -2084,24 +2084,40 @@ const ink = (() => {
     canvas.width = Math.round(W * k); canvas.height = Math.round(H * k);
     render();
   }
-  // 筆圧で太さを変え、点の中点を結ぶ曲線でなめらかにする
-  function drawStroke(p) {
-    const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
-    ctx.strokeStyle = COLOR; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    for (let i = 1; i < p.length; i++) {
-      const m0 = i === 1 ? p[0] : mid(p[i - 1], p[i]);
-      const m1 = i === p.length - 1 ? p[i] : mid(p[i], p[i + 1]);
-      ctx.lineWidth = 4 * (.4 + p[i][2] * 1.2);
-      ctx.beginPath(); ctx.moveTo(m0[0], m0[1]); ctx.quadraticCurveTo(p[i][0], p[i][1], m1[0], m1[1]); ctx.stroke();
-    }
+  // 筆圧で太さを変え、点の中点を結ぶ曲線でなめらかにする。i 番目の区間は p[i-1]・p[i]・p[i+1] で決まる
+  const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+  function drawSeg(p, i) {
+    const m0 = i === 1 ? p[0] : mid(p[i - 1], p[i]);
+    const m1 = i === p.length - 1 ? p[i] : mid(p[i], p[i + 1]);
+    ctx.lineWidth = 4 * (.4 + p[i][2] * 1.2);
+    ctx.beginPath(); ctx.moveTo(m0[0], m0[1]); ctx.quadraticCurveTo(p[i][0], p[i][1], m1[0], m1[1]); ctx.stroke();
   }
+  function drawStroke(p) { for (let i = 1; i < p.length; i++) drawSeg(p, i); }
+  // スライド全体の描き直し（元に戻す・消しゴム・スライド切り替えなどのときだけ）
   function render() {
     const k = canvas.width / W;
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.setTransform(k, 0, 0, k, 0, 0);
+    ctx.strokeStyle = COLOR; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
     pages[cur].strokes.forEach(drawStroke);
-    if (active && active.pts) drawStroke(active.pts);
+    if (active && active.pts) { drawStroke(active.pts); active.drawn = active.pts.length - 2; }
   }
+  // 書いている途中は、まだ描いていない区間だけを描き足す（毎回全部を描き直すと速く書いたときに固まるため）。
+  // 最後の区間は次の点が来ないと形が決まらないので、ペンを離したときに描く
+  function drawNew(final) {
+    const p = active.pts, upto = final ? p.length - 1 : p.length - 2;
+    for (let i = Math.max(1, active.drawn + 1); i <= upto; i++) drawSeg(p, i);
+    active.drawn = Math.max(active.drawn, upto);
+  }
+  // ペンの点はたくさん届くので、画面の書き換え 1 回につき 1 回だけまとめて描く
+  let queued = false;
+  function flush() {
+    queued = false;
+    if (!active) return;
+    if (active.pts) drawNew(false);
+    else if (active.erase.length) { const qs = active.erase; active.erase = []; if (qs.map(eraseAt).some(Boolean)) render(); }
+  }
+  const schedule = () => { if (!queued) { queued = true; requestAnimationFrame(flush); } };
   function toStage(e) {
     const r = stage.getBoundingClientRect();
     // マウスは筆圧が取れないので 0.5 として扱う
@@ -2114,12 +2130,14 @@ const ink = (() => {
     const t = L ? Math.max(0, Math.min(1, ((q[0] - a[0]) * dx + (q[1] - a[1]) * dy) / L)) : 0;
     return Math.hypot(q[0] - a[0] - t * dx, q[1] - a[1] - t * dy);
   }
+  // q の近くを通る線を消す。消したら true（描き直しは呼び出し側でまとめて行う）
   function eraseAt(q) {
     const pg = pages[cur];
     const keep = pg.strokes.filter(st => !st.some((pt, i) => segDist(q, st[Math.max(0, i - 1)], pt) < 14));
-    if (keep.length === pg.strokes.length) return;
+    if (keep.length === pg.strokes.length) return false;
     if (!active.erased) { snapshot(); active.erased = true; }
-    pg.strokes = keep; render();
+    pg.strokes = keep;
+    return true;
   }
 
   stage.addEventListener('pointerdown', e => {
@@ -2129,8 +2147,8 @@ const ink = (() => {
     const q = toStage(e);
     // ペンの消しゴム側（対応ペンのみ）は消しゴムとして扱う
     const erase = tool === 'eraser' || e.button === 5;
-    active = { id: e.pointerId, start: q, moved: 0, pts: erase ? null : [q] };
-    if (erase) eraseAt(q);
+    active = { id: e.pointerId, start: q, moved: 0, pts: erase ? null : [q], drawn: 0, erase: [] };
+    if (erase) { if (eraseAt(q)) render(); }
   });
   addEventListener('pointermove', e => {
     if (!active || e.pointerId !== active.id) return;
@@ -2139,15 +2157,21 @@ const ink = (() => {
     for (const ev of evs.length ? evs : [e]) {
       const q = toStage(ev);
       active.moved = Math.max(active.moved, Math.hypot(q[0] - active.start[0], q[1] - active.start[1]));
-      if (active.pts) active.pts.push(q); else eraseAt(q);
+      if (active.pts) {
+        // ほとんど動いていない点は間引く（見た目は変わらず、描く量が減る）
+        const last = active.pts[active.pts.length - 1];
+        if (Math.hypot(q[0] - last[0], q[1] - last[1]) >= 1.2) active.pts.push(q); else last[2] = Math.max(last[2], q[2]);
+      } else active.erase.push(q);
     }
-    if (active.pts) render();
+    schedule();
   }, { passive: false });
   function end(e) {
     if (!active || e.pointerId !== active.id) return;
+    flush();
     // ほとんど動かさなかったペン先はタップ（クリック）として扱い、線は残さない
-    if (active.pts && active.moved >= 4) { snapshot(); pages[cur].strokes.push(active.pts); }
-    active = null; render();
+    if (active.pts && active.moved >= 4) {
+      drawNew(true); snapshot(); pages[cur].strokes.push(active.pts); active = null;
+    } else { active = null; render(); }
   }
   addEventListener('pointerup', end);
   addEventListener('pointercancel', end);
@@ -2197,24 +2221,27 @@ const laser = (() => {
     if (!f) trail = [];
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.setTransform(k, 0, 0, k, 0, 0);
-    ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.shadowColor = 'rgba(255,30,60,.9)';
-    ctx.strokeStyle = `rgba(255,40,70,${.75 * f})`; ctx.lineWidth = 2 + 6 * f; ctx.shadowBlur = 14 * f * k;
-    trail.forEach(line => {
-      ctx.beginPath(); ctx.moveTo(line[0][0], line[0][1]);
-      line.forEach(q => ctx.lineTo(q[0], q[1]));
-      ctx.stroke();
-    });
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    // 影のぼかし（shadowBlur）は重いので使わず、太い半透明の線の上に細い線を重ねて光って見せる
+    const path = new Path2D();
+    trail.forEach(line => { path.moveTo(line[0][0], line[0][1]); line.forEach(q => path.lineTo(q[0], q[1])); });
+    ctx.strokeStyle = `rgba(255,40,70,${.18 * f})`; ctx.lineWidth = 6 + 14 * f; ctx.stroke(path);
+    ctx.strokeStyle = `rgba(255,40,70,${.8 * f})`; ctx.lineWidth = 2 + 5 * f; ctx.stroke(path);
     if (down) {
       const [x, y] = down.pos, g = ctx.createRadialGradient(x, y, 0, x, y, 13);
       g.addColorStop(0, '#fff'); g.addColorStop(.35, '#ff5a6e'); g.addColorStop(1, 'rgba(255,30,60,0)');
-      ctx.shadowBlur = 24 * k; ctx.fillStyle = g;
+      ctx.fillStyle = g;
       ctx.beginPath(); ctx.arc(x, y, 13, 0, Math.PI * 2); ctx.fill();
     }
-    ctx.shadowBlur = 0;
     if (fadeFrom !== null && trail.length) kick();
   }
   function kick() { if (!raf) raf = requestAnimationFrame(frame); }
-  function add(q) { trail[trail.length - 1].push(q); down.pos = q; }
+  function add(q) {
+    const line = trail[trail.length - 1], last = line[line.length - 1];
+    // ほとんど動いていない点は間引く
+    if (!last || Math.hypot(q[0] - last[0], q[1] - last[1]) >= 1.5) line.push(q);
+    down.pos = q;
+  }
 
   stage.addEventListener('pointerdown', e => {
     if (overview || e.pointerType !== 'pen' || down || e.target.closest('input') || ink.tool() !== 'laser') return;
