@@ -3,16 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>論理式を実現する古典回路 ― 半加算器から全加算器へ</title>
+<title>古典ビットから量子ビットへ ― 論理ゲート・加算器から量子状態・測定まで</title>
 <style>
 :root{
   --ink:#1f1a3d; --muted:#6b6790; --line:#1f1a3d; --bg:#fffaf0;
   --accent:#ff6b1a; --accent-d:#e04e00; --accent-l:#fff1c2;
   --blue:#3b6cff; --blue-l:#dfe8ff; --green:#14a35a;
-  --off:#b9b5d0; --pink:#ff4f9a; --yellow:#ffd53d;
+  --off:#b9b5d0; --pink:#ff4f9a; --yellow:#ffd53d; --purple:#8a5cff;
   --hard:4px 4px 0 var(--ink);
 }
 *{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 html,body{margin:0;height:100%;background:#1e293b;overflow:hidden;
   font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;color:var(--ink)}
 #viewport{position:fixed;inset:0}
@@ -81,6 +82,8 @@ table.tt tbody tr{cursor:pointer;transition:background .2s}
 table.tt tbody tr:hover td{background:#f8fafc}
 table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(250,204,21,.38)}
 table.tt.small{font-size:18px}
+.point.logic{display:flex;align-items:center;gap:14px}
+.venn{width:112px;flex:none}
 table.tt.small th,table.tt.small td{padding:3px 12px}
 table.tt.small th{font-size:15px}
 table.tt td{transition:background .3s,color .3s}
@@ -189,17 +192,24 @@ body.overview #viewport{position:static;padding:64px 24px 60px}
 body.overview #ovHead{display:flex;position:fixed;left:0;right:0;top:0;height:52px;align-items:center;gap:16px;padding:0 24px;
   background:#0f172a;color:#e2e8f0;font-size:16px;z-index:12}
 body.overview #ovHead b{font-size:18px}
+body.overview #ovHead b,body.overview #ovHead button{white-space:nowrap}
+@media (max-width:900px){body.overview #ovHead span{display:none}}
 body.overview #ovHead button{background:var(--accent);color:#fff;border:0;border-radius:6px;padding:6px 14px;cursor:pointer;font:inherit;font-weight:700;margin-left:auto}
 body.overview #stage{position:static;transform:none!important;width:auto;height:auto;overflow:visible;background:none;box-shadow:none;
-  display:grid;grid-template-columns:repeat(var(--cols,4),1fr);gap:22px}
-body.overview .slide{position:relative;inset:auto;width:1280px;height:720px;zoom:var(--z,.2);opacity:1;transform:none;pointer-events:auto;
+  display:grid;grid-template-columns:repeat(var(--cols,4),var(--ow,256px));gap:22px}
+/* 縮小は zoom ではなく transform で行う（iPad の Safari は zoom の扱いが異なり、中身の位置がずれるため）。
+   transform は並べるときの大きさに影響しないので、負の余白で縮小後の大きさ（--ow × --oh）に合わせる */
+body.overview .slide{position:relative;inset:auto;width:1280px;height:720px;opacity:1;pointer-events:auto;
+  transform:scale(var(--z,.2));transform-origin:0 0;margin:0 calc(var(--ow,256px) - 1280px) calc(var(--oh,144px) - 720px) 0;
   cursor:pointer;background:var(--bg);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);outline:0 solid var(--accent);transition:outline-width .15s}
 body.overview .slide *{pointer-events:none}
 body.overview .slide:hover{outline-width:14px}
 body.overview .slide.current{outline-width:22px}
 body.overview .frag{opacity:1;transform:none}
 body.overview .bar-fill{width:var(--w);transition:none}
-body.overview .slide .pageno{font-size:44px;font-weight:800;color:var(--ink);bottom:24px;right:40px}
+body.overview .slide{overflow:hidden}
+/* 一覧ではページ番号を右下の札にして、中身と重なっても読めるようにする */
+body.overview .slide .pageno{font-size:40px;font-weight:900;color:#fff;background:var(--ink);border-radius:16px;padding:2px 20px;bottom:14px;right:14px;z-index:6}
 body.overview #ui,body.overview #progress{display:none}
 
 /* ---------- ポップ調デザイン（太枠・ずらし影・弾むアニメ） ---------- */
@@ -256,12 +266,173 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .bar-fill.a{background:linear-gradient(90deg,var(--accent),var(--pink))}
 
 .title-wrap h1{font-size:64px;background:linear-gradient(transparent 70%,#ffe58a 70%) no-repeat;display:inline;line-height:1.3;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-.title-wrap .sub{color:var(--pink);margin-top:18px}
+.title-wrap .sub{color:var(--pink);margin-top:18px;margin-bottom:22px;font-size:23px;white-space:nowrap}
+.tchaps{display:flex;flex-direction:column;gap:12px}
+.tchap{display:flex;align-items:center;gap:12px;background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:3px 3px 0 var(--ink);padding:6px 14px 6px 6px}
+.tchap .tno{background:var(--c);color:#fff;font-weight:900;border:2px solid var(--ink);border-radius:10px;padding:2px 10px;font-size:18px;flex:none}
+.tchap .tname{font-weight:900;font-size:21px}
+.tchap .tsec{margin-left:auto;font-size:14px;color:var(--muted);font-weight:700;white-space:nowrap}
 .agenda .num{border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);background:var(--blue)}
-.agenda li:nth-child(2) .num{background:var(--pink)}
-.agenda li:nth-child(3) .num{background:var(--green)}
+.agenda li:nth-child(3) .num{background:var(--pink)}
+.agenda li:nth-child(4) .num{background:var(--green)}
+.agenda li:nth-child(6) .num{background:var(--purple)}
+.agenda li:nth-child(7) .num{background:var(--accent)}
 .agenda .new{background:var(--accent)}
 .tag{background:var(--pink);border:2px solid var(--ink);white-space:nowrap;flex:none}
+
+/* 量子ビット（第4章）の数式・図 */
+.math,.vec,.frac{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif}
+.eq{display:flex;align-items:center;justify-content:center;gap:8px;font-size:26px;flex-wrap:wrap}
+.eq.inline{display:inline-flex;font-size:inherit;vertical-align:middle;gap:5px}
+.vec{display:inline-grid;text-align:center;padding:1px 10px;border-left:3px solid currentColor;border-right:3px solid currentColor;border-radius:14px;line-height:1.25}
+.vec.row{grid-auto-flow:column;column-gap:14px}
+.eq.inline .vec{line-height:1.05;padding:0 7px;border-width:2px;border-radius:10px;font-size:.85em}
+.frac{display:inline-grid;text-align:center;line-height:1.1;font-size:.85em;vertical-align:middle}
+.frac>span:first-child{border-bottom:2px solid currentColor;padding:0 2px}
+.brace{font-size:2.3em;font-weight:200;line-height:1;transform:scaleX(.7)}
+.bar{width:2px;align-self:stretch;background:currentColor;margin:6px 2px}
+.defbox{position:relative;background:#fff;border:3px solid var(--ink);border-radius:16px;box-shadow:var(--hard);padding:16px 18px 12px;margin-top:18px;font-size:20px;line-height:1.7}
+.defbox::before{content:"定義";position:absolute;left:14px;top:-16px;background:var(--ink);color:#fff;font-weight:800;font-size:15px;border-radius:999px;padding:2px 14px}
+.qrow{display:flex;align-items:center;gap:16px}
+.qlab{width:110px;flex:none;font-weight:800;font-size:19px}
+.qcells{display:flex;gap:26px;align-items:center}
+.qbit{width:56px;height:56px;border:3px solid var(--ink);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;font-family:Consolas,Menlo,monospace;box-shadow:3px 3px 0 var(--ink);background:#fff}
+.qarrow{margin:14px 0 14px 126px;color:var(--muted);font-weight:700}
+.qverdict{margin-top:12px;text-align:center;font-size:24px;font-weight:900;padding:6px;border-radius:12px;border:2.5px solid var(--ink)}
+.qverdict.ok{background:#d9f7e6;color:var(--green)}
+.qverdict.ng{background:#ffe0e6;color:#d61f45}
+
+/* 目次の教科書の章見出し */
+.agenda li.agroup{font-size:17px;font-weight:900;color:var(--pink);letter-spacing:.06em;margin:14px 0 -4px;border-bottom:2.5px dashed #e3dcf2;padding-bottom:4px}
+.agenda li.agroup:first-child{margin-top:0}
+
+/* 教科書の章の扉（本の章扉風） */
+.partdoor .pd-wrap{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-bottom:40px}
+.pd-src{font-size:18px;font-weight:700;color:var(--muted);letter-spacing:.08em}
+.pd-no{margin-top:14px;font-size:30px;font-weight:900;color:#fff;background:var(--c);border:3px solid var(--ink);border-radius:999px;padding:4px 26px;box-shadow:4px 4px 0 var(--ink);letter-spacing:.12em}
+.pd-title{font-size:68px;line-height:1.25;margin:22px 0 26px;background:linear-gradient(transparent 70%,#ffe58a 70%);display:inline;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.pd-secs{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:22px}
+.pd-secs span{background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:4px 18px;font-size:19px;font-weight:700;box-shadow:3px 3px 0 var(--ink)}
+.pd-secs span.add{background:var(--accent-l)}
+.pd-bg{position:absolute;left:0;right:0;bottom:4px;display:flex;justify-content:center;color:var(--c);opacity:.13;font-size:84px;pointer-events:none}
+.pd-bg .eq{font-size:50px;gap:14px}
+.pd-bg .vec{border-width:5px;border-radius:40px;padding:4px 26px;line-height:1.15}
+
+/* 量子状態をつくってみる（ベクトルの足し算） */
+.qbuild{display:grid;grid-template-columns:1fr 200px;gap:10px;align-items:center}
+.qbuild svg{width:100%;height:auto;display:block;user-select:none}
+.qb-side{display:flex;flex-direction:column;gap:10px}
+.qb-side button.b{width:100%}
+.qslider{display:grid;grid-template-columns:22px 1fr 52px;align-items:center;gap:6px;font-weight:800}
+.qslider .qs-name{font-family:"Cambria Math","Times New Roman",serif;font-size:24px;font-style:italic}
+.qslider .qs-name.la{color:#e04e00}
+.qslider .qs-name.lb{color:var(--blue)}
+.qslider .qs-val{font-family:Consolas,Menlo,monospace;font-size:17px;text-align:right}
+.qslider input{width:100%;accent-color:var(--ink);height:28px;touch-action:none}
+.qb-eq{font-size:22px;margin-top:4px}
+.qb-eq .na{color:#e04e00;font-weight:700}
+.qb-eq .nb{color:var(--blue);font-weight:700}
+.qb-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:6px}
+.qb-sum{font-size:21px}
+.qb-row .qverdict{margin-top:0;font-size:17px;padding:3px 10px;white-space:nowrap;flex:none;width:200px;box-sizing:border-box}
+.qb-row .pgauge{flex:1;margin:0 0 14px}
+/* 確率のゲージ：太枠の箱がちょうど「確率 1」。足りない分は灰色の斜線、はみ出した分は赤の斜線 */
+.pgauge{position:relative;height:28px}
+.pg-box{position:absolute;left:0;top:0;bottom:0;width:60%;border:3px solid var(--ink);border-radius:8px;box-shadow:3px 3px 0 var(--ink);background:#fff;z-index:0}
+.pg-seg,.pg-gap,.pg-over{position:absolute;top:3px;bottom:3px;z-index:1;transition:left .3s,width .3s}
+.pg-seg.a{background:var(--accent);border-radius:5px 0 0 5px}
+.pg-seg.b{background:var(--blue)}
+.pg-gap{background:repeating-linear-gradient(45deg,#cfc7e6 0 5px,transparent 5px 10px)}
+.pg-over{top:0;bottom:0;background:repeating-linear-gradient(45deg,rgba(214,31,69,.75) 0 5px,rgba(214,31,69,.15) 5px 10px);
+  border:2.5px dashed #d61f45;border-left:0;border-radius:0 8px 8px 0;z-index:2}
+.pg-tick{position:absolute;top:100%;margin-top:3px;transform:translateX(-50%);font:800 13px Consolas,Menlo,monospace;color:var(--ink)}
+.pgauge.instant .pg-seg,.pgauge.instant .pg-gap,.pgauge.instant .pg-over{transition:none}
+.qb-sum{font-size:18px;font-weight:700}
+
+/* XOR ＝ 2進数の足し算の 1 桁目 */
+.b1row{display:flex;gap:10px;margin-top:8px}
+.b1c{flex:1;background:#fff;border:2px solid var(--ink);border-radius:10px;padding:4px 6px;text-align:center;font-family:Consolas,Menlo,monospace;font-size:17px;white-space:nowrap}
+.b1e{color:var(--muted);margin-right:4px}
+.b1r{font-weight:900;font-size:20px;letter-spacing:2px}
+.b1hi{color:#b9b5d0}
+.b1lo{color:#fff;background:var(--accent);border-radius:5px;padding:0 4px}
+.b1leg{margin-top:6px;font-size:14px;color:var(--muted);font-weight:700}
+.b1leg .b1lo,.b1leg .b1hi{background:none;padding:0}
+.b1leg .b1lo{color:var(--accent)}
+
+/* 測定（3.3） */
+.mworld{display:flex;align-items:center;gap:12px}
+.mw-lab{width:128px;flex:none;font-weight:900;font-size:15px;text-align:center;line-height:1.3;white-space:nowrap}
+.mw-box{flex:1;display:flex;align-items:center;justify-content:space-around;border:2.5px solid var(--ink);border-radius:14px;min-height:74px;padding:8px;background:#f1ecff}
+.mw-box.mw-q{flex-direction:column;gap:4px;padding:6px 8px}
+.mw-state{font-size:20px}
+.mw-kets{display:flex;justify-content:space-around;width:100%}
+.mworld.c .mw-box{background:#fff8e6;justify-content:center;gap:22px}
+.mket{display:inline-flex;align-items:center;justify-content:center;width:76px;height:50px;border:2.5px solid var(--ink);border-radius:50%;
+  font-family:"Cambria Math","Times New Roman",serif;font-size:24px;background:#fff;flex:none}
+.mworld.q .mket{background:#e3d9ff;animation:mwob 1.6s ease-in-out infinite}
+.mworld.q .m1{animation-delay:.8s}
+@keyframes mwob{50%{transform:scale(1.08);box-shadow:0 0 14px rgba(138,92,255,.6)}}
+.mres.r0{background:var(--accent);color:#fff}
+.mres.r1{background:var(--blue);color:#fff}
+.mres.hit{animation:mhit .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes mhit{from{transform:scale(.3)}to{transform:none}}
+.mw-note{font-size:14px;color:var(--muted);font-weight:700;line-height:1.4}
+.mdrop{display:flex;align-items:center;justify-content:center;gap:10px;margin:8px 0;border-top:2.5px dashed #b9b5d0;padding-top:6px}
+.marrow{font-size:24px}
+.marrow.go{animation:mgo .45s ease}
+@keyframes mgo{from{transform:translateY(-16px);opacity:.2}}
+.mtag{border:2px solid var(--ink);border-radius:8px;padding:0 10px;font-weight:900;background:#fff}
+.mhist{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;min-height:28px;margin-top:8px}
+.mhist span{font-family:"Cambria Math","Times New Roman",serif;font-size:15px;border-radius:8px;padding:1px 7px;color:#fff;font-weight:700}
+.mhist .h0{background:var(--accent)}
+.mhist .h1{background:var(--blue)}
+
+/* ブロッホ球 */
+.bpresets{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.bpresets button{font:700 16px "Cambria Math","Times New Roman",serif;color:var(--ink);background:#fff;border:2px solid var(--ink);border-radius:10px;
+  padding:3px 0;cursor:pointer;box-shadow:2px 2px 0 var(--ink)}
+.bpresets button:hover{background:var(--accent-l)}
+.bformula{font-size:19px;margin-top:2px;min-height:34px}
+
+/* 復習問題：カードをクリックすると答えが出る */
+.quiz{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;gap:12px 16px;align-content:center}
+.qz{display:flex;flex-direction:column;background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:10px 14px;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.qz:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.qz-q{display:flex;gap:10px;align-items:flex-start;font-size:17px;line-height:1.5;font-weight:600}
+.qz-no{flex:none;background:var(--blue);color:#fff;font-weight:900;font-size:14px;border:2px solid var(--ink);border-radius:999px;padding:1px 9px;margin-top:2px}
+.qz-a{margin-top:auto;padding-top:8px;min-height:40px;display:flex;align-items:center;border-top:2px dashed #e3dcf2;font-size:17px;line-height:1.5}
+.qz-hide{color:var(--muted);font-weight:800;font-size:15px}
+.qz-ans{display:none;color:#1f1a3d}
+.qz.open{background:#fffaf0}
+.qz.open .qz-no{background:var(--green)}
+.qz.open .qz-hide{display:none}
+.qz.open .qz-ans{display:inline;animation:qzIn .4s cubic-bezier(.3,1.6,.5,1)}
+@keyframes qzIn{from{opacity:0;transform:translateY(6px) scale(.96)}to{opacity:1;transform:none}}
+.quiz.q2{grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:auto}
+.quiz.q2 .qz{grid-column:span 2}
+.quiz.q2 .qz.dia{grid-column:span 3}
+.quiz.q2 .qz.wide .qzc{max-height:200px}
+.quiz.q2 .qz-q{font-size:16px}
+.quiz.q2 .qz-a{font-size:15.5px;min-height:34px}
+.qz-q > span:last-child{min-width:0;flex:1}
+.qzc{display:block;width:100%;max-height:170px;margin:6px auto 0;font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif}
+.qzc .qg{fill:#f1ecff;stroke:#1f1a3d;stroke-width:2.5;stroke-dasharray:6 4}
+.qzc .g-q{font-size:26px;font-weight:900;fill:#8a5cff}
+.qzc .g-ans{display:none;font-weight:900;fill:#1f1a3d}
+.qz.open .qzc .qg{fill:#fff1c2;stroke-dasharray:none}
+.qz.open .qzc .g-q{display:none}
+.qz.open .qzc .g-ans{display:inline}
+.quiz.q3{grid-auto-rows:auto}
+.quiz.q3 .qz{min-height:118px}
+.quiz.q3 .qz:last-child{grid-column:span 2}
+.qzc.qzbloch{max-height:145px}
+.qgb{cursor:pointer}
+.qgb:hover .qg{fill:#e6dcff}
+.qgb.shown .qg{fill:#fff1c2;stroke-dasharray:none}
+.qgb.shown .g-q{display:none}
+.qgb.shown .g-ans{display:inline;animation:qzIn .35s cubic-bezier(.3,1.6,.5,1)}
+h2 .qz-all{font-size:14px;padding:4px 14px;margin-left:16px;vertical-align:middle}
 
 /* 章の扉スライド */
 .door-wrap{position:relative;display:grid;grid-template-columns:auto 1fr;gap:64px;align-items:center;height:100%;padding:0 40px}
@@ -270,6 +441,7 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .slide.active .door-num{animation:doorIn .9s cubic-bezier(.3,1.6,.5,1) both}
 @keyframes doorIn{from{opacity:0;transform:rotate(-120deg) scale(.3)}to{opacity:1;transform:rotate(-6deg)}}
 .door-label{font-size:22px;font-weight:900;letter-spacing:.14em;color:var(--c)}
+.door-label .door-book{display:block;font-size:16px;letter-spacing:.04em;color:var(--muted);margin-bottom:2px}
 .door-label .tag{font-size:15px;letter-spacing:0;vertical-align:middle;margin-left:8px}
 .door h1{font-size:80px;line-height:1.15;margin:6px 0 4px}
 .door-lead{font-size:32px;font-weight:700;color:var(--muted);margin:0 0 30px}
@@ -279,22 +451,21 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
   font-family:Consolas,Menlo,monospace;pointer-events:none}
 #progress{height:6px;background:linear-gradient(90deg,var(--accent),var(--pink),var(--blue))}
 
-/* ---------- 手書き（Apple Pencil / ペンモード） ---------- */
+/* ---------- レーザーポインター（Apple Pencil） ---------- */
 #stage{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 body:not(.overview) #stage{touch-action:none}
-#ink{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none;z-index:5}
-#inkbar{position:fixed;right:12px;top:50%;transform:translateY(-50%);z-index:20;display:flex;flex-direction:column;align-items:center;gap:6px;
-  background:#fff;border:3px solid var(--ink);border-radius:24px;box-shadow:4px 4px 0 var(--ink);padding:6px;touch-action:manipulation}
-#inkbar button{width:44px;height:44px;border-radius:14px;border:2px solid transparent;background:none;font:inherit;font-size:22px;line-height:1;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink);padding:0}
-#inkbar button.on{background:var(--accent-l);border-color:var(--ink)}
-#inkbar .tools{display:none;flex-direction:column;align-items:center;gap:6px}
-#inkbar.open .tools{display:flex}
-#inkbar .colors{display:grid;grid-template-columns:repeat(2,32px);gap:6px}
-#inkbar button.sw{width:32px;height:32px;border-radius:50%;background:var(--sw);border:3px solid #fff;box-shadow:0 0 0 2px var(--ink)}
-#inkbar button.sw.on{background:var(--sw);border-color:#fff;box-shadow:0 0 0 2px var(--ink),0 0 0 5px var(--yellow)}
-#inkbar .sep{width:30px;height:2px;border-radius:1px;background:#d9d4ea}
-body.overview #ink,body.overview #inkbar{display:none}
+#laser{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none;z-index:5}
+body.overview #laser{display:none}
+/* 黒ペン（Apple Pencil で書き込み） */
+#ink{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none;z-index:4}
+#penbar{position:fixed;right:12px;top:14px;z-index:20;display:flex;align-items:center;gap:4px;background:#fff;border:2.5px solid var(--ink);
+  border-radius:999px;box-shadow:3px 3px 0 var(--ink);padding:4px;touch-action:manipulation;opacity:.85}
+#penbar:hover{opacity:1}
+#penbar button{height:38px;min-width:38px;border-radius:999px;border:2px solid transparent;background:none;font:inherit;font-size:14px;font-weight:800;
+  color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;padding:0 10px}
+#penbar button.on{background:var(--accent-l);border-color:var(--ink)}
+#penbar .sep{width:2px;height:24px;background:#e3dcf2;border-radius:1px}
+body.overview #ink,body.overview #penbar{display:none}
 
 @media print{
   @page{size:1280px 720px;margin:0}
@@ -303,7 +474,7 @@ body.overview #ink,body.overview #inkbar{display:none}
   #stage{position:static;transform:none!important;box-shadow:none;width:auto;height:auto;overflow:visible;background:none}
   .slide{position:relative;width:1280px;height:720px;opacity:1;transform:none;page-break-after:always;background:var(--bg)}
   .frag{opacity:1;transform:none}
-  #ui,#progress,.btns,.hint,#ink,#inkbar{display:none}
+  #ui,#progress,.btns,.hint,#laser,#penbar{display:none}
 }
 </style>
 </head>
@@ -315,9 +486,14 @@ body.overview #ink,body.overview #inkbar{display:none}
 <section class="slide" data-id="title">
   <div class="title-wrap">
     <div>
-      <div class="chap pop">『量子コンピュータの頭の中』 第2章 ／ 2.8 論理式を実現する古典回路<br>教科書 pp.76–81</div>
-      <h1 class="pop" style="--d:.1s">論理式を実現する<br>古典回路</h1>
-      <div class="sub pop" style="--d:.2s">― 半加算器から全加算器へ ―</div>    </div>
+      <div class="chap pop">『量子コンピュータの頭の中』 ゼミ資料</div>
+      <h1 class="pop" style="--d:.1s">古典ビットから<br>量子ビットへ</h1>
+      <div class="sub pop" style="--d:.2s">― 論理ゲート・加算器から量子状態・測定まで ―</div>
+      <div class="tchaps">
+        <div class="tchap pop" style="--d:.3s;--c:var(--blue)"><span class="tno">第2章</span><span class="tname">量子コンピュータ入門以前</span><span class="tsec">2.8（pp.76–81）＋ 全加算器</span></div>
+        <div class="tchap pop" style="--d:.4s;--c:var(--purple)"><span class="tno">第3章</span><span class="tname">量子コンピュータの基本ルール</span><span class="tsec">3.1〜3.3（pp.84–91）</span></div>
+      </div>
+    </div>
     <div class="card pop" style="--d:.4s">
       <svg class="circ" id="titleCirc"></svg>
       <div class="hint" style="text-align:center">信号の流れ（オレンジ = 1）を見ながら進めます</div>
@@ -331,9 +507,13 @@ body.overview #ink,body.overview #inkbar{display:none}
   <h2>本日の流れ</h2>
   <div class="body cols" style="grid-template-columns:1.5fr 1fr">
     <ul class="agenda">
-      <li class="pop" style="--d:.05s"><span class="num">1</span>基本古典ゲート（AND / OR / NOT / XOR）</li>
+      <li class="agroup pop">第2章 量子コンピュータ入門以前</li>
+      <li class="pop" style="--d:.05s"><span class="num">1</span>論理ゲート（AND / OR / NOT / XOR）</li>
       <li class="pop" style="--d:.15s"><span class="num">2</span>半加算器：1ビット同士の足し算</li>
       <li class="pop" style="--d:.25s"><span class="num">3</span>全加算器：繰り上がりを受け取る足し算 <span class="tag">追加</span></li>
+      <li class="agroup pop" style="--d:.3s">第3章 量子コンピュータの基本ルール</li>
+      <li class="pop" style="--d:.35s"><span class="num">4</span>量子ビット：量子状態と重ね合わせ</li>
+      <li class="pop" style="--d:.45s"><span class="num">5</span>測定：計算結果を得る</li>
     </ul>
     <div class="card pop" style="--d:.5s">
       <p style="margin:0 0 8px;font-weight:700">このスライドの使い方</p>
@@ -348,14 +528,26 @@ body.overview #ink,body.overview #inkbar{display:none}
   <div class="pageno"></div>
 </section>
 
+<!-- 教科書 第2章の扉 -->
+<section class="slide partdoor" style="--c:var(--blue)">
+  <div class="pd-bg"><span class="math">A ∧ B　A ∨ B　¬A　A ⊕ B</span></div>
+  <div class="pd-wrap">
+    <div class="pd-src pop">『量子コンピュータの頭の中』</div>
+    <div class="pd-no pop" style="--d:.05s">第 2 章</div>
+    <h1 class="pd-title pop" style="--d:.15s">量子コンピュータ入門以前</h1>
+    <div class="pd-secs pop" style="--d:.3s"><span>2.8 論理式を実現する古典回路（pp.76–81）</span><span class="add">＋ 全加算器（追加内容）</span></div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
 <!-- 扉：第1章 -->
 <section class="slide door" style="--c:var(--blue)">
   <div class="door-bg">1</div>
   <div class="door-wrap">
     <div class="door-num">1</div>
     <div>
-      <div class="door-label pop">CHAPTER 1</div>
-      <h1 class="pop" style="--d:.1s">基本古典ゲート</h1>
+      <div class="door-label pop"><span class="door-book">第2章 量子コンピュータ入門以前</span>PART 1</div>
+      <h1 class="pop" style="--d:.1s">論理ゲート</h1>
       <p class="door-lead pop" style="--d:.2s">AND / OR / NOT / XOR</p>
       <div class="door-topics pop" style="--d:.3s"><span>古典回路とは</span><span>AND</span><span>OR</span><span>NOT</span><span>XOR</span></div>
     </div>
@@ -365,22 +557,23 @@ body.overview #ink,body.overview #inkbar{display:none}
 
 <!-- 3. 古典回路とは -->
 <section class="slide">
-  <div class="chap">2.8 論理式を実現する古典回路</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路</div>
   <h2>古典回路とは<small>図2.13（p.76）</small></h2>
   <div class="body cols">
     <div>
+      <p class="pop" style="margin:0 0 10px;font-size:23px;font-weight:700">古典回路は、<b class="k">0と1の信号</b>を使って計算する電子回路です。</p>
       <ul>
-        <li class="pop" style="font-size:21px">古典コンピュータは情報を <b class="k">0 と 1 のビット</b> で表現する
+        <li class="pop" style="--d:.1s;font-size:21px">コンピュータは、情報を0と1の組み合わせ（<b class="k" style="white-space:nowrap">ビット列</b>）で表します。
           <div class="bitex">
             <span><small>数</small>5 → <b>101</b></span>
             <span><small>文字（ASCII）</small>A → <b>01000001</b></span>
             <span><small>スイッチ</small>OFF / ON → <b>0 / 1</b></span>
           </div>
         </li>
-        <li class="pop" style="--d:.1s;font-size:21px">ビットに対する基本的な演算を組み合わせて <b class="k">古典回路</b>（classical circuit）を構成し、計算を行う</li>
-        <li class="frag" style="font-size:21px"><span class="quote">「古典回路は<b>ビット列からビット列への写像</b>である。」<small>by しむさん</small></span></li>
-        <li class="frag" style="font-size:21px">このような、基本的な演算を組み合わせて計算を表現する <b class="kb">「回路」という考え方は、量子コンピュータにも共通する</b></li>
+        <li class="pop" style="--d:.2s;font-size:21px">AND・OR・NOTなどの基本的な演算を行う部品を「<b class="k" style="white-space:nowrap">論理ゲート</b>」と呼びます。</li>
+        <li class="pop" style="--d:.3s;font-size:21px">論理ゲートを組み合わせることで、足し算や比較など、<b class="kb" style="white-space:nowrap">複雑な計算</b>を実現できます。</li>
       </ul>
+      <div class="point frag" style="font-size:21px">つまり、古典回路とは「<b>0と1を入力し、決められた計算を行い、0と1を出力する仕組み</b>」です。</div>
     </div>
     <div class="card pop" style="--d:.2s">
       <div class="muted" style="font-size:17px;font-weight:700">図2.13：古典回路の例</div>
@@ -395,9 +588,9 @@ body.overview #ink,body.overview #inkbar{display:none}
 
 <!-- 4. AND -->
 <section class="slide">
-  <div class="chap">2.8 論理式を実現する古典回路 ／ 基本ゲート ①</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路 ／ 論理ゲート ①</div>
   <h2>AND（論理積）<small>表2.3（p.77）・図2.14（p.78）</small></h2>
-  <div class="body cols">
+  <div class="body cols" style="grid-template-columns:1fr 1.15fr">
     <div class="card pop">
       <svg class="circ" id="cAnd"></svg>
       <div class="btns"><button class="b" id="pAnd" data-autoplay>▶ 自動再生</button></div>
@@ -405,7 +598,7 @@ body.overview #ink,body.overview #inkbar{display:none}
     <div>
       <div class="ttcap pop" style="--d:.1s">AND の真理値表</div>
       <table class="tt pop" style="--d:.1s" id="tAnd"></table>
-      <div class="point frag">入力が <b>両方とも 1 のときだけ</b> 出力が 1<br>かけ算と同じ → <b class="k">論理積</b>　<span class="formula" style="font-size:24px;padding:2px 12px">A · B</span></div>
+      <div class="point logic frag"><div><b>「A かつ B」</b>：A も B も <b>真（1）のときだけ</b> 真（1）<br><b class="k">論理積</b> <span class="formula" style="font-size:20px;padding:0 8px">A ∧ B</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#fff"/><defs><clipPath id="vennB"><circle cx="78" cy="42" r="26"/></clipPath></defs><circle cx="54" cy="42" r="26" fill="#ffbf8f" clip-path="url(#vennB)"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="54" cy="42" r="26"/><circle cx="78" cy="42" r="26"/></g><g font-size="16" font-weight="800" fill="#1f1a3d" text-anchor="middle"><text x="42" y="48">A</text><text x="90" y="48">B</text></g></svg></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -413,9 +606,9 @@ body.overview #ink,body.overview #inkbar{display:none}
 
 <!-- 5. OR -->
 <section class="slide">
-  <div class="chap">2.8 論理式を実現する古典回路 ／ 基本ゲート ②</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路 ／ 論理ゲート ②</div>
   <h2>OR（論理和）<small>表2.4（p.77）・図2.15（p.78）</small></h2>
-  <div class="body cols">
+  <div class="body cols" style="grid-template-columns:1fr 1.15fr">
     <div class="card pop">
       <svg class="circ" id="cOr"></svg>
       <div class="btns"><button class="b" id="pOr" data-autoplay>▶ 自動再生</button></div>
@@ -423,8 +616,7 @@ body.overview #ink,body.overview #inkbar{display:none}
     <div>
       <div class="ttcap pop" style="--d:.1s">OR の真理値表</div>
       <table class="tt pop" style="--d:.1s" id="tOr"></table>
-      <div class="point frag">入力の <b>どちらか一方でも 1</b> なら出力が 1<br>足し算に似ている → <b class="k">論理和</b>　<span class="formula" style="font-size:24px;padding:2px 12px">A + B</span></div>
-      <div class="point blue frag" style="font-size:19px">注意：論理和では <b>1 + 1 = 1</b>。普通の足し算（1 + 1 = 2）とは少し違うので「足し算と似た演算」と表現している</div>
+      <div class="point logic frag"><div><b>「A または B」</b>：<b>少なくとも一方が真</b> なら真<br><b class="k">論理和</b> <span class="formula" style="font-size:20px;padding:0 8px">A ∨ B</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#fff"/><path d="M28,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0 M52,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0" fill="#ffbf8f"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="54" cy="42" r="26"/><circle cx="78" cy="42" r="26"/></g><g font-size="16" font-weight="800" fill="#1f1a3d" text-anchor="middle"><text x="42" y="48">A</text><text x="90" y="48">B</text></g></svg></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -432,9 +624,9 @@ body.overview #ink,body.overview #inkbar{display:none}
 
 <!-- 6. NOT -->
 <section class="slide">
-  <div class="chap">2.8 論理式を実現する古典回路 ／ 基本ゲート ③</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路 ／ 論理ゲート ③</div>
   <h2>NOT（否定）<small>表2.5（p.77）・図2.16（p.78）</small></h2>
-  <div class="body cols">
+  <div class="body cols" style="grid-template-columns:1fr 1.15fr">
     <div class="card pop">
       <svg class="circ" id="cNot"></svg>
       <div class="btns"><button class="b" id="pNot" data-autoplay>▶ 自動再生</button></div>
@@ -442,16 +634,16 @@ body.overview #ink,body.overview #inkbar{display:none}
     <div>
       <div class="ttcap pop" style="--d:.1s">NOT の真理値表</div>
       <table class="tt pop" style="--d:.1s" id="tNot"></table>
-      <div class="point frag">ビットを <b>反転</b> させる演算（0 と 1 を入れ替える）<br>記号の先端の <b>小さな丸</b> が「反転」を表す</div>    </div>
+      <div class="point logic frag"><div><b>「A でない」</b>：A が真なら偽、偽なら真<br><span class="formula" style="font-size:20px;padding:0 8px">¬A</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#ffbf8f"/><circle cx="66" cy="42" r="26" fill="#fff"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="66" cy="42" r="26"/></g><text x="66" y="48" text-anchor="middle" font-size="16" font-weight="800" fill="#1f1a3d">A</text></svg></div>
   </div>
   <div class="pageno"></div>
 </section>
 
 <!-- XOR -->
 <section class="slide">
-  <div class="chap">2.8 論理式を実現する古典回路 ／ 基本ゲート ④</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路 ／ 論理ゲート ④</div>
   <h2>XOR（排他的論理和）<small>表2.7（p.80）・図2.19（p.81）</small></h2>
-  <div class="body cols">
+  <div class="body cols" style="grid-template-columns:1fr 1.15fr">
     <div class="card pop">
       <svg class="circ" id="cXor"></svg>
       <div class="btns"><button class="b" id="pXor" data-autoplay>▶ 自動再生</button></div>
@@ -459,10 +651,10 @@ body.overview #ink,body.overview #inkbar{display:none}
     <div>
       <div class="ttcap pop" style="--d:.1s">XOR の真理値表</div>
       <table class="tt small pop" style="--d:.1s" id="tXor"></table>
-      <div class="point blue frag" style="font-size:20px"><b>片方だけ</b> が 1 のとき 1 → <b class="kb">排他的論理和</b>（exclusive or）<span class="formula" style="font-size:21px;padding:0 10px">A ⊕ B</span><br>
-        ＝ OR の入力が <b>両方 1 のときに出力が 1 にならないようにした</b> ゲート</div>
-      <div class="point frag" style="font-size:20px"><b>2 を法とした和</b> ＝ <b class="k">繰り上がりを考慮しない足し算</b><br>
-        <span class="formula" style="font-size:21px;padding:0 10px">A ⊕ B = (A + B) mod 2</span>　1 + 1 = 2 ≡ <b>0</b> (mod 2)</div>
+      <div class="point blue logic frag" style="font-size:20px"><div><b>「A か B の一方だけ」</b>：<b>ちょうど一方だけ</b> が真なら真<br><b class="kb">排他的論理和</b> <span class="formula" style="font-size:20px;padding:0 8px">A ⊕ B</span></div><svg class="venn" viewBox="0 0 132 84" aria-hidden="true"><rect x="3" y="3" width="126" height="78" rx="8" fill="#fff"/><path d="M28,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0 M52,42 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0" fill="#ffbf8f" fill-rule="evenodd"/><g fill="none" stroke="#1f1a3d" stroke-width="2.5"><rect x="3" y="3" width="126" height="78" rx="8"/><circle cx="54" cy="42" r="26"/><circle cx="78" cy="42" r="26"/></g><g font-size="16" font-weight="800" fill="#1f1a3d" text-anchor="middle"><text x="42" y="48">A</text><text x="90" y="48">B</text></g></svg></div>
+      <div class="point frag" style="font-size:19px;padding:8px 14px"><b>XOR</b> は <b class="k" style="white-space:nowrap">2進数の足し算の 1 桁目（1 の位）</b> を表す
+        <div class="b1row"><div class="b1c"><span class="b1e">0 + 0 =</span><span class="b1r"><span class="b1hi">0</span><span class="b1lo">0</span></span></div><div class="b1c"><span class="b1e">0 + 1 =</span><span class="b1r"><span class="b1hi">0</span><span class="b1lo">1</span></span></div><div class="b1c"><span class="b1e">1 + 0 =</span><span class="b1r"><span class="b1hi">0</span><span class="b1lo">1</span></span></div><div class="b1c"><span class="b1e">1 + 1 =</span><span class="b1r"><span class="b1hi">1</span><span class="b1lo">0</span></span></div></div>
+        <div class="b1leg"><span class="b1lo">■</span> 1 の位 ＝ A ⊕ B　<span class="b1hi">■</span> 2 桁目（繰り上がり）は見ない</div></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -474,7 +666,7 @@ body.overview #ink,body.overview #inkbar{display:none}
   <div class="door-wrap">
     <div class="door-num">2</div>
     <div>
-      <div class="door-label pop">CHAPTER 2</div>
+      <div class="door-label pop"><span class="door-book">第2章 量子コンピュータ入門以前</span>PART 2</div>
       <h1 class="pop" style="--d:.1s">半加算器</h1>
       <p class="door-lead pop" style="--d:.2s">1ビット同士の足し算</p>
       <div class="door-topics pop" style="--d:.3s"><span>1ビットの筆算</span><span>AND・OR・NOT 版</span><span>XOR 版</span><span>ゲート数・段数の比較</span><span>ゲートのコスト（補足）</span></div>
@@ -485,7 +677,7 @@ body.overview #ink,body.overview #inkbar{display:none}
 
 <!-- 半加算器の導入（1ビットの筆算） -->
 <section class="slide" data-id="coladd1">
-  <div class="chap">2.8 論理式を実現する古典回路 ／ 半加算器</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路 ／ 半加算器</div>
   <h2>1ビット同士の足し算を筆算で考える<small>表2.6（p.79）</small></h2>
   <div class="body cols">
     <div class="card pop">
@@ -511,19 +703,19 @@ body.overview #ink,body.overview #inkbar{display:none}
 
 <!-- 半加算器 4ゲート -->
 <section class="slide">
-  <div class="chap">2.8 論理式を実現する古典回路 ／ 半加算器</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路 ／ 半加算器</div>
   <h2>AND・OR・NOT（積・和・否定）で半加算器を作る<small>図2.18（p.80）</small></h2>
-  <div class="body cols wide">
+  <div class="body cols" style="grid-template-columns:minmax(0,1.45fr) minmax(0,1fr)">
     <div class="card pop">
       <svg class="circ" id="cHa4"></svg>
       <div class="btns"><button class="b" id="pHa4" data-autoplay>▶ 自動再生</button></div>
     </div>
     <div>
-      <div class="point pop" style="margin-top:0;font-size:20px">出力1（繰り上がり）＝「<b>両方 1 のときだけ繰り上がる</b>」<br><span style="font-size:17px">→ AND そのもの</span></div>
-      <div class="point blue pop" style="--d:.1s;font-size:20px">出力2（和）＝「<b>OR だけど、両方 1 のときは除く</b>」</div>
-      <div class="ttcap pop" style="--d:.2s;margin-top:14px">半加算器の真理値表</div>
+      <div class="point pop" style="margin-top:0;font-size:18px;padding:8px 14px">出力1（和）＝「<b style="white-space:nowrap">OR だけど、両方 1 のときは除く</b>」</div>
+      <div class="point blue pop" style="--d:.1s;font-size:18px;padding:8px 14px;margin-top:10px">出力2（繰り上がり）＝「<b style="white-space:nowrap">両方 1 のときだけ繰り上がる</b>」→ AND そのもの</div>
+      <div class="ttcap pop" style="--d:.2s;margin-top:12px">半加算器の真理値表</div>
       <table class="tt small pop" style="--d:.2s" id="tHa4"></table>
-      <div class="point frag" style="font-size:19px">ゲート <b>4個</b>。和が出るまでに <b>3段</b>（AND → NOT → AND）かかる</div>
+      <div class="point frag" style="font-size:17px;padding:8px 14px;margin-top:10px">ゲート <b>4個</b>。和が出るまでに <b>3段</b>（AND → NOT → AND）かかる</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -531,13 +723,13 @@ body.overview #ink,body.overview #inkbar{display:none}
 
 <!-- 11. XOR 半加算器 -->
 <section class="slide">
-  <div class="chap">2.8 論理式を実現する古典回路 ／ 半加算器の簡略化</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路 ／ 半加算器の簡略化</div>
   <h2>XOR を使った半加算器<small>図2.20（p.81）</small></h2>
   <div class="body cols">
     <div class="card pop">
       <svg class="circ" id="cHa2"></svg>
       <div class="btns"><button class="b" id="pHa2" data-autoplay>▶ 自動再生</button></div>
-      <div class="hint">図2.13 と同じ回路です（出力の番号付けだけ逆）</div>
+      <div class="hint">図2.13 と同じ回路です</div>
     </div>
     <div>
       <div class="formula pop" style="font-size:24px">和 = A ⊕ B　　繰り上がり = A · B</div>
@@ -551,7 +743,7 @@ body.overview #ink,body.overview #inkbar{display:none}
 
 <!-- ゲート数・段数の比較 -->
 <section class="slide" data-id="hacmp">
-  <div class="chap">2.8 論理式を実現する古典回路 ／ 半加算器の簡略化</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 2.8 論理式を実現する古典回路 ／ 半加算器の簡略化</div>
   <h2>2つの半加算器を比べる<small>ゲート数と段数（p.81）</small></h2>
   <div class="body cols">
     <div class="card pop" style="padding:12px 18px">
@@ -582,7 +774,7 @@ body.overview #ink,body.overview #inkbar{display:none}
 
 <!-- ゲートごとのコスト -->
 <section class="slide">
-  <div class="chap">補足 ／ 基本論理ゲートのコスト</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 補足 ／ 基本論理ゲートのコスト</div>
   <h2>ゲートの種類でトランジスタ数・計算時間は違う</h2>
   <div class="body cols">
     <div class="card pop">
@@ -619,7 +811,7 @@ body.overview #ink,body.overview #inkbar{display:none}
   <div class="door-wrap">
     <div class="door-num">3</div>
     <div>
-      <div class="door-label pop">CHAPTER 3 <span class="tag">追加</span></div>
+      <div class="door-label pop"><span class="door-book">第2章 量子コンピュータ入門以前</span>PART 3 <span class="tag">追加</span></div>
       <h1 class="pop" style="--d:.1s">全加算器</h1>
       <p class="door-lead pop" style="--d:.2s">繰り上がりを受け取る足し算</p>
       <div class="door-topics pop" style="--d:.3s"><span>多ビットの筆算</span><span>全加算器の回路</span><span>リップルキャリー加算器</span></div>
@@ -630,7 +822,7 @@ body.overview #ink,body.overview #inkbar{display:none}
 
 <!-- 12. 半加算器の限界 -->
 <section class="slide" data-id="coladd">
-  <div class="chap">ここから追加内容 ／ 全加算器</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ ここから追加内容 ／ 全加算器</div>
   <h2>半加算器だけでは足りない？<small>多ビットの筆算</small></h2>
   <div class="body cols">
     <div class="card pop">
@@ -654,7 +846,7 @@ body.overview #ink,body.overview #inkbar{display:none}
 
 <!-- 15. 全加算器 回路 -->
 <section class="slide">
-  <div class="chap">追加内容 ／ 全加算器</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 追加内容 ／ 全加算器</div>
   <h2>全加算器の回路を動かしてみる<small>半加算器 × 2 ＋ OR</small></h2>
   <div class="body cols wide" style="align-items:start">
     <div>
@@ -665,9 +857,9 @@ body.overview #ink,body.overview #inkbar{display:none}
       </div>
       <div class="point blue frag" style="font-size:18px;margin-top:10px"><b>S（和・この桁の出力ビット）</b>：A と B を半加算した和 <b>P</b> を、さらに繰り上がり C<sub>in</sub> と半加算した和
         <span class="formula" style="font-size:18px;padding:0 8px">S = P ⊕ C<sub>in</sub> = A ⊕ B ⊕ C<sub>in</sub></span></div>
-      <div class="point frag" style="font-size:18px;margin-top:10px"><b>C<sub>out</sub>（繰り上がりビット）</b>：次のどちらかなら 1（OR でまとめる）<br>
-        ① A と B の半加算で <b>繰り上がりがあった</b>（A·B = 1）→ そのまま C<sub>out</sub> = 1<br>
-        ② A と B の半加算の和 P が 1 で、<b>C<sub>in</sub> も 1</b>（半加算器②で繰り上がり）→ C<sub>out</sub> = 1
+      <div class="point frag" style="font-size:18px;margin-top:10px"><b>C<sub>out</sub>（繰り上がりビット）</b>：次の <b>どちらか</b> で繰り上がれば繰り上がる（OR でまとめる）<br>
+        ① <b>A と B の半加算</b>（半加算器①）で繰り上がる<br>
+        ② <b>A と B の和 P と C<sub>in</sub> の半加算</b>（半加算器②）で繰り上がる
         <span class="formula" style="font-size:18px;padding:0 8px">C<sub>out</sub> = A·B + P·C<sub>in</sub></span></div>
     </div>
     <div>
@@ -680,7 +872,7 @@ body.overview #ink,body.overview #inkbar{display:none}
 
 <!-- 16. リップルキャリー -->
 <section class="slide" data-id="ripple">
-  <div class="chap">追加内容 ／ 多ビット加算器</div>
+  <div class="chap">第2章 量子コンピュータ入門以前 ／ 追加内容 ／ 多ビット加算器</div>
   <h2 style="font-size:32px">リップルキャリー加算器（繰り上がりのさざ波加算器）<small>全加算器結合加算器</small></h2>
   <div class="body">
     <div class="card pop" style="padding:10px 18px">
@@ -696,20 +888,225 @@ body.overview #ink,body.overview #inkbar{display:none}
   <div class="pageno"></div>
 </section>
 
-<!-- 18. まとめ -->
+<!-- 第2章の復習問題 -->
+<section class="slide" data-id="quiz2">
+  <div class="chap">Review ／ 第2章 量子コンピュータ入門以前</div>
+  <h2>復習問題<small>第2章 量子コンピュータ入門以前</small><button class="b qz-all" data-quiz-all>答えをぜんぶ表示</button></h2>
+  <div class="body quiz q2">
+      <div class="qz pop " style="--d:0.00s"><div class="qz-q"><span class="qz-no">Q1</span><span>AND・OR・NOT・XOR のうち、「入力が <b>両方とも 1 のときだけ</b> 出力が 1」になるのはどれ？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>AND</b>（論理積）</span></div></div>
+      <div class="qz pop " style="--d:0.06s"><div class="qz-q"><span class="qz-no">Q2</span><span><b>半加算器</b> はどんな計算をする回路？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>1ビット + 1ビット</b> を計算し、<b>和</b> と <b>繰り上がり</b> の2ビットを出す</span></div></div>
+      <div class="qz pop " style="--d:0.12s"><div class="qz-q"><span class="qz-no">Q3</span><span><b>全加算器</b> はどんな計算をする回路？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>A + B + 下の桁からの繰り上がり</b> の3ビットを足し、<b>和</b> と <b>繰り上がり</b> を出す</span></div></div>
+      <div class="qz pop dia" style="--d:0.18s"><div class="qz-q"><span class="qz-no">Q4</span><span><b>半加算器</b> の回路図。<b>?</b> に入るゲートは？<svg class="qzc" viewBox="0 0 345 120" aria-label="半加算器の回路図（ゲートが ? になっている）"><path fill="none" stroke="#1f1a3d" stroke-width="2.2" d="M31,35 H60 V27 H130 M60,35 V77 H130 M31,85 H80 V43 H130 M80,85 V93 H130 M190,35 H230 M190,85 H230"/><circle cx="60" cy="35" r="3.5" fill="#1f1a3d"/><circle cx="80" cy="85" r="3.5" fill="#1f1a3d"/><circle cx="20" cy="35" r="11" fill="#fff" stroke="#3b6cff" stroke-width="2.5"/><text x="20" y="40" text-anchor="middle" font-size="13" font-weight="800" fill="#3b6cff">A</text><circle cx="20" cy="85" r="11" fill="#fff" stroke="#3b6cff" stroke-width="2.5"/><text x="20" y="90" text-anchor="middle" font-size="13" font-weight="800" fill="#3b6cff">B</text><g class="qgb"><rect class="qg" x="130" y="15" width="60" height="40" rx="8"/><text class="g-q" x="160.0" y="43.0" text-anchor="middle">?</text><text class="g-ans" x="160.0" y="40.0" text-anchor="middle" font-size="15">XOR</text></g><g class="qgb"><rect class="qg" x="130" y="65" width="60" height="40" rx="8"/><text class="g-q" x="160.0" y="93.0" text-anchor="middle">?</text><text class="g-ans" x="160.0" y="90.0" text-anchor="middle" font-size="15">AND</text></g><text x="234" y="40" font-size="13" font-weight="800" fill="#e04e00">S（和）</text><text x="234" y="90" font-size="13" font-weight="800" fill="#3b6cff">C（繰り上がり）</text></svg></span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">上が <b>XOR</b>（和）、下が <b>AND</b>（繰り上がり）</span></div></div>
+      <div class="qz pop dia wide" style="--d:0.24s"><div class="qz-q"><span class="qz-no">Q5</span><span><b>全加算器</b> の回路図。<b>?</b> に入るものは？<svg class="qzc" viewBox="0 0 470 165" aria-label="全加算器の回路図（部品が ? になっている）"><path fill="none" stroke="#1f1a3d" stroke-width="2.2" d="M31,40 H80 M31,70 H80 M31,125 H190 M150,40 H190 M150,75 H170 V152 H285 V100 H300 M260,50 H330 M260,120 H300 M350,110 H370"/><circle cx="20" cy="40" r="11" fill="#fff" stroke="#3b6cff" stroke-width="2.5"/><text x="20" y="45" text-anchor="middle" font-size="13" font-weight="800" fill="#3b6cff">A</text><circle cx="20" cy="70" r="11" fill="#fff" stroke="#3b6cff" stroke-width="2.5"/><text x="20" y="75" text-anchor="middle" font-size="13" font-weight="800" fill="#3b6cff">B</text><circle cx="20" cy="125" r="11" fill="#fff" stroke="#3b6cff" stroke-width="2.5"/><text x="20" y="130" text-anchor="middle" font-size="13" font-weight="800" fill="#3b6cff">C<tspan font-size="9">in</tspan></text><g class="qgb"><rect class="qg" x="80" y="22" width="70" height="66" rx="8"/><text class="g-q" x="115.0" y="63.0" text-anchor="middle">?</text><text class="g-ans" x="115.0" y="60.0" text-anchor="middle" font-size="15">半加算器</text></g><g class="qgb"><rect class="qg" x="190" y="30" width="70" height="110" rx="8"/><text class="g-q" x="225.0" y="93.0" text-anchor="middle">?</text><text class="g-ans" x="225.0" y="90.0" text-anchor="middle" font-size="15">半加算器</text></g><g class="qgb"><rect class="qg" x="300" y="88" width="50" height="44" rx="8"/><text class="g-q" x="325.0" y="118.0" text-anchor="middle">?</text><text class="g-ans" x="325.0" y="115.0" text-anchor="middle" font-size="15">OR</text></g><text x="334" y="56" font-size="15" font-weight="800" fill="#e04e00">S（和）</text><text x="374" y="105" font-size="15" font-weight="800" fill="#3b6cff">C<tspan font-size="9">out</tspan></text><text x="374" y="123" font-size="13" font-weight="700" fill="#3b6cff">（繰り上がり）</text></svg></span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>半加算器</b> 2つと <b>OR</b>（半加算器 × 2 + OR）</span></div></div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 教科書 第3章の扉 -->
+<section class="slide partdoor" style="--c:var(--purple)">
+  <div class="pd-bg"><span class="eq"><span class="math">|φ⟩ =</span><span class="vec"><span>a</span><span>b</span></span><span class="math">∈ ℂ²</span></span></div>
+  <div class="pd-wrap">
+    <div class="pd-src pop">『量子コンピュータの頭の中』</div>
+    <div class="pd-no pop" style="--d:.05s">第 3 章</div>
+    <h1 class="pd-title pop" style="--d:.15s">量子コンピュータの<br>基本ルール</h1>
+    <div class="pd-secs pop" style="--d:.3s"><span>3.1 この章で学ぶこと</span><span>3.2 量子コンピュータの基礎「量子ビット」（pp.84–87）</span><span>3.3 計算結果を得る「測定」（pp.88–91）</span></div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉：第4章 -->
+<section class="slide door" style="--c:var(--purple)">
+  <div class="door-bg">4</div>
+  <div class="door-wrap">
+    <div class="door-num">4</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">第3章 量子コンピュータの基本ルール</span>PART 4</div>
+      <h1 class="pop" style="--d:.1s">量子ビット</h1>
+      <p class="door-lead pop" style="--d:.2s">量子状態と重ね合わせ</p>
+      <div class="door-topics pop" style="--d:.3s"><span>量子ビット |0⟩, |1⟩</span><span>量子状態</span><span>状態ベクトル</span><span>ブロッホ球（補足）</span><span>内積による表し方</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 量子ビット |0⟩ と |1⟩ -->
 <section class="slide">
-  <div class="chap">Summary</div>
-  <h2>まとめ</h2>
-  <div class="body">
-    <ul>
-      <li class="pop">古典回路は <b>AND / OR / NOT / XOR</b> などの基本演算（ゲート）を組み合わせて計算する。動作は <b>真理値表</b> で表せる</li>
-      <li class="pop" style="--d:.1s"><b>半加算器</b>：1ビット + 1ビット → <b class="k">和 = A ⊕ B</b>、<b class="k">繰り上がり = A · B</b></li>
-      <li class="pop" style="--d:.2s">同じ結果を出す回路は複数ある。</li>
-      <li class="pop" style="--d:.5s">実際の基本論理ゲートは、種類ごとに <b>必要なトランジスタの数や計算時間が違う</b></li>
-      <li class="pop" style="--d:.3s"><b>全加算器</b>：下の桁からの繰り上がりを含む3入力の足し算。<b>半加算器 × 2 + OR</b> で作れる<br>
-        <span class="formula" style="font-size:24px;padding:2px 12px">S = A ⊕ B ⊕ C<sub>in</sub>,　C<sub>out</sub> = A·B + (A ⊕ B)·C<sub>in</sub></span></li>
-      <li class="pop" style="--d:.4s">全加算器を並べれば <b>任意ビットの加算器</b> になる（リップルキャリー加算器）</li>
-    </ul>
+  <div class="chap">第3章 量子コンピュータの基本ルール ／ 3.2 量子ビット</div>
+  <h2>量子ビット |0⟩ と |1⟩<small>3.1・3.2（pp.84–85）</small></h2>
+  <div class="body cols even">
+    <div>
+      <p class="pop" style="margin:0 0 10px;font-size:21px">ここからは <b class="k">ベクトル</b> などの数式を使って、量子コンピュータの計算ルール（定義）を説明していく</p>
+      <ul>
+        <li class="pop" style="--d:.1s;font-size:20px">古典ビットの 0, 1 に対応する <b class="k">量子ビット</b>（quantum bit, qubit）を <span class="math">|0⟩, |1⟩</span> と書き、<b>ベクトル</b> として定義する</li>
+      </ul>
+    </div>
+    <div class="card pop" style="--d:.2s">
+      <div class="qrow">
+        <div class="qlab">古典ビット</div>
+        <div class="qcells"><span class="qbit">0</span><span class="qbit">1</span></div>
+      </div>
+      <div class="qarrow">↓ 対応する</div>
+      <div class="qrow">
+        <div class="qlab">量子ビット</div>
+        <div class="qcells">
+          <span class="eq"><span class="math">|0⟩ =</span><span class="vec"><span>1</span><span>0</span></span></span>
+          <span class="eq"><span class="math">|1⟩ =</span><span class="vec"><span>0</span><span>1</span></span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 量子状態の定義 -->
+<section class="slide" data-id="qbuild">
+  <div class="chap">第3章 量子コンピュータの基本ルール ／ 3.2 量子ビット</div>
+  <h2>量子状態<small>定義（pp.85–86）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)">
+    <div>
+      <div class="defbox pop" style="font-size:18px;padding:14px 16px 10px">複素数 <span class="math">a, b</span> が <span class="math" style="white-space:nowrap">|a|² + |b|² = 1</span> という条件を満たすとき、<span class="math" style="white-space:nowrap">a|0⟩ + b|1⟩</span> の形をしたベクトルを <b class="k">量子状態</b>（quantum state）という</div>
+      <div class="point frag" style="font-size:16px;padding:6px 14px;margin-top:10px"><span class="math">a|0⟩ + b|1⟩</span> は <b class="k">|0⟩ と |1⟩ の重ね合わせ</b>。a, b がどちらも 0 でないとき <b class="k">重ね合わせ状態</b>（superposition）という</div>
+      <div class="point blue frag" style="font-size:16px;padding:6px 14px;margin-top:10px">📌 予告：<b><span class="math">|a|²</span></b> は測定で <span class="math">|0⟩</span> を得る確率、<b><span class="math">|b|²</span></b> は <span class="math">|1⟩</span> を得る確率<br>
+        だから <b><span class="math">|a|² + |b|² = 1</span></b>（確率を全部足すと 1）</div>
+      <ul style="margin-top:8px">
+        <li class="frag" style="font-size:15px;margin:0;line-height:1.5"><span class="math">|a|, |b|</span> は複素数の絶対値（実数なら符号をプラスにしたもの）</li>
+        <li class="frag" style="font-size:15px;margin:0;line-height:1.5">量子状態をベクトルの形で表したものを <b class="k">状態ベクトル</b>（state vector）という</li>
+      </ul>
+      <div class="point frag" style="font-size:15px;padding:4px 14px;margin-top:8px">集合で書くと（量子状態全体の集合 Q）
+        <div class="eq" style="font-size:18px"><span class="math">Q :=</span><span class="brace">{</span><span class="vec"><span>a</span><span>b</span></span><span class="math">∈ ℂ²</span><span class="bar"></span><span class="math">|a|² + |b|² = 1</span><span class="brace">}</span></div></div>
+    </div>
+    <div class="card pop" style="--d:.2s;padding:12px 18px">
+      <div class="qbuild">
+        <svg id="qVecSvg" viewBox="0 0 300 250" aria-label="a|0⟩ と b|1⟩ を足してできるベクトル"></svg>
+        <div class="qb-side">
+          <label class="qslider"><span class="qs-name la">a</span><input type="range" id="qA" min="-1" max="1" step="any"><span class="qs-val" id="qAv"></span></label>
+          <label class="qslider"><span class="qs-name lb">b</span><input type="range" id="qB" min="-1" max="1" step="any"><span class="qs-val" id="qBv"></span></label>
+          <button class="b" id="qNorm">⭕ 円の上にのせる</button>
+          <button class="b" id="qbAuto" data-autoplay>▶ 自動再生</button>
+        </div>
+      </div>
+      <div class="eq qb-eq" id="qbEq"></div>
+      <div class="eq qb-sum" id="qbSum"></div>
+      <div class="qb-row"><div class="pgauge" id="qbGauge"></div><div class="qverdict" id="qbVerdict"></div></div>
+      <div class="hint" style="margin-top:2px"><span style="color:#e04e00;font-weight:800">■ |0⟩ の確率</span>　<span style="color:#3b6cff;font-weight:800">■ |1⟩ の確率</span>　※ 係数を実数に限ったイメージ図</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- ブロッホ球（教科書外の補足） -->
+<section class="slide" data-id="bloch">
+  <div class="chap">第3章 量子コンピュータの基本ルール ／ 補足（教科書外）</div>
+  <h2>ブロッホ球<small>補足（教科書外）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)">
+    <div>
+      <div class="point pop" style="margin-top:0;font-size:17px;padding:8px 14px">1量子ビットの量子状態は、2つの角度 <span class="math">θ</span>（0〜180°）と <span class="math">φ</span>（0〜360°）を使って
+        <div class="eq" style="font-size:21px;margin:4px 0"><span class="math">|ψ⟩ = cos</span><span class="frac"><span>θ</span><span>2</span></span><span class="math">|0⟩ + e<sup>iφ</sup> sin</span><span class="frac"><span>θ</span><span>2</span></span><span class="math">|1⟩</span></div>
+        と書ける（全体にかかる位相は測定に影響しないので省く）</div>
+      <ul style="margin-top:8px">
+        <li class="pop" style="--d:.1s;font-size:17px;margin:3px 0">θ を緯度、φ を経度とみなすと、量子状態は <b class="k">半径 1 の球面上の 1 点</b> になる → <b class="k">ブロッホ球</b></li>
+        <li class="frag" style="font-size:17px;margin:3px 0"><b>北極が |0⟩、南極が |1⟩</b>。その間はすべて |0⟩ と |1⟩ の重ね合わせ（赤道上は半々）</li>
+        <li class="frag" style="font-size:17px;margin:3px 0"><b>高さ（θ）で測定確率が決まる</b>：|0⟩ の確率 <span class="math">cos²(θ/2)</span>、|1⟩ の確率 <span class="math">sin²(θ/2)</span>。経度 φ（位相）は確率を変えない</li>
+      </ul>
+    </div>
+    <div class="card pop" style="--d:.2s;padding:10px 16px">
+      <div class="qbuild" style="grid-template-columns:1fr 210px">
+        <svg id="blochSvg" viewBox="-20 0 340 290" aria-label="ブロッホ球"></svg>
+        <div class="qb-side">
+          <label class="qslider"><span class="qs-name la">θ</span><input type="range" id="bTh" min="0" max="180" step="any"><span class="qs-val" id="bThv"></span></label>
+          <label class="qslider"><span class="qs-name lb">φ</span><input type="range" id="bPh" min="0" max="360" step="any"><span class="qs-val" id="bPhv"></span></label>
+          <div class="bpresets" id="bPresets"></div>
+          <button class="b" id="bAuto" data-autoplay>▶ 自動再生</button>
+        </div>
+      </div>
+      <div class="eq bformula" id="bFormula"></div>
+      <div class="pgauge" id="bGauge" style="margin:6px 0 18px"></div>
+      <div class="hint" style="margin-top:0"><span style="color:#e04e00;font-weight:800">■ |0⟩ の確率</span>　<span style="color:#3b6cff;font-weight:800">■ |1⟩ の確率</span>　|±⟩ = (|0⟩ ± |1⟩)/√2、|±i⟩ = (|0⟩ ± i|1⟩)/√2</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 内積で表す -->
+<section class="slide">
+  <div class="chap">第3章 量子コンピュータの基本ルール ／ 3.2 量子ビット</div>
+  <h2>内積を使って量子状態を表す<small>pp.86–87</small></h2>
+  <div class="body cols even">
+    <div>
+      <p class="pop" style="margin:0 0 6px;font-size:20px">量子状態 <span class="eq inline"><span class="math">|φ⟩ =</span><span class="vec"><span>a</span><span>b</span></span><span class="math">∈ ℂ²</span></span> の内積 <span class="math">⟨φ|φ⟩</span> を計算すると</p>
+      <div class="card pop" style="--d:.1s;padding:12px 16px">
+        <div class="eq"><span class="math">⟨φ|φ⟩ =</span><span class="vec row"><span>a*</span><span>b*</span></span><span class="vec"><span>a</span><span>b</span></span></div>
+        <div class="eq" style="margin-top:6px"><span class="math">= a*a + b*b = |a|² + |b|²</span></div>
+        <div class="hint" style="text-align:center"><span class="math">a*</span> は a の複素共役（内積は教科書 第2章を参照）</div>
+      </div>
+      <div class="point frag" style="font-size:20px">よって、量子状態全体の集合 Q は
+        <div class="eq" style="margin-top:4px"><span class="math">Q = </span><span class="brace">{</span><span class="math">|φ⟩ ∈ ℂ²</span><span class="bar"></span><span class="math">⟨φ|φ⟩ = 1</span><span class="brace">}</span></div></div>
+    </div>
+    <div>
+      <div class="defbox frag">複素数を成分とした2次元ベクトル <span class="math">|φ⟩</span> が <span class="math">⟨φ|φ⟩ = 1</span> という条件を満たすとき、<span class="math">|φ⟩</span> を <b class="k">量子状態</b> という</div>
+      <div class="point blue frag" style="font-size:19px;margin-top:22px">前のページの定義と <b>同じ量子状態</b> を表している。<br>量子状態を表す方法はいくつかあるので、<b>状況に応じて扱いやすい方法</b> を使う</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉：PART 5 測定 -->
+<section class="slide door" style="--c:var(--accent)">
+  <div class="door-bg">5</div>
+  <div class="door-wrap">
+    <div class="door-num">5</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">第3章 量子コンピュータの基本ルール</span>PART 5</div>
+      <h1 class="pop" style="--d:.1s">測定</h1>
+      <p class="door-lead pop" style="--d:.2s">計算結果を得る（教科書 3.3）</p>
+      <div class="door-topics pop" style="--d:.3s"><span>測定とは</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 測定とは -->
+<section class="slide" data-id="meas1">
+  <div class="chap">第3章 量子コンピュータの基本ルール ／ 3.3 計算結果を得る「測定」</div>
+  <h2>計算結果を得る「測定」<small>3.3・図3.1（p.88）</small></h2>
+  <div class="body cols even">
+    <div>
+      <ul>
+        <li class="pop" style="font-size:20px">古典ビットを読み取ると、0 なら 0、1 なら 1 が返る。<b>何回読み取っても同じ結果</b></li>
+        <li class="pop" style="--d:.1s;font-size:20px">量子ビットは
+          <span class="eq inline"><span class="frac"><span>1</span><span>√5</span></span><span class="math">|0⟩ +</span><span class="frac"><span>2</span><span>√5</span></span><span class="math">|1⟩</span></span>
+          のように、|0⟩ でも |1⟩ でもない状態を表せる</li>
+        <li class="frag" style="font-size:20px">これを読み取ると、<b class="kb">|0⟩ が返ることも |1⟩ が返ることもある</b>。何が返るかは毎回異なり、読み取るまで分からない</li>
+      </ul>
+      <div class="point frag" style="font-size:20px">ただし、何が返るかは <b>確率で表せる</b><br>この読み取りのことを <b class="k">測定</b>（measurement）という</div>
+    </div>
+    <div class="card pop" style="--d:.2s;padding:12px 16px">
+      <div class="mworld q">
+        <div class="mw-lab">量子コンピュータ<br>の世界</div>
+        <div class="mw-box mw-q"><div class="eq mw-state"><span class="math">|φ⟩ =</span><span class="frac"><span>1</span><span>√5</span></span><span class="math">|0⟩ +</span><span class="frac"><span>2</span><span>√5</span></span><span class="math">|1⟩</span></div><div class="mw-kets"><span class="mket m0">|0⟩</span><span class="mket m1">|1⟩</span></div></div>
+      </div>
+      <div class="mdrop"><span class="marrow" id="m1Arrow">⬇</span><span class="mtag">測定</span></div>
+      <div class="mworld c">
+        <div class="mw-lab">古典コンピュータ<br>の世界</div>
+        <div class="mw-box"><span class="mket mres" id="m1Res">?</span><span class="mw-note">測定で得られる<br>情報は確率的</span></div>
+      </div>
+      <div class="mhist" id="m1Hist"></div>
+      <div class="btns" style="justify-content:center"><button class="b" id="m1Btn">🔍 測定してみる</button><button class="b" id="m1Auto" data-autoplay>▶ 自動再生</button></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 第3章の復習問題 -->
+<section class="slide" data-id="quiz3">
+  <div class="chap">Review ／ 第3章 量子コンピュータの基本ルール</div>
+  <h2>復習問題<small>第3章 量子コンピュータの基本ルール</small><button class="b qz-all" data-quiz-all>答えをぜんぶ表示</button></h2>
+  <div class="body quiz q3">
+      <div class="qz pop" style="--d:0.00s"><div class="qz-q"><span class="qz-no">Q1</span><span>量子ビット <span class="math">|0⟩</span> と <span class="math">|1⟩</span> をベクトルで書くと？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><span class="math">|0⟩ =</span><span class="eq inline"><span class="vec"><span>1</span><span>0</span></span></span>、<span class="math">|1⟩ =</span><span class="eq inline"><span class="vec"><span>0</span><span>1</span></span></span></span></div></div>
+      <div class="qz pop" style="--d:0.06s"><div class="qz-q"><span class="qz-no">Q2</span><span><span class="math">a|0⟩ + b|1⟩</span> が <b>量子状態</b> になるための条件は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b><span class="math">|a|² + |b|² = 1</span></b>（内積で書くと <span class="math">⟨φ|φ⟩ = 1</span>）</span></div></div>
+      <div class="qz pop" style="--d:0.12s"><div class="qz-q"><span class="qz-no">Q3</span><span><span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span><span class="math">|0⟩ +</span><span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span><span class="math">|1⟩</span> は量子状態？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>量子状態ではない</b>。<span class="math">|1/2|² + |1/2|² = 1/4 + 1/4 = 1/2 ≠ 1</span> のため</span></div></div>
+      <div class="qz pop" style="--d:0.18s"><div class="qz-q"><span class="qz-no">Q4</span><span><span class="eq inline"><span class="frac"><span>√3</span><span>2</span></span></span><span class="math">|0⟩ −</span><span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span><span class="math">|1⟩</span> を測定すると、|0⟩ と |1⟩ はそれぞれ何 % で得られる？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>|0⟩ が 75%</b>（|√3/2|² = 3/4）、<b>|1⟩ が 25%</b>（|−1/2|² = 1/4）。係数がマイナスでも、確率は絶対値の2乗</span></div></div>
+      <div class="qz pop" style="--d:0.24s"><div class="qz-q"><span class="qz-no">Q5</span><span><b>ブロッホ球</b> の北極・南極の <b>?</b> に入る状態は？<svg class="qzc qzbloch" viewBox="0 0 300 200" aria-label="ブロッホ球（北極・南極の状態が ? になっている）"><defs><radialGradient id="qzShade" cx="38%" cy="32%" r="75%"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#dcd2ff"/></radialGradient></defs><circle cx="150" cy="100" r="70" fill="url(#qzShade)" stroke="#1f1a3d" stroke-width="2.5"/><path d="M80,100 A70,18 0 0 1 220,100" fill="none" stroke="#8a5cff" stroke-width="1.5" stroke-dasharray="4 4" opacity=".7"/><path d="M80,100 A70,18 0 0 0 220,100" fill="none" stroke="#8a5cff" stroke-width="2.5"/><line x1="150" y1="22" x2="150" y2="178" stroke="#9a93bd" stroke-width="1.5" stroke-dasharray="3 4"/><circle cx="150" cy="30" r="6" fill="#ffd53d" stroke="#1f1a3d" stroke-width="2.5"/><circle cx="150" cy="170" r="6" fill="#ffd53d" stroke="#1f1a3d" stroke-width="2.5"/><g font-size="13" font-weight="800" fill="#6b6790" text-anchor="end"><text x="138" y="26">北極</text><text x="138" y="186">南極</text></g><g class="qgb"><rect class="qg" x="164" y="4" width="56" height="30" rx="8"/><text class="g-q" x="192.0" y="27.0" text-anchor="middle">?</text><text class="g-ans" x="192.0" y="24.0" text-anchor="middle" font-size="18">|0⟩</text></g><g class="qgb"><rect class="qg" x="164" y="164" width="56" height="30" rx="8"/><text class="g-q" x="192.0" y="187.0" text-anchor="middle">?</text><text class="g-ans" x="192.0" y="184.0" text-anchor="middle" font-size="18">|1⟩</text></g></svg></span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">北極が <b>|0⟩</b>、南極が <b>|1⟩</b></span></div></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -723,25 +1120,14 @@ body.overview #ink,body.overview #inkbar{display:none}
   <span>← → / Space でページ送り</span>
 </div>
 <div id="progress"></div>
-<div id="inkbar">
-  <button id="inkToggle" title="手書き (P)">✏️</button>
-  <div class="tools">
-    <button data-tool="pen" class="on" title="ペン">🖊️</button>
-    <button data-tool="marker" title="マーカー">🖍️</button>
-    <button data-tool="eraser" title="消しゴム（なぞった線を消す）">🧽</button>
-    <span class="sep"></span>
-    <div class="colors">
-      <button class="sw on" data-color="#e5383b" style="--sw:#e5383b" title="赤"></button>
-      <button class="sw" data-color="#3b6cff" style="--sw:#3b6cff" title="青"></button>
-      <button class="sw" data-color="#1f1a3d" style="--sw:#1f1a3d" title="黒"></button>
-      <button class="sw" data-color="#14a35a" style="--sw:#14a35a" title="緑"></button>
-    </div>
-    <span class="sep"></span>
-    <button id="inkUndo" title="元に戻す (Z)">↩️</button>
-    <button id="inkClear" title="このスライドの書き込みを全部消す">🗑️</button>
-  </div>
+<div id="penbar" aria-label="ペンの道具">
+  <button data-tool="laser" class="on" title="レーザーポインター（書き込みは残らない）">🔴 レーザー</button>
+  <button data-tool="pen" title="黒ペンで書き込む (P)">✏️ 黒ペン</button>
+  <button data-tool="eraser" title="消しゴム（なぞった線を消す）">🧽 消す</button>
+  <span class="sep"></span>
+  <button id="inkUndo" title="元に戻す (Z)">↩️</button>
+  <button id="inkClear" title="このスライドの書き込みを全部消す">🗑️</button>
 </div>
-
 <script>
 const NS = 'http://www.w3.org/2000/svg';
 const $ = s => document.querySelector(s);
@@ -880,9 +1266,12 @@ function truthTable(id, c, ins, outs, extra) {
   const k = ins.length;
   let html = '<thead><tr>' + ins.map(i => `<th>${i[1]}</th>`).join('') +
     outs.map(o => `<th class="out">${o[1]}</th>`).join('') + (extra ? `<th>${extra[0]}</th>` : '') + '</tr></thead><tbody>';
+  // 行は ins に書いた列の順（左の列が上位ビット）で並べ、各行の入力値を覚えておく
+  const rows = [];
   for (let n = 0; n < (1 << k); n++) {
     const vals = {};
     ins.forEach((inp, j) => vals[inp[0]] = (n >> (k - 1 - j)) & 1);
+    rows.push(vals);
     const s = c.compute(vals);
     html += '<tr>' + ins.map(i => `<td>${vals[i[0]]}</td>`).join('') +
       outs.map(o => `<td class="out${s[o[0]] ? ' one' : ''}${o[2] ? ' ' + o[2] + s[o[0]] : ''}">${s[o[0]]}</td>`).join('') +
@@ -890,8 +1279,9 @@ function truthTable(id, c, ins, outs, extra) {
   }
   table.innerHTML = html + '</tbody>';
   const trs = [...table.querySelectorAll('tbody tr')];
-  trs.forEach((tr, n) => tr.addEventListener('click', () => c.setIndex(n)));
-  c.onChange(() => { const n = c.index(); trs.forEach((tr, i) => tr.classList.toggle('cur', i === n)); });
+  trs.forEach((tr, n) => tr.addEventListener('click', () => c.set(rows[n])));
+  c.onChange(() => trs.forEach((tr, i) =>
+    tr.classList.toggle('cur', ins.every(([name]) => rows[i][name] === c.inputVals[name]))));
 }
 
 function autoplay(btnId, c, interval = 1900) {
@@ -977,30 +1367,29 @@ function halfAdder4(id) {
   c.link('B', 'o.in1', 160); c.link('B', 'a.in1', 160); c.dot(160, 160, 'B');
   c.link('a', 'n.in0', 290);
   c.link('o', 'f.in0', 340); c.link('n', 'f.in1', 395);
-  c.output('S', 580, 100, 'f', '出力2 (和)');
-  c.output('C', 580, 200, 'a', '出力1 (繰り上がり)');
+  c.output('S', 580, 100, 'f', '出力1 (和)');
+  c.output('C', 580, 200, 'a', '出力2 (繰り上がり)');
   c.link('f', 'S'); c.link('a', 'C'); c.dot(290, 200, 'a');
   return c;
 }
 {
   const c = halfAdder4('cHa4');
-  truthTable('tHa4', c, [['A', '入力1'], ['B', '入力2']], [['a', '出力1'], ['f', '出力2']]);
+  truthTable('tHa4', c, [['B', '入力2'], ['A', '入力1']], [['a', '出力2'], ['f', '出力1']]);
   autoplay('pHa4', c); c.set({}, false);
 }
 {
   const c = singleGate('cXor', 'XOR', 'A XOR B');
-  truthTable('tXor', c, [['A', 'A'], ['B', 'B']], [['g', 'A XOR B']],
-    ['(A + B) mod 2', (v, s) => `${v.A + v.B} mod 2 = ${s.g}`]);
+  truthTable('tXor', c, [['A', 'A'], ['B', 'B']], [['g', 'A XOR B']]);
   autoplay('pXor', c); c.set({}, false);
 }
 {
-  const c = halfAdderXor('cHa2', '出力2 (和)', '出力1 (繰り上がり)');
-  truthTable('tHa2', c, [['A', '入力1'], ['B', '入力2']], [['a', '出力1<br>(繰り上がり)'], ['x', '出力2<br>(和)']]);
+  const c = halfAdderXor('cHa2', '出力1 (和)', '出力2 (繰り上がり)');
+  truthTable('tHa2', c, [['B', '入力2'], ['A', '入力1']], [['a', '出力2<br>(繰り上がり)'], ['x', '出力1<br>(和)']]);
   autoplay('pHa2', c); c.set({}, false);
 }
 {
   const slow = halfAdder4('cmpHa4');
-  const fast = halfAdderXor('cmpHa2', '出力2 (和)', '出力1 (繰り上がり)');
+  const fast = halfAdderXor('cmpHa2', '出力1 (和)', '出力2 (繰り上がり)');
   const both = n => { slow.setIndex(n); fast.setIndex(n); };
   slow.onChange(() => { if (fast.index() !== slow.index()) fast.setIndex(slow.index()); });
   fast.onChange(() => { if (slow.index() !== fast.index()) slow.setIndex(fast.index()); });
@@ -1249,6 +1638,309 @@ function columnAdder(grid, msg, A, B, describe) {
   run();
 }
 
+
+/* 確率のゲージ。太枠の箱の幅がちょうど確率 1（全体の 60%）で、箱の外は合計が 1 を超えた分 */
+function probGauge(el) {
+  const BOX = 60, MAX = 100 / BOX;  // 表示できる合計の上限（約 1.67）
+  el.innerHTML = '<div class="pg-box"></div><div class="pg-seg a"></div><div class="pg-seg b"></div><div class="pg-gap"></div><div class="pg-over"></div>' +
+    `<span class="pg-tick" style="left:0">0</span><span class="pg-tick" style="left:${BOX}%">1</span>`;
+  const [sa, sb] = el.querySelectorAll('.pg-seg'), gap = el.querySelector('.pg-gap'), over = el.querySelector('.pg-over');
+  const pos = (e, from, to) => { e.style.left = `${from * BOX}%`; e.style.width = `${Math.max(0, to - from) * BOX}%`; };
+  return (a2, b2) => {
+    const A = Math.min(a2, MAX), S = Math.min(a2 + b2, MAX);
+    pos(sa, 0, A); pos(sb, A, S);
+    pos(gap, Math.min(S, 1), 1);   // 1 に足りない分（箱の中の空き）
+    pos(over, 1, Math.max(S, 1));  // 1 を超えた分（箱からはみ出す）
+  };
+}
+
+/* ---------- 量子状態をつくってみる（a|0⟩ + b|1⟩ を矢印の足し算で見せる） ---------- */
+{
+  const svg = $('#qVecSvg'), NS = 'http://www.w3.org/2000/svg';
+  const OX = 150, OY = 125, U = 88;  // 原点と、長さ 1 の大きさ
+  const mk = (tag, attrs, parent = svg) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    parent.appendChild(e); return e;
+  };
+  const defs = mk('defs', {});
+  [['qhA', '#ff6b1a'], ['qhB', '#3b6cff'], ['qhS', '#1f1a3d']].forEach(([id, c]) => {
+    const m = mk('marker', { id, viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 5, markerHeight: 5, orient: 'auto-start-reverse' }, defs);
+    mk('path', { d: 'M0,0 L10,5 L0,10 z', fill: c }, m);
+  });
+  mk('line', { x1: 20, y1: OY, x2: 280, y2: OY, stroke: '#d9d4ea', 'stroke-width': 2 });
+  mk('line', { x1: OX, y1: 8, x2: OX, y2: 242, stroke: '#d9d4ea', 'stroke-width': 2 });
+  const ring = mk('circle', { cx: OX, cy: OY, r: U, fill: 'none', stroke: '#1f1a3d', 'stroke-width': 2.5, 'stroke-dasharray': '6 6' });
+  const t = (x, y, s, c) => { const e = mk('text', { x, y, 'text-anchor': 'middle', 'font-size': 15, 'font-weight': 800, fill: c, 'font-family': 'Cambria Math,Times New Roman,serif' }); e.textContent = s; return e; };
+  t(OX + U + 26, OY - 8, '|0⟩', '#6b6790'); t(OX + 20, OY - U - 8, '|1⟩', '#6b6790');
+  const arA = mk('line', { x1: OX, y1: OY, stroke: '#ff6b1a', 'stroke-width': 6, 'stroke-linecap': 'round', 'marker-end': 'url(#qhA)' });
+  const arB = mk('line', { stroke: '#3b6cff', 'stroke-width': 6, 'stroke-linecap': 'round', 'marker-end': 'url(#qhB)' });
+  const arS = mk('line', { x1: OX, y1: OY, stroke: '#1f1a3d', 'stroke-width': 3.5, 'stroke-dasharray': '2 6', 'stroke-linecap': 'round', 'marker-end': 'url(#qhS)' });
+  const tip = mk('circle', { r: 9, stroke: '#1f1a3d', 'stroke-width': 3 });
+  const lA = t(0, 0, '', '#e04e00'), lB = t(0, 0, '', '#3b6cff');
+  const lSup = t(8, 244, '', '#e04e00');
+  lSup.setAttribute('text-anchor', 'start'); lSup.setAttribute('font-family', 'inherit');
+
+  const sa = $('#qA'), sb = $('#qB');
+  const gEl = $('#qbGauge'), gauge = probGauge(gEl);
+  gEl.classList.add('instant');  // スライダーに遅れずついてくるように
+  let a = 1, b = 0, anim = 0;
+  const f2 = x => (Math.abs(x) < .005 ? 0 : x).toFixed(2);
+  const vec = (x, y, cx = '', cy = '') => `<span class="vec"><span class="${cx}">${x}</span><span class="${cy}">${y}</span></span>`;
+  function draw() {
+    const xa = OX + U * a, yb = OY - U * b;
+    const vis = (e, on) => e.setAttribute('visibility', on ? 'visible' : 'hidden');
+    arA.setAttribute('x2', xa); arA.setAttribute('y2', OY); vis(arA, Math.abs(a) > .03);
+    arB.setAttribute('x1', xa); arB.setAttribute('y1', OY); arB.setAttribute('x2', xa); arB.setAttribute('y2', yb); vis(arB, Math.abs(b) > .03);
+    arS.setAttribute('x2', xa); arS.setAttribute('y2', yb); vis(arS, Math.abs(a) > .03 && Math.abs(b) > .03);
+    tip.setAttribute('cx', xa); tip.setAttribute('cy', yb);
+    lA.setAttribute('x', OX + U * a / 2); lA.setAttribute('y', OY + (b < 0 ? -10 : 20)); lA.textContent = Math.abs(a) > .15 ? 'a|0⟩' : '';
+    lB.setAttribute('x', xa + (a < 0 ? -24 : 24)); lB.setAttribute('y', OY - U * b / 2 + 5); lB.textContent = Math.abs(b) > .15 ? 'b|1⟩' : '';
+    const sum = a * a + b * b, ok = sum.toFixed(2) === '1.00';
+    tip.setAttribute('fill', ok ? '#ffd53d' : '#fff');
+    // a, b がどちらも 0 でなければ |0⟩ と |1⟩ の重ね合わせ
+    const sup = Math.abs(a) >= .005 && Math.abs(b) >= .005;
+    lSup.textContent = sup ? '|0⟩ と |1⟩ の重ね合わせ' : Math.abs(b) < .005 ? '|0⟩ の成分だけ' : '|1⟩ の成分だけ';
+    lSup.setAttribute('fill', sup ? '#e04e00' : '#6b6790');
+    ring.setAttribute('stroke', ok ? '#14a35a' : '#1f1a3d');
+    sa.value = a; sb.value = b;
+    $('#qAv').textContent = f2(a); $('#qBv').textContent = f2(b);
+    const A = `<span class="na">${f2(a)}</span>`, B = `<span class="nb">${f2(b)}</span>`;
+    $('#qbEq').innerHTML = `<span class="math">${A}|0⟩ + ${B}|1⟩ = ${A}</span>${vec(1, 0)}<span class="math">+ ${B}</span>${vec(0, 1)}<span class="math">=</span>${vec(f2(a), f2(b), 'na', 'nb')}`;
+    $('#qbSum').innerHTML = `<span style="color:#e04e00">|0⟩ の確率 <span class="math">|a|²</span></span> ＋ <span style="color:#3b6cff">|1⟩ の確率 <span class="math">|b|²</span></span>` +
+      `<span class="math">= ${(a * a).toFixed(2)} + ${(b * b).toFixed(2)} = <b>${sum.toFixed(2)}</b></span>`;
+    gauge(a * a, b * b);
+    const v = $('#qbVerdict');
+    v.className = 'qverdict ' + (ok ? 'ok' : 'ng');
+    v.textContent = ok ? '✓ 量子状態' : '✗ 量子状態ではない';
+  }
+  function tween(ta, tb) {
+    cancelAnimationFrame(anim);
+    const a0 = a, b0 = b, t0 = performance.now();
+    const step = now => {
+      const k = Math.min(1, (now - t0) / 650), e = 1 - Math.pow(1 - k, 3);
+      a = a0 + (ta - a0) * e; b = b0 + (tb - b0) * e; draw();
+      if (k < 1) anim = requestAnimationFrame(step);
+    };
+    anim = requestAnimationFrame(step);
+  }
+  const auto = $('#qbAuto');
+  let timer = null, pi = 0;
+  const r2 = Math.SQRT1_2;
+  // 量子状態の例と、そうでない例（|a|² + |b|² が 1 より小さい・大きい）を順に見せる
+  const presets = [[1, 0], [.6, .8], [0, 1], [-.8, .6], [.5, .5], [1, 1], [r2, -r2]];
+  function stop() { clearInterval(timer); timer = null; auto.textContent = '▶ 自動再生'; auto.classList.remove('playing'); }
+  auto.addEventListener('click', () => {
+    auto.blur();
+    if (timer) return stop();
+    auto.textContent = '■ 停止'; auto.classList.add('playing');
+    timer = setInterval(() => { pi = (pi + 1) % presets.length; tween(...presets[pi]); }, 2400);
+  });
+  stoppers.push(stop);
+  sa.addEventListener('input', () => { stop(); cancelAnimationFrame(anim); a = +sa.value; draw(); });
+  sb.addEventListener('input', () => { stop(); cancelAnimationFrame(anim); b = +sb.value; draw(); });
+  $('#qNorm').addEventListener('click', e => {
+    e.currentTarget.blur(); stop();
+    const len = Math.hypot(a, b);
+    if (len < 1e-6) tween(1, 0); else tween(a / len, b / len);
+  });
+  window.onEnter = window.onEnter || {};
+  onEnter.qbuild = () => { pi = 0; cancelAnimationFrame(anim); a = 1; b = 0; draw(); };
+  draw();
+}
+
+/* ---------- ブロッホ球（教科書外の補足） ---------- */
+{
+  const svg = $('#blochSvg'), NS = 'http://www.w3.org/2000/svg';
+  const CX = 150, CY = 148, R = 100, rad = d => d * Math.PI / 180;
+  const VA = rad(250), VE = rad(20);  // 眺める向き（x 軸が手前、y 軸が右に見える標準的な向き）
+  // 球の上の点 (x, y, z) を画面の座標と奥行き（正なら手前）に変換する
+  function proj(x, y, z) {
+    const x1 = x * Math.cos(VA) - y * Math.sin(VA), y1 = x * Math.sin(VA) + y * Math.cos(VA);
+    return [CX + R * x1, CY - R * (y1 * Math.sin(VE) + z * Math.cos(VE)), -y1 * Math.cos(VE) + z * Math.sin(VE)];
+  }
+  const mk = (tag, attrs, parent = svg) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    parent.appendChild(e); return e;
+  };
+  const defs = mk('defs', {});
+  const g = mk('radialGradient', { id: 'bShade', cx: '38%', cy: '32%', r: '75%' }, defs);
+  mk('stop', { offset: '0%', 'stop-color': '#ffffff' }, g);
+  mk('stop', { offset: '100%', 'stop-color': '#dcd2ff' }, g);
+  const mh = mk('marker', { id: 'bHead', viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 5, markerHeight: 5, orient: 'auto' }, defs);
+  mk('path', { d: 'M0,0 L10,5 L0,10 z', fill: '#1f1a3d' }, mh);
+  mk('circle', { cx: CX, cy: CY, r: R, fill: 'url(#bShade)', stroke: '#1f1a3d', 'stroke-width': 2.5 });
+  // 大円を、手前は実線・奥は点線で描く
+  function circlePaths(fn, front, back) {
+    let f = '', b = '', prev = null;
+    for (let t = 0; t <= 360; t += 3) {
+      const [x, y, d] = proj(...fn(rad(t))), vis = d >= 0;
+      const cmd = (prev === vis ? 'L' : 'M') + x.toFixed(1) + ',' + y.toFixed(1);
+      if (vis) f += cmd; else b += cmd;
+      if (prev !== null && prev !== vis) { if (vis) b += 'L' + x.toFixed(1) + ',' + y.toFixed(1); else f += 'L' + x.toFixed(1) + ',' + y.toFixed(1); }
+      prev = vis;
+    }
+    front.setAttribute('d', f); back.setAttribute('d', b);
+  }
+  const eqB = mk('path', { fill: 'none', stroke: '#8a5cff', 'stroke-width': 1.5, 'stroke-dasharray': '4 4', opacity: .6 });
+  const eqF = mk('path', { fill: 'none', stroke: '#8a5cff', 'stroke-width': 2 });
+  circlePaths(t => [Math.cos(t), Math.sin(t), 0], eqF, eqB);
+  const merB = mk('path', { fill: 'none', stroke: '#b9b5d0', 'stroke-width': 1.5, 'stroke-dasharray': '4 4' });
+  const merF = mk('path', { fill: 'none', stroke: '#b9b5d0', 'stroke-width': 2 });
+  // 軸と、端の状態の名前
+  const axes = [[[0, 0, 1], '|0⟩'], [[0, 0, -1], '|1⟩'], [[1, 0, 0], '|+⟩'], [[-1, 0, 0], '|−⟩'], [[0, 1, 0], '|+i⟩'], [[0, -1, 0], '|−i⟩']];
+  axes.forEach(([v]) => { const [x, y] = proj(...v); mk('line', { x1: CX, y1: CY, x2: x, y2: y, stroke: '#9a93bd', 'stroke-width': 1.5, 'stroke-dasharray': '3 4' }); });
+  axes.forEach(([v, name]) => {
+    const [x, y] = proj(...v.map(c => c * (v[2] ? 1.2 : (c > 0 ? .74 : 1.3))));
+    // 線や球の輪郭と重なっても読めるよう、文字のまわりを白で縁取る
+    const e = mk('text', { x, y: y + 6, 'text-anchor': 'middle', 'font-size': name.length > 3 ? 15 : 18, 'font-weight': 800,
+      fill: v[2] ? '#1f1a3d' : '#6b6790', 'font-family': 'Cambria Math,Times New Roman,serif',
+      stroke: '#fffaf0', 'stroke-width': 4, 'paint-order': 'stroke', 'stroke-linejoin': 'round' });
+    e.textContent = name;
+  });
+  // x・y・z 軸：球の外側へ伸びる矢印と、軸の名前
+  const ah = mk('marker', { id: 'bAxHead', viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 6, markerHeight: 6, orient: 'auto' }, defs);
+  mk('path', { d: 'M0,0 L10,5 L0,10 z', fill: '#e04e00' }, ah);
+  [[[1, 0, 0], 'x'], [[0, 1, 0], 'y'], [[0, 0, 1], 'z']].forEach(([v, name]) => {
+    const [x1, y1] = proj(...v.map(c => c * 1.0)), [x2, y2] = proj(...v.map(c => c * (v[2] ? 1.0 : v[0] ? 1.85 : 1.5)));
+    if (!v[2]) mk('line', { x1, y1, x2, y2, stroke: '#e04e00', 'stroke-width': 2, 'marker-end': 'url(#bAxHead)' });
+    // z 軸は |0⟩ の文字と重ならないよう、北極の少し右に名前を置く
+    const [lx, ly] = v[2] ? [proj(0, 0, 1.2)[0] + 24, proj(0, 0, 1.2)[1]] : proj(...v.map(c => c * (v[0] ? 2.0 : 1.62)));
+    const t = mk('text', { x: lx, y: ly + 6, 'text-anchor': 'middle', 'font-size': 20, 'font-weight': 700, 'font-style': 'italic', fill: '#e04e00',
+      'font-family': 'Cambria Math,Times New Roman,serif', stroke: '#fffaf0', 'stroke-width': 4, 'paint-order': 'stroke' });
+    t.textContent = name;
+  });
+  const drop = mk('line', { stroke: '#8a5cff', 'stroke-width': 2.5, 'stroke-dasharray': '4 3' });
+  const foot = mk('line', { stroke: '#8a5cff', 'stroke-width': 2.5, 'stroke-dasharray': '4 3' });
+  const arrow = mk('line', { x1: CX, y1: CY, stroke: '#1f1a3d', 'stroke-width': 4, 'stroke-linecap': 'round', 'marker-end': 'url(#bHead)' });
+  const dot = mk('circle', { r: 9, fill: '#ffd53d', stroke: '#1f1a3d', 'stroke-width': 3 });
+
+  const sTh = $('#bTh'), sPh = $('#bPh'), gEl = $('#bGauge'), gauge = probGauge(gEl);
+  gEl.classList.add('instant');
+  let th = 0, ph = 0, anim = 0;
+  const F = (n, d) => `<span class="frac"><span>${n}</span><span>${d}</span></span>`;
+  function draw() {
+    const x = Math.sin(rad(th)) * Math.cos(rad(ph)), y = Math.sin(rad(th)) * Math.sin(rad(ph)), z = Math.cos(rad(th));
+    const [px, py, pd] = proj(x, y, z), [fx, fy] = proj(x, y, 0);
+    arrow.setAttribute('x2', px); arrow.setAttribute('y2', py); arrow.setAttribute('opacity', pd >= -0.05 ? 1 : .55);
+    dot.setAttribute('cx', px); dot.setAttribute('cy', py); dot.setAttribute('opacity', pd >= -0.05 ? 1 : .6);
+    drop.setAttribute('x1', px); drop.setAttribute('y1', py); drop.setAttribute('x2', fx); drop.setAttribute('y2', fy);
+    foot.setAttribute('x1', CX); foot.setAttribute('y1', CY); foot.setAttribute('x2', fx); foot.setAttribute('y2', fy);
+    // 状態の経度 φ を通る大円（子午線）
+    circlePaths(t => [Math.sin(t) * Math.cos(rad(ph)), Math.sin(t) * Math.sin(rad(ph)), Math.cos(t)], merF, merB);
+    sTh.value = th; sPh.value = ph;
+    $('#bThv').textContent = `${Math.round(th)}°`; $('#bPhv').textContent = `${Math.round(ph) % 360}°`;
+    const c = Math.cos(rad(th / 2)), sn = Math.sin(rad(th / 2));
+    $('#bFormula').innerHTML = `<span class="math">|ψ⟩ = <span style="color:#e04e00">${c.toFixed(2)}</span>|0⟩ + e<sup>i·${Math.round(ph) % 360}°</sup> <span style="color:#3b6cff">${sn.toFixed(2)}</span>|1⟩　→　確率 ${(c * c).toFixed(2)} : ${(sn * sn).toFixed(2)}</span>`;
+    gauge(c * c, sn * sn);
+  }
+  function tween(t2, p2) {
+    cancelAnimationFrame(anim);
+    const t0 = th, p0 = ph, dp = ((p2 - p0) % 360 + 540) % 360 - 180, s0 = performance.now();
+    const step = now => {
+      const k = Math.min(1, (now - s0) / 700), e = 1 - Math.pow(1 - k, 3);
+      th = t0 + (t2 - t0) * e; ph = (p0 + dp * e + 360) % 360; draw();
+      if (k < 1) anim = requestAnimationFrame(step);
+    };
+    anim = requestAnimationFrame(step);
+  }
+  const presets = [['|0⟩', 0, 0], ['|+⟩', 90, 0], ['|+i⟩', 90, 90], ['|−⟩', 90, 180], ['|−i⟩', 90, 270], ['|1⟩', 180, 0]];
+  presets.forEach(([name, t, p]) => {
+    const b = document.createElement('button');
+    b.textContent = name;
+    b.addEventListener('click', () => { b.blur(); stop(); tween(t, p); });
+    $('#bPresets').appendChild(b);
+  });
+  // 自動再生：経度 φ をぐるぐる回しながら、緯度 θ も北極近くから南極近くまでゆっくり上下させ、
+  // 軸や赤道の上だけでなく球面のあちこちを通るようにする
+  const auto = $('#bAuto');
+  let timer = null;
+  function stop() { cancelAnimationFrame(timer); timer = null; auto.textContent = '▶ 自動再生'; auto.classList.remove('playing'); }
+  auto.addEventListener('click', () => {
+    auto.blur();
+    if (timer) return stop();
+    auto.textContent = '■ 停止'; auto.classList.add('playing');
+    cancelAnimationFrame(anim);
+    // いまの位置から途切れずに動き出せるよう、θ の上下の位相を今の θ に合わせる
+    const ph0 = ph, t0 = performance.now(), wave0 = Math.asin(Math.max(-1, Math.min(1, (th - 90) / 80)));
+    const step = now => {
+      const sec = (now - t0) / 1000;
+      ph = (ph0 + sec * 40) % 360;                  // 9 秒で 1 周
+      th = 90 + 80 * Math.sin(wave0 + sec * 0.55);  // 約 11 秒で 1 往復（10°〜170°）
+      draw();
+      timer = requestAnimationFrame(step);
+    };
+    timer = requestAnimationFrame(step);
+  });
+  sTh.addEventListener('input', () => { stop(); cancelAnimationFrame(anim); th = +sTh.value; draw(); });
+  sPh.addEventListener('input', () => { stop(); cancelAnimationFrame(anim); ph = +sPh.value; draw(); });
+  stoppers.push(stop);
+  window.onEnter = window.onEnter || {};
+  onEnter.bloch = () => { cancelAnimationFrame(anim); th = 0; ph = 0; draw(); };
+  draw();
+}
+
+/* ---------- 測定（3.3）：毎回 (1/√5)|0⟩ + (2/√5)|1⟩ を用意して測定する ---------- */
+const P0 = 1 / 5;  // 測定値 |0⟩ を得る確率 |1/√5|²
+const measureOnce = () => (Math.random() < P0 ? 0 : 1);
+{
+  const res = $('#m1Res'), hist = $('#m1Hist'), arrow = $('#m1Arrow');
+  let hs = [];
+  const replay = (el, cls) => { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
+  function measure() {
+    const r = measureOnce();
+    res.textContent = `|${r}⟩`; res.className = 'mket mres r' + r; replay(res, 'hit'); replay(arrow, 'go');
+    hs.push(r); if (hs.length > 14) hs.shift();
+    hist.innerHTML = hs.map(v => `<span class="h${v}">|${v}⟩</span>`).join('');
+  }
+  const auto = $('#m1Auto');
+  let t = null;
+  const stop = () => { clearInterval(t); t = null; auto.textContent = '▶ 自動再生'; auto.classList.remove('playing'); };
+  auto.addEventListener('click', () => {
+    auto.blur();
+    if (t) return stop();
+    auto.textContent = '■ 停止'; auto.classList.add('playing');
+    measure(); t = setInterval(measure, 1300);
+  });
+  $('#m1Btn').addEventListener('click', e => { e.currentTarget.blur(); stop(); measure(); });
+  stoppers.push(stop);
+  window.onEnter = window.onEnter || {};
+  onEnter.meas1 = () => { hs = []; hist.innerHTML = ''; res.textContent = '?'; res.className = 'mket mres'; };
+}
+
+/* ---------- 復習問題：カードをクリックすると答えが出る（もう一度押すと隠れる） ---------- */
+{
+  document.querySelectorAll('.qz').forEach(q => q.addEventListener('click', () => {
+    const open = q.classList.toggle('open');
+    q.querySelectorAll('.qgb').forEach(g => g.classList.toggle('shown', open));
+  }));
+  // 図の ? は 1 つずつクリックで開ける。全部開いたら答えの文も出す
+  document.querySelectorAll('.qgb').forEach(g => g.addEventListener('click', e => {
+    e.stopPropagation();
+    g.classList.toggle('shown');
+    const q = g.closest('.qz'), all = [...q.querySelectorAll('.qgb')];
+    q.classList.toggle('open', all.every(x => x.classList.contains('shown')));
+  }));
+  document.querySelectorAll('[data-quiz-all]').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation(); b.blur();
+    const qs = [...b.closest('.slide').querySelectorAll('.qz')], open = !qs.every(q => q.classList.contains('open'));
+    qs.forEach(q => { q.classList.toggle('open', open); q.querySelectorAll('.qgb').forEach(g => g.classList.toggle('shown', open)); });
+    b.textContent = open ? '答えをぜんぶ隠す' : '答えをぜんぶ表示';
+  }));
+  // スライドを開くたびに答えを隠した状態に戻す
+  const reset = id => () => {
+    const sl = document.querySelector(`.slide[data-id="${id}"]`);
+    sl.querySelectorAll('.qz').forEach(q => q.classList.remove('open'));
+    sl.querySelectorAll('.qgb').forEach(g => g.classList.remove('shown'));
+    sl.querySelector('[data-quiz-all]').textContent = '答えをぜんぶ表示';
+  };
+  window.onEnter = window.onEnter || {};
+  onEnter.quiz2 = reset('quiz2'); onEnter.quiz3 = reset('quiz3');
+  // 印刷（配布資料）では答えも見えるようにする
+  addEventListener('beforeprint', () => document.querySelectorAll('.qz, .qgb').forEach(q => q.classList.add(q.classList.contains('qz') ? 'open' : 'shown')));
+}
+
 /* ---------- スライド制御 ---------- */
 const stage = $('#stage');
 function fit() {
@@ -1297,6 +1989,8 @@ function layoutOverview() {
   const w = (document.body.clientWidth - 48 - 22 * (cols - 1)) / cols;
   stage.style.setProperty('--cols', cols);
   stage.style.setProperty('--z', w / 1280);
+  stage.style.setProperty('--ow', `${w}px`);
+  stage.style.setProperty('--oh', `${w * 720 / 1280}px`);
 }
 function markCurrent() { slides.forEach((s, i) => s.classList.toggle('current', i === cur)); }
 function toggleOverview(on = !overview) {
@@ -1327,8 +2021,8 @@ addEventListener('keydown', e => {
     }
     return;
   }
-  if (e.target.tagName === 'SUMMARY') return;
-  if (e.key === 'p' || e.key === 'P') return ink.setOpen();
+  if (e.target.tagName === 'SUMMARY' || e.target.tagName === 'INPUT') return;
+  if (e.key === 'p' || e.key === 'P') return ink.setTool(ink.tool() === 'pen' ? 'laser' : 'pen');
   if (e.key === 'z' || e.key === 'Z') return ink.undo();
   if (e.key === 'o' || e.key === 'O') return toggleOverview(true);
   if (['ArrowRight', 'PageDown', ' ', 'Enter', 'ArrowDown'].includes(e.key)) { e.preventDefault(); next(); }
@@ -1338,67 +2032,104 @@ addEventListener('keydown', e => {
   else if (e.key === 'f' || e.key === 'F') fullscreen();
 });
 let tx = null;
-addEventListener('touchstart', e => tx = ink.blocksSwipe(e.touches[0]) ? null : e.touches[0].clientX, { passive: true });
+// スライダー操作や Apple Pencil のタッチはスワイプのページ送りに使わない
+addEventListener('touchstart', e => tx = laser.blocksSwipe(e.touches[0]) || e.target.closest('input') ? null : e.touches[0].clientX, { passive: true });
 addEventListener('touchend', e => {
   if (tx === null || overview) return;
   const dx = e.changedTouches[0].clientX - tx; tx = null;
   if (Math.abs(dx) > 60) dx < 0 ? next() : prev();
 });
+// Apple Pencil のタッチは、Safari のスクリブル（手書き入力）・スクロール・拡大鏡などの判定に使わせない。
+// これらが働くと、速く書いたときにペンの動きが一瞬ページに届かなくなり、固まって見えるため。
+// タッチの既定の動作を止めるとクリックも起きなくなるので、ペンで軽くタップしたときはこちらでクリックを送る
+let penTap = null;
+const findPen = e => penTap && [...e.changedTouches].find(t => t.identifier === penTap.id);
+stage.addEventListener('touchstart', e => {
+  const t = e.changedTouches[0];
+  if (t.touchType !== 'stylus' || overview || e.target.closest('input')) return;
+  e.preventDefault();
+  penTap = { id: t.identifier, x: t.clientX, y: t.clientY, target: e.target, moved: 0 };
+}, { passive: false });
+stage.addEventListener('touchmove', e => {
+  const t = findPen(e);
+  if (!t) return;
+  e.preventDefault();
+  penTap.moved = Math.max(penTap.moved, Math.hypot(t.clientX - penTap.x, t.clientY - penTap.y));
+}, { passive: false });
+stage.addEventListener('touchend', e => {
+  const t = findPen(e);
+  if (!t) return;
+  const { target, moved } = penTap;
+  penTap = null;
+  // ほとんど動かさなかったときはタップとみなしてクリックを送る（ボタン・回路の入力・復習問題のカードなど）
+  if (moved < 8) {
+    if (typeof target.click === 'function') target.click();
+    else target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: t.clientX, clientY: t.clientY }));
+  }
+});
+stage.addEventListener('touchcancel', () => { penTap = null; });
 $('#btnNext').onclick = e => { e.currentTarget.blur(); next(); };
 $('#btnPrev').onclick = e => { e.currentTarget.blur(); prev(); };
 $('#btnFs').onclick = e => { e.currentTarget.blur(); fullscreen(); };
 $('#btnOv').onclick = e => { e.currentTarget.blur(); toggleOverview(true); };
 $('#btnOvClose').onclick = e => { e.currentTarget.blur(); toggleOverview(false); };
 addEventListener('beforeprint', () => slides.forEach(s => frags(s).forEach(f => showFrag(f, true))));
-/* ---------- 手書き ----------
-   Apple Pencil はいつでもそのまま書ける。マウス・指は ✏️（P キー）で手書きモードにしたときだけ書ける。
-   Apple Pencil を一度使ったら、指は書き込みに使わない（手のひらの誤反応を防ぎ、指はスワイプやタップに使う）。
-   ペンで軽くタップしただけのときは線を残さず、ボタンや入力の丸のクリックとして扱う。
+/* ---------- 黒ペン ----------
+   右下の道具で「黒ペン」を選ぶと、Apple Pencil（パソコンではマウス）でスライドに書き込める。指では書かない（指はスワイプやタップに使う）。
+   ペン先で軽くタップしただけのときは線を残さず、ボタンや入力の丸のクリックとして扱う。
    書き込みはスライドごとに保持し、ページを戻ると再表示される（再読み込みで消える）。 */
 const ink = (() => {
-  const W = 1280, H = 720;
+  const W = 1280, H = 720, COLOR = '#111';
   const canvas = document.createElement('canvas');
   canvas.id = 'ink';
   stage.appendChild(canvas);
   const ctx = canvas.getContext('2d');
-  const bar = $('#inkbar');
+  const bar = $('#penbar');
   const pages = slides.map(() => ({ strokes: [], undo: [] }));
-  let open = false, penSeen = false, tool = 'pen', color = '#e5383b', active = null;
+  let tool = 'laser', active = null;
 
   function resize() {
     const k = Math.min(4096 / W, stage.getBoundingClientRect().width / W * (devicePixelRatio || 1));
     canvas.width = Math.round(W * k); canvas.height = Math.round(H * k);
     render();
   }
-  function drawStroke(st) {
-    const p = st.pts;
-    ctx.strokeStyle = st.color; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    if (st.tool === 'marker') {
-      ctx.globalAlpha = .35; ctx.lineWidth = 22;
-      ctx.beginPath(); ctx.moveTo(p[0][0], p[0][1]);
-      for (let i = 1; i < p.length; i++) ctx.lineTo(p[i][0], p[i][1]);
-      ctx.stroke(); ctx.globalAlpha = 1;
-      return;
-    }
-    // ペンは筆圧で太さを変え、点の中点を結ぶ曲線でなめらかにする
-    const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
-    for (let i = 1; i < p.length; i++) {
-      const m0 = i === 1 ? p[0] : mid(p[i - 1], p[i]);
-      const m1 = i === p.length - 1 ? p[i] : mid(p[i], p[i + 1]);
-      ctx.lineWidth = 4.5 * (.4 + p[i][2] * 1.2);
-      ctx.beginPath(); ctx.moveTo(m0[0], m0[1]); ctx.quadraticCurveTo(p[i][0], p[i][1], m1[0], m1[1]); ctx.stroke();
-    }
+  // 筆圧で太さを変え、点の中点を結ぶ曲線でなめらかにする。i 番目の区間は p[i-1]・p[i]・p[i+1] で決まる
+  const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+  function drawSeg(p, i) {
+    const m0 = i === 1 ? p[0] : mid(p[i - 1], p[i]);
+    const m1 = i === p.length - 1 ? p[i] : mid(p[i], p[i + 1]);
+    ctx.lineWidth = 4 * (.4 + p[i][2] * 1.2);
+    ctx.beginPath(); ctx.moveTo(m0[0], m0[1]); ctx.quadraticCurveTo(p[i][0], p[i][1], m1[0], m1[1]); ctx.stroke();
   }
+  function drawStroke(p) { for (let i = 1; i < p.length; i++) drawSeg(p, i); }
+  // スライド全体の描き直し（元に戻す・消しゴム・スライド切り替えなどのときだけ）
   function render() {
     const k = canvas.width / W;
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.setTransform(k, 0, 0, k, 0, 0);
+    ctx.strokeStyle = COLOR; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
     pages[cur].strokes.forEach(drawStroke);
-    if (active && active.stroke) drawStroke(active.stroke);
+    if (active && active.pts) { drawStroke(active.pts); active.drawn = active.pts.length - 2; }
   }
+  // 書いている途中は、まだ描いていない区間だけを描き足す（毎回全部を描き直すと速く書いたときに固まるため）。
+  // 最後の区間は次の点が来ないと形が決まらないので、ペンを離したときに描く
+  function drawNew(final) {
+    const p = active.pts, upto = final ? p.length - 1 : p.length - 2;
+    for (let i = Math.max(1, active.drawn + 1); i <= upto; i++) drawSeg(p, i);
+    active.drawn = Math.max(active.drawn, upto);
+  }
+  // ペンの点はたくさん届くので、画面の書き換え 1 回につき 1 回だけまとめて描く
+  let queued = false;
+  function flush() {
+    queued = false;
+    if (!active) return;
+    if (active.pts) drawNew(false);
+    else if (active.erase.length) { const qs = active.erase; active.erase = []; if (qs.map(eraseAt).some(Boolean)) render(); }
+  }
+  const schedule = () => { if (!queued) { queued = true; requestAnimationFrame(flush); } };
   function toStage(e) {
     const r = stage.getBoundingClientRect();
-    // マウス・指は筆圧が取れないので 0.5 として扱う
+    // マウスは筆圧が取れないので 0.5 として扱う
     const pr = e.pointerType === 'pen' && e.pressure > 0 ? e.pressure : .5;
     return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H, pr];
   }
@@ -1408,25 +2139,25 @@ const ink = (() => {
     const t = L ? Math.max(0, Math.min(1, ((q[0] - a[0]) * dx + (q[1] - a[1]) * dy) / L)) : 0;
     return Math.hypot(q[0] - a[0] - t * dx, q[1] - a[1] - t * dy);
   }
+  // q の近くを通る線を消す。消したら true（描き直しは呼び出し側でまとめて行う）
   function eraseAt(q) {
     const pg = pages[cur];
-    const keep = pg.strokes.filter(st => !st.pts.some((pt, i) =>
-      segDist(q, st.pts[Math.max(0, i - 1)], pt) < (st.tool === 'marker' ? 24 : 14)));
-    if (keep.length === pg.strokes.length) return;
+    const keep = pg.strokes.filter(st => !st.some((pt, i) => segDist(q, st[Math.max(0, i - 1)], pt) < 14));
+    if (keep.length === pg.strokes.length) return false;
     if (!active.erased) { snapshot(); active.erased = true; }
-    pg.strokes = keep; render();
+    pg.strokes = keep;
+    return true;
   }
 
   stage.addEventListener('pointerdown', e => {
-    if (overview || active) return;
-    if (e.pointerType === 'pen') { penSeen = true; if (!open) setOpen(true); }
-    else if (!open || (e.pointerType === 'touch' && penSeen) || e.button !== 0) return;
+    if (overview || active || tool === 'laser' || e.target.closest('input')) return;
+    if (!(e.pointerType === 'pen' || (e.pointerType === 'mouse' && e.button === 0))) return;
     e.preventDefault();
     const q = toStage(e);
     // ペンの消しゴム側（対応ペンのみ）は消しゴムとして扱う
-    const t = e.button === 5 ? 'eraser' : tool;
-    active = { id: e.pointerId, start: q, moved: 0, stroke: t === 'eraser' ? null : { tool: t, color, pts: [q] } };
-    if (t === 'eraser') eraseAt(q);
+    const erase = tool === 'eraser' || e.button === 5;
+    active = { id: e.pointerId, start: q, moved: 0, pts: erase ? null : [q], drawn: 0, erase: [] };
+    if (erase) { if (eraseAt(q)) render(); }
   });
   addEventListener('pointermove', e => {
     if (!active || e.pointerId !== active.id) return;
@@ -1435,47 +2166,116 @@ const ink = (() => {
     for (const ev of evs.length ? evs : [e]) {
       const q = toStage(ev);
       active.moved = Math.max(active.moved, Math.hypot(q[0] - active.start[0], q[1] - active.start[1]));
-      if (active.stroke) active.stroke.pts.push(q); else eraseAt(q);
+      if (active.pts) {
+        // ほとんど動いていない点は間引く（見た目は変わらず、描く量が減る）
+        const last = active.pts[active.pts.length - 1];
+        if (Math.hypot(q[0] - last[0], q[1] - last[1]) >= 1.2) active.pts.push(q); else last[2] = Math.max(last[2], q[2]);
+      } else active.erase.push(q);
     }
-    if (active.stroke) render();
+    schedule();
   }, { passive: false });
   function end(e) {
     if (!active || e.pointerId !== active.id) return;
-    const st = active.stroke;
+    flush();
     // ほとんど動かさなかったペン先はタップ（クリック）として扱い、線は残さない
-    if (st && active.moved >= 4) { snapshot(); pages[cur].strokes.push(st); }
-    active = null; render();
+    if (active.pts && active.moved >= 4) {
+      drawNew(true); snapshot(); pages[cur].strokes.push(active.pts); active = null;
+    } else { active = null; render(); }
   }
   addEventListener('pointerup', end);
   addEventListener('pointercancel', end);
 
-  function setOpen(on = !open) {
-    open = on;
-    bar.classList.toggle('open', on);
-    $('#inkToggle').classList.toggle('on', on);
+  function setTool(t) {
+    tool = t;
+    bar.querySelectorAll('[data-tool]').forEach(b => b.classList.toggle('on', b.dataset.tool === t));
   }
   function undo() { const pg = pages[cur]; if (pg.undo.length) { pg.strokes = pg.undo.pop(); render(); } }
-  $('#inkToggle').onclick = e => { e.currentTarget.blur(); setOpen(); };
-  bar.querySelectorAll('[data-tool]').forEach(b => b.onclick = () => {
-    tool = b.dataset.tool;
-    bar.querySelectorAll('[data-tool]').forEach(x => x.classList.toggle('on', x === b));
-  });
-  bar.querySelectorAll('[data-color]').forEach(b => b.onclick = () => {
-    color = b.dataset.color;
-    bar.querySelectorAll('[data-color]').forEach(x => x.classList.toggle('on', x === b));
-    if (tool === 'eraser') bar.querySelector('[data-tool="pen"]').click();
-  });
-  $('#inkUndo').onclick = undo;
-  $('#inkClear').onclick = () => { if (pages[cur].strokes.length) { snapshot(); pages[cur].strokes = []; render(); } };
-  addEventListener('resize', resize);
-
-  return {
-    render, undo, setOpen, resize,
-    // Apple Pencil の線や、指で書き込み中のタッチはスワイプのページ送りに使わない
-    blocksSwipe: t => t.touchType === 'stylus' || (open && !penSeen) || !!active,
+  bar.querySelectorAll('[data-tool]').forEach(b => b.onclick = () => { b.blur(); setTool(b.dataset.tool); });
+  $('#inkUndo').onclick = e => { e.currentTarget.blur(); undo(); };
+  $('#inkClear').onclick = e => {
+    e.currentTarget.blur();
+    if (pages[cur].strokes.length) { snapshot(); pages[cur].strokes = []; render(); }
   };
+  addEventListener('resize', resize);
+  resize();
+  return { render, undo, setTool, tool: () => tool, drawing: () => !!active };
 })();
-ink.resize();
+
+/* ---------- レーザーポインター ----------
+   Apple Pencil のペン先を画面に当てている間だけ赤く光る点を表示し、なぞった軌跡を光らせる（書き込みは残らない）。
+   軌跡はペンを離してから約1秒で消える。消えきる前にもう一度ペンを当てると、それまでの軌跡は消えずに残り続ける。
+   軽いタップは今までどおり回路の入力やボタンのクリックとして扱う。 */
+const laser = (() => {
+  const W = 1280, H = 720, LIFE = 1000;
+  const canvas = document.createElement('canvas');
+  canvas.id = 'laser';
+  stage.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  // trail は線ごとの点の配列。fadeFrom はペンを離した時刻（ペンを当てている間は null）
+  let trail = [], down = null, raf = 0, fadeFrom = null;
+
+  function resize() {
+    const k = Math.min(4096 / W, stage.getBoundingClientRect().width / W * (devicePixelRatio || 1));
+    canvas.width = Math.round(W * k); canvas.height = Math.round(H * k);
+    kick();
+  }
+  function toStage(e) {
+    const r = stage.getBoundingClientRect();
+    return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H];
+  }
+  const level = () => fadeFrom === null ? 1 : Math.max(0, 1 - (performance.now() - fadeFrom) / LIFE);
+  function frame() {
+    raf = 0;
+    const k = canvas.width / W, f = level();
+    if (!f) trail = [];
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    // 影のぼかし（shadowBlur）は重いので使わず、太い半透明の線の上に細い線を重ねて光って見せる
+    const path = new Path2D();
+    trail.forEach(line => { path.moveTo(line[0][0], line[0][1]); line.forEach(q => path.lineTo(q[0], q[1])); });
+    ctx.strokeStyle = `rgba(255,40,70,${.18 * f})`; ctx.lineWidth = 6 + 14 * f; ctx.stroke(path);
+    ctx.strokeStyle = `rgba(255,40,70,${.8 * f})`; ctx.lineWidth = 2 + 5 * f; ctx.stroke(path);
+    if (down) {
+      const [x, y] = down.pos, g = ctx.createRadialGradient(x, y, 0, x, y, 13);
+      g.addColorStop(0, '#fff'); g.addColorStop(.35, '#ff5a6e'); g.addColorStop(1, 'rgba(255,30,60,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(x, y, 13, 0, Math.PI * 2); ctx.fill();
+    }
+    if (fadeFrom !== null && trail.length) kick();
+  }
+  function kick() { if (!raf) raf = requestAnimationFrame(frame); }
+  function add(q) {
+    const line = trail[trail.length - 1], last = line[line.length - 1];
+    // ほとんど動いていない点は間引く
+    if (!last || Math.hypot(q[0] - last[0], q[1] - last[1]) >= 1.5) line.push(q);
+    down.pos = q;
+  }
+
+  stage.addEventListener('pointerdown', e => {
+    if (overview || e.pointerType !== 'pen' || down || e.target.closest('input') || ink.tool() !== 'laser') return;
+    e.preventDefault();
+    // 前の軌跡が消えきっていなければ残したまま続ける
+    if (!level()) trail = [];
+    fadeFrom = null; down = { id: e.pointerId, pos: null };
+    trail.push([]); add(toStage(e)); kick();
+  });
+  addEventListener('pointermove', e => {
+    if (!down || e.pointerId !== down.id) return;
+    e.preventDefault();
+    const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [];
+    (evs.length ? evs : [e]).forEach(ev => add(toStage(ev)));
+    kick();
+  }, { passive: false });
+  const up = e => { if (down && e.pointerId === down.id) { down = null; fadeFrom = performance.now(); kick(); } };
+  addEventListener('pointerup', up);
+  addEventListener('pointercancel', up);
+  addEventListener('resize', resize);
+  resize();
+
+  // Apple Pencil のタッチはスワイプのページ送りに使わない
+  return { blocksSwipe: t => t.touchType === 'stylus' || !!down };
+})();
 
 go(Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1)) || 1) - 1)));
 </script>
