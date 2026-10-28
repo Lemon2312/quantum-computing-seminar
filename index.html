@@ -382,10 +382,6 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .mhist span{font-family:"Cambria Math","Times New Roman",serif;font-size:15px;border-radius:8px;padding:1px 7px;color:#fff;font-weight:700}
 .mhist .h0{background:var(--accent)}
 .mhist .h1{background:var(--blue)}
-.mpair{display:flex;justify-content:center;gap:34px;margin-top:4px;font-size:22px;align-items:flex-end}
-.mmini{display:inline-flex;align-items:flex-end;gap:4px;height:44px;vertical-align:bottom;border-bottom:2px solid var(--ink);padding:0 4px}
-.mmini i{display:block;width:16px;height:calc(var(--h) * 40px);background:#ff6b1a;border:1.5px solid var(--ink);border-bottom:0}
-.mmini.b i{background:#3b6cff}
 
 /* ブロッホ球 */
 .bpresets{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
@@ -1024,7 +1020,7 @@ body.overview #ink,body.overview #penbar{display:none}
       <div class="door-label pop"><span class="door-book">第3章 量子コンピュータの基本ルール</span>PART 5</div>
       <h1 class="pop" style="--d:.1s">測定</h1>
       <p class="door-lead pop" style="--d:.2s">計算結果を得る（教科書 3.3）</p>
-      <div class="door-topics pop" style="--d:.3s"><span>測定とは</span><span>測定の振舞いが一致する例</span></div>
+      <div class="door-topics pop" style="--d:.3s"><span>測定とは</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1058,35 +1054,6 @@ body.overview #ink,body.overview #penbar{display:none}
       <div class="mhist" id="m1Hist"></div>
       <div class="btns" style="justify-content:center"><button class="b" id="m1Btn">🔍 測定してみる</button><button class="b" id="m1Auto" data-autoplay>▶ 自動再生</button></div>
       <div class="hint" style="text-align:center">毎回 <span class="math">(1/√5)|0⟩ + (2/√5)|1⟩</span> を用意して測定（図3.1 のイメージ）</div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 測定の振舞いが一致する例 -->
-<section class="slide">
-  <div class="chap">第3章 量子コンピュータの基本ルール ／ 3.3 計算結果を得る「測定」</div>
-  <h2>ベクトルは違っても測定の振舞いは同じ<small>p.91</small></h2>
-  <div class="body cols" style="grid-template-columns:1.15fr 1fr">
-    <div>
-      <ul>
-        <li class="pop" style="font-size:19px"><span class="math">|0⟩</span> は何度測定しても <span class="math">|0⟩</span>、<span class="math">|1⟩</span> は何度測定しても <span class="math">|1⟩</span><br>→ 重ね合わせでない <span class="math">|0⟩, |1⟩</span> の測定は <b>古典ビットと同じ振舞い</b></li>
-        <li class="pop" style="--d:.1s;font-size:19px">では、次の <span class="math">|ψ⟩</span> を測定すると？
-          <div class="eq" style="font-size:22px;margin:4px 0"><span class="math">|ψ⟩ =</span><span class="frac"><span>1</span><span>√5</span></span><span class="math">|0⟩ −</span><span class="frac"><span>2</span><span>√5</span></span><span class="math">|1⟩</span></div></li>
-      </ul>
-      <div class="card frag" style="padding:8px 14px;font-size:18px">
-        <div>測定値 <span class="math">|0⟩</span> の確率：<span class="eq inline"><span class="math">|</span><span class="frac"><span>1</span><span>√5</span></span><span class="math">|² =</span><span class="frac"><span>1</span><span>5</span></span></span> = 0.2 → 状態は <span class="math">|0⟩</span> に</div>
-        <div>測定値 <span class="math">|1⟩</span> の確率：<span class="eq inline"><span class="math">|−</span><span class="frac"><span>2</span><span>√5</span></span><span class="math">|² =</span><span class="frac"><span>4</span><span>5</span></span></span> = 0.8 → 状態は <span class="math">|1⟩</span> に</div>
-      </div>
-      <div class="point blue frag" style="font-size:19px"><span class="math">|φ⟩</span> と <span class="math">|ψ⟩</span> は <b>ベクトルとしては異なるが、測定したときの振舞いは一致する</b>。こういうケースがあることに注意</div>
-    </div>
-    <div class="card pop" style="--d:.2s;padding:12px 16px">
-      <svg class="circ" id="mPsiSvg" viewBox="0 0 320 250" style="height:230px;width:auto;margin:0 auto"></svg>
-      <div class="mpair">
-        <div><b class="math" style="color:#ff6b1a">|φ⟩</b> <span class="mmini"><i style="--h:.2"></i><i style="--h:.8"></i></span></div>
-        <div><b class="math" style="color:#3b6cff">|ψ⟩</b> <span class="mmini b"><i style="--h:.2"></i><i style="--h:.8"></i></span></div>
-      </div>
-      <div class="hint" style="text-align:center">向きは違う（係数の符号が違う）が、測定の確率分布はどちらも |0⟩：0.2、|1⟩：0.8<br>※ 係数を実数に限った場合のイメージ図</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1931,31 +1898,6 @@ const measureOnce = () => (Math.random() < P0 ? 0 : 1);
   stoppers.push(stop);
   window.onEnter = window.onEnter || {};
   onEnter.meas1 = () => { hs = []; hist.innerHTML = ''; res.textContent = '?'; res.className = 'mket mres'; };
-}
-/* |φ⟩ と |ψ⟩ の向き（係数を実数に限ったイメージ） */
-{
-  const svg = $('#mPsiSvg'), NS = 'http://www.w3.org/2000/svg';
-  const OX = 120, OY = 125, U = 95;
-  const mk = (tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); svg.appendChild(e); return e; };
-  const defs = mk('defs', {});
-  [['mhP', '#ff6b1a'], ['mhS', '#3b6cff']].forEach(([id, col]) => {
-    const m = document.createElementNS(NS, 'marker');
-    for (const [k, v] of Object.entries({ id, viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 5, markerHeight: 5, orient: 'auto' })) m.setAttribute(k, v);
-    const pth = document.createElementNS(NS, 'path'); pth.setAttribute('d', 'M0,0 L10,5 L0,10 z'); pth.setAttribute('fill', col);
-    m.appendChild(pth); defs.appendChild(m);
-  });
-  mk('line', { x1: 10, y1: OY, x2: 240, y2: OY, stroke: '#d9d4ea', 'stroke-width': 2 });
-  mk('line', { x1: OX, y1: 14, x2: OX, y2: 236, stroke: '#d9d4ea', 'stroke-width': 2 });
-  mk('circle', { cx: OX, cy: OY, r: U, fill: 'none', stroke: '#1f1a3d', 'stroke-width': 2.5, 'stroke-dasharray': '6 6' });
-  const a = 1 / Math.sqrt(5), b = 2 / Math.sqrt(5);
-  const x = OX + U * a;
-  mk('line', { x1: x, y1: OY - U * b, x2: x, y2: OY + U * b, stroke: '#b9b5d0', 'stroke-width': 2, 'stroke-dasharray': '4 4' });
-  mk('line', { x1: OX, y1: OY, x2: x, y2: OY - U * b, stroke: '#ff6b1a', 'stroke-width': 5, 'stroke-linecap': 'round', 'marker-end': 'url(#mhP)' });
-  mk('line', { x1: OX, y1: OY, x2: x, y2: OY + U * b, stroke: '#3b6cff', 'stroke-width': 5, 'stroke-linecap': 'round', 'marker-end': 'url(#mhS)' });
-  const t = (tx, ty, s, col, anchor = 'start') => { const e = mk('text', { x: tx, y: ty, 'text-anchor': anchor, 'font-size': 18, 'font-weight': 800, fill: col, 'font-family': 'Cambria Math,Times New Roman,serif' }); e.textContent = s; };
-  t(x + 10, OY - U * b - 4, '|φ⟩', '#ff6b1a'); t(x + 10, OY + U * b + 14, '|ψ⟩', '#3b6cff');
-  t(OX + U + 6, OY - 6, '|0⟩', '#6b6790'); t(OX + 6, 16, '|1⟩', '#6b6790'); t(OX + 6, 244, '−|1⟩', '#6b6790');
-  t(x + 8, OY - 40, '+2/√5', '#ff6b1a'); t(x + 8, OY + 50, '−2/√5', '#3b6cff');
 }
 
 /* ---------- スライド制御 ---------- */
