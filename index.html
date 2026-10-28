@@ -201,7 +201,9 @@ body.overview .slide:hover{outline-width:14px}
 body.overview .slide.current{outline-width:22px}
 body.overview .frag{opacity:1;transform:none}
 body.overview .bar-fill{width:var(--w);transition:none}
-body.overview .slide .pageno{font-size:44px;font-weight:800;color:var(--ink);bottom:24px;right:40px}
+body.overview .slide{overflow:hidden}
+/* 一覧ではページ番号を右下の札にして、中身と重なっても読めるようにする */
+body.overview .slide .pageno{font-size:40px;font-weight:900;color:#fff;background:var(--ink);border-radius:16px;padding:2px 20px;bottom:14px;right:14px;z-index:6}
 body.overview #ui,body.overview #progress{display:none}
 
 /* ---------- ポップ調デザイン（太枠・ずらし影・弾むアニメ） ---------- */
@@ -306,8 +308,8 @@ table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
 .pd-secs{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:22px}
 .pd-secs span{background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:4px 18px;font-size:19px;font-weight:700;box-shadow:3px 3px 0 var(--ink)}
 .pd-secs span.add{background:var(--accent-l)}
-.pd-bg{position:absolute;left:0;right:0;bottom:46px;display:flex;justify-content:center;color:var(--c);opacity:.13;font-size:84px;pointer-events:none}
-.pd-bg .eq{font-size:84px;gap:20px}
+.pd-bg{position:absolute;left:0;right:0;bottom:4px;display:flex;justify-content:center;color:var(--c);opacity:.13;font-size:84px;pointer-events:none}
+.pd-bg .eq{font-size:50px;gap:14px}
 .pd-bg .vec{border-width:5px;border-radius:40px;padding:4px 26px;line-height:1.15}
 
 /* 量子状態をつくってみる（ベクトルの足し算） */
