@@ -1893,6 +1893,21 @@ svg.topo{display:block;width:100%;height:auto;user-select:none}
 @media print{.code .cl.on{background:none;box-shadow:none}}
 
 /* ===== 改訂で追加したスライド用 ===== */
+.nz2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.nzc{border:2.5px solid var(--ink);border-radius:14px;padding:6px 10px 8px;border-top:8px solid var(--c);background:#fff}
+.nzc .nh{font-weight:900;font-size:16px;text-align:center;color:var(--c)}
+.nzc .out{font-size:14px;line-height:1.5;min-height:52px}
+.vidbox{position:relative;flex:1;min-height:0;background:#1f1a3d;border:3px solid var(--ink);border-radius:16px;box-shadow:var(--hard);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.vidbox video{width:100%;height:100%;object-fit:contain;background:#000;display:none}
+.vidbox.has video{display:block}
+.vidbox.has .vph{display:none}
+.vidbox.drag{outline:5px dashed var(--yellow);outline-offset:-12px}
+.vph{color:#ece9ff;text-align:center;font-size:20px;line-height:1.8}
+.vph .vi{font-size:64px;line-height:1.2}
+.vph .tiny{color:#b9b5d0}
+.vph label{display:inline-block;margin-top:10px;background:var(--yellow);color:var(--ink);font-weight:900;border:2.5px solid var(--ink);border-radius:999px;padding:6px 20px;cursor:pointer;box-shadow:3px 3px 0 #000}
+.vph input{display:none}
+
 .slide[data-id="title"] .title-wrap{display:flex !important;flex-direction:column;justify-content:center;align-items:stretch;gap:30px}
 .slide[data-id="title"] .title-wrap h1{font-size:46px}
 .slide[data-id="title"] .title-wrap h1 br{display:none}
@@ -1976,7 +1991,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
         <li class="agroup pop" style="--d:.25s">復習</li>
         <li class="pop" style="--d:.27s"><span class="num" style="background:#9a93bd">0</span>量子状態・量子ゲート・2 量子ビット<em>第3〜5章</em></li>
         <li class="agroup pop" style="--d:.29s">第6章 2 量子ビットの量子回路</li>
-        <li class="pop" style="--d:.31s"><span class="num" style="background:var(--blue)">1</span>ややこしい計算をやさしくする工夫<em>6.1・6.2</em></li>
+        <li class="pop" style="--d:.31s"><span class="num" style="background:var(--blue)">1</span>記法の工夫<em>6.2</em></li>
         <li class="pop" style="--d:.33s"><span class="num" style="background:var(--pink)">2</span>CNOT ゲート<em>6.3</em></li>
         <li class="pop" style="--d:.35s"><span class="num" style="background:var(--green)">3</span>SWAP ゲート・測定・量子回路の用語<em>6.4・6.5・7.4</em></li>
         <li class="pop" style="--d:.37s"><span class="num" style="background:var(--accent)">4</span>実行結果を検証する技術<em>コラム</em></li>
@@ -2035,13 +2050,11 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
     </div>
     <div class="rvc pop" style="--d:.2s;--c:var(--green)">
       <div class="rh">③ 2 量子ビットの量子状態<small>第5章</small></div>
-      <div class="rdl" style="--c:var(--green)">
-        <b>基本の状態</b><div><span class="math">|00⟩, |01⟩, |10⟩, |11⟩</span> の 4 つ<br><span class="math">|01⟩ = |0⟩ ⊗ |1⟩</span>（<b class="k">テンソル積</b>）</div>
-        <b>一般の状態</b><div><span class="math">a|00⟩ + b|01⟩ + c|10⟩ + d|11⟩</span><br><span class="tiny">（<span class="math">|a|² + |b|² + |c|² + |d|² = 1</span>）</span></div>
-        <b>テンソル積</b><div class="eqrow"><span class="vec "><span>a</span><span>b</span></span><span>⊗</span><span class="vec "><span>c</span><span>d</span></span><span>=</span><span class="vec "><span>ac</span><span>ad</span><span>bc</span><span>bd</span></span></div>
-        <b>量子ゲート</b><div>4 × 4 のユニタリ行列（例：<span class="math">U ⊗ V</span>）</div>
-        <b>量子もつれ</b><div>テンソル積で書けない状態<br>例：<span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|00⟩ + |11⟩)</span></div>
-      </div>
+      <div>基本の 4 状態 <span class="math">|00⟩, |01⟩, |10⟩, |11⟩</span>（<span class="math">|01⟩ = |0⟩ ⊗ |1⟩</span>）の <b class="k">重ね合わせ</b></div>
+      <div class="eqrow" style="font-size:19px"><span>|φ⟩ = a|00⟩ + b|01⟩ + c|10⟩ + d|11⟩ =</span><span class="vec"><span>a</span><span>b</span><span>c</span><span>d</span></span></div>
+      <div class="ctr">（<span class="math"><b>|a|² + |b|² + |c|² + |d|² = 1</b></span>）</div>
+      <div class="rnb"><b>測定</b> すると確率 <span class="math"><b>|a|²</b></span> で |00⟩、<span class="math"><b>|b|²</b></span> で |01⟩、<span class="math"><b>|c|²</b></span> で |10⟩、<span class="math"><b>|d|²</b></span> で |11⟩ を得る</div>
+      <div class="rnb">例：<span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|00⟩ + |11⟩)</span> → |00⟩ も |11⟩ も確率 1/2</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -2054,7 +2067,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
     <div class="pd-src pop">『量子コンピュータの頭の中』</div>
     <div class="pd-no pop" style="--d:.05s">第 6 章</div>
     <h1 class="pd-title pop" style="--d:.15s">2 量子ビットの量子回路</h1>
-    <div class="pd-secs pop" style="--d:.3s"><span>SECTION 1　ややこしい計算をやさしくする工夫（6.1・6.2）</span><span>SECTION 2　CNOT ゲート（6.3）</span><span>SECTION 3　SWAP ゲート・測定・量子回路の用語（6.4・6.5・7.4）</span><span>SECTION 4　コラム：実行結果を検証する技術</span></div>
+    <div class="pd-secs pop" style="--d:.3s"><span>SECTION 1　記法の工夫（6.2）</span><span>SECTION 2　CNOT ゲート（6.3）</span><span>SECTION 3　SWAP ゲート・測定・量子回路の用語（6.4・6.5・7.4）</span><span>SECTION 4　コラム：実行結果を検証する技術</span></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -2065,8 +2078,8 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
     <div class="door-num">1</div>
     <div>
       <div class="door-label pop"><span class="door-book">第6章 2 量子ビットの量子回路</span>SECTION 1</div>
-      <h1 class="pop" style="--d:.1s">ややこしい計算を<br>やさしくする工夫</h1>
-      <p class="door-lead pop" style="--d:.2s">記法の工夫と量子ビットの順番（6.1・6.2）</p>
+      <h1 class="pop" style="--d:.1s">記法の工夫</h1>
+      <p class="door-lead pop" style="--d:.2s">H<sub>0</sub>・H<sup>⊗2</sup> という書き方と量子ビットの順番（6.2）</p>
       <div class="door-topics pop" style="--d:.3s"><span>H<sub>0</sub> という書き方</span><span>H<sup>⊗2</sup></span><span>バイト・オーダ</span></div>
     </div>
   </div>
@@ -2107,7 +2120,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
         <div class="ctr" style="font-size:19px;font-weight:800;color:var(--muted)">右上の ⊗2 ＝「2 個のテンソル積」</div>
       </div>
     </div>
-    <div class="point blue pop" style="--d:.2s;margin-top:0;font-size:23px">2 量子ビットではありがたみが少ないが、<b class="kb">量子ビットが増えるほど</b> 記述をぐっと簡潔にできる　例：<span class="math" style="font-size:28px">H ⊗ H ⊗ H ⊗ H ⊗ H = <b>H<sup>⊗5</sup></b></span></div>
+    <div class="point blue pop" style="--d:.2s;margin-top:0;font-size:23px">2 量子ビットではありがたみが少ないが、<b class="kb">量子ビットが増えるほど</b> 記述をぐっと簡潔にできる<br>例：<span class="math" style="font-size:28px;white-space:nowrap">H ⊗ H ⊗ H ⊗ H ⊗ H = <b>H<sup>⊗5</sup></b></span></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -2118,7 +2131,6 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <h2>量子ビットの順番に注意：バイト・オーダ<small>p.141</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)">
     <div class="col">
-      <div class="lead pop">量子ビットを並べる順番（<b>左右どちらから</b>番号をつけるか）を <b class="k">バイト・オーダ</b>（byte order）という</div>
       <div class="icard pop" style="--d:.1s;--c:var(--blue)"><span class="tag2">本書（第6章）</span><div class="ih">⟶ 左から右へ 0, 1, …</div><p>|0⟩ ⊗ |1⟩ なら <b>|0⟩ が 0 番目</b>、|1⟩ が 1 番目。量子アルゴリズムの説明で多い書き方</p></div>
       <div class="icard pop" style="--d:.15s;--c:var(--pink)"><span class="tag2" style="background:var(--pink)">Qiskit など（第7章）</span><div class="ih">⟵ 右から左へ 0, 1, …</div><p>|0⟩ ⊗ |1⟩ なら <b>|1⟩ が 0 番目</b>、|0⟩ が 1 番目。量子プログラミング・ライブラリで多い書き方</p></div>
       <div class="point pop" style="--d:.2s;font-size:17px;margin-top:0">非常に混乱しやすい！ <b>第7章でコードを書くときにもう一度出てくる</b></div>
@@ -2150,7 +2162,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
         <div class="vsc" style="--c:var(--blue)"><div class="vh">本書（第6章）：左が 0 番目</div><div class="vb" id="bo2Book"></div></div>
         <div class="vsc" style="--c:var(--pink)"><div class="vh">Qiskit の出力（確率）：右が 0 番目</div><div><span class="out pre" id="bo2Out" style="font-size:18px"></span></div><div class="tiny mt6" id="bo2Note"></div></div>
       </div>
-      <div class="point pop" style="--d:.2s;font-size:17.5px;margin-top:0">同じ回路なのに、<b class="k">文字列の左右が逆</b> になる。Qiskit の <span class="mono">01 1.0</span> は「<b>量子ビット 1 が 0、量子ビット 0 が 1</b> の状態を確率 1 で得る」という意味</div>
+      <div class="point pop" style="--d:.2s;font-size:17.5px;margin-top:0">同じ回路なのに、<b class="k">文字列の左右が逆</b> になる。<br>Qiskit の <span class="mono" style="white-space:nowrap">01 1.0</span> は、<br>「<b>量子ビット 1 が 0、量子ビット 0 が 1</b>」の状態を<br>確率 1 で得るという意味</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -2250,20 +2262,14 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <div class="pageno"></div>
 </section>
 
-<!-- 6.5 測定 ＋ 7.4 量子回路の用語 -->
+<!-- 6.5 ・ 7.4 量子回路の表記法 -->
 <section class="slide" data-id="me">
   <div class="chap">第6章 ／ 6.5 量子ビットを測定する ・ 第7章 7.4 量子回路に関する用語</div>
   <h2>量子回路の表記法<small>6.5（p.150）／ 7.4・図 7.7（pp.163–165）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)">
-    <div class="col" style="gap:10px">
-      <div class="card pop" style="padding:10px 16px">
-        <div class="mp-lbl">図 7.7：量子回路の表記法 — 用語を選ぶと場所が光る</div>
-        <div id="tgCirc"></div>
-      </div>
-    </div>
-    <div class="col" style="gap:14px">
-      <div class="tg-list pop" style="--d:.05s;display:flex;flex-direction:column;gap:10px;align-items:stretch" id="tgList"></div>
-      <div class="tg-desc pop" style="--d:.1s;font-size:20px;min-height:170px" id="tgDesc"></div>
+  <div class="body center">
+    <div class="card pop" style="padding:14px 24px;width:100%;max-width:1060px">
+      <div class="mp-lbl" style="font-size:18px">図 7.7：量子回路の各部分の呼び方</div>
+      <div id="tgCirc"></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -2297,10 +2303,11 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
     </div>
     <div class="card pop" style="--d:.2s;padding:12px 16px">
       <div class="pk jp" id="tmN" data-label="測定回数" style="justify-content:center"></div>
-      <div class="pk jp mt6" id="tmNoise" data-label="装置" style="justify-content:center"></div>
-      <div class="hist mt14" id="tmHist" style="height:170px"></div>
-      <div class="hlabs"><span>0</span><span>1</span></div>
-      <div class="out mt10 ctr" id="tmOut" style="font-size:16px"></div>
+      <div class="nz2 mt10">
+        <div class="nzc" style="--c:var(--green)"><div class="nh">ノイズなし（理想）</div><div class="hist mt10" id="tmHistA" style="height:150px"></div><div class="hlabs"><span>0</span><span>1</span></div><div class="out mt6 ctr" id="tmOutA"></div></div>
+        <div class="nzc" style="--c:var(--red)"><div class="nh">ノイズあり（実機のイメージ）</div><div class="hist mt10" id="tmHistB" style="height:150px"></div><div class="hlabs"><span>0</span><span>1</span></div><div class="out mt6 ctr" id="tmOutB"></div></div>
+      </div>
+      <div class="tiny ctr mt6" id="tmEps"></div>
       <div class="btns" style="justify-content:center;margin-top:8px"><button class="b" id="tmGo">▶ 測定する</button><button class="b" id="tmAuto" data-autoplay>▶ 自動再生</button></div>
     </div>
   </div>
@@ -2446,6 +2453,26 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
         <div class="point blue pop" style="--d:.25s;margin-top:0;font-size:16px">⚠️ <b>教科書出版後の変更</b>：IBM Quantum Lab は 2024 年に提供を終了。現在は <b>自分の PC</b> か Google Colab などで実行するのが一般的（→ 7.8 の後の補足）</div>
       </div>
     </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 7.3.2 Quantum Composer の操作動画 -->
+<section class="slide" data-id="vd">
+  <div class="chap">第7章 ／ 7.3.2 Qiskit の実行方法</div>
+  <h2>Quantum Composer で量子回路を組み立てる<small>動画で操作を確認</small></h2>
+  <div class="body col" style="gap:10px">
+    <div class="vidbox" id="vdBox">
+      <video id="vdVideo" controls playsinline preload="metadata"></video>
+      <div class="vph">
+        <div class="vi">🎬</div>
+        Quantum Composer の操作動画をここに映します<br>
+        <span class="tiny">動画ファイルをこの枠にドラッグ＆ドロップするか、ボタンから選んでください<br>
+        （このスライドと同じフォルダに <b>composer.mp4</b> を置くと、自動で読み込みます）</span><br>
+        <label>📂 動画ファイルを選ぶ<input type="file" id="vdFile" accept="video/*"></label>
+      </div>
+    </div>
+    <div class="tiny ctr">クリックで再生 ／ 一時停止。全画面は動画の右下のボタンから</div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -3367,49 +3394,77 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
   looper('#swAuto', () => pk((pk.cur() + 1) % 4), 2600);
 }
 
-/* ---------- 7.4 量子回路の用語（図 7.7）：6.5 の測定スライドに表示 ---------- */
+/* ---------- 7.3.2 Quantum Composer の操作動画 ---------- */
 {
-  const qc = drawQC('#tgCirc', { n: 2, nc: 2, ops: BELL_OPS, colW: 92, rowH: 70, top: 40, maxW: '640px', bottom: 6 });
-  const svg = qc.svg, X = qc.X, Y = qc.Y, cy = qc.cy;
-  const R = (x, y, w, h) => qc.hl(x, y, w, h);
-  const T = [
-    { k: '量子レジスタ', h: [R(qc.L0 - 4, Y(0) - 26, qc.W - qc.L0 - 2, Y(1) - Y(0) + 52)], d: '<b class="t">量子レジスタ</b>（quantum register）：q<sub>0</sub> や q<sub>1</sub> と書いてある一重線。<b class="k">量子ビットを格納する領域</b>' },
-    { k: 'サイズ', h: [R(0, Y(0) - 22, qc.L0 - 2, Y(1) - Y(0) + 44)], d: '<b class="t">量子回路のサイズ</b>（size）：利用する量子レジスタの数（＝ 量子ビットの数）。図 7.7 の量子回路は <b class="k">サイズ 2</b>' },
-    { k: '古典レジスタ', h: [R(qc.L0 - 4, cy - 14, qc.W - qc.L0 - 2, 28)], d: '<b class="t">古典レジスタ</b>（classical register）：c と書いてある二重線。<b class="k">古典ビットを格納する領域</b>' },
-    { k: '古典レジスタのサイズ', h: [R(qc.L0 + 2, cy - 30, 30, 44)], d: '<b class="t">古典レジスタのサイズ</b>：古典ビットの数。複数の古典レジスタは 1 本の二重線にまとめて書くことが多く、そのサイズは <b class="k">二重線の左端</b> に記載（ここでは 2）' },
-    { k: '処理の流れ', h: [R(qc.L0 - 4, 2, qc.W - qc.L0 - 4, 30)], d: '<b class="t">処理の流れ</b>：量子回路の操作は <b class="k">左から右</b> に順番に実行する。一方、量子状態にユニタリ行列をかける場合は右から左に並べるので注意' },
-    { k: '量子ゲート', h: [R(X(0) - 26, Y(0) - 26, 52, 52), R(X(1) - 26, Y(0) - 26, 52, Y(1) - Y(0) + 52)], d: '<b class="t">量子ゲート</b>：H などの記号はゲートを表す。この量子回路は <b class="k">H、CNOT、測定の順</b> で実行する' },
-    { k: '測定', h: [R(X(2) - 26, Y(0) - 26, 52, 52), R(X(3) - 26, Y(1) - 26, 52, 52)], d: '<b class="t">測定</b>：メーターのような記号。測定で得た値を古典レジスタに格納するため、「測定する量子レジスタ」から「値を格納する古典レジスタ」に <b class="k">二重線の矢印</b> を引く' },
-    { k: '格納先', h: [R(X(2) - 8, cy - 14, 34, 44), R(X(3) - 8, cy - 14, 34, 44)], d: '<b class="t">格納先の添え字</b>：矢印の先の数字は古典レジスタの添え字。量子レジスタ 0 を測定した値を <b class="k">古典レジスタ 0</b> に、量子レジスタ 1 を測定した値を <b class="k">古典レジスタ 1</b> に格納' },
-  ];
-  T.splice(0, T.length, ...T.filter(t => ['量子レジスタ', '古典レジスタ', '古典レジスタのサイズ'].includes(t.k)));
-  $('#tgList').innerHTML = T.map((t, i) => `<button data-i="${i}">${t.k}</button>`).join('');
-  const bs = [...$('#tgList').querySelectorAll('button')];
-  let cur = 0;
-  const set = i => { cur = i; bs.forEach((b, j) => b.classList.toggle('on', i === j)); T.forEach((t, j) => t.h.forEach(r => r.classList.toggle('on', i === j))); $('#tgDesc').innerHTML = T[i].d; };
-  bs.forEach((b, i) => b.addEventListener('click', e => { e.currentTarget.blur(); set(i); }));
-  set(0);
+  const box = $('#vdBox'), v = $('#vdVideo');
+  const load = src => { v.src = src; box.classList.add('has'); };
+  // 同じフォルダの composer.mp4 があれば自動で読み込む
+  v.addEventListener('loadedmetadata', () => box.classList.add('has'));
+  v.addEventListener('error', () => { if (!v.dataset.user) box.classList.remove('has'); });
+  v.src = 'composer.mp4';
+  const pickFile = f => { if (!f || !f.type.startsWith('video/')) return; v.dataset.user = 1; load(URL.createObjectURL(f)); };
+  $('#vdFile').addEventListener('change', e => pickFile(e.target.files[0]));
+  ['dragenter', 'dragover'].forEach(t => box.addEventListener(t, e => { e.preventDefault(); box.classList.add('drag'); }));
+  ['dragleave', 'drop'].forEach(t => box.addEventListener(t, () => box.classList.remove('drag')));
+  box.addEventListener('drop', e => { e.preventDefault(); pickFile(e.dataTransfer.files[0]); });
+  // スライドを移ったら止める
+  stoppers.push(() => v.pause());
 }
 
-/* ---------- コラム：統計誤差とノイズ ---------- */
+/* ---------- 7.4 量子回路の表記法（図 7.7）：3 つの部分を色分けして名前を付ける ---------- */
+{
+  const qc = drawQC('#tgCirc', { n: 2, nc: 2, ops: BELL_OPS, colW: 92, rowH: 70, top: 34 });
+  const svg = qc.svg, Y = qc.Y, cy = qc.cy, L0 = qc.L0, W = qc.W;
+  const EXT = 300, BOT = 64;
+  svg.setAttribute('viewBox', `0 0 ${W + EXT} ${qc.H + BOT}`);
+  const g = el('g', {}, svg);
+  svg.insertBefore(g, svg.firstChild);
+  const lab = (x, y, s, c, anchor = 'start') => {
+    const t = el('text', { x, y, fill: c, 'font-size': 22, 'font-weight': 900, 'text-anchor': anchor, 'dominant-baseline': 'central', 'font-family': '"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif' }, svg);
+    t.textContent = s; return t;
+  };
+  const box = (x, y, w, h, c, f) => el('rect', { x, y, width: w, height: h, rx: 10, fill: f, stroke: c, 'stroke-width': 3 }, g);
+  const line = (x1, y1, x2, y2, c) => el('line', { x1, y1, x2, y2, stroke: c, 'stroke-width': 3, 'stroke-dasharray': '6 4' }, svg);
+  // 量子レジスタ
+  const cQ = '#e04e00';
+  box(L0 - 6, Y(0) - 28, W - L0, Y(1) - Y(0) + 56, cQ, 'rgba(255,107,26,.12)');
+  line(W - 6, (Y(0) + Y(1)) / 2, W + 26, (Y(0) + Y(1)) / 2, cQ);
+  lab(W + 34, (Y(0) + Y(1)) / 2 - 14, '量子レジスタ', cQ);
+  lab(W + 34, (Y(0) + Y(1)) / 2 + 16, '（一重線：量子ビット）', cQ).setAttribute('font-size', 17);
+  // 古典レジスタ
+  const cC = '#3b6cff';
+  box(L0 + 40, cy - 16, W - L0 - 46, 32, cC, 'rgba(59,108,255,.12)');
+  line(W - 6, cy, W + 26, cy, cC);
+  lab(W + 34, cy - 14, '古典レジスタ', cC);
+  lab(W + 34, cy + 16, '（二重線：古典ビット）', cC).setAttribute('font-size', 17);
+  // 古典レジスタのサイズ
+  const cS = '#d6246e';
+  box(L0 + 2, cy - 34, 32, 50, cS, 'rgba(255,79,154,.14)');
+  line(L0 + 18, cy + 16, L0 + 18, cy + 40, cS);
+  lab(L0 - 10, cy + 52, '古典レジスタのサイズ（古典ビットの数 ＝ 2）', cS);
+}
+
+/* ---------- コラム：統計誤差とノイズ（ノイズなし／ありを並べて比較） ---------- */
 {
   drawQC('#tmCirc', { n: 1, nc: 1, init: true, names: ['q'], ops: [{ g: 'H', q: 0, col: 0 }, { g: 'M', q: 0, cb: 0, col: 1 }], colW: 66, maxW: '260px' });
-  const h = hist('#tmHist', 2, .8);
-  h.ref(.5, '理論値 1/2');
-  let N = 100, noisy = false;
-  const go = () => {
-    const p0 = noisy ? .56 : .5, k0 = binom(N, p0), f0 = k0 / N, f1 = 1 - f0;
-    h([f0, f1], [`${k0} 回`, `${N - k0} 回`]);
+  const hA = hist('#tmHistA', 2, .8), hB = hist('#tmHistB', 2, .8);
+  hA.ref(.5, '理論値 1/2'); hB.ref(.5, '理論値 1/2');
+  let N = 100;
+  const one = (hh, out, p0) => {
+    const k0 = binom(N, p0), f0 = k0 / N;
+    hh([f0, 1 - f0], [`${k0} 回`, `${N - k0} 回`]);
     const dev = Math.abs(f0 - .5) * 100, eps = 100 / Math.sqrt(N);
-    $('#tmOut').innerHTML = `0 の割合 <b>${(f0 * 100).toFixed(1)}%</b> ／ 理論値とのずれ <b>${dev.toFixed(1)}%</b> ／ 統計誤差の目安 ε ≈ 1/√N = <b>${eps.toFixed(1)}%</b>` +
-      (noisy && N >= 1000 ? '<br><span style="color:var(--red)">→ 回数を増やしても目安より大きくずれる ＝ ノイズ</span>' : '');
+    $(out).innerHTML = `0 の割合 <b>${(f0 * 100).toFixed(1)}%</b><br>理論値とのずれ <b style="color:${dev > eps ? 'var(--red)' : 'var(--green)'}">${dev.toFixed(1)}%</b>`;
+  };
+  const go = () => {
+    one(hA, '#tmOutA', .5); one(hB, '#tmOutB', .56);
+    $('#tmEps').innerHTML = `統計誤差の目安 ε ≈ 1/√N = <b>${(100 / Math.sqrt(N)).toFixed(1)}%</b>` + (N >= 1000 ? '　→ ノイズありは回数を増やしても目安より大きくずれる' : '');
   };
   const pn = picker('#tmN', [10, 100, 1000, 10000].map(n => ({ label: `${n} 回`, n })), it => { N = it.n; go(); });
-  const pz = picker('#tmNoise', [{ label: '理想（シミュレータ）', z: false }, { label: 'ノイズあり（実機のイメージ）', z: true }], it => { noisy = it.z; go(); });
-  pz(0); pn(1);
+  pn(1);
   $('#tmGo').addEventListener('click', e => { e.currentTarget.blur(); go(); });
   let t = 0;
-  looper('#tmAuto', () => { t++; if (t % 8 === 0) pz(1 - pz.cur()); pn(t % 4); }, 1400);
+  looper('#tmAuto', () => { t++; pn(t % 4); }, 1400);
 }
 
 /* ---------- コラム：量子状態トモグラフィ（3 方向から測定） ---------- */
@@ -4008,6 +4063,8 @@ slides.forEach((s, i) => s.addEventListener('click', () => {
 }));
 addEventListener('resize', () => { if (overview) layoutOverview(); });
 addEventListener('keydown', e => {
+  // 動画を操作しているときの Space・矢印キーは動画に任せる
+  if (e.target.tagName === 'VIDEO' && [' ', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
   if (overview) {
     if (['o', 'O', 'Escape'].includes(e.key)) toggleOverview(false);
     else if (e.key === 'Enter') { e.preventDefault(); toggleOverview(false); }
