@@ -1,0 +1,2284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>クモにかまれた！ ― スパイダーでビットを表す（Quantum in Pictures 2.2）</title>
+<style>
+:root{
+  --ink:#1f1a3d; --muted:#6b6790; --line:#1f1a3d; --bg:#fffaf0;
+  --accent:#ff6b1a; --accent-d:#e04e00; --accent-l:#fff1c2;
+  --blue:#3b6cff; --blue-l:#dfe8ff; --green:#14a35a;
+  --off:#b9b5d0; --pink:#ff4f9a; --yellow:#ffd53d; --purple:#8a5cff;
+  --hard:4px 4px 0 var(--ink);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{margin:0;height:100%;background:#1e293b;overflow:hidden;
+  font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;color:var(--ink)}
+#viewport{position:fixed;inset:0}
+#stage{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform-origin:center center;
+  background:var(--bg);box-shadow:0 20px 60px rgba(0,0,0,.4);overflow:hidden}
+
+/* ---------- slides ---------- */
+.slide{position:absolute;inset:0;padding:44px 64px 50px;opacity:0;pointer-events:none;
+  transform:translateX(60px);transition:opacity .55s ease,transform .55s ease;display:flex;flex-direction:column}
+.slide.past{transform:translateX(-60px)}
+.slide.active{opacity:1;transform:none;pointer-events:auto}
+.slide::before{content:"";position:absolute;left:0;top:0;right:0;height:6px;
+  background:linear-gradient(90deg,var(--accent),#facc15 50%,var(--blue))}
+.chap{font-size:15px;color:var(--muted);letter-spacing:.05em}
+h2{font-size:38px;margin:6px 0 22px;padding-left:16px;border-left:10px solid var(--accent);line-height:1.25}
+h2 small{font-size:22px;color:var(--muted);font-weight:500;margin-left:12px}
+.pageno{position:absolute;right:30px;bottom:16px;font-size:14px;color:var(--muted)}
+.body{flex:1;min-height:0}
+p,li{font-size:23px;line-height:1.6}
+ul{margin:0;padding-left:1.2em}
+li{margin:6px 0}
+b.k{color:var(--accent-d)}
+b.kb{color:var(--blue)}
+.muted{color:var(--muted)}
+.cols{display:grid;grid-template-columns:1.25fr 1fr;gap:30px;align-items:center;height:100%}
+.cols.even{grid-template-columns:1fr 1fr}
+.cols.wide{grid-template-columns:1.7fr 1fr}
+.card{background:#fff;border-radius:18px;box-shadow:0 6px 24px rgba(15,23,42,.08);padding:18px 22px}
+.point{background:var(--accent-l);border-left:7px solid var(--accent);padding:12px 18px;border-radius:10px;font-size:22px;line-height:1.55;margin-top:14px}
+.point.blue{background:var(--blue-l);border-left-color:var(--blue)}
+.hint{font-size:16px;color:var(--muted);margin-top:6px}
+.formula{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:30px;background:#fff;border-radius:12px;
+  padding:10px 20px;display:inline-block;box-shadow:0 3px 12px rgba(15,23,42,.08)}
+sub{font-size:.65em}
+.center{display:flex;justify-content:center;align-items:center}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+button.b{font:inherit;font-size:16px;padding:7px 16px;border-radius:999px;border:2px solid var(--blue);background:#fff;color:var(--blue);cursor:pointer;font-weight:700}
+button.b:hover{background:var(--blue-l)}
+button.b.playing{background:var(--blue);color:#fff}
+
+/* fragments & entrance animations */
+.frag{opacity:0;transform:translateY(18px);transition:opacity .45s ease,transform .45s ease}
+.frag.vis{opacity:1;transform:none}
+.slide.active .pop{animation:pop .6s cubic-bezier(.2,.8,.3,1.2) both;animation-delay:var(--d,0s)}
+@keyframes pop{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+
+/* ---------- truth tables ---------- */
+.ttcap{text-align:center;font-size:18px;font-weight:800;color:#334155;margin:0 0 6px}
+.bitex{display:flex;gap:10px;margin:6px 0 4px;flex-wrap:wrap}
+.bitex span{background:#fff;border-radius:10px;padding:4px 12px;font-size:18px;box-shadow:0 2px 8px rgba(15,23,42,.08)}
+.bitex small{display:block;font-size:12px;color:var(--muted)}
+.bitex b{color:var(--accent-d);font-family:Consolas,Menlo,monospace}
+.quote{display:block;background:#fff;border-left:6px solid var(--blue);border-radius:8px;padding:6px 14px;box-shadow:0 2px 8px rgba(15,23,42,.08)}
+.quote small{display:block;text-align:right;font-size:15px;color:var(--muted)}
+.mapline{text-align:center;font-size:20px;margin-top:4px;font-family:Consolas,Menlo,monospace}
+.mapline b{color:var(--blue);font-size:24px}
+.mapline b.o{color:var(--accent-d)}
+table.tt{border-collapse:collapse;font-size:22px;text-align:center;background:#fff;border-radius:12px;overflow:hidden;
+  box-shadow:0 4px 16px rgba(15,23,42,.08);margin:0 auto}
+table.tt th,table.tt td{padding:6px 16px;border:1px solid var(--line)}
+table.tt th{background:#e2e8f0;font-size:18px;white-space:nowrap}
+table.tt th.out{background:#fde7d3}
+table.tt td.calc{font-family:Consolas,Menlo,monospace;color:var(--muted);font-size:19px}
+table.tt td.out.one{color:var(--accent-d);font-weight:800}
+table.tt tbody tr{cursor:pointer;transition:background .2s}
+table.tt tbody tr:hover td{background:#f8fafc}
+table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(250,204,21,.38)}
+table.tt.small{font-size:18px}
+.point.logic{display:flex;align-items:center;gap:14px}
+.venn{width:112px;flex:none}
+table.tt.small th,table.tt.small td{padding:3px 12px}
+table.tt.small th{font-size:15px}
+table.tt td{transition:background .3s,color .3s}
+.slide.show-s table.tt td.s1{background:var(--blue-l);color:var(--blue);font-weight:800}
+.slide.show-c table.tt td.c1{background:#fed7aa;color:var(--accent-d);font-weight:800}
+
+/* ---------- circuits (SVG) ---------- */
+svg.circ{width:100%;height:auto;display:block;user-select:none}
+.wire{fill:none;stroke:var(--off);stroke-width:4;stroke-linejoin:round;stroke-linecap:round;transition:stroke .25s}
+.wire.on{stroke:var(--accent)}
+.flow{fill:none;stroke:#fff;stroke-width:2.2;stroke-dasharray:4 12;stroke-linecap:round;opacity:0;transition:opacity .25s}
+.flow.on{opacity:.95;animation:flow .55s linear infinite}
+@keyframes flow{from{stroke-dashoffset:16}to{stroke-dashoffset:0}}
+.dot{fill:var(--off);transition:fill .25s}
+.dot.on{fill:var(--accent)}
+.gate path,.gate circle{fill:#fff;stroke:#1e293b;stroke-width:3;transition:fill .3s,stroke .3s}
+.gate path.xorback{fill:none}
+.gate.on path:not(.xorback),.gate.on circle{fill:var(--accent-l);stroke:var(--accent-d)}
+.gate.on path.xorback{stroke:var(--accent-d)}
+.gate.on{filter:drop-shadow(0 0 6px rgba(249,115,22,.55))}
+.glabel{font-size:11px;fill:var(--muted);text-anchor:middle;font-weight:700;pointer-events:none}
+.inp{cursor:pointer}
+.inp circle{fill:#fff;stroke:var(--blue);stroke-width:3;transition:fill .2s}
+.inp:hover circle{fill:var(--blue-l)}
+.inp.on circle{fill:var(--blue);stroke:var(--blue)}
+.inp .val{fill:var(--blue)}
+.inp.on .val{fill:#fff}
+.val{font-size:19px;font-weight:800;text-anchor:middle;pointer-events:none;font-family:Consolas,Menlo,monospace}
+.lbl{font-size:20px;font-weight:700;fill:var(--ink)}
+.lamp circle{fill:#f1f5f9;stroke:#475569;stroke-width:3;transition:fill .3s,stroke .3s}
+.lamp .val{fill:#475569}
+.lamp.on circle{fill:#facc15;stroke:var(--accent-d);filter:drop-shadow(0 0 10px rgba(250,204,21,.9))}
+.lamp.on .val{fill:#7c2d12}
+.probe{font-size:15px;font-weight:700;fill:var(--muted);font-family:Consolas,Menlo,monospace;transition:fill .3s}
+.probe.on{fill:var(--accent-d)}
+.habox{fill:rgba(37,99,235,.05);stroke:var(--blue);stroke-width:2;stroke-dasharray:7 6}
+.halbl{font-size:15px;font-weight:700;fill:var(--blue)}
+
+/* ripple adder */
+.fa rect{fill:#fff;stroke:#1e293b;stroke-width:3;transition:fill .3s,stroke .3s}
+.fa.active rect{fill:#fef3c7;stroke:var(--accent);filter:drop-shadow(0 0 12px rgba(249,115,22,.7))}
+.fa.done rect{fill:#f8fafc}
+.fa .t1{font-size:22px;font-weight:800;text-anchor:middle}
+.fa .t2{font-size:18px;text-anchor:middle;fill:var(--muted);font-family:Consolas,Menlo,monospace}
+.fa .t3{font-size:20px;text-anchor:middle;fill:var(--accent-d);font-weight:800;font-family:Consolas,Menlo,monospace}
+.wait .val{fill:#94a3b8}
+.wire.wait{stroke:#cbd5e1;stroke-dasharray:6 6}
+.readout{font-size:26px;text-align:center;margin-top:6px;font-family:Consolas,Menlo,monospace}
+.readout .eq{color:var(--accent-d);font-weight:800}
+
+/* column addition */
+.ca-grid{display:grid;grid-template-columns:110px repeat(5,72px);gap:6px 6px;justify-content:center;font-family:Consolas,Menlo,monospace}
+.ca-grid div{height:64px;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700;border-radius:10px;transition:background .3s}
+.ca-grid .rl{font-size:18px;font-family:inherit;color:var(--muted);justify-content:flex-end;padding-right:10px;font-weight:700}
+.ca-grid .carry{font-size:26px;color:var(--accent);height:44px}
+.ca-grid .carry span,.ca-grid .sum span{opacity:0;transform:translateY(-20px);transition:all .5s cubic-bezier(.2,.8,.3,1.3)}
+.ca-grid .carry.show span,.ca-grid .sum.show span{opacity:1;transform:none}
+.ca-grid .sum{color:var(--blue)}
+.ca-grid .hl{background:#fef3c7}
+.ca-grid .bar{grid-column:1/-1;height:4px;background:var(--ink);border-radius:2px}
+.ca-msg{min-height:80px;font-size:23px;margin-top:16px;line-height:1.5;text-align:center}
+
+/* bars */
+.barrow{display:grid;grid-template-columns:190px 1fr;align-items:center;gap:10px;margin:8px 0;font-size:18px}
+.bar-bg{background:#e2e8f0;border-radius:8px;height:30px;overflow:hidden}
+.bar-fill{height:100%;width:0;border-radius:8px;transition:width 1.2s cubic-bezier(.2,.8,.3,1);display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-weight:800}
+.slide.active .bar-fill{width:var(--w)}
+.bar-fill.o{background:var(--off)}
+.bar-fill.a{background:var(--accent)}
+
+/* bit tiles */
+.tiles{display:flex;gap:14px;justify-content:center;margin:6px 0 16px}
+.tile{background:#fff;border-radius:14px;padding:10px 18px;font-family:Consolas,Menlo,monospace;font-size:28px;box-shadow:0 4px 14px rgba(15,23,42,.08);text-align:center}
+.tile b{color:var(--accent-d)}
+.tile small{display:block;font-size:14px;color:var(--muted);font-family:inherit}
+.chips{display:inline-flex;gap:6px;vertical-align:middle}
+.chip{display:inline-block;width:34px;text-align:center;border-radius:6px;background:#fff;font-family:Consolas,monospace;font-weight:800;border:2px solid var(--line)}
+.chip.ng{border-color:#dc2626;color:#dc2626;background:#fee2e2}
+.chip.ok{border-color:var(--green);color:var(--green)}
+
+/* title */
+.title-wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:30px;align-items:center;height:100%}
+.title-wrap h1{font-size:54px;line-height:1.25;margin:0 0 14px}
+.title-wrap .sub{font-size:30px;color:var(--accent-d);font-weight:700;margin-bottom:34px}
+.title-wrap .meta{font-size:20px;color:var(--muted);line-height:1.8}
+.agenda li{font-size:27px;margin:16px 0;list-style:none;display:flex;align-items:center;gap:16px}
+.agenda .num{width:46px;height:46px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;flex:none}
+.agenda .new{background:var(--accent)}
+.tag{font-size:15px;background:var(--accent);color:#fff;border-radius:999px;padding:2px 12px;font-weight:700}
+details{background:#fff;border-radius:12px;padding:10px 18px;margin:10px 0;box-shadow:0 3px 12px rgba(15,23,42,.06);font-size:22px}
+details summary{cursor:pointer;font-weight:700}
+details[open] summary{color:var(--accent-d)}
+details div{margin-top:8px;line-height:1.6;color:#334155}
+
+/* ---------- UI ---------- */
+#ui{position:fixed;left:0;right:0;bottom:0;height:40px;display:flex;align-items:center;gap:10px;padding:0 14px;
+  color:#cbd5e1;font-size:14px;opacity:.25;transition:opacity .3s;z-index:10}
+#ui:hover{opacity:1}
+#ui button{background:#334155;color:#fff;border:0;border-radius:6px;padding:5px 12px;cursor:pointer;font:inherit}
+#progress{position:fixed;left:0;bottom:0;height:4px;background:var(--accent);transition:width .4s;z-index:11}
+
+/* ---------- 一覧モード ---------- */
+#ovHead{display:none}
+body.overview{overflow:auto}
+body.overview #viewport{position:static;padding:64px 24px 60px}
+body.overview #ovHead{display:flex;position:fixed;left:0;right:0;top:0;height:52px;align-items:center;gap:16px;padding:0 24px;
+  background:#0f172a;color:#e2e8f0;font-size:16px;z-index:12}
+body.overview #ovHead b{font-size:18px}
+body.overview #ovHead b,body.overview #ovHead button{white-space:nowrap}
+@media (max-width:900px){body.overview #ovHead span{display:none}}
+body.overview #ovHead button{background:var(--accent);color:#fff;border:0;border-radius:6px;padding:6px 14px;cursor:pointer;font:inherit;font-weight:700;margin-left:auto}
+body.overview #stage{position:static;transform:none!important;width:auto;height:auto;overflow:visible;background:none;box-shadow:none;
+  display:grid;grid-template-columns:repeat(var(--cols,4),var(--ow,256px));gap:22px}
+/* 縮小は zoom ではなく transform で行う（iPad の Safari は zoom の扱いが異なり、中身の位置がずれるため）。
+   transform は並べるときの大きさに影響しないので、負の余白で縮小後の大きさ（--ow × --oh）に合わせる */
+body.overview .slide{position:relative;inset:auto;width:1280px;height:720px;opacity:1;pointer-events:auto;
+  transform:scale(var(--z,.2));transform-origin:0 0;margin:0 calc(var(--ow,256px) - 1280px) calc(var(--oh,144px) - 720px) 0;
+  cursor:pointer;background:var(--bg);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);outline:0 solid var(--accent);transition:outline-width .15s}
+body.overview .slide *{pointer-events:none}
+body.overview .slide:hover{outline-width:14px}
+body.overview .slide.current{outline-width:22px}
+body.overview .frag{opacity:1;transform:none}
+body.overview .bar-fill{width:var(--w);transition:none}
+body.overview .slide{overflow:hidden}
+/* 一覧ではページ番号を右下の札にして、中身と重なっても読めるようにする */
+body.overview .slide .pageno{font-size:40px;font-weight:900;color:#fff;background:var(--ink);border-radius:16px;padding:2px 20px;bottom:14px;right:14px;z-index:6}
+body.overview #ui,body.overview #progress{display:none}
+
+/* ---------- ポップ調デザイン（太枠・ずらし影・弾むアニメ） ---------- */
+html,body{background:#2a2350}
+#stage{background:
+  radial-gradient(circle at 92% 8%,#ffd6e8 0 120px,transparent 121px),
+  radial-gradient(circle at 4% 96%,#d4f4ff 0 150px,transparent 151px),
+  radial-gradient(circle at 98% 92%,#fff0b3 0 70px,transparent 71px),
+  radial-gradient(#e9e2cf 1.4px,transparent 1.6px) 0 0/22px 22px,
+  var(--bg)}
+.slide{transition:opacity .45s ease,transform .6s cubic-bezier(.3,1.5,.5,1)}
+.slide::before{height:10px;background:repeating-linear-gradient(90deg,var(--accent) 0 80px,var(--yellow) 80px 160px,var(--pink) 160px 240px,var(--blue) 240px 320px)}
+.chap{font-weight:700;color:var(--pink);letter-spacing:.08em}
+h2{border-left:none;padding-left:54px;position:relative}
+h2::before{content:"";position:absolute;left:0;top:50%;width:34px;height:34px;margin-top:-17px;border-radius:10px;
+  background:linear-gradient(135deg,var(--yellow),var(--accent) 55%,var(--pink));border:3px solid var(--ink);transform:rotate(-12deg);box-shadow:3px 3px 0 var(--ink)}
+.slide.active h2::before{animation:wiggle 1s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes wiggle{from{transform:rotate(-120deg) scale(.3)}to{transform:rotate(-12deg)}}
+h2 small{white-space:nowrap;background:var(--accent-l);color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:2px 14px;font-size:18px;font-weight:700;vertical-align:middle}
+b.k{color:var(--accent-d);background:linear-gradient(transparent 62%,#ffe58a 62%)}
+b.kb{color:var(--blue);background:linear-gradient(transparent 62%,#cfe0ff 62%)}
+.card{border:3px solid var(--ink);border-radius:22px;box-shadow:6px 6px 0 var(--ink)}
+.point{border:2.5px solid var(--ink);border-left:10px solid var(--accent);border-radius:16px;box-shadow:var(--hard)}
+.point.blue{border-left-color:var(--blue)}
+.formula{border:2.5px solid var(--ink);box-shadow:var(--hard)}
+button.b{border:2.5px solid var(--ink);background:var(--yellow);color:var(--ink);box-shadow:3px 3px 0 var(--ink);transition:transform .1s,box-shadow .1s}
+button.b:hover{background:#ffe06b;transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+button.b:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+button.b.playing{background:var(--pink);color:#fff}
+.slide.active .pop{animation:pop .7s cubic-bezier(.3,1.6,.5,1) both;animation-delay:var(--d,0s)}
+@keyframes pop{from{opacity:0;transform:translateY(30px) scale(.85) rotate(-2deg)}to{opacity:1;transform:none}}
+.frag{transform:translateY(18px) scale(.95);transition:opacity .4s ease,transform .5s cubic-bezier(.3,1.6,.5,1)}
+
+.bitex span,.quote,.tile,details{border:2.5px solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
+table.tt{border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);border-collapse:separate;border-spacing:0}
+table.tt th,table.tt td{border:0;border-right:1.5px solid #d9d4ea;border-bottom:1.5px solid #d9d4ea}
+table.tt th{background:#ece6ff;border-bottom:2.5px solid var(--ink)}
+table.tt th.out{background:#ffe1c7}
+table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
+
+.wire{stroke-width:5}
+.gate path,.gate circle{stroke:var(--ink);stroke-width:3.5}
+.gate.on path:not(.xorback),.gate.on circle{fill:#ffe1c7;stroke:var(--ink)}
+.gate.on path.xorback{stroke:var(--ink)}
+.gate.on{filter:drop-shadow(3px 3px 0 var(--accent))}
+.inp circle{stroke-width:3.5}
+.inp.on circle{stroke:var(--ink)}
+.lamp circle{stroke:var(--ink)}
+.lamp.on circle{fill:var(--yellow);stroke:var(--ink);filter:drop-shadow(0 0 12px rgba(255,213,61,.95))}
+.fa rect{stroke:var(--ink);rx:16}
+.fa.active rect{fill:#fff1c2;stroke:var(--ink);filter:drop-shadow(4px 4px 0 var(--accent))}
+.ca-grid .hl{background:#fff1c2;border:2px dashed var(--accent)}
+.bar-bg{background:#ece6ff;border:2px solid var(--ink)}
+.bar-fill.a{background:linear-gradient(90deg,var(--accent),var(--pink))}
+
+.title-wrap h1{font-size:64px;background:linear-gradient(transparent 70%,#ffe58a 70%) no-repeat;display:inline;line-height:1.3;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.title-wrap .sub{color:var(--pink);margin-top:18px;margin-bottom:22px;font-size:23px;white-space:nowrap}
+.tchaps{display:flex;flex-direction:column;gap:12px}
+.tchap{display:flex;align-items:center;gap:12px;background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:3px 3px 0 var(--ink);padding:6px 14px 6px 6px}
+.tchap .tno{background:var(--c);color:#fff;font-weight:900;border:2px solid var(--ink);border-radius:10px;padding:2px 10px;font-size:18px;flex:none}
+.tchap .tname{font-weight:900;font-size:21px}
+.tchap .tsec{margin-left:auto;font-size:14px;color:var(--muted);font-weight:700;white-space:nowrap}
+.agenda .num{border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);background:var(--blue)}
+.agenda li:nth-child(3) .num{background:var(--pink)}
+.agenda li:nth-child(4) .num{background:var(--green)}
+.agenda li:nth-child(6) .num{background:var(--purple)}
+.agenda li:nth-child(7) .num{background:var(--accent)}
+.agenda .new{background:var(--accent)}
+.tag{background:var(--pink);border:2px solid var(--ink);white-space:nowrap;flex:none}
+
+/* 量子ビット（第4章）の数式・図 */
+.math,.vec,.frac{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif}
+.eq{display:flex;align-items:center;justify-content:center;gap:8px;font-size:26px;flex-wrap:wrap}
+.eq.inline{display:inline-flex;font-size:inherit;vertical-align:middle;gap:5px}
+.vec{display:inline-grid;text-align:center;padding:1px 10px;border-left:3px solid currentColor;border-right:3px solid currentColor;border-radius:14px;line-height:1.25}
+.vec.row{grid-auto-flow:column;column-gap:14px}
+.eq.inline .vec{line-height:1.05;padding:0 7px;border-width:2px;border-radius:10px;font-size:.85em}
+.frac{display:inline-grid;text-align:center;line-height:1.1;font-size:.85em;vertical-align:middle}
+.frac>span:first-child{border-bottom:2px solid currentColor;padding:0 2px}
+.brace{font-size:2.3em;font-weight:200;line-height:1;transform:scaleX(.7)}
+.bar{width:2px;align-self:stretch;background:currentColor;margin:6px 2px}
+.defbox{position:relative;background:#fff;border:3px solid var(--ink);border-radius:16px;box-shadow:var(--hard);padding:16px 18px 12px;margin-top:18px;font-size:20px;line-height:1.7}
+.defbox::before{content:"定義";position:absolute;left:14px;top:-16px;background:var(--ink);color:#fff;font-weight:800;font-size:15px;border-radius:999px;padding:2px 14px}
+.qrow{display:flex;align-items:center;gap:16px}
+.qlab{width:110px;flex:none;font-weight:800;font-size:19px}
+.qcells{display:flex;gap:26px;align-items:center}
+.qbit{width:56px;height:56px;border:3px solid var(--ink);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;font-family:Consolas,Menlo,monospace;box-shadow:3px 3px 0 var(--ink);background:#fff}
+.qarrow{margin:14px 0 14px 126px;color:var(--muted);font-weight:700}
+.qverdict{margin-top:12px;text-align:center;font-size:24px;font-weight:900;padding:6px;border-radius:12px;border:2.5px solid var(--ink)}
+.qverdict.ok{background:#d9f7e6;color:var(--green)}
+.qverdict.ng{background:#ffe0e6;color:#d61f45}
+
+/* 目次の教科書の章見出し */
+.agenda li.agroup{font-size:17px;font-weight:900;color:var(--pink);letter-spacing:.06em;margin:14px 0 -4px;border-bottom:2.5px dashed #e3dcf2;padding-bottom:4px}
+.agenda li.agroup:first-child{margin-top:0}
+.quiz{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;gap:12px 16px;align-content:center}
+.qz{display:flex;flex-direction:column;background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:10px 14px;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.qz:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.qz-q{display:flex;gap:10px;align-items:flex-start;font-size:17px;line-height:1.5;font-weight:600}
+.qz-no{flex:none;background:var(--blue);color:#fff;font-weight:900;font-size:14px;border:2px solid var(--ink);border-radius:999px;padding:1px 9px;margin-top:2px}
+.qz-a{margin-top:auto;padding-top:8px;min-height:40px;display:flex;align-items:center;border-top:2px dashed #e3dcf2;font-size:17px;line-height:1.5}
+.qz-hide{color:var(--muted);font-weight:800;font-size:15px}
+.qz-ans{display:none;color:#1f1a3d}
+.qz.open{background:#fffaf0}
+.qz.open .qz-no{background:var(--green)}
+.qz.open .qz-hide{display:none}
+.qz.open .qz-ans{display:inline;animation:qzIn .4s cubic-bezier(.3,1.6,.5,1)}
+@keyframes qzIn{from{opacity:0;transform:translateY(6px) scale(.96)}to{opacity:1;transform:none}}
+.quiz.q2{grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:auto}
+.quiz.q2 .qz{grid-column:span 2}
+.quiz.q2 .qz.dia{grid-column:span 3}
+.quiz.q2 .qz.wide .qzc{max-height:200px}
+.quiz.q2 .qz-q{font-size:16px}
+.quiz.q2 .qz-a{font-size:15.5px;min-height:34px}
+.qz-q > span:last-child{min-width:0;flex:1}
+.qzc{display:block;width:100%;max-height:170px;margin:6px auto 0;font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif}
+.qzc .qg{fill:#f1ecff;stroke:#1f1a3d;stroke-width:2.5;stroke-dasharray:6 4}
+.qzc .g-q{font-size:26px;font-weight:900;fill:#8a5cff}
+.qzc .g-ans{display:none;font-weight:900;fill:#1f1a3d}
+.qz.open .qzc .qg{fill:#fff1c2;stroke-dasharray:none}
+.qz.open .qzc .g-q{display:none}
+.qz.open .qzc .g-ans{display:inline}
+.quiz.q3{grid-auto-rows:auto}
+.quiz.q3 .qz{min-height:118px}
+.quiz.q3 .qz:last-child{grid-column:span 2}
+.qzc.qzbloch{max-height:145px}
+.qgb{cursor:pointer}
+.qgb:hover .qg{fill:#e6dcff}
+.qgb.shown .qg{fill:#fff1c2;stroke-dasharray:none}
+.qgb.shown .g-q{display:none}
+.qgb.shown .g-ans{display:inline;animation:qzIn .35s cubic-bezier(.3,1.6,.5,1)}
+h2 .qz-all{font-size:14px;padding:4px 14px;margin-left:16px;vertical-align:middle}
+/* 章の扉スライド */
+.door-wrap{position:relative;display:grid;grid-template-columns:auto 1fr;gap:64px;align-items:center;height:100%;padding:0 40px}
+.door-num{width:210px;height:210px;border-radius:46px;background:var(--c);color:#fff;border:5px solid var(--ink);box-shadow:10px 10px 0 var(--ink);
+  display:flex;align-items:center;justify-content:center;font-size:140px;font-weight:900;font-family:Consolas,Menlo,monospace;transform:rotate(-6deg)}
+.slide.active .door-num{animation:doorIn .9s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes doorIn{from{opacity:0;transform:rotate(-120deg) scale(.3)}to{opacity:1;transform:rotate(-6deg)}}
+.door-label{font-size:22px;font-weight:900;letter-spacing:.14em;color:var(--c)}
+.door-label .door-book{display:block;font-size:16px;letter-spacing:.04em;color:var(--muted);margin-bottom:2px}
+.door-label .tag{font-size:15px;letter-spacing:0;vertical-align:middle;margin-left:8px}
+.door h1{font-size:80px;line-height:1.15;margin:6px 0 4px}
+.door-lead{font-size:32px;font-weight:700;color:var(--muted);margin:0 0 30px}
+.door-topics{display:flex;flex-wrap:wrap;gap:12px}
+.door-topics span{background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:4px 18px;font-size:19px;font-weight:700;box-shadow:3px 3px 0 var(--ink)}
+.door-bg{position:absolute;right:-20px;bottom:-150px;font-size:600px;font-weight:900;line-height:1;color:var(--c);opacity:.09;
+  font-family:Consolas,Menlo,monospace;pointer-events:none}
+#progress{height:6px;background:linear-gradient(90deg,var(--accent),var(--pink),var(--blue))}
+
+/* ---------- レーザーポインター（Apple Pencil） ---------- */
+#stage{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body:not(.overview) #stage{touch-action:none}
+#laser{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none;z-index:5}
+body.overview #laser{display:none}
+/* 黒ペン（Apple Pencil で書き込み） */
+#ink{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none;z-index:4}
+#penbar{position:fixed;right:12px;top:14px;z-index:20;display:flex;align-items:center;gap:4px;background:#fff;border:2.5px solid var(--ink);
+  border-radius:999px;box-shadow:3px 3px 0 var(--ink);padding:4px;touch-action:manipulation;opacity:.85}
+#penbar:hover{opacity:1}
+#penbar button{height:38px;min-width:38px;border-radius:999px;border:2px solid transparent;background:none;font:inherit;font-size:14px;font-weight:800;
+  color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;padding:0 10px}
+#penbar button.on{background:var(--accent-l);border-color:var(--ink)}
+#penbar .sep{width:2px;height:24px;background:#e3dcf2;border-radius:1px}
+body.overview #ink,body.overview #penbar{display:none}
+
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{overflow:visible;background:#fff}
+  #viewport{position:static}
+  #stage{position:static;transform:none!important;box-shadow:none;width:auto;height:auto;overflow:visible;background:none}
+  .slide{position:relative;width:1280px;height:720px;opacity:1;transform:none;page-break-after:always;background:var(--bg)}
+  .frag{opacity:1;transform:none}
+  #ui,#progress,.btns,.hint,#laser,#penbar{display:none}
+}
+/* まとめ（5 項目） */
+.sumlist{display:flex;flex-direction:column;gap:12px;justify-content:center}
+.sl{display:flex;gap:14px;align-items:center;background:#fff;border:2.5px solid var(--ink);border-left:12px solid var(--c);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:10px 18px;font-size:21px;line-height:1.5}
+.sl-n{flex:none;width:36px;height:36px;border-radius:50%;background:var(--c);color:#fff;font-weight:900;font-size:18px;display:flex;align-items:center;justify-content:center;border:2px solid var(--ink)}
+.sl-s{font-size:16px;color:var(--muted);margin-left:4px}
+
+/* =====================================================================
+   2.2 A spider bit me! で追加した部品
+   ===================================================================== */
+:root{--zr:#e8402e;--zg:#a6dc6a}
+.mono{font-family:Consolas,Menlo,monospace;letter-spacing:.04em}
+.math{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif}
+.mini-h{font-size:16px;font-weight:900;color:var(--muted);text-align:center;margin-bottom:2px}
+.slide .point{font-size:19px;line-height:1.6;padding:10px 18px}
+.slide .defbox{font-size:20px}
+table.tt tbody.static tr{cursor:default}
+table.tt tbody.static tr:hover td{background:none}
+
+/* タイトル */
+.slide[data-id="title"] .title-wrap{grid-template-columns:1.12fr .88fr}
+.slide[data-id="title"] .title-wrap h1{font-size:60px}
+.slide[data-id="title"] .title-wrap .sub{font-size:19px;margin:14px 0 8px;white-space:normal}
+.pun{display:inline-block;font-size:15px;font-weight:700;background:#fff;border:2px dashed var(--ink);border-radius:12px;padding:3px 12px;margin-bottom:8px}
+.ag-t{margin:4px 0 0;padding:0}
+.ag-t li{font-size:19px;margin:3px 0;gap:10px}
+.ag-t li em{font-style:normal;font-size:13px;font-weight:800;color:var(--muted);margin-left:auto;padding-left:10px;white-space:nowrap}
+.ag-t .num{width:30px;height:30px;font-size:14px;border-width:2px;box-shadow:2px 2px 0 var(--ink)}
+.ag-t li.agroup{font-size:13px;margin:8px 0 0;padding-bottom:1px}
+.agenda .num.rv{background:#9a93bd !important}
+
+/* 確認スライド */
+.door.review .door-num{font-size:64px;letter-spacing:.05em}
+.slide.review{background:linear-gradient(180deg,rgba(154,147,189,.10),rgba(154,147,189,.03))}
+.slide.review h2::before{background:linear-gradient(135deg,#d9d4ea,#9a93bd)}
+.rv-badge{position:absolute;right:74px;top:86px;background:#9a93bd;color:#fff;font-weight:900;font-size:18px;letter-spacing:.2em;border:2.5px solid var(--ink);border-radius:999px;padding:4px 18px;box-shadow:3px 3px 0 var(--ink);transform:rotate(4deg)}
+
+/* スパイダー図（SVG） */
+svg.zx{width:100%;height:auto;display:block;user-select:none;-webkit-user-select:none;overflow:visible}
+.zw{fill:none;stroke:var(--ink);stroke-width:4;stroke-linecap:round}
+.zn circle{stroke:var(--ink);stroke-width:3.5}
+.zn.r circle{fill:var(--zr)}
+.zn.g circle{fill:var(--zg)}
+.zn text{font:900 13px "Segoe UI","Helvetica Neue",Arial,sans-serif;text-anchor:middle;dominant-baseline:central;fill:#fff;pointer-events:none}
+.zn.g text{fill:var(--ink)}
+.zn.clk{cursor:pointer}
+.zn.clk:hover circle{stroke-width:5.5}
+.zn.hl circle{filter:drop-shadow(0 0 7px rgba(255,190,0,.95))}
+.zt{font:800 16px "Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;fill:var(--muted);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.zt.big{font:900 26px Consolas,Menlo,monospace;fill:var(--ink)}
+.zt.o{fill:var(--accent-d)}
+.zt.b{fill:var(--blue)}
+.zt.eqs{font:900 34px sans-serif;fill:var(--ink)}
+.zt.tag{font-size:17px;fill:var(--purple);font-weight:900}
+.zt.pk{fill:var(--pink);font-weight:900}
+.zt.sm{font-size:13px}
+.zcap{text-align:center;font-size:19px;font-weight:700;min-height:32px;line-height:1.45;margin-top:2px}
+.zcap.left{text-align:left;font-size:17px}
+.zcap b{color:var(--accent-d)}
+.zcap .mono{font-weight:900}
+.zctl{display:flex;flex-wrap:wrap;gap:8px 10px;justify-content:center;align-items:center;margin-top:6px}
+.zctl button.b{margin:0}
+.zrow2{display:grid;grid-template-columns:1fr 200px;gap:10px;align-items:center}
+.zside{display:flex;flex-direction:column;gap:9px}
+.zside button.b{width:100%}
+.picker button{font:800 17px Consolas,Menlo,monospace;color:var(--ink);background:#fff;border:2px solid var(--ink);border-radius:10px;padding:2px 12px;cursor:pointer;box-shadow:2px 2px 0 var(--ink)}
+.picker{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.picker .pk-l{font-weight:800;font-size:15px;color:var(--muted);margin-right:2px}
+.picker button:hover{background:var(--accent-l)}
+.picker button.on{background:var(--yellow)}
+
+/* 文中の小さなクモ */
+i.zs{display:inline-block;vertical-align:middle;line-height:0;margin:0 1px}
+i.zs svg{display:block}
+.an-ic{flex:none;display:flex;gap:2px;align-items:center;justify-content:center;min-width:76px}
+
+/* 確認：クモの部位 */
+.anat{display:flex;flex-direction:column;gap:6px}
+.an-row{display:flex;align-items:center;gap:12px;background:#fff;border:2.5px solid var(--ink);border-radius:14px;box-shadow:3px 3px 0 var(--ink);padding:4px 14px;font-size:19px;line-height:1.45}
+
+/* ビット */
+.cmp2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0 4px}
+.cmp2-c{background:#fff8e6;border:2.5px solid var(--ink);border-radius:16px;box-shadow:3px 3px 0 var(--ink);padding:8px 14px;text-align:center;font-size:21px}
+.cmp2-c.q{background:#efe7ff}
+.cmp2-h{font-size:14px;font-weight:900;color:var(--muted)}
+.cmp2-c small{display:block;font-size:15px;color:var(--muted);font-weight:700}
+.txtin{display:flex;align-items:center;justify-content:center;gap:10px;font-size:18px;font-weight:800;margin:6px 0 8px}
+.txtin input{font:800 28px Consolas,Menlo,monospace;width:150px;text-align:center;border:3px solid var(--ink);border-radius:12px;padding:2px 8px;box-shadow:3px 3px 0 var(--ink);background:var(--accent-l);outline:none;letter-spacing:.1em}
+.bin-list{display:flex;flex-direction:column;gap:6px;min-height:178px}
+.bin-row{display:grid;grid-template-columns:52px 70px 1fr;align-items:center;gap:8px;animation:qzIn .35s cubic-bezier(.3,1.6,.5,1)}
+.bin-ch{font:900 30px Consolas,Menlo,monospace;text-align:center;background:#fff;border:2.5px solid var(--ink);border-radius:10px;box-shadow:2px 2px 0 var(--ink)}
+.bin-code{font:700 15px Consolas,Menlo,monospace;color:var(--muted);text-align:center}
+.bin-bits{display:flex;gap:3px}
+.bin-bits span{flex:1;height:36px;display:flex;align-items:center;justify-content:center;font:900 20px Consolas,Menlo,monospace;border:2px solid var(--ink);border-radius:7px;background:#fff}
+.bin-bits span.one{background:var(--accent);color:#fff}
+.bin-all{margin-top:8px;text-align:center;font:900 22px Consolas,Menlo,monospace;word-break:break-all;color:var(--accent-d);min-height:30px}
+
+/* なぜビット？ */
+.why3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.why3 div{background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:8px 12px;text-align:center}
+.why3 .ic{font-size:28px;display:block;line-height:1.2}
+.why3>div>b{display:block;font-size:21px}
+.why3 small{font-size:16px;color:#3b3560;font-weight:700;line-height:1.5}
+.why-row{display:grid;grid-template-columns:1fr 250px;gap:14px;align-items:center}
+
+/* ビット状態 */
+.bs2{display:grid;grid-template-columns:1fr 1fr;gap:30px;padding:0 60px}
+.bs-card{background:#fff;border:3px solid var(--ink);border-radius:22px;box-shadow:6px 6px 0 var(--ink);padding:10px 18px 12px}
+.bs-card svg{max-height:180px}
+.bs-cap{text-align:center;font-size:21px;margin-top:4px}
+
+/* ビット列 */
+.str-out{text-align:center;font-size:22px;font-weight:800;margin:2px 0 4px}
+.str-out b{font:900 34px Consolas,Menlo,monospace;color:var(--accent-d);letter-spacing:.12em;background:var(--accent-l);border:2.5px solid var(--ink);border-radius:12px;padding:0 14px;box-shadow:3px 3px 0 var(--ink)}
+.str-out span{font-size:17px;color:var(--muted);margin-left:12px}
+
+/* 等式カード */
+.eqcards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.eqc{position:relative;background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:3px 3px 0 var(--ink);padding:16px 10px 6px;text-align:center;margin-top:8px}
+.eqc.new{background:#fffbea}
+.eqc small{display:block;font:900 17px Consolas,Menlo,monospace;color:var(--accent-d)}
+.eqc-t{position:absolute;left:12px;top:-13px;background:var(--ink);color:#fff;font-size:13px;font-weight:800;border-radius:999px;padding:1px 12px}
+.eqc.new .eqc-t{background:var(--pink)}
+
+/* ⊕ の表 */
+.xor4{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;margin:8px 0}
+.xor4 div{background:#fff;border:2.5px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--ink);text-align:center;font:900 28px Consolas,Menlo,monospace;padding:4px 0;display:flex;align-items:center;justify-content:center;gap:10px}
+.xor4 span{color:var(--blue)}
+.xor4 b{color:var(--accent-d)}
+.xor4 .hot{background:var(--accent-l)}
+.xor4.two div{font-size:30px}
+
+/* 手順 */
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.steps li{display:flex;gap:12px;align-items:flex-start;background:#fff;border:2.5px solid var(--ink);border-radius:14px;box-shadow:3px 3px 0 var(--ink);padding:8px 14px;font-size:19px;line-height:1.5;margin:0;opacity:.45;transition:opacity .3s,background .3s,transform .3s}
+.steps li.on{opacity:1;background:var(--accent-l);transform:translateX(6px)}
+.steps li.done{opacity:1}
+.steps .sn{font-size:24px;font-weight:900;color:var(--accent-d);line-height:1.3}
+.steps .r0,.steps .r1{border-radius:6px;padding:0 3px;transition:background .3s}
+.steps.a0 li.on .r0,.steps.a1 li.on .r1{background:var(--yellow)}
+
+/* CNOT */
+.tagc{display:inline-block;font-size:15px;font-weight:900;border:2px solid var(--ink);border-radius:999px;padding:0 10px}
+.tagc.ctl{background:var(--ink);color:#fff}
+.tagc.tgt{background:var(--accent-l)}
+.slide[data-id="cnot"] .defbox::before{content:"名前の意味"}
+.ca-list{display:flex;flex-direction:column;gap:10px}
+.ca-list div{display:flex;align-items:center;gap:12px;background:#fff;border:2.5px solid var(--ink);border-radius:14px;box-shadow:3px 3px 0 var(--ink);padding:8px 14px;font-size:21px}
+.ca-i{flex:none;width:30px;height:30px;border-radius:50%;border:3px solid var(--ink)}
+.ca-i.g{background:var(--zg)}
+.ca-i.r{background:var(--zr)}
+
+/* その先へ */
+.next2{display:flex;flex-direction:column;gap:10px}
+.next2 div{background:#fff;border:2.5px solid var(--ink);border-radius:14px;box-shadow:3px 3px 0 var(--ink);padding:8px 16px;font-size:20px}
+
+/* 練習問題 */
+.slide[data-id="quiz"] .quiz.q6{grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:1fr;gap:16px 18px}
+.slide[data-id="quiz"] .qz{padding:12px 16px}
+.slide[data-id="quiz"] .qz-q{font-size:20px}
+.slide[data-id="quiz"] .qz-a{font-size:18px}
+.sumlist .sl{font-size:20px;padding:8px 18px}
+
+.card svg.zx{max-height:318px}
+.slide[data-id="why"] svg.zx{max-height:250px}
+.slide[data-id="more"] svg.zx{max-height:225px}
+.slide[data-id="cnot"] svg.zx{max-height:420px}
+.zcap{font-size:18px}
+#addTbl{font-size:19px}
+#addTbl th,#addTbl td{padding:5px 10px;white-space:nowrap}
+#addTbl small{font-size:14px;color:var(--muted);margin-left:2px}
+#addTbl td.calc{font-size:16px}
+.an-wrap{display:grid;grid-template-columns:1fr 210px;gap:12px;align-items:center;margin-top:8px}
+.an-wrap .eqc{margin-top:8px}
+.an-wrap svg.zx{max-height:150px}
+
+</style>
+</head>
+<body>
+<div id="ovHead"><b>スライド一覧</b><span>クリックでそのスライドへ ／ ← → で選択、Enter で開く、O / Esc で戻る</span><button id="btnOvClose">一覧を閉じる</button></div>
+<div id="viewport"><div id="stage">
+
+<!-- 1. タイトル -->
+<section class="slide" data-id="title">
+  <div class="title-wrap">
+    <div>
+      <div class="chap pop">『Quantum in Pictures』 ゼミ資料 ／ 2.2 A spider bit me!</div>
+      <h1 class="pop" style="--d:.1s">クモにかまれた！</h1>
+      <div class="sub pop" style="--d:.2s">― スパイダーで「ビット」を表す：COPY・ADD・NOT・CNOT ―</div>
+      <div class="pun pop" style="--d:.24s">💡 題名の <b>bit</b> は「かんだ（bite の過去形）」と「<b>ビット</b>」をかけたダジャレ</div>
+      <ul class="agenda ag-t">
+        <li class="agroup pop" style="--d:.27s">確認</li>
+        <li class="pop" style="--d:.29s"><span class="num rv">0</span>スパイダーのルール：融合（fuse）<em>前の節まで</em></li>
+        <li class="agroup pop" style="--d:.31s">2.2 A spider bit me!</li>
+        <li class="pop" style="--d:.33s"><span class="num" style="background:var(--blue)">1</span>ビットと 2 つの「ビット状態」<em>0 と 1</em></li>
+        <li class="pop" style="--d:.35s"><span class="num" style="background:var(--green)">2</span>緑のクモ ＝ COPY（コピー）<em>コピー</em></li>
+        <li class="pop" style="--d:.37s"><span class="num" style="background:var(--pink)">3</span>赤のクモ ＝ ADD と NOT<em>1 + 1 = 0</em></li>
+        <li class="pop" style="--d:.39s"><span class="num" style="background:var(--purple)">4</span>CNOT ＝ COPY ＋ ADD<em>制御 NOT</em></li>
+        <li class="pop" style="--d:.41s"><span class="num" style="background:var(--ink)">✓</span>まとめ と 練習問題</li>
+      </ul>
+    </div>
+    <div class="card pop" style="--d:.4s;padding:12px 16px">
+      <div class="mini-h">CNOT の中でビットが動く様子</div>
+      <svg class="zx" id="zTitle" viewBox="0 0 420 320"></svg>
+      <div class="zcap" id="zTitleCap"></div>
+      <div class="btns" style="justify-content:center;margin-top:2px"><button class="b" id="zTitleAuto" data-autoplay>▶ 自動再生</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- 扉：確認 -->
+<section class="slide door review" style="--c:#9a93bd">
+  <div class="door-bg">0</div>
+  <div class="door-wrap">
+    <div class="door-num">確認</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">前の節までに出てきたルール</span>SECTION 0 ／ 確認</div>
+      <h1 class="pop" style="--d:.1s">スパイダーの<br>ルール</h1>
+      <p class="door-lead pop" style="--d:.2s">この節で使う「融合（fuse）」をおさらい</p>
+      <div class="door-topics pop" style="--d:.3s"><span>緑のクモ・赤のクモ</span><span>足と角度</span><span>同じ色はくっつく（融合）</span><span>角度は足し算</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 確認：スパイダーと融合 -->
+<section class="slide review" data-id="rvfuse">
+  <div class="chap">確認 ／ この節で使うルール</div>
+  <h2>スパイダー（クモ）と「融合」<small>前の節まで</small></h2>
+  <div class="rv-badge">確認</div>
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+    <div>
+      <div class="anat pop">
+        <div class="an-row"><span class="an-ic"><i class="zs" data-c="g" data-l="2"></i><i class="zs" data-c="r" data-l="2"></i></span><div><b>色</b>：<b style="color:#3f9a1c">緑</b> と <b style="color:#d6321f">赤</b> の 2 種類</div></div>
+        <div class="an-row"><span class="an-ic"><i class="zs" data-c="r" data-l="3"></i></span><div><b>足</b>（線）：何本でもよい。下が入力、上が出力</div></div>
+        <div class="an-row"><span class="an-ic"><i class="zs" data-c="r" data-p="90" data-l="2"></i></span><div><b>角度</b>：0°・90°・180° など。<b class="k">0° は何も書かない</b></div></div>
+        <div class="an-row"><span class="an-ic"><i class="zs" data-c="r"></i><i class="zs" data-c="r" data-p="180"></i></span><div>上にだけ足がある 1 本足のクモ ＝ <b class="kb">状態</b></div></div>
+      </div>
+      <div class="point frag"><b>融合（fuse）</b>：<b class="k">同じ色</b>のクモが足でつながると <b>1 匹にくっつく</b>。<br>足は全部引きつぎ、<b class="k">角度は足し算</b>（360° で一周して 0° にもどる）</div>
+    </div>
+    <div class="card pop" style="--d:.15s;padding:10px 16px">
+      <div class="zrow2">
+        <svg class="zx" id="zFuse" viewBox="0 0 360 300"></svg>
+        <div class="zside">
+          <div class="picker" id="pkFuseC" data-label="色"></div>
+          <div class="picker" id="pkFuseB" data-label="上 β"></div>
+          <div class="picker" id="pkFuseA" data-label="下 α"></div>
+          <button class="b" id="fuseGo">▶ 融合する</button>
+          <button class="b" id="fuseReset">↺ もとに戻す</button>
+        </div>
+      </div>
+      <div class="zcap" id="zFuseCap"></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉：SECTION 1 -->
+<section class="slide door" style="--c:var(--blue)">
+  <div class="door-bg">1</div>
+  <div class="door-wrap">
+    <div class="door-num">1</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">2.2 A spider bit me!</span>SECTION 1</div>
+      <h1 class="pop" style="--d:.1s">ビットと<br>「ビット状態」</h1>
+      <p class="door-lead pop" style="--d:.2s">量子ビットを、ふつうのビットのように使う</p>
+      <div class="door-topics pop" style="--d:.3s"><span>ビット ＝ 0 か 1</span><span>状態と箱をしぼる</span><span>赤 0° ↔ 0</span><span>赤 180° ↔ 1</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- ビットとは -->
+<section class="slide" data-id="bits">
+  <div class="chap">2.2 ／ ふつうのコンピュータとビット</div>
+  <h2>ふつうのコンピュータは「ビット」で動く<small>2.2</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1.05fr)">
+    <div>
+      <p class="pop" style="margin:0 0 6px">パソコン・スマホなどは <b class="k">ビット</b>（bit）で動いている。<br>ビットは <b class="k">0 か 1</b> のどちらか。</p>
+      <div class="cmp2 pop" style="--d:.1s">
+        <div class="cmp2-c"><div class="cmp2-h">ふつうのコンピュータ</div><b>ビット</b><small>0 か 1</small></div>
+        <div class="cmp2-c q"><div class="cmp2-h">量子コンピュータ</div><b>量子ビット</b>（qubit）<small>ビットよりずっと強力</small></div>
+      </div>
+      <div class="point frag">「hi」と打って送信すると、コンピュータには <b class="mono">0110100001101001</b> という <b>0 と 1 の列</b> に見えている</div>
+    </div>
+    <div class="card pop" style="--d:.15s">
+      <div class="mini-h">文字 → 0 と 1 の列（1 文字 = 8 ビット）</div>
+      <div class="txtin"><span>文字を入力：</span><input id="binIn" type="text" value="hi" maxlength="4" spellcheck="false" autocomplete="off"></div>
+      <div class="bin-list" id="binList"></div>
+      <div class="bin-all" id="binAll"></div>
+      <div class="hint" style="text-align:center">半角の英数字・記号を 4 文字まで（文字コード ASCII）</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 量子ビットをビットのように使う -->
+<section class="slide" data-id="why">
+  <div class="chap">2.2 ／ 量子コンピュータの中でビットを使う</div>
+  <h2>量子コンピュータでもビットを使いたい<small>2.2</small></h2>
+  <div class="body" style="display:flex;flex-direction:column;justify-content:center;gap:12px">
+    <div class="why3 pop">
+      <div><span class="ic">🔌</span><b>なぜ？</b><small>ふつうのコンピュータと<br>つなぎたいから</small></div>
+      <div><span class="ic">✂️</span><b>どうやって？</b><small>使ってよい <b>状態</b> と <b>箱</b> を<br>ビットらしいものだけにしぼる</small></div>
+      <div><span class="ic">🎭</span><b>すると…</b><small>ふつうのコンピュータで<br>ビットを扱っているように見える</small></div>
+    </div>
+    <div class="card pop" style="--d:.15s;padding:8px 18px">
+      <div class="why-row">
+        <svg class="zx" id="zWhy" viewBox="0 0 560 210"></svg>
+        <div class="zside" style="width:250px">
+          <div class="zcap left" id="zWhyCap"></div>
+          <button class="b" id="whyGo">✂️ ビット状態だけにしぼる</button>
+          <button class="b" id="whyAuto" data-autoplay>▶ 自動再生</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 2 つのビット状態 -->
+<section class="slide" data-id="bitstate">
+  <div class="chap">2.2 ／ 1 量子ビットの「ビット状態」</div>
+  <h2>2 つの「ビット状態」<small>2.2</small></h2>
+  <div class="body" style="display:flex;flex-direction:column;justify-content:center">
+    <p class="pop" style="text-align:center;margin:0 0 14px">1 つの量子ビットには、次の <b class="k">2 つの状態だけ</b> を許す</p>
+    <div class="bs2">
+      <div class="bs-card pop" style="--d:.1s"><svg class="zx" id="zBs0" viewBox="0 0 300 170"></svg><div class="bs-cap"><b>0° の赤のクモ状態</b> ＝ ビットの <b class="k">0</b></div></div>
+      <div class="bs-card pop" style="--d:.2s"><svg class="zx" id="zBs1" viewBox="0 0 300 170"></svg><div class="bs-cap"><b>180° の赤のクモ状態</b> ＝ ビットの <b class="k">1</b></div></div>
+    </div>
+    <div class="point frag" style="margin-top:20px">角度 0° のときは何も書かないので、<b>無地の赤丸 = 0</b>、<b>「180°」と書いた赤丸 = 1</b> と覚えればよい</div>
+    <div class="point blue frag">補足：『量子コンピュータの頭の中』の書き方では、それぞれ <b class="math">|0⟩</b> と <b class="math">|1⟩</b> に当たる（定数倍を除く）</div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- ビット列 -->
+<section class="slide" data-id="bitstr">
+  <div class="chap">2.2 ／ 量子ビットを並べる</div>
+  <h2>並べると「0 と 1 の列」になる<small>2.2</small></h2>
+  <div class="body" style="display:flex;flex-direction:column;justify-content:center">
+    <p class="pop" style="margin:0 0 10px">量子ビットを何個か並べ、<b>1 つ 1 つ</b>を 2 つのビット状態のどちらかにすると、ふつうのコンピュータと同じ <b class="k">0 と 1 の列</b> が作れる</p>
+    <div class="card pop" style="--d:.1s;padding:8px 18px">
+      <svg class="zx" id="zStr" viewBox="0 0 600 220" style="max-height:260px"></svg>
+      <div class="str-out">ビット列：<b id="strOut"></b><span id="strNote"></span></div>
+      <div class="btns" style="justify-content:center">
+        <button class="b" data-bits="10010">10010（教科書の例）</button>
+        <button class="b" data-bits="01101000">「h」＝ 01101000</button>
+        <button class="b" data-bits="01101001">「i」＝ 01101001</button>
+        <button class="b" data-bits="?">🎲 ランダム</button>
+      </div>
+      <div class="hint" style="text-align:center">クモをクリックすると 0 ⇄ 1（0° ⇄ 180°）が切り替わる</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉：SECTION 2 -->
+<section class="slide door" style="--c:var(--green)">
+  <div class="door-bg">2</div>
+  <div class="door-wrap">
+    <div class="door-num">2</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">2.2 A spider bit me!</span>SECTION 2</div>
+      <h1 class="pop" style="--d:.1s">緑のクモ ＝ COPY</h1>
+      <p class="door-lead pop" style="--d:.2s">ビットにぴったりの最初の「箱」</p>
+      <div class="door-topics pop" style="--d:.3s"><span>0 をコピー</span><span>1 もコピー</span><span>コピーはふつうのコンピュータの得意技</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- コピー -->
+<section class="slide" data-id="copy">
+  <div class="chap">2.2 ／ 緑のクモはビットをコピーする</div>
+  <h2>緑のクモはビットを「コピー」する<small>2.2</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+    <div>
+      <div class="eqcards pop">
+        <div class="eqc"><span class="eqc-t">すでに知っている</span><svg class="zx" id="zCpEq0" viewBox="0 0 290 150"></svg><small>0 → 0, 0</small></div>
+        <div class="eqc new"><span class="eqc-t">じつは 180° も</span><svg class="zx" id="zCpEq1" viewBox="0 0 290 150"></svg><small>1 → 1, 1</small></div>
+      </div>
+      <div class="point frag"><b>コピー</b>はふつうのコンピュータがとても得意なこと。<br>→ 緑のクモは <b class="k">ビットにぴったりの箱（COPY）</b></div>
+      <div class="point blue frag">補足：量子の世界では、<b>どんな状態でも</b>コピーできるわけではない（量子複製不可能定理）。緑のクモがコピーできるのは <b>ビット状態</b> だから</div>
+    </div>
+    <div class="card pop" style="--d:.15s;padding:10px 16px">
+      <svg class="zx" id="zCopy" viewBox="0 0 360 290"></svg>
+      <div class="zcap" id="zCopyCap"></div>
+      <div class="zctl">
+        <div class="picker" id="pkCopy" data-label="入力"></div>
+        <button class="b" id="copyGo">▶ コピー</button>
+        <button class="b" id="copyAuto" data-autoplay>▶ 自動再生</button>
+      </div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉：SECTION 3 -->
+<section class="slide door" style="--c:var(--pink)">
+  <div class="door-bg">3</div>
+  <div class="door-wrap">
+    <div class="door-num">3</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">2.2 A spider bit me!</span>SECTION 3</div>
+      <h1 class="pop" style="--d:.1s">赤のクモ ＝<br>ADD と NOT</h1>
+      <p class="door-lead pop" style="--d:.2s">赤どうしは「融合」して角度を足す</p>
+      <div class="door-topics pop" style="--d:.3s"><span>1 + 1 = 0</span><span>ADD 箱 ⊕</span><span>NOT 箱</span><span>ADD に 1 を入れると NOT</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 赤のクモに 2 ビット -->
+<section class="slide" data-id="add4">
+  <div class="chap">2.2 ／ 赤のクモにビットを 2 つ入れる</div>
+  <h2>赤のクモにビットを 2 つ入れると？<small>2.2</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+    <div>
+      <p class="pop" style="margin:0 0 8px">赤のビット状態は、赤のクモでは <b>コピーされず</b>、<b class="k">融合</b> する（同じ色なので）。<br>→ 角度が <b>足し算</b> される</p>
+      <table class="tt pop" id="addTbl" style="--d:.1s">
+        <thead><tr><th>左の入力</th><th>右の入力</th><th>角度の足し算</th><th class="out">結果</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="point frag">180° + 180° = 360° ＝ <b>ぐるっと一周</b> して 0° にもどる<br>→ <b class="k">1 と 1 を入れると 0</b> が出てくる</div>
+    </div>
+    <div class="card pop" style="--d:.15s;padding:10px 16px">
+      <svg class="zx" id="zAdd" viewBox="0 0 360 290"></svg>
+      <div class="zcap" id="zAddCap"></div>
+      <div class="zctl">
+        <div class="picker" id="pkAddA" data-label="左"></div>
+        <div class="picker" id="pkAddB" data-label="右"></div>
+        <button class="b" id="addGo">▶ 融合</button>
+        <button class="b" id="addAuto" data-autoplay>▶ 自動再生</button>
+      </div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- ADD 箱 -->
+<section class="slide" data-id="addbox">
+  <div class="chap">2.2 ／ ADD 箱</div>
+  <h2>ADD 箱：1 + 1 = 0 の足し算<small>2.2</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+    <div>
+      <p class="pop" style="margin:0 0 8px">0 と 1 の足し算に似ているが、<b>ビットには 2 がない</b>ので <b class="k">1 + 1 = 0</b> とする。<br>この箱を <b class="k">ADD 箱</b> とよび、変わったプラス記号 <b class="k">⊕</b> で書く</p>
+      <div class="xor4 pop" style="--d:.1s">
+        <div><span>0</span>⊕<span>0</span>=<b>0</b></div>
+        <div><span>0</span>⊕<span>1</span>=<b>1</b></div>
+        <div><span>1</span>⊕<span>0</span>=<b>1</b></div>
+        <div class="hot"><span>1</span>⊕<span>1</span>=<b>0</b></div>
+      </div>
+      <div class="point frag" style="display:flex;gap:14px;align-items:center"><span class="an-ic"><i class="zs" data-c="r" data-l="3" data-big="1"></i></span><span>2 本の入力・1 本の出力をもつ <b>赤のクモ</b> ＝ ADD 箱 ⊕</span></div>
+      <div class="point blue frag">『量子コンピュータの頭の中』の <b>XOR</b> と同じ（2 進数の足し算の 1 桁目）</div>
+    </div>
+    <div class="card pop" style="--d:.15s;padding:10px 16px">
+      <div class="mini-h">なぜ 1 + 1 = 0？ ― 角度の「時計」で考える</div>
+      <svg class="zx" id="zDial" viewBox="0 0 360 250"></svg>
+      <div class="zcap" id="zDialCap"></div>
+      <div class="zctl">
+        <button class="b" id="dialAdd1">＋1（180° まわす）</button>
+        <button class="b" id="dialAdd0">＋0（まわさない）</button>
+        <button class="b" id="dialReset">↺ リセット</button>
+      </div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- NOT 箱 -->
+<section class="slide" data-id="not">
+  <div class="chap">2.2 ／ NOT 箱</div>
+  <h2>NOT 箱：0 と 1 を入れかえる<small>2.2</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+    <div>
+      <p class="pop" style="margin:0 0 8px">ビットのもう 1 つの大事な箱が <b class="k">NOT 箱</b>。ビットの値を <b>0 → 1</b>、<b>1 → 0</b> にひっくり返す</p>
+      <div class="xor4 two pop" style="--d:.1s">
+        <div>NOT <span>0</span> = <b>1</b></div>
+        <div>NOT <span>1</span> = <b>0</b></div>
+      </div>
+      <div class="point frag" style="display:flex;gap:14px;align-items:center"><span class="an-ic"><i class="zs" data-c="r" data-p="180" data-l="2" data-big="1"></i></span><span>これは <b>180° の 2 本足の赤のクモ</b> がやっていることそのもの。融合すると<br>180° + 0° = 180°（0→1）、180° + 180° = 0°（1→0）</span></div>
+      <div class="point blue frag">補足：『量子コンピュータの頭の中』の <b>X ゲート</b>（ビット反転）に当たる</div>
+    </div>
+    <div class="card pop" style="--d:.15s;padding:10px 16px">
+      <svg class="zx" id="zNot" viewBox="0 0 360 290"></svg>
+      <div class="zcap" id="zNotCap"></div>
+      <div class="zctl">
+        <div class="picker" id="pkNot" data-label="入力"></div>
+        <button class="b" id="notGo">▶ 融合</button>
+        <button class="b" id="notAuto" data-autoplay>▶ 自動再生</button>
+      </div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- ADD に 1 を入れると NOT -->
+<section class="slide" data-id="addnot">
+  <div class="chap">2.2 ／ 箱どうしの関係が絵でわかる</div>
+  <h2>ADD 箱に 1 を差しこむと NOT 箱になる<small>2.2</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+    <div>
+      <p class="pop" style="margin:0 0 8px">スパイダーを使うと、ADD や NOT といった <b>箱どうしの関係</b> もすぐにわかる</p>
+      <div class="an-wrap">
+        <div class="eqc pop" style="--d:.1s"><span class="eqc-t">ADD の片足に 1 ＝ NOT</span><svg class="zx" id="zAnEq" viewBox="0 0 300 160"></svg></div>
+        <table class="tt small pop" style="--d:.15s">
+          <thead><tr><th>x</th><th>x ⊕ 1</th><th class="out">NOT x</th></tr></thead>
+          <tbody class="static"><tr><td>0</td><td>1</td><td class="out one">1</td></tr><tr><td>1</td><td>0</td><td class="out">0</td></tr></tbody>
+        </table>
+      </div>
+      <div class="point frag">理由は <b>融合するだけ</b>：ADD の 0° と差しこんだ 180° が足されて <b class="k">180° の 2 本足の赤 ＝ NOT</b></div>
+    </div>
+    <div class="card pop" style="--d:.15s;padding:10px 16px">
+      <svg class="zx" id="zAn" viewBox="0 0 360 290"></svg>
+      <div class="zcap" id="zAnCap"></div>
+      <div class="zctl">
+        <button class="b" id="anGo">▶ 1 を差しこむ</button>
+        <button class="b" id="anAuto" data-autoplay>▶ 自動再生</button>
+      </div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉：SECTION 4 -->
+<section class="slide door" style="--c:var(--purple)">
+  <div class="door-bg">4</div>
+  <div class="door-wrap">
+    <div class="door-num">4</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">2.2 A spider bit me!</span>SECTION 4</div>
+      <h1 class="pop" style="--d:.1s">CNOT ＝<br>COPY ＋ ADD</h1>
+      <p class="door-lead pop" style="--d:.2s">緑と赤のクモの「握手」でできる大事な箱</p>
+      <div class="door-topics pop" style="--d:.3s"><span>2 入力・2 出力</span><span>左が右を「制御」</span><span>コピー → 融合</span><span>ゲート</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- CNOT の形 -->
+<section class="slide" data-id="cnot">
+  <div class="chap">2.2 ／ CNOT</div>
+  <h2>CNOT：緑と赤のクモの握手<small>2.2</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)">
+    <div>
+      <ul class="pop">
+        <li><b>入力 2 本・出力 2 本</b> の箱</li>
+        <li><b>3 本足の緑のクモ</b> と <b>3 本足の赤のクモ</b> が <b class="k">握手</b>（横の線でつながる）</li>
+      </ul>
+      <div class="defbox pop" style="--d:.1s">CNOT ＝ <b>Controlled NOT</b>（制御 NOT）<br>
+        <span class="tagc ctl">左</span> のビットが、<span class="tagc tgt">右</span> のビットを<br>
+        ・<b>そのままにする</b> か<br>・<b>NOT をかける</b> か を <b class="k">「制御」</b>する</div>
+      <div class="point frag">左に 0 が来たら右は「そのまま」、1 が来たら右に「NOT」― 次のスライドで、<b>クモのルールだけ</b>で確かめる</div>
+    </div>
+    <div class="card pop" style="--d:.15s;padding:10px 16px">
+      <svg class="zx" id="zCn" viewBox="0 0 420 330"></svg>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- CNOT の中で起きること -->
+<section class="slide" data-id="cnotstep">
+  <div class="chap">2.2 ／ CNOT の中で何が起きている？</div>
+  <h2>左に 0 / 1 を入れると何が起きる？<small>2.2</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+    <div>
+      <ol class="steps pop" id="csSteps">
+        <li data-s="1"><span class="sn">①</span><div><b>コピー</b>：左の入力を緑のクモがコピー。<br>1 つは出力 1 へ、もう 1 つは握手の線を通って赤のクモへ</div></li>
+        <li data-s="2"><span class="sn">②</span><div><b>融合</b>：赤どうしなので、届いたコピーと赤のクモがくっつく（角度を足す）</div></li>
+        <li data-s="3"><span class="sn">③</span><div><b>結果</b>：<span class="r0">0 → 右は <b>何もしない線</b></span> ／ <span class="r1">1 → 右は <b>NOT</b></span></div></li>
+      </ol>
+      <div class="point frag">出力 1 には <b>入れたビットがそのまま</b> 出てくる。右の線は、左のビットしだいで <b class="k">そのまま</b> か <b class="k">NOT</b></div>
+    </div>
+    <div class="card pop" style="--d:.15s;padding:10px 16px">
+      <svg class="zx" id="zCs" viewBox="0 0 420 320"></svg>
+      <div class="zcap" id="zCsCap"></div>
+      <div class="zctl">
+        <div class="picker" id="pkCs" data-label="左の入力"></div>
+        <button class="b" id="csNext">次へ ▶</button>
+        <button class="b" id="csReset">↺</button>
+        <button class="b" id="csAuto">▶ 自動再生</button>
+      </div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- CNOT の真理値表 -->
+<section class="slide" data-id="cnottt">
+  <div class="chap">2.2 ／ CNOT に 2 つのビットを入れる</div>
+  <h2>CNOT の入力と出力<small>2.2</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+    <div>
+      <p class="pop" style="margin:0 0 8px">右の入力にもビットを入れてみる。例：<b>左に 1、右に 0</b> → 右のビットは <b class="k">1 に変わる</b></p>
+      <table class="tt pop" id="ctTbl" style="--d:.1s">
+        <thead><tr><th>入力 1</th><th>入力 2</th><th class="out">出力 1</th><th class="out">出力 2</th><th>右の線</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="point frag">出力 1 ＝ <b>入力 1</b>、出力 2 ＝ <b class="k">入力 1 ⊕ 入力 2</b></div>
+      <div class="point blue frag">量子コンピュータで使う、このような箱を <b>ゲート</b>（gate）とよぶ</div>
+    </div>
+    <div class="card pop" style="--d:.15s;padding:10px 16px">
+      <svg class="zx" id="zCt" viewBox="0 0 420 320"></svg>
+      <div class="zcap" id="zCtCap"></div>
+      <div class="btns" style="justify-content:center;margin-top:2px"><button class="b" id="ctAuto" data-autoplay>▶ 自動再生</button></div>
+      <div class="hint" style="text-align:center">表の行をクリックすると、その入力で動く</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- CNOT = COPY + ADD -->
+<section class="slide" data-id="cnotca">
+  <div class="chap">2.2 ／ 絵を見るだけでわかること</div>
+  <h2>CNOT ＝ COPY ＋ ADD<small>2.2</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+    <div>
+      <p class="pop" style="margin:0 0 10px">CNOT の 2 匹のクモを <b>ずらして</b> みると…</p>
+      <div class="ca-list pop" style="--d:.1s">
+        <div><span class="ca-i g"></span><b>緑のクモ</b> ＝ <b class="k">COPY</b>：入力 1 をコピー</div>
+        <div><span class="ca-i r"></span><b>赤のクモ</b> ＝ <b class="k">ADD</b>：コピーと入力 2 を ⊕</div>
+      </div>
+      <div class="formula frag" style="margin-top:16px;font-size:28px">(a, b) ↦ (a, <b style="color:var(--accent-d)">a ⊕ b</b>)</div>
+      <div class="point frag">クモは足を曲げたり伸ばしたりしても <b>つながり方が同じなら同じもの</b>。<br>→ 計算しなくても、<b class="k">絵を見るだけ</b>で CNOT がコピーと ADD でできているとわかる</div>
+    </div>
+    <div class="card pop" style="--d:.15s;padding:10px 16px">
+      <svg class="zx" id="zCa" viewBox="0 0 400 320"></svg>
+      <div class="zcap" id="zCaCap"></div>
+      <div class="btns" style="justify-content:center;margin-top:2px"><button class="b" id="caGo">⇄ 形を変える</button><button class="b" id="caAuto" data-autoplay>▶ 自動再生</button></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- さらに多くの量子ゲート -->
+<section class="slide" data-id="more">
+  <div class="chap">2.2 ／ その先へ</div>
+  <h2>量子ビットの箱・状態は、もっとたくさんある<small>2.2</small></h2>
+  <div class="body" style="display:flex;flex-direction:column;justify-content:center;gap:12px">
+    <p class="pop" style="margin:0">ビットのために使ったのは、ほんの一部。量子ビットには <b class="k">量子ゲート</b>（quantum gate）とよばれる箱がもっとたくさんあり、それらを組み合わせて量子コンピュータを作る</p>
+    <div class="card pop" style="--d:.1s;padding:6px 18px">
+      <svg class="zx" id="zMore" viewBox="0 0 640 200"></svg>
+    </div>
+    <div class="next2 pop" style="--d:.2s">
+      <div>🛒 量子コンピュータはまだお店では売っていない ― <b>今まさに発明されているところ！</b></div>
+      <div>🔬 次は、実験室の研究者たちが <b>クモから量子コンピュータを組み立てる方法</b> を見ていく</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- まとめ -->
+<section class="slide">
+  <div class="chap">Summary ／ 2.2 A spider bit me!</div>
+  <h2>まとめ<small>2.2</small></h2>
+  <div class="body sumlist">
+    <div class="sl pop" style="--d:0.00s;--c:var(--blue)"><span class="sl-n">1</span><div>量子ビットをビットとして使うには、<b class="k">状態と箱をビットらしいものだけにしぼる</b></div></div>
+    <div class="sl pop" style="--d:0.07s;--c:var(--blue)"><span class="sl-n">2</span><div>ビット状態は 2 つ：<i class="zs" data-c="r"></i> <b>赤 0° ＝ 0</b>、<i class="zs" data-c="r" data-p="180"></i> <b>赤 180° ＝ 1</b>。並べると 0 と 1 の列になる</div></div>
+    <div class="sl pop" style="--d:0.14s;--c:var(--green)"><span class="sl-n">3</span><div><b>緑のクモ</b> は 0 も 1 も <b class="k">コピー</b> する（COPY）</div></div>
+    <div class="sl pop" style="--d:0.21s;--c:var(--pink)"><span class="sl-n">4</span><div><b>赤のクモ</b> はビットと <b class="k">融合</b> して角度を足す → <b class="k">ADD 箱 ⊕</b>（1 ⊕ 1 = 0）。<b>180° の赤</b> は <b class="k">NOT 箱</b></div></div>
+    <div class="sl pop" style="--d:0.28s;--c:var(--pink)"><span class="sl-n">5</span><div>ADD の片足に 1 を差しこむと NOT になる ― <b>融合するだけ</b>でわかる</div></div>
+    <div class="sl pop" style="--d:0.35s;--c:var(--purple)"><span class="sl-n">6</span><div><b class="k">CNOT</b> ＝ 緑と赤の握手 ＝ <b>COPY ＋ ADD</b>：(a, b) ↦ (a, a ⊕ b)。左のビットが右に NOT をかけるかを制御する</div></div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 練習問題 -->
+<section class="slide" data-id="quiz">
+  <div class="chap">Practice ／ 2.2 A spider bit me!</div>
+  <h2>練習問題<small>クリックで答え</small><button class="b qz-all" data-quiz-all>答えをぜんぶ表示</button></h2>
+  <div class="body quiz q6">
+    <div class="qz pop" style="--d:0.00s"><div class="qz-q"><span class="qz-no">Q1</span><span>ビット列 <b class="mono">0110</b> を表すクモの並びは？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><i class="zs" data-c="r"></i><i class="zs" data-c="r" data-p="180"></i><i class="zs" data-c="r" data-p="180"></i><i class="zs" data-c="r"></i>（赤 0°・180°・180°・0°）</span></div></div>
+    <div class="qz pop" style="--d:0.05s"><div class="qz-q"><span class="qz-no">Q2</span><span>緑のクモに 1（<i class="zs" data-c="r" data-p="180"></i>）を入れると？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><i class="zs" data-c="r" data-p="180"></i><i class="zs" data-c="r" data-p="180"></i> 1 が 2 つにコピーされる</span></div></div>
+    <div class="qz pop" style="--d:0.10s"><div class="qz-q"><span class="qz-no">Q3</span><span><b class="mono">1 ⊕ 1 ⊕ 1</b> はいくつ？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>1</b>（180° × 3 = 540° = 360° + 180° → 180°）</span></div></div>
+    <div class="qz pop" style="--d:0.15s"><div class="qz-q"><span class="qz-no">Q4</span><span>ADD 箱の片方の足に <b>0</b>（<i class="zs" data-c="r"></i>）を差しこむと？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">0° + 0° = 0° の 2 本足の赤 ＝ <b>何もしない線</b>（x ⊕ 0 = x）</span></div></div>
+    <div class="qz pop" style="--d:0.20s"><div class="qz-q"><span class="qz-no">Q5</span><span>CNOT に（入力 1, 入力 2）＝（1, 1）を入れると？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>（1, 0）</b>：左の 1 が右に NOT をかけ、1 → 0</span></div></div>
+    <div class="qz pop" style="--d:0.25s"><div class="qz-q"><span class="qz-no">Q6</span><span>赤のビット状態を、緑のクモはコピーするのに、赤のクモがコピーしないのはなぜ？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>同じ色どうしは融合する</b>から（くっついて角度が足される）</span></div></div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+</div></div>
+<div id="ui">
+  <button id="btnPrev">◀</button><span id="counter"></span><button id="btnNext">▶</button>
+  <button id="btnFs">全画面 (F)</button>
+  <button id="btnOv">一覧 (O)</button>
+  <span>← → / Space でページ送り</span>
+</div>
+<div id="progress"></div>
+<div id="penbar" aria-label="ペンの道具">
+  <button data-tool="laser" class="on" title="レーザーポインター（書き込みは残らない）">🔴 レーザー</button>
+  <button data-tool="pen" title="黒ペンで書き込む (P)">✏️ 黒ペン</button>
+  <button data-tool="eraser" title="消しゴム（なぞった線を消す）">🧽 消す</button>
+  <button data-tool="lasso" title="投げ縄：書き込みを囲んで選択・移動・複製 (L)">➰ 投げ縄</button>
+  <button id="inkPaste" title="コピーした書き込みを貼り付け (V)" disabled>📌 貼り付け</button>
+  <span class="sep"></span>
+  <button id="inkUndo" title="元に戻す (Z)">↩️</button>
+  <button id="inkClear" title="このスライドの書き込みを全部消す">🗑️</button>
+</div>
+<script>
+const NS = 'http://www.w3.org/2000/svg';
+const $ = s => document.querySelector(s);
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+const stoppers = [];
+window.onEnter = window.onEnter || {};
+
+/* 自動再生ボタン（step を一定間隔で呼ぶ）。戻り値は停止する関数 */
+function looper(btn, step, interval) {
+  btn = typeof btn === 'string' ? $(btn) : btn;
+  let t = null;
+  const stop = () => { clearInterval(t); t = null; btn.textContent = '▶ 自動再生'; btn.classList.remove('playing'); };
+  btn.addEventListener('click', () => {
+    btn.blur();
+    if (t) return stop();
+    btn.textContent = '■ 停止'; btn.classList.add('playing');
+    step(); t = setInterval(step, interval);
+  });
+  stoppers.push(stop);
+  return stop;
+}
+/* 選択ボタンの列 */
+function picker(root, items, onPick) {
+  root = typeof root === 'string' ? $(root) : root;
+  const lab = root.dataset.label;
+  root.innerHTML = (lab ? `<span class="pk-l">${lab}</span>` : '') +
+    items.map((it, i) => `<button data-i="${i}" class="${it.cls || ''}">${it.label}</button>`).join('');
+  const bs = [...root.querySelectorAll('button')];
+  const set = (i, user = false) => { bs.forEach((b, j) => b.classList.toggle('on', i === j)); onPick(items[i], i, user); };
+  bs.forEach((b, i) => b.addEventListener('click', e => { e.currentTarget.blur(); set(i, true); }));
+  return set;
+}
+const BITS = [{ label: '0', v: 0 }, { label: '1', v: 1 }];
+
+/* ---------- 順番に動かす処理（スライドを離れたり、別の操作を始めたら中断する） ---------- */
+const SEQ_STOP = {};
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+function seqRunner() {
+  let tok = 0;
+  const r = {
+    stop() { tok++; },
+    async run(fn) {
+      const t = ++tok;
+      const chk = async p => { await p; if (t !== tok) throw SEQ_STOP; };
+      try { await fn(chk); } catch (e) { if (e !== SEQ_STOP) throw e; }
+    },
+  };
+  stoppers.push(r.stop);
+  return r;
+}
+
+/* =====================================================================
+   スパイダー図（ZX 図）を描いて、状態から状態へなめらかに動かす
+   状態 = { n: { id: ノード }, w: { id: 線 } }
+     ノード：クモ {x, y, c:'r'|'g', p:角度, r:半径, o:不透明度, clk, hl}
+             文字 {x, y, t:'文字', cls}
+             新しく出てくるノードに from:'id' を付けると、そのノードの位置から出てくる
+     線    ：{a, b, h, s, o}（a・b はノードの id か [x, y]。h：横向きに出る曲線、s：直線）
+   ===================================================================== */
+const ease = t => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+const norm = p => (((p || 0) % 360) + 360) % 360;
+const plab = p => (norm(p) ? norm(p) + '°' : '');
+const lerp = (a, b, e) => a + (b - a) * e;
+function zxScene(svg, { onClick } = {}) {
+  svg = typeof svg === 'string' ? document.getElementById(svg) : svg;
+  const gW = el('g', {}, svg), gN = el('g', {}, svg);
+  let S = { n: {}, w: {} };
+  const D = { n: {}, w: {} };
+  let raf = 0, finish = null;
+
+  function nodeEl(id, n) {
+    let e = D.n[id];
+    const isText = n.t !== undefined;
+    if (e && e.isText !== isText) { e.remove(); e = null; }
+    if (!e) {
+      if (isText) e = el('text', {}, gN);
+      else { e = el('g', {}, gN); el('circle', { r: 20 }, e); el('text', {}, e); }
+      e.isText = isText;
+      e.dataset.id = id;
+      if (onClick) e.addEventListener('click', ev => { ev.stopPropagation(); onClick(id); });
+      D.n[id] = e;
+    }
+    return e;
+  }
+  function wireEl(id) {
+    if (!D.w[id]) D.w[id] = el('path', { class: 'zw' }, gW);
+    return D.w[id];
+  }
+  function drawNode(e, n, x, y, r, o, label) {
+    e.style.opacity = o;
+    e.style.pointerEvents = o < .5 ? 'none' : '';
+    if (e.isText) {
+      e.setAttribute('x', x); e.setAttribute('y', y);
+      e.setAttribute('class', 'zt ' + (n.cls || ''));
+      if (e.textContent !== n.t) e.textContent = n.t;
+      return;
+    }
+    e.setAttribute('transform', `translate(${x},${y})`);
+    e.setAttribute('class', `zn ${n.c || 'r'}${n.clk ? ' clk' : ''}${n.hl ? ' hl' : ''}`);
+    e.firstChild.setAttribute('r', r);
+    const tx = e.lastChild;
+    if (tx.textContent !== label) tx.textContent = label;
+    tx.style.fontSize = (r >= 23 ? 14 : r >= 17 ? 12.5 : 10) + 'px';
+  }
+  function wpath(a, b, w) {
+    if (w.s) return `M${a[0]},${a[1]} L${b[0]},${b[1]}`;
+    if (w.h) { const mx = (a[0] + b[0]) / 2; return `M${a[0]},${a[1]} C${mx},${a[1]} ${mx},${b[1]} ${b[0]},${b[1]}`; }
+    const my = (a[1] + b[1]) / 2;
+    return `M${a[0]},${a[1]} C${a[0]},${my} ${b[0]},${my} ${b[0]},${b[1]}`;
+  }
+  const defR = n => n.r ?? 20;
+
+  // from → to を e（0〜1）の割合で描く
+  function frame(F, T, e, pos) {
+    for (const id in T.n) {
+      const f = F.n[id], t = T.n[id];
+      const x = lerp(f.x, t.x, e), y = lerp(f.y, t.y, e);
+      pos[id] = [x, y];
+      const lab = norm(f.p) === norm(t.p) ? plab(t.p) : (e < .8 ? plab(f.p) : plab(t.p));
+      drawNode(nodeEl(id, t), e < .5 && f.c ? { ...t, c: f.c } : t, x, y, lerp(defR(f), defR(t), e), lerp(f.o ?? 1, t.o ?? 1, e), lab);
+    }
+    const end = (ref, P) => (typeof ref === 'string' ? (pos[ref] || [P.n[ref]?.x ?? 0, P.n[ref]?.y ?? 0]) : ref);
+    for (const id in T.w) {
+      const f = F.w[id], t = T.w[id];
+      const a0 = end(f.a, F), a1 = end(t.a, T), b0 = end(f.b, F), b1 = end(t.b, T);
+      const a = [lerp(a0[0], a1[0], e), lerp(a0[1], a1[1], e)], b = [lerp(b0[0], b1[0], e), lerp(b0[1], b1[1], e)];
+      const p = wireEl(id);
+      p.setAttribute('d', wpath(a, b, t));
+      p.style.opacity = lerp(f.o ?? 1, t.o ?? 1, e);
+    }
+  }
+  function cleanup(next) {
+    for (const id in D.n) if (!next.n[id]) { D.n[id].remove(); delete D.n[id]; }
+    for (const id in D.w) if (!next.w[id]) { D.w[id].remove(); delete D.w[id]; }
+  }
+  function stopAnim() { if (raf) { cancelAnimationFrame(raf); raf = 0; } if (finish) { const f = finish; finish = null; f(); } }
+  function set(next) {
+    stopAnim();
+    cleanup(next);
+    // 描く順番（後ろのものほど上）を状態の並び順にそろえる
+    for (const id in next.w) gW.appendChild(wireEl(id));
+    for (const id in next.n) gN.appendChild(nodeEl(id, next.n[id]));
+    frame(next, next, 1, {});
+    S = next;
+  }
+  function to(next, dur = 700) {
+    stopAnim();
+    const prev = S, F = { n: {}, w: {} }, T = { n: {}, w: {} };
+    for (const id in prev.n) { if (!next.n[id]) { F.n[id] = prev.n[id]; T.n[id] = { ...prev.n[id], o: 0 }; } }
+    for (const id in next.n) {
+      const q = next.n[id], p = prev.n[id];
+      if (p) F.n[id] = p;
+      else if (q.from && prev.n[q.from]) { const s = prev.n[q.from]; F.n[id] = { ...q, x: s.x, y: s.y, r: s.r ?? q.r, o: s.o ?? 1 }; }
+      else F.n[id] = { ...q, o: 0 };
+      T.n[id] = q;
+    }
+    for (const id in prev.w) { if (!next.w[id]) { F.w[id] = prev.w[id]; T.w[id] = { ...prev.w[id], o: 0 }; } }
+    for (const id in next.w) { F.w[id] = prev.w[id] || { ...next.w[id], o: 0 }; T.w[id] = next.w[id]; }
+    for (const id in T.n) nodeEl(id, T.n[id]);
+    for (const id in next.n) gN.appendChild(D.n[id]);
+    for (const id in T.w) wireEl(id);
+    const t0 = performance.now();
+    return new Promise(res => {
+      finish = res;
+      const tick = now => {
+        const k = Math.min(1, (now - t0) / dur);
+        frame(F, T, ease(k), {});
+        if (k < 1) raf = requestAnimationFrame(tick);
+        else { raf = 0; cleanup(next); S = next; const f = finish; finish = null; f && f(); }
+      };
+      raf = requestAnimationFrame(tick);
+    });
+  }
+  return { set, to, state: () => S };
+}
+
+/* 文中の小さなクモ：<i class="zs" data-c="r" data-p="180" data-l="1|2|3"></i> */
+function glyphs() {
+  document.querySelectorAll('i.zs').forEach(g => {
+    const c = g.dataset.c || 'r', p = +g.dataset.p || 0, l = g.dataset.l || '1', big = !!g.dataset.big;
+    const W = l === '3' ? 40 : 30, H = l === '1' ? 36 : 44, k = big ? 1.35 : 1;
+    const s = el('svg', { width: W * k, height: H * k, viewBox: `0 0 ${W} ${H}` });
+    const cx = W / 2, cy = l === '1' ? 22 : H / 2, r = 11;
+    const ln = d => el('path', { d, fill: 'none', stroke: '#1f1a3d', 'stroke-width': 2.6, 'stroke-linecap': 'round' }, s);
+    ln(`M${cx},2 L${cx},${cy}`);
+    if (l === '2') ln(`M${cx},${cy} L${cx},${H - 2}`);
+    if (l === '3') { ln(`M${cx},${cy} C${cx},${H - 8} 6,${H - 10} 5,${H - 2}`); ln(`M${cx},${cy} C${cx},${H - 8} ${W - 6},${H - 10} ${W - 5},${H - 2}`); }
+    el('circle', { cx, cy, r, fill: c === 'g' ? '#a6dc6a' : '#e8402e', stroke: '#1f1a3d', 'stroke-width': 2.4 }, s);
+    if (p) el('text', { x: cx, y: cy + .5, 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': 8.4, 'font-weight': 900, 'font-family': 'Arial,sans-serif', fill: c === 'g' ? '#1f1a3d' : '#fff' }, s).textContent = p + '°';
+    g.replaceChildren(s);
+  });
+}
+glyphs();
+
+const deg = b => b * 180;
+const stName = b => `<b class="mono">${b}</b>（${b ? '180°' : '0°'}）`;
+
+/* =====================================================================
+   確認：融合（同じ色のクモがくっつき、角度が足される）
+   ===================================================================== */
+{
+  const sc = zxScene('zFuse');
+  let c = 'r', a = 90, b = 180, fused = false;
+  const R = new seqRunner();
+  const legs = (top, bot) => ({ u1: { a: top, b: [110, 22] }, u2: { a: top, b: [250, 22] }, d1: { a: bot, b: [180, 288] } });
+  const st0 = () => ({ n: { S2: { x: 180, y: 100, c, p: b, r: 25 }, S1: { x: 180, y: 200, c, p: a, r: 25 } },
+    w: { ...legs('S2', 'S1'), m: { a: 'S1', b: 'S2' } } });
+  const st1 = () => ({ n: { S2: { x: 180, y: 150, c, p: a + b, r: 27, hl: true }, S1: { x: 180, y: 150, c, p: a, r: 25, o: 0 } }, w: legs('S2', 'S1') });
+  const cap = () => {
+    if (!fused) return `<span style="color:var(--muted)">下 α = ${a}°、上 β = ${b}° の${c === 'r' ? '赤' : '緑'}のクモ</span>`;
+    const s = a + b;
+    return `α + β = ${a}° + ${b}° = <b>${s >= 360 ? s + '° → ' + norm(s) + '°（一周）' : s + '°'}</b>`;
+  };
+  const show = () => { fused = false; sc.set(st0()); $('#zFuseCap').innerHTML = cap(); };
+  const ANG = [0, 90, 180, 270].map(v => ({ label: v + '°', v }));
+  const setC = picker('#pkFuseC', [{ label: '赤', v: 'r' }, { label: '緑', v: 'g' }], it => { c = it.v; show(); });
+  const setA = picker('#pkFuseA', ANG, it => { a = it.v; show(); });
+  const setB = picker('#pkFuseB', ANG, it => { b = it.v; show(); });
+  setC(0); setA(1); setB(2);
+  $('#fuseGo').onclick = e => { e.currentTarget.blur(); R.run(async chk => { if (fused) { show(); await chk(sleep(250)); } await chk(sc.to(st1(), 900)); fused = true; $('#zFuseCap').innerHTML = cap(); }); };
+  $('#fuseReset').onclick = e => { e.currentTarget.blur(); R.stop(); show(); };
+  onEnter.rvfuse = show;
+}
+
+/* =====================================================================
+   ビット：文字 → 0 と 1 の列
+   ===================================================================== */
+{
+  const inp = $('#binIn');
+  const upd = () => {
+    const chars = [...inp.value].filter(ch => ch.charCodeAt(0) < 128).slice(0, 4);
+    $('#binList').innerHTML = chars.map(ch => {
+      const code = ch.charCodeAt(0), bits = code.toString(2).padStart(8, '0');
+      return `<div class="bin-row"><div class="bin-ch">${ch === ' ' ? '␣' : ch.replace(/[<>&]/g, m => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[m]))}</div><div class="bin-code">${code}</div><div class="bin-bits">${[...bits].map(x => `<span class="${x === '1' ? 'one' : ''}">${x}</span>`).join('')}</div></div>`;
+    }).join('');
+    $('#binAll').textContent = chars.map(ch => ch.charCodeAt(0).toString(2).padStart(8, '0')).join('');
+  };
+  inp.addEventListener('input', upd);
+  inp.addEventListener('keydown', e => e.stopPropagation());
+  upd();
+}
+
+/* =====================================================================
+   量子ビットの状態をビット状態だけにしぼる
+   ===================================================================== */
+{
+  const sc = zxScene('zWhy');
+  const LIST = [['g', 0], ['g', 90], ['g', 180], ['g', 270], ['r', 0], ['r', 90], ['r', 180], ['r', 270]];
+  const all = () => {
+    const n = {}, w = {};
+    LIST.forEach(([c, p], i) => { const id = c + p; n[id] = { x: 50 + i * 65, y: 125, c, p, r: 21 }; w['w' + id] = { a: id, b: [50 + i * 65, 50] }; });
+    n.lab = { x: 280, y: 190, t: '量子ビットの状態は、緑・赤 × いろいろな角度…', cls: '' };
+    return { n, w };
+  };
+  const bits = () => {
+    const s = all();
+    for (const id in s.n) if (id !== 'lab') s.n[id] = { ...s.n[id], o: .12 };
+    for (const id in s.w) s.w[id] = { ...s.w[id], o: .12 };
+    s.n.r0 = { x: 200, y: 115, c: 'r', p: 0, r: 28, hl: true };
+    s.n.r180 = { x: 360, y: 115, c: 'r', p: 180, r: 28, hl: true };
+    s.w.wr0 = { a: 'r0', b: [200, 35] }; s.w.wr180 = { a: 'r180', b: [360, 35] };
+    s.n.lab = { x: 280, y: 190, t: '', cls: '' };
+    s.n.d0 = { x: 200, y: 178, t: '0', cls: 'big o' };
+    s.n.d1 = { x: 360, y: 178, t: '1', cls: 'big o' };
+    s.n.ar = { x: 280, y: 115, t: '…だけ使う', cls: 'tag' };
+    return s;
+  };
+  let on = false;
+  const R = new seqRunner();
+  const show = (v, anim = true) => {
+    on = v;
+    $('#whyGo').textContent = on ? '↺ すべての状態を表示' : '✂️ ビット状態だけにしぼる';
+    $('#zWhyCap').innerHTML = on ? '使うのは <b>赤 0°</b> と <b>赤 180°</b> の 2 つだけ → <b>0</b> と <b>1</b> とみなす' : '量子ビットには、たくさんの状態がある';
+    R.run(async chk => { await chk(anim ? sc.to(on ? bits() : all(), 900) : sc.set(on ? bits() : all())); });
+  };
+  const stopAuto = looper('#whyAuto', () => show(!on), 2600);
+  $('#whyGo').onclick = e => { e.currentTarget.blur(); stopAuto(); show(!on); };
+  onEnter.why = () => show(false, false);
+  show(false, false);
+}
+
+/* =====================================================================
+   2 つのビット状態（静止図）
+   ===================================================================== */
+for (const [id, p, d] of [['zBs0', 0, '0'], ['zBs1', 180, '1']]) {
+  zxScene(id).set({
+    n: { s: { x: 90, y: 110, c: 'r', p, r: 34 }, eq: { x: 165, y: 108, t: '⟷', cls: 'eqs' }, d: { x: 235, y: 106, t: d, cls: 'big o' } },
+    w: { w: { a: 's', b: [90, 18] } },
+  });
+  document.querySelector(`#${id} text.zt.big`).style.fontSize = '64px';
+}
+
+/* =====================================================================
+   ビット列：クリックで 0 ⇄ 1
+   ===================================================================== */
+{
+  let bits = '10010';
+  const sc = zxScene('zStr', { onClick: id => { const i = +id.slice(1); if (id[0] !== 's') return; toggle(i); } });
+  const st = () => {
+    const n = {}, w = {}, k = bits.length, gap = 68, x0 = 300 - (k - 1) * gap / 2;
+    [...bits].forEach((b, i) => {
+      const x = x0 + i * gap;
+      n['s' + i] = { x, y: 110, c: 'r', p: deg(+b), r: 23, clk: true };
+      n['d' + i] = { x, y: 172, t: b, cls: 'big' + (b === '1' ? ' o' : '') };
+      w['w' + i] = { a: 's' + i, b: [x, 30] };
+    });
+    return { n, w };
+  };
+  const out = () => {
+    $('#strOut').textContent = bits;
+    const ch = bits.length === 8 ? String.fromCharCode(parseInt(bits, 2)) : '';
+    $('#strNote').textContent = ch && /[!-~]/.test(ch) ? `＝ 文字「${ch}」` : '';
+  };
+  const toggle = i => { bits = bits.slice(0, i) + (bits[i] === '1' ? '0' : '1') + bits.slice(i + 1); sc.to(st(), 380); out(); };
+  document.querySelectorAll('[data-bits]').forEach(b => b.addEventListener('click', e => {
+    e.currentTarget.blur();
+    const v = b.dataset.bits;
+    bits = v === '?' ? Array.from({ length: 5 + Math.floor(Math.random() * 4) }, () => (Math.random() < .5 ? '0' : '1')).join('') : v;
+    sc.to(st(), 600); out();
+  }));
+  sc.set(st()); out();
+  onEnter.bitstr = () => { bits = '10010'; sc.set(st()); out(); };
+}
+
+/* =====================================================================
+   緑のクモ = COPY
+   ===================================================================== */
+// 左の等式カード（静止図）
+for (const [id, p] of [['zCpEq0', 0], ['zCpEq1', 180]]) {
+  zxScene(id).set({
+    n: { G: { x: 62, y: 70, c: 'g', r: 19 }, A: { x: 62, y: 122, c: 'r', p, r: 16 }, eq: { x: 135, y: 82, t: '=', cls: 'eqs' },
+      B: { x: 192, y: 92, c: 'r', p, r: 16 }, C: { x: 245, y: 92, c: 'r', p, r: 16 } },
+    w: { u1: { a: 'G', b: [36, 14] }, u2: { a: 'G', b: [88, 14] }, i: { a: 'G', b: 'A' }, b1: { a: 'B', b: [192, 26] }, c1: { a: 'C', b: [245, 26] } },
+  });
+}
+{
+  const sc = zxScene('zCopy');
+  const R = new seqRunner();
+  let a = 0;
+  const st0 = () => ({ n: { G: { x: 180, y: 140, c: 'g', r: 26 }, A: { x: 180, y: 232, c: 'r', p: deg(a), r: 21 }, da: { x: 128, y: 236, t: String(a), cls: 'big o' } },
+    w: { l: { a: 'G', b: [110, 22] }, r: { a: 'G', b: [250, 22] }, i: { a: 'G', b: 'A' } } });
+  const st1 = () => { const s = st0(); s.n.A = { ...s.n.A, x: 180, y: 140 }; s.n.da = { ...s.n.da, x: 128, y: 144, o: 0 }; return s; };
+  const st2 = () => ({ n: { G: { x: 180, y: 140, c: 'g', r: 26, o: 0 }, A: { x: 110, y: 104, c: 'r', p: deg(a), r: 21, hl: true }, B: { from: 'A', x: 250, y: 104, c: 'r', p: deg(a), r: 21, hl: true },
+    d1: { x: 110, y: 160, t: String(a), cls: 'big o' }, d2: { x: 250, y: 160, t: String(a), cls: 'big o' }, cp: { x: 180, y: 104, t: 'コピー！', cls: 'tag' } },
+    w: { l: { a: 'A', b: [110, 22] }, r: { a: 'B', b: [250, 22] } } });
+  const cap = done => (done ? `入力 ${stName(a)} → 出力 <b>${a}, ${a}</b>（2 つにコピー）` : `入力 ${stName(a)} を緑のクモに入れる`);
+  const reset = () => { R.stop(); sc.set(st0()); $('#zCopyCap').innerHTML = cap(false); };
+  const play = () => R.run(async chk => {
+    sc.set(st0()); $('#zCopyCap').innerHTML = cap(false);
+    await chk(sleep(350)); await chk(sc.to(st1(), 650)); await chk(sc.to(st2(), 800));
+    $('#zCopyCap').innerHTML = cap(true);
+  });
+  const setA = picker('#pkCopy', BITS, (it, i, user) => { a = it.v; if (user) { stopAuto(); reset(); } });
+  const stopAuto = looper('#copyAuto', () => { setA(a ^ 1); play(); }, 3200);
+  $('#copyGo').onclick = e => { e.currentTarget.blur(); stopAuto(); play(); };
+  setA(1); reset();
+  onEnter.copy = () => { setA(1); reset(); };
+}
+
+/* =====================================================================
+   赤のクモに 2 ビット：融合して角度を足す（ADD）
+   ===================================================================== */
+{
+  const sc = zxScene('zAdd');
+  const R = new seqRunner();
+  let a = 0, b = 0;
+  const CASES = [[0, 0], [0, 1], [1, 0], [1, 1]];
+  const tb = $('#addTbl tbody');
+  tb.innerHTML = CASES.map(([x, y]) => `<tr><td>${x} <small>${deg(x)}°</small></td><td>${y} <small>${deg(y)}°</small></td><td class="calc">${deg(x)}° + ${deg(y)}° = ${deg(x) + deg(y)}°${deg(x) + deg(y) === 360 ? ' = 0°' : ''}</td><td class="out ${x ^ y ? 'one' : ''}">${x ^ y}</td></tr>`).join('');
+  const rows = [...tb.rows];
+  const st0 = () => ({ n: { S: { x: 180, y: 118, c: 'r', r: 27 }, A: { x: 105, y: 228, c: 'r', p: deg(a), r: 21 }, B: { x: 255, y: 228, c: 'r', p: deg(b), r: 21 },
+    da: { x: 60, y: 232, t: String(a), cls: 'big b' }, db: { x: 300, y: 232, t: String(b), cls: 'big b' } },
+    w: { o: { a: 'S', b: [180, 22] }, ia: { a: 'S', b: 'A' }, ib: { a: 'S', b: 'B' } } });
+  const st1 = () => ({ n: { S: { x: 180, y: 150, c: 'r', r: 27, p: deg(a) + deg(b), hl: true }, A: { x: 180, y: 150, c: 'r', p: deg(a), r: 21, o: 0 }, B: { x: 180, y: 150, c: 'r', p: deg(b), r: 21, o: 0 },
+    da: { x: 180, y: 150, t: String(a), cls: 'big b', o: 0 }, db: { x: 180, y: 150, t: String(b), cls: 'big b', o: 0 },
+    dr: { x: 240, y: 154, t: '= ' + (a ^ b), cls: 'big o' }, fs: { x: 180, y: 222, t: '融合！', cls: 'tag' } },
+    w: { o: { a: 'S', b: [180, 22] } } });
+  const cap = done => (done ? `0° + ${deg(a)}° + ${deg(b)}° = ${deg(a) + deg(b)}°${a & b ? ' = 0°（一周）' : ''} → <b>${a} ⊕ ${b} = ${a ^ b}</b>` : `入力 ${a} と ${b} を赤のクモ（0°）に入れる`);
+  const mark = () => rows.forEach((r, i) => r.classList.toggle('cur', CASES[i][0] === a && CASES[i][1] === b));
+  const reset = () => { R.stop(); sc.set(st0()); mark(); $('#zAddCap').innerHTML = cap(false); };
+  const play = () => R.run(async chk => {
+    sc.set(st0()); mark(); $('#zAddCap').innerHTML = cap(false);
+    await chk(sleep(400)); await chk(sc.to(st1(), 950)); $('#zAddCap').innerHTML = cap(true);
+  });
+  const setA = picker('#pkAddA', BITS, (it, i, user) => { a = it.v; if (user) { stopAuto(); reset(); } });
+  const setB = picker('#pkAddB', BITS, (it, i, user) => { b = it.v; if (user) { stopAuto(); reset(); } });
+  let k = -1;
+  const stopAuto = looper('#addAuto', () => { k = (k + 1) % 4; setA(CASES[k][0]); setB(CASES[k][1]); play(); }, 2900);
+  rows.forEach((r, i) => r.addEventListener('click', () => { stopAuto(); setA(CASES[i][0]); setB(CASES[i][1]); play(); }));
+  $('#addGo').onclick = e => { e.currentTarget.blur(); stopAuto(); play(); };
+  setA(0); setB(0); reset();
+  onEnter.add4 = () => { k = -1; setA(0); setB(0); reset(); };
+}
+
+/* =====================================================================
+   ADD 箱：角度の時計（1 を足すたびに 180° まわる）
+   ===================================================================== */
+{
+  const svg = $('#zDial');
+  const CX = 180, CY = 118, RR = 88;
+  el('circle', { cx: CX, cy: CY, r: RR, fill: '#fff', stroke: '#1f1a3d', 'stroke-width': 4 }, svg);
+  for (let i = 0; i < 12; i++) {
+    const t = i * Math.PI / 6, r1 = i % 3 ? RR - 9 : RR - 16;
+    el('line', { x1: CX + Math.sin(t) * r1, y1: CY - Math.cos(t) * r1, x2: CX + Math.sin(t) * RR, y2: CY - Math.cos(t) * RR, stroke: '#1f1a3d', 'stroke-width': i % 3 ? 2 : 4 }, svg);
+  }
+  const mk = (x, y, s, cls) => { const t = el('text', { x, y, class: 'zt ' + cls }, svg); t.textContent = s; return t; };
+  mk(CX, CY - RR - 16, '0°（= 0）', 'sm o');
+  mk(CX, CY + RR + 16, '180°（= 1）', 'sm o');
+  mk(CX + RR + 30, CY, '90°', 'sm');
+  mk(CX - RR - 30, CY, '270°', 'sm');
+  const needle = el('g', {}, svg);
+  el('line', { x1: CX, y1: CY + 14, x2: CX, y2: CY - RR + 22, stroke: '#e8402e', 'stroke-width': 8, 'stroke-linecap': 'round' }, needle);
+  el('circle', { cx: CX, cy: CY - RR + 26, r: 11, fill: '#e8402e', stroke: '#1f1a3d', 'stroke-width': 3 }, needle);
+  el('circle', { cx: CX, cy: CY, r: 9, fill: '#1f1a3d' }, svg);
+  const valT = mk(CX + 2, CY + 40, '0', 'big o');
+  let hist = [], ang = 0, raf = 0;
+  const draw = a => needle.setAttribute('transform', `rotate(${a},${CX},${CY})`);
+  const animTo = target => {
+    cancelAnimationFrame(raf);
+    const from = ang, t0 = performance.now();
+    const tick = now => { const k = Math.min(1, (now - t0) / 650); ang = from + (target - from) * ease(k); draw(ang); if (k < 1) raf = requestAnimationFrame(tick); else ang = target; };
+    raf = requestAnimationFrame(tick);
+  };
+  const cap = () => {
+    const ones = hist.filter(x => x).length, v = ones % 2;
+    valT.textContent = String(v);
+    if (!hist.length) return 'ボタンで 0 や 1 を足していく（はじめは 0）';
+    const sum = hist.length ? hist.join(' ⊕ ') : '';
+    return `<span class="mono">${sum} = <b>${v}</b></span><br><span style="font-size:16px;color:var(--muted)">針は 180° × ${ones} = ${ones * 180}°${ones >= 2 ? `（${Math.floor(ones / 2)} 周して ${v ? '180°' : '0°'}）` : ''} まわった</span>`;
+  };
+  const add = x => { if (hist.length >= 8) hist = []; hist.push(x); animTo(hist.filter(y => y).length * 180); $('#zDialCap').innerHTML = cap(); };
+  $('#dialAdd1').onclick = e => { e.currentTarget.blur(); add(1); };
+  $('#dialAdd0').onclick = e => { e.currentTarget.blur(); add(0); };
+  const reset = () => { cancelAnimationFrame(raf); hist = []; ang = 0; draw(0); $('#zDialCap').innerHTML = cap(); };
+  $('#dialReset').onclick = e => { e.currentTarget.blur(); reset(); };
+  reset();
+  onEnter.addbox = reset;
+}
+
+/* =====================================================================
+   NOT 箱：180° の 2 本足の赤のクモ
+   ===================================================================== */
+{
+  const sc = zxScene('zNot');
+  const R = new seqRunner();
+  let a = 0;
+  const st0 = () => ({ n: { N: { x: 180, y: 112, c: 'r', p: 180, r: 27 }, A: { x: 180, y: 232, c: 'r', p: deg(a), r: 21 }, da: { x: 128, y: 236, t: String(a), cls: 'big b' }, nl: { x: 262, y: 112, t: '← NOT 箱', cls: 'tag' } },
+    w: { o: { a: 'N', b: [180, 22] }, i: { a: 'N', b: 'A' } } });
+  const st1 = () => ({ n: { N: { x: 180, y: 150, c: 'r', p: 180 + deg(a), r: 27, hl: true }, A: { x: 180, y: 150, c: 'r', p: deg(a), r: 21, o: 0 }, da: { x: 180, y: 150, t: String(a), cls: 'big b', o: 0 },
+    dr: { x: 240, y: 154, t: '= ' + (a ^ 1), cls: 'big o' }, fs: { x: 180, y: 222, t: '融合！', cls: 'tag' } },
+    w: { o: { a: 'N', b: [180, 22] } } });
+  const cap = done => (done ? `180° + ${deg(a)}° = ${180 + deg(a)}°${a ? ' = 0°（一周）' : ''} → <b>NOT ${a} = ${a ^ 1}</b>` : `入力 ${stName(a)} を NOT 箱に入れる`);
+  const reset = () => { R.stop(); sc.set(st0()); $('#zNotCap').innerHTML = cap(false); };
+  const play = () => R.run(async chk => {
+    sc.set(st0()); $('#zNotCap').innerHTML = cap(false);
+    await chk(sleep(400)); await chk(sc.to(st1(), 900)); $('#zNotCap').innerHTML = cap(true);
+  });
+  const setA = picker('#pkNot', BITS, (it, i, user) => { a = it.v; if (user) { stopAuto(); reset(); } });
+  const stopAuto = looper('#notAuto', () => { setA(a ^ 1); play(); }, 2700);
+  $('#notGo').onclick = e => { e.currentTarget.blur(); stopAuto(); play(); };
+  setA(1); reset();
+  onEnter.not = () => { setA(1); reset(); };
+}
+
+/* =====================================================================
+   ADD に 1 を差しこむと NOT
+   ===================================================================== */
+zxScene('zAnEq').set({
+  n: { S: { x: 70, y: 70, c: 'r', r: 20 }, P: { x: 108, y: 112, c: 'r', p: 180, r: 16 }, eq: { x: 160, y: 80, t: '=', cls: 'eqs' }, N: { x: 230, y: 80, c: 'r', p: 180, r: 22 }, nl: { x: 270, y: 80, t: 'NOT', cls: 'tag sm' } },
+  w: { o: { a: 'S', b: [70, 14] }, i: { a: 'S', b: [40, 148] }, p: { a: 'S', b: 'P' }, no: { a: 'N', b: [230, 14] }, ni: { a: 'N', b: [230, 148] } },
+});
+{
+  const sc = zxScene('zAn');
+  const R = new seqRunner();
+  const st0 = () => ({ n: { S: { x: 180, y: 120, c: 'r', r: 27 }, P: { x: 248, y: 205, c: 'r', p: 180, r: 21 }, al: { x: 180, y: 70, t: 'ADD 箱', cls: 'tag' }, pl: { x: 292, y: 210, t: '1', cls: 'big b' }, xl: { x: 100, y: 268, t: 'x', cls: 'big' } },
+    w: { o: { a: 'S', b: [180, 22] }, i: { a: 'S', b: [120, 272] }, p: { a: 'S', b: 'P' } } });
+  const st1 = () => ({ n: { S: { x: 180, y: 130, c: 'r', r: 27, p: 180, hl: true }, P: { x: 180, y: 130, c: 'r', p: 180, r: 21, o: 0 }, al: { x: 180, y: 70, t: 'ADD 箱', cls: 'tag', o: 0 }, pl: { x: 180, y: 130, t: '1', cls: 'big b', o: 0 }, xl: { x: 100, y: 268, t: 'x', cls: 'big' },
+    fs: { x: 290, y: 215, t: '0° + 180°', cls: 'tag' } },
+    w: { o: { a: 'S', b: [180, 22] }, i: { a: 'S', b: [120, 272] } } });
+  const st2 = () => ({ n: { S: { x: 180, y: 140, c: 'r', r: 27, p: 180, hl: true }, xl: { x: 150, y: 268, t: 'x', cls: 'big' }, nl: { x: 262, y: 140, t: '← NOT 箱', cls: 'tag' } },
+    w: { o: { a: 'S', b: [180, 22] }, i: { a: 'S', b: [180, 272] } } });
+  const CAP = ['ADD 箱の右の足に 1（180° の赤）を差しこむと…', '融合して 0° + 180° = <b>180°</b> に', '足をまっすぐにすると <b>180° の 2 本足の赤 ＝ NOT 箱</b>！'];
+  const play = () => R.run(async chk => {
+    sc.set(st0()); $('#zAnCap').innerHTML = CAP[0];
+    await chk(sleep(600)); await chk(sc.to(st1(), 900)); $('#zAnCap').innerHTML = CAP[1];
+    await chk(sleep(700)); await chk(sc.to(st2(), 800)); $('#zAnCap').innerHTML = CAP[2];
+  });
+  const stopAuto = looper('#anAuto', play, 4600);
+  $('#anGo').onclick = e => { e.currentTarget.blur(); stopAuto(); play(); };
+  const reset = () => { R.stop(); sc.set(st0()); $('#zAnCap').innerHTML = CAP[0]; };
+  reset();
+  onEnter.addnot = reset;
+}
+
+/* =====================================================================
+   CNOT：緑（コピー）と赤（ADD）の握手
+   a = 左の入力、b = 右の入力（null なら右は入力なしの線）
+   ===================================================================== */
+function cnotStates(a, b) {
+  const L = 150, R = 270, Y = 160, TOP = 22, BOT = 302, SY = 258, OY = 92;
+  const hasB = b !== null && b !== undefined;
+  const base = () => ({
+    n: { G: { x: L, y: Y, c: 'g', r: 26 }, X: { x: R, y: Y, c: 'r', r: 26 }, A: { x: L, y: SY, c: 'r', p: deg(a), r: 21 },
+      ...(hasB ? { B: { x: R, y: SY, c: 'r', p: deg(b), r: 21 } } : {}),
+      da: { x: L - 46, y: SY + 4, t: String(a), cls: 'big b' },
+      ...(hasB ? { db: { x: R + 46, y: SY + 4, t: String(b), cls: 'big b' } } : {}) },
+    w: { wG: { a: 'G', b: [L, TOP] }, wX: { a: 'X', b: [R, TOP] }, hs: { a: 'G', b: 'X', h: 1 }, wA: { a: 'G', b: 'A' }, wB: hasB ? { a: 'X', b: 'B' } : { a: 'X', b: [R, BOT] } },
+  });
+  const s0 = base();
+  const s1 = base(); s1.n.A = { ...s1.n.A, y: Y }; s1.n.da = { ...s1.n.da, y: Y + 4, o: 0 };
+  const s2 = base();
+  s2.n.G = { ...s2.n.G, o: 0 };
+  s2.n.A = { ...s2.n.A, y: OY, hl: true };
+  s2.n.C = { from: 'A', x: L + 64, y: Y, c: 'r', p: deg(a), r: 18, hl: true };
+  s2.n.da = { ...s2.n.da, y: OY + 4 };
+  s2.n.t1 = { x: L - 4, y: Y + 46, t: '① コピー', cls: 'tag' };
+  delete s2.w.wA;
+  s2.w.wG = { a: 'A', b: [L, TOP] };
+  s2.w.hs = { a: 'C', b: 'X', h: 1 };
+  const s3 = JSON.parse(JSON.stringify(s2));
+  delete s3.n.C; delete s3.w.hs; delete s3.n.t1;
+  s3.n.C = { x: R, y: Y, c: 'r', p: deg(a), r: 18, o: 0 };
+  s3.n.X = { ...s3.n.X, p: deg(a), hl: true, o: !hasB && !a ? 0 : 1 };
+  s3.n.t2 = { x: R, y: Y + 50, t: '② 融合', cls: 'tag' };
+  if (!hasB) s3.n.nl = { x: R + 76, y: Y, t: a ? '← NOT' : '← 何もしない線', cls: 'tag pk' };
+  else s3.n.nl = { x: R + 62, y: Y, t: a ? '← NOT' : '← ただの線', cls: 'tag pk' };
+  if (!a) s3.n.X.o = 0;
+  const steps = [s0, s1, s2, s3];
+  if (hasB) {
+    const s4 = JSON.parse(JSON.stringify(s3));
+    delete s4.n.t2; delete s4.n.nl; delete s4.n.C;
+    s4.n.X = { x: R, y: OY, c: 'r', p: deg(a) + deg(b), r: 21, hl: true };
+    s4.n.B = { ...s4.n.B, x: R, y: OY, o: 0 };
+    s4.n.db = { x: R + 46, y: OY + 4, t: String(a ^ b), cls: 'big o' };
+    s4.n.da = { ...s4.n.da, cls: 'big o' };
+    s4.n.t3 = { x: (L + R) / 2, y: Y + 30, t: '③ 右の入力も融合', cls: 'tag' };
+    delete s4.w.wB;
+    steps.push(s4);
+  }
+  return steps;
+}
+const cnotCaps = (a, b) => {
+  const hasB = b !== null && b !== undefined;
+  const c = [
+    hasB ? `入力 (${a}, ${b}) を CNOT に入れる` : `左に ${stName(a)} を入れる（右は入力なし）`,
+    '左の入力が緑のクモへ…',
+    `① 緑のクモが <b>${a}</b> をコピー：1 つは出力 1 へ、1 つは赤のクモへ`,
+    hasB ? `② 赤どうし融合：右の線は ${a ? '<b>NOT</b>' : '<b>ただの線</b>'} になる` : (a ? '② 赤どうし融合して 180° → 右の線は <b>NOT</b>' : '② 赤どうし融合しても 0° → 右は <b>何もしない線</b>'),
+  ];
+  if (hasB) c.push(`③ 出力 = (<b>${a}</b>, <b>${a} ⊕ ${b} = ${a ^ b}</b>)`);
+  return c;
+};
+
+// タイトル：入力 4 通りを順に流す
+{
+  const sc = zxScene('zTitle');
+  const R = new seqRunner();
+  const CASES = [[1, 0], [0, 1], [1, 1], [0, 0]];
+  let k = -1;
+  const play = () => R.run(async chk => {
+    k = (k + 1) % 4;
+    const [a, b] = CASES[k], st = cnotStates(a, b), cp = cnotCaps(a, b);
+    sc.set(st[0]); $('#zTitleCap').innerHTML = cp[0];
+    for (let i = 1; i < st.length; i++) { await chk(sleep(i === 1 ? 500 : 450)); await chk(sc.to(st[i], 750)); $('#zTitleCap').innerHTML = cp[i]; }
+  });
+  sc.set(cnotStates(1, 0)[0]); $('#zTitleCap').innerHTML = cnotCaps(1, 0)[0];
+  looper('#zTitleAuto', play, 5600);
+}
+
+// CNOT の形（静止図）
+zxScene('zCn').set({
+  n: { G: { x: 150, y: 165, c: 'g', r: 28 }, X: { x: 270, y: 165, c: 'r', r: 28 },
+    i1: { x: 150, y: 318, t: '入力 1', cls: '' }, i2: { x: 270, y: 318, t: '入力 2', cls: '' }, o1: { x: 150, y: 12, t: '出力 1', cls: '' }, o2: { x: 270, y: 12, t: '出力 2', cls: '' },
+    hd: { x: 210, y: 140, t: '握手', cls: 'tag sm' }, gl: { x: 72, y: 165, t: '緑・3 本足', cls: 'sm' }, rl: { x: 350, y: 165, t: '赤・3 本足', cls: 'sm' },
+    cl: { x: 92, y: 245, t: '制御（左）', cls: 'tag sm' }, tl: { x: 330, y: 245, t: '標的（右）', cls: 'tag sm' } },
+  w: { a: { a: 'G', b: [150, 32] }, b: { a: 'G', b: [150, 298] }, c: { a: 'X', b: [270, 32] }, d: { a: 'X', b: [270, 298] }, h: { a: 'G', b: 'X', h: 1 } },
+});
+
+// CNOT の中で起きること（右は入力なし）
+{
+  const sc = zxScene('zCs');
+  const R = new seqRunner();
+  let a = 1, i = 0, st = [], cp = [];
+  const lis = [...document.querySelectorAll('#csSteps li')];
+  const mark = () => {
+    $('#csSteps').className = 'steps pop a' + a;
+    lis[0].classList.toggle('on', i === 1 || i === 2); lis[0].classList.toggle('done', i >= 3);
+    lis[1].classList.toggle('on', i >= 3); lis[2].classList.toggle('on', i >= 3);
+    lis[1].classList.remove('done'); lis[2].classList.remove('done');
+  };
+  const reset = () => { R.stop(); st = cnotStates(a, null); cp = cnotCaps(a, null); i = 0; sc.set(st[0]); $('#zCsCap').innerHTML = cp[0]; mark(); $('#csNext').disabled = false; };
+  const step = () => R.run(async chk => {
+    if (i >= st.length - 1) return;
+    if (i === 0) { i = 1; await chk(sc.to(st[1], 600)); }
+    i++; mark(); $('#zCsCap').innerHTML = cp[i];
+    await chk(sc.to(st[i], 800));
+  });
+  const playAll = () => R.run(async chk => {
+    reset();
+    await chk(sleep(500));
+    for (let j = 1; j < st.length; j++) { i = j; mark(); await chk(sc.to(st[j], 800)); $('#zCsCap').innerHTML = cp[j]; await chk(sleep(j === 1 ? 100 : 700)); }
+  });
+  const setA = picker('#pkCs', BITS, (it, j, user) => { a = it.v; if (user) stopAuto(); reset(); });
+  const stopAuto = looper('#csAuto', () => { setA(a ^ 1); playAll(); }, 4800);
+  $('#csNext').onclick = e => { e.currentTarget.blur(); stopAuto(); step(); };
+  $('#csReset').onclick = e => { e.currentTarget.blur(); stopAuto(); reset(); };
+  setA(0);
+  onEnter.cnotstep = () => setA(0);
+}
+
+// CNOT の真理値表
+{
+  const sc = zxScene('zCt');
+  const R = new seqRunner();
+  const CASES = [[0, 0], [0, 1], [1, 0], [1, 1]];
+  const tb = $('#ctTbl tbody');
+  tb.innerHTML = CASES.map(([a, b]) => `<tr><td>${a}</td><td>${b}</td><td class="out ${a ? 'one' : ''}">${a}</td><td class="out ${a ^ b ? 'one' : ''}">${a ^ b}</td><td class="calc">${a ? 'NOT' : 'そのまま'}</td></tr>`).join('');
+  const rows = [...tb.rows];
+  let k = 2;
+  const play = i => R.run(async chk => {
+    k = i;
+    rows.forEach((r, j) => r.classList.toggle('cur', j === i));
+    const [a, b] = CASES[i], st = cnotStates(a, b), cp = cnotCaps(a, b);
+    sc.set(st[0]); $('#zCtCap').innerHTML = cp[0];
+    for (let j = 1; j < st.length; j++) { await chk(sleep(j === 1 ? 450 : 400)); await chk(sc.to(st[j], 700)); $('#zCtCap').innerHTML = cp[j]; }
+  });
+  const show = i => { R.stop(); k = i; rows.forEach((r, j) => r.classList.toggle('cur', j === i)); const [a, b] = CASES[i]; sc.set(cnotStates(a, b)[0]); $('#zCtCap').innerHTML = cnotCaps(a, b)[0]; };
+  const stopAuto = looper('#ctAuto', () => play((k + 1) % 4), 5200);
+  rows.forEach((r, i) => r.addEventListener('click', () => { stopAuto(); play(i); }));
+  show(2);
+  onEnter.cnottt = () => { k = 1; show(2); };
+}
+
+// CNOT = COPY + ADD（形を変える）
+{
+  const sc = zxScene('zCa');
+  const R = new seqRunner();
+  const cn = () => ({ n: { G: { x: 140, y: 160, c: 'g', r: 26 }, X: { x: 260, y: 160, c: 'r', r: 26 }, i1: { x: 140, y: 312, t: 'a', cls: 'big b' }, i2: { x: 300, y: 312, t: 'b', cls: 'big b' } },
+    w: { a: { a: 'G', b: [140, 22] }, b: { a: 'G', b: [140, 292] }, c: { a: 'X', b: [260, 22] }, d: { a: 'X', b: [300, 292] }, h: { a: 'G', b: 'X', h: 1 } } });
+  const ca = () => ({ n: { G: { x: 140, y: 225, c: 'g', r: 26 }, X: { x: 260, y: 105, c: 'r', r: 26 }, i1: { x: 140, y: 312, t: 'a', cls: 'big b' }, i2: { x: 300, y: 312, t: 'b', cls: 'big b' },
+    o1: { x: 108, y: 34, t: 'a', cls: 'big o' }, o2: { x: 296, y: 34, t: 'a⊕b', cls: 'big o' },
+    gl: { x: 72, y: 235, t: 'COPY', cls: 'tag' }, rl: { x: 330, y: 105, t: 'ADD', cls: 'tag' } },
+    w: { a: { a: 'G', b: [140, 22] }, b: { a: 'G', b: [140, 292] }, c: { a: 'X', b: [260, 22] }, d: { a: 'X', b: [300, 292] }, h: { a: 'G', b: 'X', s: 1 } } });
+  let on = false;
+  const CAP = ['CNOT（緑と赤が横に握手）', '緑のクモを下へ、赤のクモを上へずらすと… <b>COPY</b> のあとに <b>ADD</b>！'];
+  const show = (v, anim = true) => { on = v; $('#zCaCap').innerHTML = CAP[+on]; R.run(async chk => { if (anim) await chk(sc.to(on ? ca() : cn(), 1000)); else sc.set(on ? ca() : cn()); }); };
+  const stopAuto = looper('#caAuto', () => show(!on), 2800);
+  $('#caGo').onclick = e => { e.currentTarget.blur(); stopAuto(); show(!on); };
+  show(false, false);
+  onEnter.cnotca = () => show(false, false);
+}
+
+// さらに多くの箱（静止図）
+{
+  const n = {}, w = {};
+  [['g', 0], ['g', 90], ['g', 180], ['g', 270], ['r', 0], ['r', 90], ['r', 180], ['r', 270]].forEach(([c, p], i) => {
+    const x = 50 + i * 77 + (i >= 4 ? 10 : 0), id = c + p;
+    n[id] = { x, y: 90, c, p, r: 23 };
+    w['u' + id] = { a: id, b: [x, 22] }; w['d' + id] = { a: id, b: [x, 158] };
+  });
+  n.l1 = { x: 522, y: 186, t: 'NOT（ここで使った）', cls: 'tag sm' };
+  n.l2 = { x: 204, y: 186, t: '補足：Z ゲート', cls: 'sm' };
+  n.l3 = { x: 50, y: 186, t: '何もしない線', cls: 'sm' };
+  n.l4 = { x: 368, y: 186, t: '何もしない線', cls: 'sm' };
+  zxScene('zMore').set({ n, w });
+}
+
+/* ---------- 練習問題：カードをクリックすると答えが出る（もう一度押すと隠れる） ---------- */
+{
+  document.querySelectorAll('.qz').forEach(q => q.addEventListener('click', () => q.classList.toggle('open')));
+  document.querySelectorAll('[data-quiz-all]').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation(); b.blur();
+    const qs = [...b.closest('.slide').querySelectorAll('.qz')], open = !qs.every(q => q.classList.contains('open'));
+    qs.forEach(q => q.classList.toggle('open', open));
+    b.textContent = open ? '答えをぜんぶ隠す' : '答えをぜんぶ表示';
+  }));
+  onEnter.quiz = () => {
+    const sl = document.querySelector('.slide[data-id="quiz"]');
+    sl.querySelectorAll('.qz').forEach(q => q.classList.remove('open'));
+    sl.querySelector('[data-quiz-all]').textContent = '答えをぜんぶ表示';
+  };
+  addEventListener('beforeprint', () => document.querySelectorAll('.qz').forEach(q => q.classList.add('open')));
+}
+
+/* ---------- スライド制御 ---------- */
+const stage = $('#stage');
+function fit() {
+  const s = Math.min(innerWidth / 1280, innerHeight / 720);
+  stage.style.transform = `translate(-50%,-50%) scale(${s})`;
+}
+addEventListener('resize', fit); fit();
+
+const slides = [...document.querySelectorAll('.slide')];
+slides.forEach((s, i) => { const p = s.querySelector('.pageno'); if (p) p.textContent = `${i + 1} / ${slides.length}`; });
+let cur = 0;
+const frags = s => [...s.querySelectorAll('.frag')];
+function showFrag(f, on) {
+  f.classList.toggle('vis', on);
+  if (f.dataset.slideClass) f.closest('.slide').classList.toggle(f.dataset.slideClass, on);
+}
+function go(n, showAll = false) {
+  if (n < 0 || n >= slides.length) return;
+  stoppers.forEach(f => f());
+  cur = n;
+  slides.forEach((s, i) => { s.classList.toggle('active', i === n); s.classList.toggle('past', i < n); });
+  frags(slides[n]).forEach(f => showFrag(f, showAll));
+  $('#counter').textContent = `${n + 1} / ${slides.length}`;
+  $('#progress').style.width = `${(n + 1) / slides.length * 100}%`;
+  history.replaceState(null, '', '#' + (n + 1));
+  const id = slides[n].dataset.id;
+  if (window.onEnter && onEnter[id]) onEnter[id]();
+  // 自動再生ボタンのあるスライドは、開いた時点で再生を始める（ボタンで停止できる）
+  slides[n].querySelectorAll('[data-autoplay]').forEach(b => b.click());
+  ink.render();
+}
+function next() {
+  const f = frags(slides[cur]).find(x => !x.classList.contains('vis'));
+  if (f) showFrag(f, true); else go(cur + 1);
+}
+function prev() {
+  const v = frags(slides[cur]).filter(x => x.classList.contains('vis'));
+  if (v.length) showFrag(v[v.length - 1], false); else go(cur - 1, true);
+}
+function fullscreen() {
+  if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen();
+}
+let overview = false;
+function layoutOverview() {
+  const cols = innerWidth < 900 ? 2 : innerWidth < 1400 ? 3 : 4;
+  const w = (document.body.clientWidth - 48 - 22 * (cols - 1)) / cols;
+  stage.style.setProperty('--cols', cols);
+  stage.style.setProperty('--z', w / 1280);
+  stage.style.setProperty('--ow', `${w}px`);
+  stage.style.setProperty('--oh', `${w * 720 / 1280}px`);
+}
+function markCurrent() { slides.forEach((s, i) => s.classList.toggle('current', i === cur)); }
+function toggleOverview(on = !overview) {
+  overview = on;
+  document.body.classList.toggle('overview', on);
+  if (on) {
+    stoppers.forEach(f => f());
+    layoutOverview(); markCurrent();
+    slides[cur].scrollIntoView({ block: 'center' });
+  } else {
+    document.body.scrollTop = 0;
+    go(cur);
+  }
+}
+slides.forEach((s, i) => s.addEventListener('click', () => {
+  if (!overview) return;
+  cur = i; toggleOverview(false);
+}));
+addEventListener('resize', () => { if (overview) layoutOverview(); });
+addEventListener('keydown', e => {
+  if (overview) {
+    if (['o', 'O', 'Escape'].includes(e.key)) toggleOverview(false);
+    else if (e.key === 'Enter') { e.preventDefault(); toggleOverview(false); }
+    else if (['ArrowRight', 'ArrowLeft'].includes(e.key)) {
+      e.preventDefault();
+      cur = Math.max(0, Math.min(slides.length - 1, cur + (e.key === 'ArrowRight' ? 1 : -1)));
+      markCurrent(); slides[cur].scrollIntoView({ block: 'nearest' });
+    }
+    return;
+  }
+  if (e.target.tagName === 'SUMMARY' || e.target.tagName === 'INPUT') return;
+  if (e.key === 'p' || e.key === 'P') return ink.setTool(ink.tool() === 'pen' ? 'laser' : 'pen');
+  if (e.key === 'z' || e.key === 'Z') return ink.undo();
+  if (e.key === 'o' || e.key === 'O') return toggleOverview(true);
+  if (['ArrowRight', 'PageDown', ' ', 'Enter', 'ArrowDown'].includes(e.key)) { e.preventDefault(); next(); }
+  else if (['ArrowLeft', 'PageUp', 'Backspace', 'ArrowUp'].includes(e.key)) { e.preventDefault(); prev(); }
+  else if (e.key === 'Home') go(0);
+  else if (e.key === 'End') go(slides.length - 1);
+  else if (e.key === 'f' || e.key === 'F') fullscreen();
+});
+let tx = null;
+// スライダー操作や Apple Pencil のタッチはスワイプのページ送りに使わない
+addEventListener('touchstart', e => tx = laser.blocksSwipe(e.touches[0]) || e.target.closest('input') ? null : e.touches[0].clientX, { passive: true });
+addEventListener('touchend', e => {
+  if (tx === null || overview) return;
+  const dx = e.changedTouches[0].clientX - tx; tx = null;
+  if (Math.abs(dx) > 60) dx < 0 ? next() : prev();
+});
+// Apple Pencil のタッチは、Safari のスクリブル（手書き入力）・スクロール・拡大鏡などの判定に使わせない。
+// これらが働くと、速く書いたときにペンの動きが一瞬ページに届かなくなり、固まって見えるため。
+// タッチの既定の動作を止めるとクリックも起きなくなるので、ペンで軽くタップしたときはこちらでクリックを送る
+let penTap = null;
+const findPen = e => penTap && [...e.changedTouches].find(t => t.identifier === penTap.id);
+stage.addEventListener('touchstart', e => {
+  const t = e.changedTouches[0];
+  if (t.touchType !== 'stylus' || overview || e.target.closest('input')) return;
+  e.preventDefault();
+  penTap = { id: t.identifier, x: t.clientX, y: t.clientY, target: e.target, moved: 0 };
+}, { passive: false });
+stage.addEventListener('touchmove', e => {
+  const t = findPen(e);
+  if (!t) return;
+  e.preventDefault();
+  penTap.moved = Math.max(penTap.moved, Math.hypot(t.clientX - penTap.x, t.clientY - penTap.y));
+}, { passive: false });
+stage.addEventListener('touchend', e => {
+  const t = findPen(e);
+  if (!t) return;
+  const { target, moved } = penTap;
+  penTap = null;
+  // ほとんど動かさなかったときはタップとみなしてクリックを送る（ボタン・回路の入力・復習問題のカードなど）
+  if (moved < 8) {
+    if (typeof target.click === 'function') target.click();
+    else target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: t.clientX, clientY: t.clientY }));
+  }
+});
+stage.addEventListener('touchcancel', () => { penTap = null; });
+$('#btnNext').onclick = e => { e.currentTarget.blur(); next(); };
+$('#btnPrev').onclick = e => { e.currentTarget.blur(); prev(); };
+$('#btnFs').onclick = e => { e.currentTarget.blur(); fullscreen(); };
+$('#btnOv').onclick = e => { e.currentTarget.blur(); toggleOverview(true); };
+$('#btnOvClose').onclick = e => { e.currentTarget.blur(); toggleOverview(false); };
+addEventListener('beforeprint', () => slides.forEach(s => frags(s).forEach(f => showFrag(f, true))));
+/* ---------- 黒ペン・消しゴム・投げ縄 ----------
+   右上の道具で「黒ペン」を選ぶと、Apple Pencil（パソコンではマウス）でスライドに書き込める。指では書かない（指はスワイプやタップに使う）。
+   ペン先で軽くタップしただけのときは線を残さず、ボタンや入力の丸のクリックとして扱う。
+   書き込みはスライドごとに保持し、ページを戻ると再表示される（再読み込みで消える）。
+   「投げ縄」で書き込みを囲むと選択できる。選択した線はドラッグで移動、枠のボタンで複製・コピー・削除。
+   コピーした線は別のスライドに移ってから「貼り付け」で貼れる（ページをまたいだ複製）。 */
+const ink = (() => {
+  const W = 1280, H = 720, COLOR = '#111', SEL = '#3b6cff', PAD = 12;
+  const canvas = document.createElement('canvas');
+  canvas.id = 'ink';
+  stage.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  const bar = $('#penbar');
+  const pages = slides.map(() => ({ strokes: [], undo: [] }));
+  let tool = 'laser', active = null;
+  // 投げ縄の選択（sel.items は選択中の線そのもの）とクリップボード（ページをまたいで使う）
+  let sel = null, clip = null, lassoPts = null;
+
+  // 選択中の線の操作ボタン（スライドの中に置くので、スライドと一緒に拡大縮小される）
+  const lbar = document.createElement('div');
+  lbar.id = 'lassoBar';
+  lbar.innerHTML = '<button data-act="dup" title="複製 (D)">⧉ 複製</button><button data-act="copy" title="コピー：別のスライドで貼り付けできる (C)">📋 コピー</button><button data-act="del" title="削除 (Delete)">🗑️ 削除</button>';
+  stage.appendChild(lbar);
+  const st = document.createElement('style');
+  st.textContent = `
+#lassoBar{position:absolute;z-index:6;display:none;gap:4px;background:#fff;border:2.5px solid #1f1a3d;border-radius:999px;box-shadow:3px 3px 0 #1f1a3d;padding:3px}
+#lassoBar button{border:0;background:none;font:800 14px "Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;color:#1f1a3d;border-radius:999px;padding:5px 10px;cursor:pointer;white-space:nowrap}
+#lassoBar button:hover{background:#dfe8ff}
+#penbar button:disabled{opacity:.35;cursor:default}
+#inkToast{position:absolute;left:50%;bottom:58px;transform:translateX(-50%);z-index:7;background:#1f1a3d;color:#fff;font:800 15px sans-serif;border-radius:999px;padding:6px 16px;opacity:0;transition:opacity .3s;pointer-events:none}
+#inkToast.on{opacity:.92}
+body.overview #lassoBar,body.overview #inkToast{display:none!important}`;
+  document.head.appendChild(st);
+  const toastEl = document.createElement('div');
+  toastEl.id = 'inkToast';
+  stage.appendChild(toastEl);
+  let toastT = 0;
+  const toast = msg => { toastEl.textContent = msg; toastEl.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('on'), 1600); };
+
+  function resize() {
+    const k = Math.min(4096 / W, stage.getBoundingClientRect().width / W * (devicePixelRatio || 1));
+    canvas.width = Math.round(W * k); canvas.height = Math.round(H * k);
+    render();
+  }
+  // 筆圧で太さを変え、点の中点を結ぶ曲線でなめらかにする。i 番目の区間は p[i-1]・p[i]・p[i+1] で決まる
+  const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+  function drawSeg(p, i) {
+    const m0 = i === 1 ? p[0] : mid(p[i - 1], p[i]);
+    const m1 = i === p.length - 1 ? p[i] : mid(p[i], p[i + 1]);
+    ctx.lineWidth = 4 * (.4 + p[i][2] * 1.2);
+    ctx.beginPath(); ctx.moveTo(m0[0], m0[1]); ctx.quadraticCurveTo(p[i][0], p[i][1], m1[0], m1[1]); ctx.stroke();
+  }
+  function drawStroke(p) { for (let i = 1; i < p.length; i++) drawSeg(p, i); }
+  const bbox = items => {
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    items.forEach(s => s.forEach(([x, y]) => { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }));
+    return [x0 - PAD, y0 - PAD, x1 + PAD, y1 + PAD];
+  };
+  // スライド全体の描き直し（元に戻す・消しゴム・スライド切り替え・投げ縄の操作など）
+  function render() {
+    if (sel && (sel.page !== cur || !sel.items.every(s => pages[cur].strokes.includes(s)))) setSel(null, false);
+    const k = canvas.width / W;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    // 選択中の線は青く縁取る
+    if (sel) {
+      ctx.strokeStyle = 'rgba(59,108,255,.35)'; ctx.lineWidth = 12;
+      sel.items.forEach(s => { ctx.beginPath(); s.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); if (s.length === 1) ctx.lineTo(s[0][0] + .1, s[0][1]); ctx.stroke(); });
+    }
+    ctx.strokeStyle = COLOR;
+    pages[cur].strokes.forEach(drawStroke);
+    if (active && active.pts) { drawStroke(active.pts); active.drawn = active.pts.length - 2; }
+    if (sel) {
+      const [x0, y0, x1, y1] = bbox(sel.items);
+      ctx.save(); ctx.strokeStyle = SEL; ctx.lineWidth = 2; ctx.setLineDash([7, 5]);
+      ctx.strokeRect(x0, y0, x1 - x0, y1 - y0); ctx.restore();
+      placeBar([x0, y0, x1, y1]);
+    }
+    if (lassoPts && lassoPts.length > 1) {
+      ctx.save(); ctx.strokeStyle = SEL; ctx.fillStyle = 'rgba(59,108,255,.08)'; ctx.lineWidth = 2.5; ctx.setLineDash([6, 6]);
+      ctx.beginPath(); lassoPts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+    }
+  }
+  function placeBar([x0, y0, x1, y1]) {
+    lbar.style.display = 'flex';
+    const w = lbar.offsetWidth || 230, h = lbar.offsetHeight || 36;
+    let left = Math.max(8, Math.min(W - w - 8, x1 - w)), top = y0 - h - 8;
+    if (top < 70) top = Math.min(H - h - 8, y1 + 8);
+    lbar.style.left = left + 'px'; lbar.style.top = top + 'px';
+  }
+  function setSel(items, draw = true) {
+    sel = items && items.length ? { page: cur, items } : null;
+    if (!sel) lbar.style.display = 'none';
+    if (draw) render();
+  }
+  // 書いている途中は、まだ描いていない区間だけを描き足す（毎回全部を描き直すと速く書いたときに固まるため）。
+  // 最後の区間は次の点が来ないと形が決まらないので、ペンを離したときに描く
+  function drawNew(final) {
+    const p = active.pts, upto = final ? p.length - 1 : p.length - 2;
+    for (let i = Math.max(1, active.drawn + 1); i <= upto; i++) drawSeg(p, i);
+    active.drawn = Math.max(active.drawn, upto);
+  }
+  // ペンの点はたくさん届くので、画面の書き換え 1 回につき 1 回だけまとめて描く
+  let queued = false;
+  function flush() {
+    queued = false;
+    if (!active) return;
+    if (active.mode === 'lasso' || active.mode === 'move') render();
+    else if (active.pts) drawNew(false);
+    else if (active.erase.length) { const qs = active.erase; active.erase = []; if (qs.map(eraseAt).some(Boolean)) render(); }
+  }
+  const schedule = () => { if (!queued) { queued = true; requestAnimationFrame(flush); } };
+  function toStage(e) {
+    const r = stage.getBoundingClientRect();
+    // マウスは筆圧が取れないので 0.5 として扱う
+    const pr = e.pointerType === 'pen' && e.pressure > 0 ? e.pressure : .5;
+    return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H, pr];
+  }
+  function snapshot() { const pg = pages[cur]; pg.undo.push(pg.strokes.slice()); if (pg.undo.length > 100) pg.undo.shift(); }
+  function segDist(q, a, b) {
+    const dx = b[0] - a[0], dy = b[1] - a[1], L = dx * dx + dy * dy;
+    const t = L ? Math.max(0, Math.min(1, ((q[0] - a[0]) * dx + (q[1] - a[1]) * dy) / L)) : 0;
+    return Math.hypot(q[0] - a[0] - t * dx, q[1] - a[1] - t * dy);
+  }
+  // q の近くを通る線を消す。消したら true（描き直しは呼び出し側でまとめて行う）
+  function eraseAt(q) {
+    const pg = pages[cur];
+    const keep = pg.strokes.filter(st => !st.some((pt, i) => segDist(q, st[Math.max(0, i - 1)], pt) < 14));
+    if (keep.length === pg.strokes.length) return false;
+    if (!active.erased) { snapshot(); active.erased = true; }
+    pg.strokes = keep;
+    return true;
+  }
+  // 点が多角形の内側か（投げ縄の判定）
+  function inPoly(p, poly) {
+    let c = false;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const [xi, yi] = poly[i], [xj, yj] = poly[j];
+      if ((yi > p[1]) !== (yj > p[1]) && p[0] < (xj - xi) * (p[1] - yi) / (yj - yi) + xi) c = !c;
+    }
+    return c;
+  }
+  const inBox = (q, [x0, y0, x1, y1]) => q[0] >= x0 && q[0] <= x1 && q[1] >= y0 && q[1] <= y1;
+  const clone = items => items.map(s => s.map(p => p.slice()));
+  const shift = (items, dx, dy) => items.forEach(s => s.forEach(p => { p[0] += dx; p[1] += dy; }));
+
+  // ---- 投げ縄の操作 ----
+  function duplicate() {
+    if (!sel) return;
+    snapshot();
+    const items = clone(sel.items); shift(items, 24, 24);
+    pages[cur].strokes.push(...items);
+    setSel(items); toast('複製しました');
+  }
+  function copy() {
+    if (!sel) return;
+    clip = { items: clone(sel.items), from: cur, n: 0 };
+    $('#inkPaste').disabled = false;
+    toast('コピーしました。別のスライドで「貼り付け」できます');
+  }
+  function paste() {
+    if (!clip) return;
+    snapshot();
+    const items = clone(clip.items);
+    // 同じスライドに貼るときは重ならないように少しずらす
+    if (clip.from === cur) { clip.n++; shift(items, 24 * clip.n, 24 * clip.n); }
+    pages[cur].strokes.push(...items);
+    setTool('lasso'); setSel(items); toast('貼り付けました（ドラッグで移動できます）');
+  }
+  function del() {
+    if (!sel) return;
+    snapshot();
+    pages[cur].strokes = pages[cur].strokes.filter(s => !sel.items.includes(s));
+    setSel(null);
+  }
+  lbar.addEventListener('pointerdown', e => e.stopPropagation());
+  lbar.querySelectorAll('button').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation(); b.blur();
+    ({ dup: duplicate, copy, del })[b.dataset.act]();
+  }));
+
+  stage.addEventListener('pointerdown', e => {
+    if (overview || active || tool === 'laser' || e.target.closest('input') || e.target.closest('#lassoBar')) return;
+    if (!(e.pointerType === 'pen' || (e.pointerType === 'mouse' && e.button === 0))) return;
+    e.preventDefault();
+    const q = toStage(e);
+    if (tool === 'lasso') {
+      // 選択枠の中をつかんだら移動、外なら新しく囲む
+      if (sel && inBox(q, bbox(sel.items))) active = { id: e.pointerId, mode: 'move', start: q, last: q, moved: 0 };
+      else { setSel(null, false); lassoPts = [q]; active = { id: e.pointerId, mode: 'lasso', start: q, moved: 0 }; render(); }
+      return;
+    }
+    // ペンの消しゴム側（対応ペンのみ）は消しゴムとして扱う
+    const erase = tool === 'eraser' || e.button === 5;
+    active = { id: e.pointerId, start: q, moved: 0, pts: erase ? null : [q], drawn: 0, erase: [] };
+    if (erase) { if (eraseAt(q)) render(); }
+  });
+  addEventListener('pointermove', e => {
+    if (!active || e.pointerId !== active.id) return;
+    e.preventDefault();
+    const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [];
+    for (const ev of evs.length ? evs : [e]) {
+      const q = toStage(ev);
+      active.moved = Math.max(active.moved, Math.hypot(q[0] - active.start[0], q[1] - active.start[1]));
+      if (active.mode === 'lasso') {
+        const last = lassoPts[lassoPts.length - 1];
+        if (Math.hypot(q[0] - last[0], q[1] - last[1]) >= 3) lassoPts.push(q);
+      } else if (active.mode === 'move') {
+        if (!active.began && active.moved >= 3) {
+          // 元に戻せるよう、動かす前の状態を残し、選択中の線は複製に差し替えてから動かす
+          active.began = true; snapshot();
+          const pg = pages[cur], copies = clone(sel.items);
+          pg.strokes = pg.strokes.map(s => { const i = sel.items.indexOf(s); return i < 0 ? s : copies[i]; });
+          sel.items = copies;
+        }
+        if (active.began) { shift(sel.items, q[0] - active.last[0], q[1] - active.last[1]); active.last = q; }
+      } else if (active.pts) {
+        // ほとんど動いていない点は間引く（見た目は変わらず、描く量が減る）
+        const last = active.pts[active.pts.length - 1];
+        if (Math.hypot(q[0] - last[0], q[1] - last[1]) >= 1.2) active.pts.push(q); else last[2] = Math.max(last[2], q[2]);
+      } else active.erase.push(q);
+    }
+    schedule();
+  }, { passive: false });
+  function end(e) {
+    if (!active || e.pointerId !== active.id) return;
+    if (active.mode === 'lasso') {
+      const poly = lassoPts; lassoPts = null;
+      // 点の半分以上が投げ縄の内側にある線を選ぶ
+      const items = active.moved >= 6 ? pages[cur].strokes.filter(s => s.filter(p => inPoly(p, poly)).length * 2 >= s.length) : [];
+      active = null; setSel(items);
+      return;
+    }
+    if (active.mode === 'move') { active = null; render(); return; }
+    flush();
+    // ほとんど動かさなかったペン先はタップ（クリック）として扱い、線は残さない
+    if (active.pts && active.moved >= 4) {
+      drawNew(true); snapshot(); pages[cur].strokes.push(active.pts); active = null;
+    } else { active = null; render(); }
+  }
+  addEventListener('pointerup', end);
+  addEventListener('pointercancel', end);
+
+  function setTool(t) {
+    tool = t;
+    if (t !== 'lasso') setSel(null);
+    bar.querySelectorAll('[data-tool]').forEach(b => b.classList.toggle('on', b.dataset.tool === t));
+  }
+  function undo() { const pg = pages[cur]; if (pg.undo.length) { pg.strokes = pg.undo.pop(); setSel(null, false); render(); } }
+  bar.querySelectorAll('[data-tool]').forEach(b => b.onclick = () => { b.blur(); setTool(b.dataset.tool); });
+  $('#inkUndo').onclick = e => { e.currentTarget.blur(); undo(); };
+  $('#inkPaste').onclick = e => { e.currentTarget.blur(); paste(); };
+  $('#inkClear').onclick = e => {
+    e.currentTarget.blur();
+    if (pages[cur].strokes.length) { snapshot(); pages[cur].strokes = []; setSel(null, false); render(); }
+  };
+  // 投げ縄の選択中のキー操作（ページ送りより先に受け取る）
+  addEventListener('keydown', e => {
+    if (overview || e.target.tagName === 'INPUT') return;
+    const k = e.key.toLowerCase(), mod = e.ctrlKey || e.metaKey;
+    let f = null;
+    if (k === 'l' && !mod) f = () => setTool(tool === 'lasso' ? 'laser' : 'lasso');
+    else if (sel && (k === 'delete' || k === 'backspace')) f = del;
+    else if (sel && k === 'escape') f = () => setSel(null);
+    else if (sel && k === 'd') f = duplicate;
+    else if (sel && k === 'c') f = copy;
+    else if (clip && k === 'v') f = paste;
+    if (!f) return;
+    e.preventDefault(); e.stopImmediatePropagation(); f();
+  }, true);
+  addEventListener('resize', resize);
+  resize();
+  return { render, undo, setTool, tool: () => tool, drawing: () => !!active };
+})();
+
+/* ---------- レーザーポインター ----------
+   Apple Pencil：ペン先を画面に当てている間だけ赤く光る点を表示し、なぞった軌跡を光らせる（書き込みは残らない）。
+   パソコン（マウス）：「レーザー」を選んでいる間、マウスの位置に赤い点が出る（3 秒止めると消える）。
+   ボタンを押したままドラッグすると軌跡が光る。ボタン・回路の入力など、クリックできる場所の上では軌跡を描かずクリックを優先する。
+   軌跡は離してから約1秒で消える。消えきる前にもう一度当てると、それまでの軌跡は消えずに残り続ける。 */
+const laser = (() => {
+  const W = 1280, H = 720, LIFE = 1000, IDLE = 3000;
+  const canvas = document.createElement('canvas');
+  canvas.id = 'laser';
+  stage.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  // trail は線ごとの点の配列。fadeFrom は離した時刻（当てている間は null）。hover はマウスの位置
+  let trail = [], down = null, raf = 0, fadeFrom = null, hover = null, idleT = 0;
+
+  function resize() {
+    const k = Math.min(4096 / W, stage.getBoundingClientRect().width / W * (devicePixelRatio || 1));
+    canvas.width = Math.round(W * k); canvas.height = Math.round(H * k);
+    kick();
+  }
+  function toStage(e) {
+    const r = stage.getBoundingClientRect();
+    return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H];
+  }
+  const level = () => fadeFrom === null ? 1 : Math.max(0, 1 - (performance.now() - fadeFrom) / LIFE);
+  const hoverLevel = () => {
+    if (!hover || down || ink.tool() !== 'laser' || overview) return 0;
+    const t = performance.now() - hover.t;
+    return t < IDLE ? 1 : Math.max(0, 1 - (t - IDLE) / 400);
+  };
+  function dot([x, y], a = 1) {
+    const g = ctx.createRadialGradient(x, y, 0, x, y, 13);
+    g.addColorStop(0, `rgba(255,255,255,${a})`); g.addColorStop(.35, `rgba(255,90,110,${a})`); g.addColorStop(1, 'rgba(255,30,60,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x, y, 13, 0, Math.PI * 2); ctx.fill();
+  }
+  function frame() {
+    raf = 0;
+    const k = canvas.width / W, f = level(), hl = hoverLevel();
+    if (!f) trail = [];
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    // 影のぼかし（shadowBlur）は重いので使わず、太い半透明の線の上に細い線を重ねて光って見せる
+    const path = new Path2D();
+    trail.forEach(line => { if (!line.length) return; path.moveTo(line[0][0], line[0][1]); line.forEach(q => path.lineTo(q[0], q[1])); });
+    ctx.strokeStyle = `rgba(255,40,70,${.18 * f})`; ctx.lineWidth = 6 + 14 * f; ctx.stroke(path);
+    ctx.strokeStyle = `rgba(255,40,70,${.8 * f})`; ctx.lineWidth = 2 + 5 * f; ctx.stroke(path);
+    if (down) dot(down.pos);
+    else if (hl > 0) dot(hover.pos, hl);
+    if ((fadeFrom !== null && trail.length) || (hl > 0 && hl < 1)) kick();
+    else if (hl === 1) { clearTimeout(idleT); idleT = setTimeout(kick, IDLE + 20 - (performance.now() - hover.t)); }
+  }
+  function kick() { if (!raf) raf = requestAnimationFrame(frame); }
+  function add(q) {
+    const line = trail[trail.length - 1], last = line[line.length - 1];
+    // ほとんど動いていない点は間引く
+    if (!last || Math.hypot(q[0] - last[0], q[1] - last[1]) >= 1.5) line.push(q);
+    down.pos = q;
+  }
+  // クリックできる場所（ボタン・入力の丸・カードなど）の上ではマウスの軌跡を描かない
+  const clickable = t => !!t.closest('button,input,select,textarea,a,label,summary,#lassoBar') || ['pointer', 'grab', 'grabbing'].includes(getComputedStyle(t).cursor);
+
+  stage.addEventListener('pointerdown', e => {
+    if (overview || down || e.target.closest('input') || ink.tool() !== 'laser') return;
+    const mouse = e.pointerType === 'mouse';
+    if (!(e.pointerType === 'pen' || (mouse && e.button === 0 && !clickable(e.target)))) return;
+    e.preventDefault();
+    // 前の軌跡が消えきっていなければ残したまま続ける
+    if (!level()) trail = [];
+    fadeFrom = null; down = { id: e.pointerId, pos: null };
+    trail.push([]); add(toStage(e)); kick();
+  });
+  addEventListener('pointermove', e => {
+    if (down && e.pointerId === down.id) {
+      e.preventDefault();
+      const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [];
+      (evs.length ? evs : [e]).forEach(ev => add(toStage(ev)));
+      kick();
+      return;
+    }
+    if (e.pointerType === 'mouse' && ink.tool() === 'laser' && !overview && stage.contains(e.target)) {
+      hover = { pos: toStage(e), t: performance.now() }; kick();
+    }
+    else if (e.pointerType === 'mouse' && hover && ink.tool() !== 'laser') { hover = null; kick(); }
+  }, { passive: false });
+  stage.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') { hover = null; kick(); } });
+  const up = e => { if (down && e.pointerId === down.id) { down = null; fadeFrom = performance.now(); if (e.pointerType === 'mouse') hover = { pos: toStage(e), t: performance.now() }; kick(); } };
+  addEventListener('pointerup', up);
+  addEventListener('pointercancel', up);
+  addEventListener('resize', resize);
+  resize();
+
+  // Apple Pencil のタッチはスワイプのページ送りに使わない
+  return { blocksSwipe: t => t.touchType === 'stylus' || !!down, refresh: kick };
+})();
+
+go(Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1)) || 1) - 1)));
+</script>
+</body>
+</html>
