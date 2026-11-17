@@ -1893,6 +1893,75 @@ svg.topo{display:block;width:100%;height:auto;user-select:none}
 @media print{.code .cl.on{background:none;box-shadow:none}}
 
 /* ===== 改訂で追加したスライド用 ===== */
+/* 余白の多いスライドは中身を拡大する */
+.slide[data-id="qq"] .body{zoom:1.3}
+.slide[data-id="qw"] .body{zoom:1.32}
+.slide[data-id="cp"] .body{zoom:1.3}
+.slide[data-id="op"] .body{zoom:1.28}
+.slide[data-id="sum6"] .body,.slide[data-id="sum7"] .body{zoom:1.35}
+.slide[data-id="sum6"] .sumlist,.slide[data-id="sum7"] .sumlist{gap:12px}
+/* Composer 風の回路エディタ */
+.qcmp{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr);background:#fff;border:2.5px solid var(--ink);border-radius:14px;box-shadow:4px 4px 0 var(--ink);overflow:hidden;user-select:none;-webkit-user-select:none}
+.qc-top{display:flex;align-items:center;gap:10px;background:#1f1a3d;color:#fff;padding:6px 12px;font-size:14px}
+.qc-top .lg{font-weight:900;font-size:16px}
+.qc-top .fn{background:rgba(255,255,255,.12);border-radius:6px;padding:2px 10px;font-family:Consolas,Menlo,monospace;font-size:13px}
+.qc-top .sp{flex:1}
+.qc-top select{font:700 13px Consolas,monospace;border-radius:6px;padding:1px 4px}
+.qc-top button{font:800 14px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;border:0;border-radius:8px;padding:5px 14px;cursor:pointer;background:#fff;color:#1f1a3d}
+.qc-top button.run{background:var(--yellow)}
+.qc-main{display:grid;grid-template-columns:118px minmax(0,1fr) 290px;min-height:0}
+.qc-pal{background:#f4f2fa;border-right:2px solid #e3dcf2;padding:8px;display:grid;grid-template-columns:1fr 1fr;gap:7px;align-content:start}
+.qc-pal .ph{grid-column:span 2;font:900 12px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:var(--muted);margin-top:2px}
+.qg{width:44px;height:44px;border-radius:7px;border:2px solid var(--ink);color:#fff;font:700 21px "Cambria Math","Times New Roman",serif;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;position:relative;box-shadow:2px 2px 0 var(--ink)}
+.qg.sm{font-size:13px;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;font-weight:900}
+.qc-pal .qg.sel{outline:4px solid var(--yellow);outline-offset:1px}
+.qc-pal .qg.need{animation:qcNeed 1s ease-in-out infinite}
+@keyframes qcNeed{0%,100%{box-shadow:2px 2px 0 var(--ink),0 0 0 0 rgba(255,107,26,.0)}50%{box-shadow:2px 2px 0 var(--ink),0 0 0 7px rgba(255,107,26,.55)}}
+.qc-ghost{position:fixed;z-index:9999;pointer-events:none;transform:translate(-50%,-50%) scale(1.05);opacity:.9}
+.qc-center{display:grid;grid-template-rows:auto minmax(0,1fr);min-height:0;padding:8px 12px;gap:8px}
+.qc-circ{display:flex;align-items:flex-start;position:relative}
+.qc-lab{display:flex;flex-direction:column;width:46px;flex:none}
+.qc-lab div{height:56px;display:flex;align-items:center;font:italic 19px "Cambria Math","Times New Roman",serif}
+.qc-lab div.c{height:40px}
+.qcol{position:relative;width:58px;flex:none}
+.qcell{height:56px;position:relative;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.qcell::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2.5px solid var(--ink)}
+.qcell.over::after{content:"";position:absolute;inset:6px;border:2.5px dashed var(--accent);border-radius:8px;background:rgba(255,213,61,.25)}
+.ccell{height:40px;position:relative}
+.ccell::before{content:"";position:absolute;left:0;right:0;top:50%;height:5px;margin-top:-2.5px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.qcol .qg{position:relative;z-index:2;cursor:grab}
+.qc-dot{width:16px;height:16px;border-radius:50%;background:var(--ink);position:relative;z-index:2}
+.qc-tgt{width:30px;height:30px;border-radius:50%;border:2.5px solid var(--ink);background:#fff;position:relative;z-index:2;display:flex;align-items:center;justify-content:center;font:700 26px/1 sans-serif;color:var(--ink)}
+.qc-x{position:relative;z-index:2;font:900 26px/1 sans-serif;color:var(--ink)}
+.qc-vl,.qc-ma,.qc-mn{pointer-events:none}
+.qc-vl{position:absolute;left:50%;width:2.5px;margin-left:-1.25px;background:var(--ink);z-index:1;top:28px;height:56px}
+.qc-ma{position:absolute;left:50%;width:6px;margin-left:-3px;border-left:2px solid #8f8aa8;border-right:2px solid #8f8aa8;z-index:1}
+.qc-mn{position:absolute;left:50%;transform:translateX(4px);font:700 12px Consolas,monospace;color:var(--ink);bottom:-2px}
+.qc-panels{display:grid;grid-template-columns:1fr 1fr;gap:10px;min-height:0}
+.qc-panel{border:2px solid #e3dcf2;border-radius:10px;padding:6px 10px;display:flex;flex-direction:column;min-height:0}
+.qc-ph{font:900 13px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:var(--muted)}
+.qc-ph small{font-weight:700}
+.qc-bars{flex:1;display:flex;align-items:flex-end;gap:10px;padding:4px 4px 0;border-bottom:2.5px solid var(--ink);min-height:110px}
+.qc-bars .bc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font:700 12px Consolas,monospace}
+.qc-bars .bc i{display:block;width:70%;background:var(--blue);border:2px solid var(--ink);border-bottom:0;border-radius:5px 5px 0 0;transition:height .35s}
+.qc-bars.hist .bc i{background:var(--accent)}
+.qc-bl{display:flex;gap:10px;padding:2px 4px 0;font:700 13px Consolas,monospace}
+.qc-bl span{flex:1;text-align:center}
+.qc-msg{font-size:13px;color:var(--muted);font-weight:700;text-align:center;padding:30px 0}
+.qc-tut{border-left:2px solid #e3dcf2;padding:8px 12px;display:flex;flex-direction:column;gap:6px;min-height:0;background:#fffdf6}
+.qc-tut h4{margin:0;font-size:17px}
+.qc-step{display:flex;gap:8px;align-items:flex-start;font-size:14.5px;line-height:1.45;padding:4px 6px;border-radius:8px}
+.qc-step b.n{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--ink);background:#fff;display:flex;align-items:center;justify-content:center;font-size:12px}
+.qc-step.done{color:var(--muted)}
+.qc-step.done b.n{background:var(--green);color:#fff}
+.qc-step.cur{background:#fff1c2;font-weight:700}
+.qc-step.cur b.n{background:var(--accent);color:#fff}
+.qc-ok{background:#e3f6ea;border:2px solid var(--green);border-radius:10px;padding:6px 10px;font-size:14px;line-height:1.5;display:none}
+.qc-row{display:flex;gap:10px;align-items:flex-start}
+.qc-code{flex:1;min-width:0;background:#1f1a3d;color:#ece9ff;border-radius:10px;padding:6px 10px;font:500 12.5px/1.45 Consolas,Menlo,monospace;white-space:pre;overflow:hidden;height:150px}
+.qc-code .cm{color:#8f8aa8}
+.qc-tip{font-size:12.5px;color:var(--muted);font-weight:700;line-height:1.5}
+
 .slide[data-id="tq"] .point{font-size:15.5px !important;line-height:1.55 !important;padding:7px 14px !important}
 .mxc{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:16px}
 .mxp{background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:8px 14px;border-top:9px solid var(--c)}
@@ -2411,7 +2480,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
         <div class="mp-lbl" style="text-align:left">必要な測定回数：推定精度 ε にするには約 <span class="math"><b>1/ε²</b></span> 回</div>
         <div class="g2" style="gap:8px;font-size:16px"><div class="stbox" style="padding:4px 10px">小数第 1 位：ε = 0.1<br><b class="math">1/ε² = 10² = 100 回</b></div><div class="stbox" style="padding:4px 10px">小数第 2 位：ε = 0.01<br><b class="math">1/ε² = 100² = 10000 回</b></div></div>
       </div>
-      <div class="point pop" style="--d:.15s;margin-top:0;font-size:14.5px;line-height:1.5">z 方向の測定だけでは <span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩+|1⟩)</span> と <span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩−|1⟩)</span> を区別できない（どちらも |0⟩ の確率 1/2）。よって、<b class="k">x, y, z の 3 種類の方向</b> から測定する。小数第 2 位までなら 3 × 10000 = <b>30000 回</b><br>→ 回数が膨大になるため、<b class="k">より少ない回数で推定する効率的な手法</b>（例：古典シャドウ）も研究されている</div>
+      <div class="point pop" style="--d:.15s;margin-top:0;font-size:14.5px;line-height:1.5">z 方向の測定だけでは <span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩+|1⟩)</span> と <span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩−|1⟩)</span> を区別できない（どちらも |0⟩ の確率 1/2）。よって、<b class="k">x, y, z の 3 種類の方向</b> から測定する。小数第 2 位までなら 3 × 10000 = <b>30000 回</b><br>→ 回数が膨大になるため、<b class="k">より少ない回数で推定する効率的な手法</b> も研究されている</div>
     </div>
     <div class="card pop" style="--d:.2s;padding:10px 14px">
       <div class="pk" id="tqK" data-label="状態" style="justify-content:center"></div>
@@ -2429,7 +2498,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 </section>
 
 <!-- 第6章まとめ -->
-<section class="slide">
+<section class="slide" data-id="sum6">
   <div class="chap">Summary ／ 第6章</div>
   <h2>第6章のまとめ<small>6.2（p.140）〜 6.5・7.4・コラム（p.156）</small></h2>
   <div class="body sumlist">
@@ -2515,29 +2584,40 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
     <div class="ic3">
       <div class="icard pop" style="--c:var(--blue)"><span class="tag2">ブラウザ</span><div class="ih"><span class="ii">🧩</span>Quantum Composer</div><p>IBM Quantum の機能。ブラウザから <b>ビジュアルに</b> 量子回路を組み立てて実行できる（図 7.2）</p></div>
       <div class="icard pop" style="--d:.06s;--c:var(--purple)"><span class="tag2" style="background:var(--purple)">ブラウザ</span><div class="ih"><span class="ii">📓</span>Google Colab</div><p>Google の無料サービス。ブラウザで Python のノートブックを実行できる。<span class="mono">pip install qiskit</span> で Qiskit を入れれば、<b>PC へのインストール不要</b> で使える</p></div>
-      <div class="icard pop" style="--d:.12s;--c:var(--green)"><span class="tag2" style="background:var(--green)">7.8 で説明</span><div class="ih"><span class="ii">💻</span>自分の PC</div><p>自分のコンピュータで実行。<b>Python や Qiskit のインストール</b> が必要</p></div>
+      <div class="icard pop" style="--d:.12s;--c:var(--green)"><span class="tag2" style="background:var(--green)">インストール</span><div class="ih"><span class="ii">💻</span>自分の PC</div><p>自分のコンピュータで実行。<b>Python や Qiskit のインストール</b> が必要</p></div>
     </div>
     <div class="tiny pop" style="--d:.2s;font-size:17px">※ 教科書で使っている IBM Quantum Lab（JupyterLab の実行環境、図 7.3）は 2024 年に提供を終了したため、ここでは代わりに Google Colab を紹介</div>
   </div>
   <div class="pageno"></div>
 </section>
 
-<!-- 7.3.2 Quantum Composer の操作動画 -->
-<section class="slide" data-id="vd">
-  <div class="chap">第7章 ／ 7.3.2 Qiskit の実行方法</div>
-  <h2>Quantum Composer で量子回路を組み立てる<small>動画で操作を確認</small></h2>
-  <div class="body col" style="gap:10px">
-    <div class="vidbox" id="vdBox">
-      <video id="vdVideo" controls playsinline preload="metadata"></video>
-      <div class="vph">
-        <div class="vi">🎬</div>
-        Quantum Composer の操作動画をここに映します<br>
-        <span class="tiny">動画ファイルをこの枠にドラッグ＆ドロップするか、ボタンから選んでください<br>
-        （このスライドと同じフォルダに <b>composer.mp4</b> を置くと、自動で読み込みます）</span><br>
-        <label>📂 動画ファイルを選ぶ<input type="file" id="vdFile" accept="video/*"></label>
+<!-- 7.3.2 Quantum Composer 風の回路エディタでチュートリアル -->
+<section class="slide" data-id="cmp">
+  <div class="chap">第7章 ／ 7.3.2 Qiskit の実行方法 ・ 補足（教科書外）</div>
+  <h2>Quantum Composer で回路を組み立てる<small>練習用エディタ</small></h2>
+  <div class="xtra">教科書外</div>
+  <div class="body">
+    <div class="qcmp">
+      <div class="qc-top"><span class="lg">⚛ Composer（練習用）</span><span class="fn">bell_state.qasm</span><span class="sp"></span>
+        <label>shots <select id="qcShots"><option>100</option><option selected>1024</option><option>4096</option></select></label>
+        <button id="qcDemo">見本を作る</button><button id="qcClear">クリア</button><button class="run" id="qcRun">▶ 実行</button></div>
+      <div class="qc-main">
+        <div class="qc-pal" id="qcPal"></div>
+        <div class="qc-center">
+          <div class="qc-row"><div class="qc-circ" id="qcCirc"></div><div class="qc-code" id="qcCode"></div></div>
+          <div class="qc-panels">
+            <div class="qc-panel"><div class="qc-ph">確率（Probabilities）<small>　測定する直前の状態。回路を変えるとすぐ変わる</small></div><div class="qc-bars" id="qcProb"></div><div class="qc-bl" id="qcProbL"></div></div>
+            <div class="qc-panel"><div class="qc-ph">実行結果（Histogram）<small id="qcShotsL"></small></div><div class="qc-bars hist" id="qcHist"></div><div class="qc-bl" id="qcHistL"></div></div>
+          </div>
+        </div>
+        <div class="qc-tut">
+          <h4>チュートリアル：量子もつれを作ろう</h4>
+          <div id="qcSteps"></div>
+          <div class="qc-ok" id="qcOk">🎉 完成！ <b>00 と 11 だけ</b> がおおよそ半々で出る ＝ 量子もつれ<br>次は q[1] に X を足したり、H を S や T に替えたりして試そう</div>
+          <div class="qc-tip">ゲートはドラッグで置く（クリックで選んでから置いても OK）。置いたゲートは枠の外へドラッグすると消える。ビット列は Qiskit と同じく <b>右が q[0]</b></div>
+        </div>
       </div>
     </div>
-    <div class="tiny ctr">クリックで再生 ／ 一時停止。全画面は動画の右下のボタンから</div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -2698,7 +2778,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 </section>
 
 <!-- 第7章まとめ -->
-<section class="slide">
+<section class="slide" data-id="sum7">
   <div class="chap">Summary ／ 第7章</div>
   <h2>第7章のまとめ<small>7.2（p.158）〜 7.3・7.9（p.189）</small></h2>
   <div class="body sumlist">
@@ -3265,21 +3345,179 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
   show(0);
 }
 
-/* ---------- 7.3.2 Quantum Composer の操作動画 ---------- */
+/* ---------- Quantum Composer 風の回路エディタ（チュートリアル付き） ---------- */
 {
-  const box = $('#vdBox'), v = $('#vdVideo');
-  const load = src => { v.src = src; box.classList.add('has'); };
-  // 同じフォルダの composer.mp4 があれば自動で読み込む
-  v.addEventListener('loadedmetadata', () => box.classList.add('has'));
-  v.addEventListener('error', () => { if (!v.dataset.user) box.classList.remove('has'); });
-  v.src = 'composer.mp4';
-  const pickFile = f => { if (!f || !f.type.startsWith('video/')) return; v.dataset.user = 1; load(URL.createObjectURL(f)); };
-  $('#vdFile').addEventListener('change', e => pickFile(e.target.files[0]));
-  ['dragenter', 'dragover'].forEach(t => box.addEventListener(t, e => { e.preventDefault(); box.classList.add('drag'); }));
-  ['dragleave', 'drop'].forEach(t => box.addEventListener(t, () => box.classList.remove('drag')));
-  box.addEventListener('drop', e => { e.preventDefault(); pickFile(e.dataTransfer.files[0]); });
-  // スライドを移ったら止める
-  stoppers.push(() => v.pause());
+  const NQ = 2, NCOL = 7;
+  const GATES = [
+    { g: 'H', c: 'var(--blue)' }, { g: 'X', c: 'var(--accent)' }, { g: 'Y', c: 'var(--pink)' }, { g: 'Z', c: 'var(--green)' },
+    { g: 'S', c: 'var(--purple)' }, { g: 'T', c: 'var(--teal)' }, { g: 'I', c: '#9a93bd' }, { g: 'CX', c: '#3b3561', t: 'CNOT' },
+    { g: 'SW', c: '#3b3561', t: 'SWAP' }, { g: 'M', c: '#1f1a3d', t: '測定' }];
+  const METER = '<svg viewBox="0 0 40 40" width="34" height="34"><path d="M8 28A12 12 0 0 1 32 28M20 28L28 13" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>';
+  const COL = Object.fromEntries(GATES.map(x => [x.g, x.c]));
+  const grid = Array.from({ length: NCOL }, () => ({}));
+  let sel = null, ran = false;
+  const tb = timerBag();
+  // ---- 複素数と状態ベクトル（添字 = q1*2 + q0、Qiskit と同じ並び） ----
+  const cm = (a, b) => [a[0] * b[0] - a[1] * b[1], a[0] * b[1] + a[1] * b[0]], ca = (a, b) => [a[0] + b[0], a[1] + b[1]];
+  const r = Math.SQRT1_2, w = [Math.cos(Math.PI / 4), Math.sin(Math.PI / 4)];
+  const U = { H: [[[r, 0], [r, 0]], [[r, 0], [-r, 0]]], X: [[[0, 0], [1, 0]], [[1, 0], [0, 0]]], Y: [[[0, 0], [0, -1]], [[0, 1], [0, 0]]],
+    Z: [[[1, 0], [0, 0]], [[0, 0], [-1, 0]]], S: [[[1, 0], [0, 0]], [[0, 0], [0, 1]]], T: [[[1, 0], [0, 0]], [[0, 0], w]], I: [[[1, 0], [0, 0]], [[0, 0], [1, 0]]] };
+  // collapse = true のときは測定で状態を確率的に収縮させ、その時点の値を古典ビットに記録する（1 回分の実行）
+  const simulate = (collapse = false) => {
+    let s = [[1, 0], [0, 0], [0, 0], [0, 0]];
+    const meas = new Set(), cbit = {};
+    grid.forEach(col => {
+      if (col.two) {
+        const o = col.two;
+        if (o.g === 'CX') for (let i = 0; i < 4; i++) if ((i >> o.c & 1) && !(i >> o.t & 1)) { const j = i | 1 << o.t; [s[i], s[j]] = [s[j], s[i]]; }
+        if (o.g === 'SW') [s[1], s[2]] = [s[2], s[1]];
+        return;
+      }
+      for (let q = 0; q < NQ; q++) {
+        const o = col['q' + q]; if (!o) continue;
+        if (o.g === 'M') {
+          meas.add(q);
+          if (collapse) {
+            const p1 = s.reduce((t, a, i) => t + (i >> q & 1 ? a[0] * a[0] + a[1] * a[1] : 0), 0), b = Math.random() < p1 ? 1 : 0, nrm = Math.sqrt(b ? p1 : 1 - p1) || 1;
+            s = s.map((a, i) => ((i >> q & 1) === b ? [a[0] / nrm, a[1] / nrm] : [0, 0])); cbit[q] = b;
+          }
+          continue;
+        }
+        const M = U[o.g], ns = s.slice();
+        for (let i = 0; i < 4; i++) if (!(i >> q & 1)) { const j = i | 1 << q; ns[i] = ca(cm(M[0][0], s[i]), cm(M[0][1], s[j])); ns[j] = ca(cm(M[1][0], s[i]), cm(M[1][1], s[j])); }
+        s = ns;
+      }
+    });
+    return { p: s.map(a => a[0] * a[0] + a[1] * a[1]), meas, cbit };
+  };
+  // ---- パレット ----
+  const tile = (o, extra = '') => `<div class="qg ${o.t && o.g !== 'M' ? 'sm' : ''} ${extra}" data-g="${o.g}" style="background:${o.c}" title="${o.t || o.g}">${o.g === 'M' ? METER : o.t || o.g}</div>`;
+  $('#qcPal').innerHTML = '<div class="ph">ゲート</div>' + GATES.slice(0, 7).map(o => tile(o)).join('') + '<div class="ph">2 量子ビット・測定</div>' + GATES.slice(7).map(o => tile(o)).join('');
+  // ---- 回路の描画 ----
+  const circ = $('#qcCirc');
+  const drawCirc = () => {
+    let html = '<div class="qc-lab"><div>q[0]</div><div>q[1]</div><div class="c">c(2)</div></div>';
+    grid.forEach((col, c) => {
+      let cells = ['', ''], extra = '';
+      if (col.two) {
+        const o = col.two;
+        if (o.g === 'CX') { cells[o.c] = `<div class="qc-dot qgp" data-c="${c}"></div>`; cells[o.t] = `<div class="qc-tgt qgp" data-c="${c}">+</div>`; }
+        else cells = [0, 1].map(() => `<div class="qc-x qgp" data-c="${c}">✕</div>`);
+        extra = '<div class="qc-vl"></div>';
+      } else for (let q = 0; q < NQ; q++) {
+        const o = col['q' + q]; if (!o) continue;
+        const t = GATES.find(x => x.g === o.g);
+        cells[q] = o.g === 'M'
+          ? `<div class="qg qgp" data-c="${c}" data-q="${q}" style="background:#1f1a3d"><svg viewBox="0 0 40 40" width="34" height="34"><path d="M8 28A12 12 0 0 1 32 28M20 28L28 13" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg></div>`
+          : `<div class="qg qgp" data-c="${c}" data-q="${q}" style="background:${t.c}">${o.g}</div>`;
+        if (o.g === 'M') { const top = 28 + q * 56 + 22, bot = 2 * 56 + 20; extra += `<div class="qc-ma" style="top:${top}px;height:${bot - top - 4}px"></div><div class="qc-mn" style="top:${2 * 56 + 22}px">${q}</div>`; }
+      }
+      html += `<div class="qcol" data-c="${c}">${extra}${cells.map((x, q) => `<div class="qcell" data-c="${c}" data-q="${q}">${x}</div>`).join('')}<div class="ccell"></div></div>`;
+    });
+    circ.innerHTML = html;
+  };
+  // ---- 確率・ヒストグラム ----
+  const bars = (root, labRoot, labs, vals, txt) => {
+    $(root).innerHTML = vals.map((v, i) => `<div class="bc">${txt[i]}<i style="height:${Math.max(v * 100, 0)}%"></i></div>`).join('');
+    $(labRoot).innerHTML = labs.map(l => `<span>${l}</span>`).join('');
+  };
+  const KEYS = ['00', '01', '10', '11'];
+  const clearHist = msg => { $('#qcHist').innerHTML = `<div class="qc-msg">${msg}</div>`; $('#qcHistL').innerHTML = ''; $('#qcShotsL').textContent = ''; };
+  // ---- Qiskit のコード ----
+  const code = () => {
+    const L = ['<span class="cm"># Qiskit のコード（自動生成）</span>', 'qc = QuantumCircuit(2, 2)'];
+    grid.forEach(col => {
+      if (col.two) { L.push(col.two.g === 'CX' ? `qc.cx(${col.two.c}, ${col.two.t})` : 'qc.swap(0, 1)'); return; }
+      for (let q = 0; q < NQ; q++) { const o = col['q' + q]; if (o) L.push(o.g === 'M' ? `qc.measure(${q}, ${q})` : `qc.${o.g === 'I' ? 'id' : o.g.toLowerCase()}(${q})`); }
+    });
+    $('#qcCode').innerHTML = L.join('\n');
+  };
+  // ---- チュートリアル ----
+  const STEPS = [
+    { t: '<b>H</b> を <b>q[0]</b> にドラッグする', need: 'H' },
+    { t: '<b>CNOT</b> を H より右の <b>q[0]</b> に置く（q[0] が制御、q[1] が標的）', need: 'CX' },
+    { t: '<b>測定</b> を q[0] と q[1] の両方に置く', need: 'M' },
+    { t: '右上の <b>▶ 実行</b> を押して結果を見る', need: null },
+  ];
+  const progress = () => {
+    const cH = grid.findIndex(c => c.q0 && c.q0.g === 'H');
+    const cX = grid.findIndex((c, i) => i > cH && cH >= 0 && c.two && c.two.g === 'CX' && c.two.c === 0);
+    const mOk = cX >= 0 && [0, 1].every(q => grid.some((c, i) => i > cX && c['q' + q] && c['q' + q].g === 'M'));
+    return [cH >= 0, cX >= 0, mOk, mOk && ran];
+  };
+  const drawTut = () => {
+    const d = progress(), cur = d.indexOf(false);
+    $('#qcSteps').innerHTML = STEPS.map((s, i) => `<div class="qc-step ${d[i] ? 'done' : i === cur ? 'cur' : ''}"><b class="n">${d[i] ? '✓' : i + 1}</b><span>${s.t}</span></div>`).join('');
+    $('#qcOk').style.display = cur === -1 ? 'block' : 'none';
+    $('#qcPal').querySelectorAll('.qg').forEach(t => t.classList.toggle('need', cur >= 0 && STEPS[cur].need === t.dataset.g));
+    $('#qcRun').style.boxShadow = cur === 3 ? '0 0 0 4px rgba(255,213,61,.6)' : '';
+  };
+  const update = (keepRun = false) => {
+    if (!keepRun) { ran = false; clearHist('▶ 実行 を押すと、ここに結果が出る'); }
+    drawCirc();
+    const { p } = simulate();
+    bars('#qcProb', '#qcProbL', KEYS, p, p.map(v => `${Math.round(v * 1000) / 10}%`));
+    code(); drawTut();
+  };
+  const run = () => {
+    const { p, meas } = simulate();
+    if (!meas.size) { clearHist('測定ゲートがない（📏 測定 を置こう）'); return; }
+    const N = +$('#qcShots').value, ms = [...meas].sort((a, b) => b - a), cnt = {};
+    for (let k = 0; k < N; k++) { const { cbit } = simulate(true); const key = ms.map(q => cbit[q]).join(''); cnt[key] = (cnt[key] || 0) + 1; }
+    const keys = Array.from({ length: 1 << ms.length }, (_, v) => v.toString(2).padStart(ms.length, '0'));
+    bars('#qcHist', '#qcHistL', keys, keys.map(k => (cnt[k] || 0) / N), keys.map(k => cnt[k] || 0));
+    $('#qcShotsL').textContent = `　${N} 回実行（測定した c[${ms.join('], c[')}]）`;
+    ran = true; drawTut();
+  };
+  // ---- 置く・消す ----
+  const place = (g, c, q) => {
+    if (g === 'CX') grid[c] = { two: { g, c: q, t: 1 - q } };
+    else if (g === 'SW') grid[c] = { two: { g } };
+    else { if (grid[c].two) grid[c] = {}; grid[c]['q' + q] = { g }; }
+    update();
+  };
+  const removeAt = (c, q) => { if (grid[c].two) grid[c] = {}; else delete grid[c]['q' + q]; update(); };
+  // ---- ドラッグ（パレットから・置いたゲートから） ----
+  let drag = null;
+  const cellAt = (x, y) => { const e = document.elementFromPoint(x, y); return e && e.closest ? e.closest('#qcCirc .qcell') : null; };
+  const startDrag = (e, g, from) => {
+    e.preventDefault(); e.stopPropagation();
+    const t = GATES.find(x => x.g === g);
+    const gh = document.createElement('div'); gh.className = 'qg qc-ghost' + (t.t && g !== 'M' ? ' sm' : ''); gh.style.background = t.c; gh.innerHTML = g === 'M' ? METER : t.t || g;
+    gh.style.left = e.clientX + 'px'; gh.style.top = e.clientY + 'px';
+    drag = { g, from, gh, x0: e.clientX, y0: e.clientY, moved: false, id: e.pointerId, over: null };
+  };
+  addEventListener('pointermove', e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    if (!drag.moved && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) > 6) { drag.moved = true; document.body.appendChild(drag.gh); if (drag.from) removeAt(...drag.from); }
+    if (!drag.moved) return;
+    drag.gh.style.left = e.clientX + 'px'; drag.gh.style.top = e.clientY + 'px';
+    const c = cellAt(e.clientX, e.clientY);
+    if (drag.over !== c) { if (drag.over) drag.over.classList.remove('over'); drag.over = c; if (c) c.classList.add('over'); }
+  });
+  addEventListener('pointerup', e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const d = drag; drag = null; d.gh.remove(); if (d.over) d.over.classList.remove('over');
+    if (d.moved) { const c = cellAt(e.clientX, e.clientY); if (c) place(d.g, +c.dataset.c, +c.dataset.q); return; }
+    // ほとんど動かさなかった：パレットなら選択、置いたゲートなら削除
+    if (!d.from) { sel = sel === d.g ? null : d.g; $('#qcPal').querySelectorAll('.qg').forEach(t => t.classList.toggle('sel', t.dataset.g === sel)); }
+    else removeAt(...d.from);
+  });
+  $('#qcPal').addEventListener('pointerdown', e => { const t = e.target.closest('.qg'); if (t) startDrag(e, t.dataset.g, null); });
+  circ.addEventListener('pointerdown', e => {
+    const p = e.target.closest('.qgp'), cell = e.target.closest('.qcell');
+    if (p) { const c = +p.dataset.c, col = grid[c], q = p.dataset.q !== undefined ? +p.dataset.q : (col.two.g === 'CX' ? col.two.c : 0); startDrag(e, col.two ? col.two.g : col['q' + q].g, [c, q]); return; }
+    if (cell && sel) { e.preventDefault(); e.stopPropagation(); place(sel, +cell.dataset.c, +cell.dataset.q); }
+  });
+  $('#qcRun').onclick = e => { e.currentTarget.blur(); run(); };
+  $('#qcClear').onclick = e => { e.currentTarget.blur(); tb.clear(); grid.forEach((_, i) => grid[i] = {}); update(); };
+  $('#qcShots').onchange = () => { if (ran) run(); };
+  $('#qcDemo').onclick = e => {
+    e.currentTarget.blur(); tb.clear(); grid.forEach((_, i) => grid[i] = {}); update();
+    [['H', 0, 0], ['CX', 1, 0], ['M', 2, 0], ['M', 3, 1]].forEach(([g, c, q], k) => tb.later(() => place(g, c, q), 500 + k * 700));
+    tb.later(run, 500 + 4 * 700);
+  };
+  update();
 }
 
 /* ---------- 7.4 量子回路の表記法（図 7.7）：3 つの部分を色分けして名前を付ける ---------- */
