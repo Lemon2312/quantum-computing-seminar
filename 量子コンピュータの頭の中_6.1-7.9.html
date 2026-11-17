@@ -1893,6 +1893,11 @@ svg.topo{display:block;width:100%;height:auto;user-select:none}
 @media print{.code .cl.on{background:none;box-shadow:none}}
 
 /* ===== 改訂で追加したスライド用 ===== */
+.bl4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 10px}
+.bl4 .blc{text-align:center}
+.bl4 .blh{font:800 15px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:var(--ink)}
+.bl4 .blh .math{font-size:18px}
+.bl4 svg{width:100%;max-width:215px;display:block;margin:0 auto}
 .qw2 .icard{padding:16px 18px}
 .qw2 .icard .ih{font-size:24px;margin:8px 0 10px}
 .qw2 .icard .ii{font-size:34px}
@@ -2089,19 +2094,42 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 </section>
 
 
-<!-- 6.2.2 記法：H0 -->
+<!-- 6.2.2 0 番目にだけゲートがかかるとき -->
 <section class="slide" data-id="nt">
   <div class="chap">第6章 ／ 6.2.2 記法の工夫</div>
-  <h2>H ⊗ I を H<sub>0</sub> と書く<small>6.2.2・図 6.1（pp.140–141）</small></h2>
-  <div class="body col" style="gap:14px;justify-content:flex-start">
-    <div class="card pop" style="padding:8px 20px">
+  <h2>0 番目の量子ビットにだけゲートをかけるとき<small>6.2.2・図 6.1（pp.140–141）</small></h2>
+  <div class="body col" style="gap:18px;justify-content:flex-start">
+    <div class="card pop" style="padding:10px 20px">
       <div class="mp-lbl" style="font-size:19px">0 番目の量子ビットにだけ H を適用する回路（図 6.1）</div>
-      <div class="ieq" style="gap:30px"><div style="width:360px"><div id="ntCirc0"></div><div class="ctr" style="font-size:19px;font-weight:800;color:var(--muted)">I を省略した回路（H<sub>0</sub>）</div></div><span class="ieq-eq" style="font-size:72px">=</span><div style="width:360px"><div id="ntCircI"></div><div class="ctr" style="font-size:19px;font-weight:800;color:var(--muted)">I を描いた回路（H ⊗ I）</div></div></div>
+      <div class="ieq" style="gap:30px"><div style="width:360px"><div id="ntCirc0"></div><div class="ctr" style="font-size:19px;font-weight:800;color:var(--muted)">I を省略した回路</div></div><span class="ieq-eq" style="font-size:72px">=</span><div style="width:360px"><div id="ntCircI"></div><div class="ctr" style="font-size:19px;font-weight:800;color:var(--muted)">I を描いた回路（H ⊗ I）</div></div></div>
     </div>
-    <div class="point green pop" style="--d:.05s;margin-top:0;font-size:21px;border-left-color:var(--green);background:#e3f6ea">⚠️ 回路に H だけが描いてあっても、H は <b>2 × 2</b> の行列なので、そのままでは 2 量子ビット（4 成分のベクトル）にかけられない → <b style="color:#0a6b3a">1 番目の量子ビットには I ゲートがある</b> と考えて、<span class="math"><b>H ⊗ I</b></span>（<b>4 × 4</b> の行列）として計算する</div>
+    <div class="point green pop" style="--d:.05s;margin-top:0;font-size:23px;border-left-color:var(--green);background:#e3f6ea">0 番目の量子ビットにだけゲートがかかっている場合、<b style="color:#0a6b3a">1 番目以降の量子ビットには I ゲートがかかっている</b> と考える</div>
     <div class="g2" style="gap:18px">
-      <div class="point pop" style="--d:.1s;margin-top:0;font-size:22px"><b>I は量子状態に影響しない</b> → 回路でも何も描かないのが一般的。そこで <span class="math">H ⊗ I</span> の「I」を省略して <span class="math" style="font-size:30px"><b>H<sub>0</sub></b></span> と書く</div>
-      <div class="point blue pop" style="--d:.15s;margin-top:0;font-size:22px">添え字 0 ＝「<b class="kb">0 番目の量子ビットに H を適用する</b>」<br><span style="font-size:18px">量子プログラミングにあわせて、添え字は 0 から数える。同様に <span class="math">I ⊗ H = H<sub>1</sub></span></span></div>
+      <div class="point pop" style="--d:.1s;margin-top:0;font-size:20px">H は <b>2 × 2</b> の行列なので、そのままでは 2 量子ビット（4 成分のベクトル）にかけられない → <span class="math"><b>H ⊗ I</b></span>（<b>4 × 4</b> の行列）として計算する</div>
+      <div class="point blue pop" style="--d:.15s;margin-top:0;font-size:20px"><b>I は量子状態に影響しない</b> ので、回路では I を描かないのが一般的</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 6.2.2 H ⊗ I を H0 と書く -->
+<section class="slide" data-id="ntb">
+  <div class="chap">第6章 ／ 6.2.2 記法の工夫</div>
+  <h2>H ⊗ I を H<sub>0</sub> と書く<small>6.2.2（p.141）</small></h2>
+  <div class="body col" style="gap:18px;justify-content:flex-start">
+    <div class="g2" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px">
+      <div class="card pop center" style="padding:12px 20px;flex-direction:column">
+        <div class="mp-lbl" style="font-size:19px">I を省略して、添え字で書く</div>
+        <div class="eqrow" style="justify-content:center;font-size:64px;margin:20px 0"><span>H ⊗ I = <b style="color:var(--blue)">H<sub>0</sub></b></span></div>
+      </div>
+      <div class="card pop" style="--d:.05s;padding:12px 20px">
+        <div class="mp-lbl" style="font-size:19px">回路では</div>
+        <div id="ntCircH0"></div>
+      </div>
+    </div>
+    <div class="g2" style="gap:18px">
+      <div class="point pop" style="--d:.1s;margin-top:0;font-size:22px">添え字 0 ＝「<b class="k">0 番目の量子ビットに H を適用する</b>」<br><span style="font-size:18px">量子プログラミングにあわせて、添え字は 0 から数える</span></div>
+      <div class="point blue pop" style="--d:.15s;margin-top:0;font-size:22px">同様に、1 番目の量子ビットにだけ H をかけるなら<br><span class="math" style="font-size:28px">I ⊗ H = <b>H<sub>1</sub></b></span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -2163,7 +2191,6 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
     <div class="col">
       <div class="code pop" id="bo2Code"><span class="cap">Qiskit：1 つの量子ビットだけ操作して確率を表示</span></div>
       <div class="pk pop" id="bo2K" data-label="5 行目を変える" style="--d:.1s;justify-content:center"></div>
-      <div class="tiny pop" style="--d:.15s">Qiskit 2.x で動作を確認（出力は実際の実行結果）</div>
     </div>
     <div class="col">
       <div class="vs2 pop" style="--d:.15s">
@@ -2551,7 +2578,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 <section class="slide" data-id="hd">
   <div class="chap">第7章 ／ 7.9.3 ハードウェアで実行できるゲートを考慮した量子回路に変換</div>
   <h2>H を実行できるゲートで作る<small>7.9.3・図 7.24・7.25（pp.187–188）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)">
+  <div class="body cols" style="grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr)">
     <div class="col">
       <div class="lead pop" style="line-height:2.1 !important">ibm_washington で直接実行できるゲートは <span class="gchip y">I</span> <span class="gchip y">X</span> <span class="gchip y">RZ</span> <span class="gchip y">√X</span> <span class="gchip y">CNOT</span> だけ。<b>H はない</b></div>
       <div class="tiny pop" style="--d:.05s;font-size:16px">ブロッホ球では <b>RZ(θ) ＝ z 軸のまわりに θ 回転</b>、<b>√X ＝ x 軸のまわりに 90° 回転</b>（2 回で X ＝ 180° 回転）</div>
@@ -2559,13 +2586,12 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
         <div class="card pop" style="--d:.1s;padding:6px 10px"><div class="mp-lbl">図 7.24：コンパイル前</div><div id="hdCircB"></div></div>
         <div class="card pop" style="--d:.12s;padding:6px 10px"><div class="mp-lbl">図 7.25：コンパイル後</div><div id="hdCirc"></div></div>
       </div>
-      <div class="point pop" style="--d:.15s;margin-top:0;font-size:17px"><span class="math" style="font-size:20px"><b>H = α · RZ(π/2) · √X · RZ(π/2)</b></span>（<span class="math">α = e<sup>iπ/4</sup></span>）<br><span class="math">|α| = 1</span> なので α 倍の違いは量子回路に影響しない → コンパイラが RZ と √X の組み合わせに変換</div>
+      <div class="point pop" style="--d:.15s;margin-top:0;font-size:17px"><span class="math" style="font-size:21px"><b>H = e<sup>iπ/4</sup> · RZ(π/2) · √X · RZ(π/2)</b></span><br><span class="math">|e<sup>iπ/4</sup>| = 1</span> なので、e<sup>iπ/4</sup> 倍の違いは量子回路に影響しない → コンパイラが RZ と √X の組み合わせに変換</div>
     </div>
-    <div class="card pop" style="--d:.2s;padding:10px 14px">
-      <div class="mp-lbl">ブロッホ球で確かめる：|0⟩ に RZ(π/2) → √X → RZ(π/2) を順に適用</div>
-      <svg id="hdBloch" viewBox="0 20 420 310" style="width:100%;max-width:370px;display:block;margin:0 auto"></svg>
-      <div class="stbox" style="padding:6px 12px"><div class="sth" id="hdH"></div><div class="stf" id="hdF" style="font-size:17px"></div></div>
-      <div class="row" style="justify-content:center;gap:8px;margin-top:6px"><div class="pk" id="hdBtns" style="flex-wrap:nowrap"></div><button class="b" id="hdAuto" data-autoplay>▶ 自動再生</button></div>
+    <div class="card pop" style="--d:.2s;padding:8px 12px">
+      <div class="mp-lbl">ブロッホ球：RZ(π/2) → √X → RZ(π/2) を順に適用（緑の点線 ＝ H の結果）</div>
+      <div class="bl4" id="hdBl4"></div>
+      <div class="row" style="justify-content:center;gap:8px;margin-top:4px"><div class="pk" id="hdBtns" style="flex-wrap:nowrap"></div><button class="b" id="hdAuto" data-autoplay>▶ 自動再生</button></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -2940,13 +2966,14 @@ function gateWidget(root, M, name, mapRoot) {
 const BELL_OPS = [{ g: 'H', q: 0, col: 0 }, { g: 'CX', c: 0, t: 1, col: 1 }, { g: 'M', q: 0, cb: 0, col: 2 }, { g: 'M', q: 1, cb: 1, col: 3 }];
 
 /* ---------- 6.2.2 記法：I を描いた回路 ＝ I を省略した回路 ---------- */
-drawQC('#ntCircI', { n: 2, init: true, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'I', q: 1, col: 0 }], colW: 110, rowH: 62, maxW: '300px' });
-drawQC('#ntCirc0', { n: 2, init: true, ops: [{ g: 'H', q: 0, col: 0 }], colW: 110, rowH: 62, maxW: '300px' });
+drawQC('#ntCircI', { n: 2, init: true, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'I', q: 1, col: 0 }], colW: 110, rowH: 66, maxW: '320px' });
+drawQC('#ntCirc0', { n: 2, init: true, ops: [{ g: 'H', q: 0, col: 0 }], colW: 110, rowH: 66, maxW: '320px' });
+drawQC('#ntCircH0', { n: 2, init: true, top: 48, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'BOX', c0: 0, c1: 0, q0: 0, q1: 0, label: 'H_{0}' }], colW: 110, rowH: 70, maxW: '340px' });
 drawQC('#nt2Circ', { n: 2, init: true, top: 46, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'H', q: 1, col: 0 }, { g: 'BOX', c0: 0, c1: 0, label: 'H ⊗ H' }], colW: 110, rowH: 76, maxW: '400px' });
 
 /* ---------- バイト・オーダ：コードで実感 ---------- */
 {
-  const code = codeBlock('#bo2Code', ['from qiskit import QuantumCircuit', 'from qiskit.quantum_info import Statevector', '', 'qc = QuantumCircuit(2)', 'qc.x(0)', '', '# 各測定結果を得る確率を表示', 'probs = Statevector(qc).probabilities_dict()', 'for k, p in probs.items():', '    print(k, round(float(p), 3))']);
+  const code = codeBlock('#bo2Code', ['from qiskit import QuantumCircuit', 'from qiskit.quantum_info import Statevector', '', 'qc = QuantumCircuit(2)  # 初期状態は |00⟩', 'qc.x(0)', '', '# 各測定結果を得る確率を表示', 'probs = Statevector(qc).probabilities_dict()', 'for k, p in probs.items():', '    print(k, round(float(p), 3))']);
   const C = [
     { label: 'qc.x(0)', line: 'qc.x(0)  # 0 番目の量子ビットに X', book: 'X<sub>0</sub>(|0⟩ ⊗ |0⟩)<br>= |1⟩ ⊗ |0⟩ = <b class="k">|10⟩</b><br><span style="font-size:17px">|10⟩ を確率 1 で得る</span>', p: { '01': 1 }, note: '右端（0 番目）が 1' },
     { label: 'qc.x(1)', line: 'qc.x(1)  # 1 番目の量子ビットに X', book: 'X<sub>1</sub>(|0⟩ ⊗ |0⟩)<br>= |0⟩ ⊗ |1⟩ = <b class="k">|01⟩</b><br><span style="font-size:17px">|01⟩ を確率 1 で得る</span>', p: { '10': 1 }, note: '左端（1 番目）が 1' },
@@ -3268,55 +3295,55 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
   onEnter.sc = () => { s = -1; };
 }
 
-/* ---------- 7.9.3 H を RZ・√X で作る：ブロッホ球で回転を見る ---------- */
+/* ---------- 7.9.3 H を RZ・√X で作る：|0⟩ |1⟩ |+⟩ |−⟩ の 4 つのブロッホ球で回転を比べる ---------- */
 {
   drawQC('#hdCircB', { n: 1, nc: 1, names: ['q'], ops: [{ g: 'H', q: 0, col: 0 }, { g: 'M', q: 0, cb: 0, col: 1 }], colW: 58, maxW: '170px' });
   const qa = drawQC('#hdCirc', { n: 1, nc: 1, names: ['q'], ops: [{ g: 'RZ', q: 0, col: 0, k: 1 }, { g: 'SX', q: 0, col: 1, k: 2 }, { g: 'RZ', q: 0, col: 2, k: 3 }, { g: 'M', q: 0, cb: 0, col: 3, k: 9 }], colW: 52, maxW: '250px' });
-  const svg = $('#hdBloch'), CX = 205, CY = 170, R = 130;
-  // 斜めから見た投影：x 軸は手前左下、y 軸は右、z 軸は上
-  const P = ([x, y, z]) => [CX + R * (0.92 * y - 0.42 * x), CY - R * (0.9 * z - 0.3 * x)];
-  const pts = f => Array.from({ length: 73 }, (_, i) => f(i / 72 * 2 * Math.PI)).map(P).map(p => p.join(',')).join(' ');
-  el('circle', { cx: CX, cy: CY, r: R * 1.0, fill: '#f6f2ff', stroke: '#1f1a3d', 'stroke-width': 2 }, svg);
-  el('polyline', { points: pts(t => [Math.cos(t), Math.sin(t), 0]), fill: 'none', stroke: '#9a93bd', 'stroke-width': 1.5, 'stroke-dasharray': '4 3' }, svg);
-  const axis = (v, lab, dx, dy) => { const a = P(v.map(x => -x)), b = P(v); el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: '#9a93bd', 'stroke-width': 1.5 }, svg); const t = el('text', { x: b[0] + dx, y: b[1] + dy, 'font-size': 17, fill: '#1f1a3d', 'text-anchor': 'middle', 'font-family': 'Cambria Math,serif' }, svg); t.textContent = lab; };
-  axis([0, 0, 1], '|0⟩', 0, -10); axis([1, 0, 0], 'x', -10, 20); axis([0, 1, 0], 'y', 14, 6);
-  { const b = P([0, 0, -1]); el('text', { x: b[0], y: b[1] + 22, 'font-size': 17, 'text-anchor': 'middle', fill: '#1f1a3d', 'font-family': 'Cambria Math,serif' }, svg).textContent = '|1⟩'; }
-  // H|0⟩ = |+⟩ の目標位置
-  const tg = P([1, 0, 0]);
-  el('circle', { cx: tg[0], cy: tg[1], r: 13, fill: 'none', stroke: 'var(--green)', 'stroke-width': 3, 'stroke-dasharray': '4 3' }, svg);
-  el('text', { x: tg[0] - 16, y: tg[1] - 16, 'font-size': 14, 'font-weight': 800, fill: '#0a6b3a', 'text-anchor': 'end', 'font-family': 'sans-serif' }, svg).textContent = 'H|0⟩ = |+⟩';
-  const trail = el('polyline', { points: '', fill: 'none', stroke: 'var(--accent)', 'stroke-width': 3.5, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, svg);
-  const arm = el('line', { x1: CX, y1: CY, x2: CX, y2: CY, stroke: 'var(--pink)', 'stroke-width': 4, 'stroke-linecap': 'round' }, svg);
-  const dot = el('circle', { cx: CX, cy: CY, r: 10, fill: 'var(--pink)', stroke: '#1f1a3d', 'stroke-width': 2 }, svg);
+  const AX = ['z', 'x', 'z'];
   const rot = (v, ax, a) => { const [x, y, z] = v, c = Math.cos(a), s = Math.sin(a); return ax === 'z' ? [c * x - s * y, s * x + c * y, z] : [x, c * y - s * z, s * y + c * z]; };
-  const S = [
-    { h: '① 初期状態 |0⟩', f: 'ブロッホ球の北極（z 軸の上）' },
-    { h: '② RZ(π/2)：z 軸のまわりに 90° 回転', f: '|0⟩ は z 軸の上にあるので <b>動かない</b>', ax: 'z' },
-    { h: '③ √X：x 軸のまわりに 90° 回転', f: '北極から赤道（−y の位置）へ倒れる', ax: 'x' },
-    { h: '④ RZ(π/2)：z 軸のまわりに 90° 回転', f: '赤道上を回って <b>x 軸（|+⟩）</b> に到着 → <span class="res">H|0⟩ と同じ ✓</span>', ax: 'z' },
-  ];
-  $('#hdBtns').innerHTML = S.map((s, i) => `<button data-k="${i}">${'①②③④'[i]}</button>`).join('');
+  const STARTS = [
+    { s: '|0⟩', v: [0, 0, 1], t: '|+⟩' }, { s: '|1⟩', v: [0, 0, -1], t: '|−⟩' },
+    { s: '|+⟩', v: [1, 0, 0], t: '|0⟩' }, { s: '|−⟩', v: [-1, 0, 0], t: '|1⟩' }];
+  const root = $('#hdBl4');
+  root.innerHTML = STARTS.map((o, i) => `<div class="blc"><div class="blh">スタート <span class="math">${o.s}</span> → H${o.s} = <span class="math">${o.t}</span></div><svg viewBox="0 0 260 230" id="hdB${i}"></svg></div>`).join('');
+  const spheres = STARTS.map((o, i) => {
+    const svg = $('#hdB' + i), CX = 130, CY = 118, R = 88;
+    const P = ([x, y, z]) => [CX + R * (0.92 * y - 0.42 * x), CY - R * (0.9 * z - 0.3 * x)];
+    const pts = f => Array.from({ length: 73 }, (_, j) => P(f(j / 72 * 2 * Math.PI)).join(',')).join(' ');
+    el('circle', { cx: CX, cy: CY, r: R, fill: '#f6f2ff', stroke: '#1f1a3d', 'stroke-width': 2 }, svg);
+    el('polyline', { points: pts(t => [Math.cos(t), Math.sin(t), 0]), fill: 'none', stroke: '#9a93bd', 'stroke-width': 1.3, 'stroke-dasharray': '4 3' }, svg);
+    const T = (x, y, s, sz = 14) => { const t = el('text', { x, y, 'font-size': sz, fill: '#1f1a3d', 'text-anchor': 'middle', 'font-family': 'Cambria Math,serif' }, svg); t.textContent = s; };
+    [[0, 0, 1], [1, 0, 0], [0, 1, 0]].forEach(v => { const a = P(v.map(x => -x)), b = P(v); el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: '#9a93bd', 'stroke-width': 1.3 }, svg); });
+    T(P([0, 0, 1])[0], P([0, 0, 1])[1] - 7, '|0⟩'); T(P([0, 0, -1])[0], P([0, 0, -1])[1] + 17, '|1⟩');
+    T(P([1, 0, 0])[0] - 12, P([1, 0, 0])[1] + 16, '|+⟩'); T(P([-1, 0, 0])[0] + 12, P([-1, 0, 0])[1] - 6, '|−⟩'); T(P([0, 1, 0])[0] + 10, P([0, 1, 0])[1] + 4, 'y');
+    let end = o.v; AX.forEach(ax => { end = rot(end, ax, Math.PI / 2); });
+    const tg = P(end);
+    el('circle', { cx: tg[0], cy: tg[1], r: 11, fill: 'none', stroke: 'var(--green)', 'stroke-width': 3, 'stroke-dasharray': '4 3' }, svg);
+    const trail = el('polyline', { points: '', fill: 'none', stroke: 'var(--accent)', 'stroke-width': 3, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, svg);
+    const arm = el('line', { x1: CX, y1: CY, x2: CX, y2: CY, stroke: 'var(--pink)', 'stroke-width': 3.5, 'stroke-linecap': 'round' }, svg);
+    const dot = el('circle', { cx: CX, cy: CY, r: 7.5, fill: 'var(--pink)', stroke: '#1f1a3d', 'stroke-width': 2 }, svg);
+    const vecAt = n => { let v = o.v; for (let s = 0; s < n; s++) v = rot(v, AX[s], Math.PI / 2); return v; };
+    const pathTo = (n, e = 1) => { const out = [o.v]; let v = o.v; for (let s = 0; s < n; s++) { const last = s === n - 1, m = last ? Math.round(24 * e) : 24; for (let j = 1; j <= m; j++) out.push(rot(v, AX[s], Math.PI / 2 * j / 24)); if (last && e < 1) out.push(rot(v, AX[s], Math.PI / 2 * e)); v = rot(v, AX[s], Math.PI / 2); } return out; };
+    return (n, e = 1) => {
+      const path = pathTo(n, e), v = path[path.length - 1], p = P(v);
+      arm.setAttribute('x2', p[0]); arm.setAttribute('y2', p[1]); dot.setAttribute('cx', p[0]); dot.setAttribute('cy', p[1]);
+      trail.setAttribute('points', path.map(q => P(q).join(',')).join(' '));
+    };
+  });
+  $('#hdBtns').innerHTML = ['スタート', 'RZ', '√X', 'RZ'].map((s, i) => `<button data-k="${i}">${'①②③④'[i]} ${s}</button>`).join('');
   let k = 0, raf = 0;
-  const vecAt = n => { let v = [0, 0, 1]; for (let i = 1; i <= n; i++) v = rot(v, S[i].ax, Math.PI / 2); return v; };
-  const put = (v, path) => {
-    const p = P(v); arm.setAttribute('x2', p[0]); arm.setAttribute('y2', p[1]); dot.setAttribute('cx', p[0]); dot.setAttribute('cy', p[1]);
-    trail.setAttribute('points', path.map(P).map(q => q.join(',')).join(' '));
-  };
-  const pathTo = n => { const out = [[0, 0, 1]]; let v = [0, 0, 1]; for (let i = 1; i <= n; i++) { for (let j = 1; j <= 24; j++) out.push(rot(v, S[i].ax, Math.PI / 2 * j / 24)); v = rot(v, S[i].ax, Math.PI / 2); } return out; };
   const show = (n, anim) => {
     cancelAnimationFrame(raf);
-    k = n; qa.set(n === 0 ? 0 : n);
+    k = n; qa.set(n);
     $('#hdBtns').querySelectorAll('button').forEach((b, i) => b.classList.toggle('on', i === n));
-    $('#hdH').textContent = S[n].h; $('#hdF').innerHTML = S[n].f;
-    if (!anim || n === 0) { put(vecAt(n), pathTo(n)); return; }
-    const base = pathTo(n - 1), v0 = vecAt(n - 1), t0 = performance.now();
-    const f = ts => { const t = Math.min((ts - t0) / 900, 1), e = t < .5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2; const pp = base.slice();
-      for (let j = 1; j <= Math.round(24 * e); j++) pp.push(rot(v0, S[n].ax, Math.PI / 2 * j / 24)); const v = rot(v0, S[n].ax, Math.PI / 2 * e); pp.push(v); put(v, pp); if (t < 1) raf = requestAnimationFrame(f); };
-    raf = requestAnimationFrame(f);
+    if (!anim || n === 0) { spheres.forEach(f => f(n)); return; }
+    const t0 = performance.now();
+    const step = ts => { const t = Math.min((ts - t0) / 900, 1), e = t < .5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2; spheres.forEach(f => f(n, e)); if (t < 1) raf = requestAnimationFrame(step); };
+    raf = requestAnimationFrame(step);
   };
   $('#hdBtns').querySelectorAll('button').forEach(b => b.addEventListener('click', e => { e.currentTarget.blur(); const n = +b.dataset.k; show(n, n === k + 1); }));
   show(3, false);
-  looper('#hdAuto', () => show((k + 1) % 4, true), 1800);
+  looper('#hdAuto', () => show((k + 1) % 4, true), 1700);
   onEnter.hd = () => { k = 3; };
 }
 
