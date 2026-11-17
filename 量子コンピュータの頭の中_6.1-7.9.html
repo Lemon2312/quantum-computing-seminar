@@ -1893,6 +1893,30 @@ svg.topo{display:block;width:100%;height:auto;user-select:none}
 @media print{.code .cl.on{background:none;box-shadow:none}}
 
 /* ===== 改訂で追加したスライド用 ===== */
+.qc-top{padding:0 10px 0 0 !important;gap:0 !important;background:#262626 !important;border-bottom:1px solid #4a4a4a;height:44px}
+.qc-title{font:600 17px "Helvetica Neue",Arial,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:#f4f4f4;padding:0 16px 0 16px;outline:none;white-space:nowrap;cursor:text;border-radius:2px}
+.qc-title:focus{box-shadow:inset 0 0 0 2px #fff}
+.qc-sep{width:2px;height:24px;background:#6f6f6f;margin:0 6px}
+.qc-menu{position:relative;height:100%}
+.qc-menu > button{height:100%;background:transparent !important;color:#f4f4f4 !important;border:0 !important;border-radius:0 !important;padding:0 16px !important;font:400 16px "Helvetica Neue",Arial,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif !important;cursor:pointer}
+.qc-menu > button:hover,.qc-menu.open > button{background:#393939 !important}
+.qc-menu.open > button{background:#1f1f1f !important}
+.qc-drop{display:none;position:absolute;left:0;top:100%;min-width:220px;background:#1f1f1f;border:1px solid #393939;box-shadow:0 4px 12px rgba(0,0,0,.45);z-index:30;padding:4px 0}
+.qc-menu.open .qc-drop{display:block}
+.qc-drop button{display:flex;justify-content:space-between;gap:16px;width:100%;text-align:left;background:transparent !important;color:#f4f4f4 !important;border:0 !important;border-radius:0 !important;padding:8px 16px !important;font:400 14px "Helvetica Neue",Arial,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif !important;cursor:pointer}
+.qc-drop button:hover{background:#393939 !important}
+.qc-drop button:disabled{color:#6f6f6f !important;cursor:default}
+.qc-drop button kbd{font:400 12px Consolas,monospace;color:#a8a8a8}
+.qc-drop hr{border:0;border-top:1px solid #393939;margin:4px 0}
+.qc-top .sp{flex:1}
+.qc-top label{color:#c6c6c6;font-size:13px;margin-right:8px}
+.qc-top button.run{border-radius:0 !important;background:var(--yellow) !important;color:#1f1a3d !important;font:600 14px "Helvetica Neue",Arial,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif !important;padding:7px 18px !important}
+.qcmp.no-prob .qc-panels .qc-panel:first-child{display:none}
+.qcmp.no-prob .qc-panels{grid-template-columns:1fr}
+.qcmp.no-code .qc-code{display:none}
+.qcmp.no-tut .qc-main{grid-template-columns:118px minmax(0,1fr) 0}
+.qcmp.no-tut .qc-tut{display:none}
+
 /* 余白の多いスライドは中身を拡大する */
 .slide[data-id="qq"] .body{zoom:1.3}
 .slide[data-id="qw"] .body{zoom:1.32}
@@ -1909,7 +1933,7 @@ svg.topo{display:block;width:100%;height:auto;user-select:none}
 .qc-top select{font:700 13px Consolas,monospace;border-radius:6px;padding:1px 4px}
 .qc-top button{font:800 14px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;border:0;border-radius:8px;padding:5px 14px;cursor:pointer;background:#fff;color:#1f1a3d}
 .qc-top button.run{background:var(--yellow)}
-.qc-main{display:grid;grid-template-columns:118px minmax(0,1fr) 290px;min-height:0}
+.qc-main{display:grid;grid-template-columns:118px minmax(0,1fr) 290px;min-height:0;position:relative}
 .qc-pal{background:#f4f2fa;border-right:2px solid #e3dcf2;padding:8px;display:grid;grid-template-columns:1fr 1fr;gap:7px;align-content:start}
 .qc-pal .ph{grid-column:span 2;font:900 12px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:var(--muted);margin-top:2px}
 .qg{width:44px;height:44px;border-radius:7px;border:2px solid var(--ink);color:#fff;font:700 21px "Cambria Math","Times New Roman",serif;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;position:relative;box-shadow:2px 2px 0 var(--ink)}
@@ -2598,9 +2622,14 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <div class="xtra">教科書外</div>
   <div class="body">
     <div class="qcmp">
-      <div class="qc-top"><span class="lg">⚛ Composer（練習用）</span><span class="fn">bell_state.qasm</span><span class="sp"></span>
+      <div class="qc-top" id="qcTop"><span class="qc-title" id="qcTitle" contenteditable="true" spellcheck="false">Untitled circuit</span><span class="qc-sep"></span>
+        <div class="qc-menu"><button>File</button><div class="qc-drop"><button data-act="new">新しい回路<kbd></kbd></button><button id="qcDemo" data-act="demo">見本（量子もつれ）を開く</button><hr><button data-act="copy">Qiskit のコードをコピー</button></div></div>
+        <div class="qc-menu"><button>Edit</button><div class="qc-drop"><button data-act="undo" id="qcUndo">元に戻す<kbd>Ctrl+Z</kbd></button><button data-act="redo" id="qcRedo">やり直す<kbd>Ctrl+Y</kbd></button><hr><button id="qcClear" data-act="clear">すべてのゲートを削除</button></div></div>
+        <div class="qc-menu"><button>View</button><div class="qc-drop"><button data-act="vprob">確率（Probabilities）<kbd id="qcVprob">✓</kbd></button><button data-act="vcode">Qiskit のコード<kbd id="qcVcode">✓</kbd></button><button data-act="vtut">チュートリアル<kbd id="qcVtut">✓</kbd></button></div></div>
+        <div class="qc-menu"><button>Help</button><div class="qc-drop"><button data-act="vtut">チュートリアルを表示</button><button data-act="help">操作のしかた</button></div></div>
+        <span class="sp"></span>
         <label>shots <select id="qcShots"><option>100</option><option selected>1024</option><option>4096</option></select></label>
-        <button id="qcDemo">見本を作る</button><button id="qcClear">クリア</button><button class="run" id="qcRun">▶ 実行</button></div>
+        <button class="run" id="qcRun">▶ 実行</button></div>
       <div class="qc-main">
         <div class="qc-pal" id="qcPal"></div>
         <div class="qc-center">
@@ -3470,13 +3499,17 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
     ran = true; drawTut();
   };
   // ---- 置く・消す ----
+  const hist = [], redo = [];
+  const snap = () => { hist.push(JSON.stringify(grid)); if (hist.length > 100) hist.shift(); redo.length = 0; };
+  const restore = s => { JSON.parse(s).forEach((v, i) => grid[i] = v); update(); };
   const place = (g, c, q) => {
+    snap();
     if (g === 'CX') grid[c] = { two: { g, c: q, t: 1 - q } };
     else if (g === 'SW') grid[c] = { two: { g } };
     else { if (grid[c].two) grid[c] = {}; grid[c]['q' + q] = { g }; }
     update();
   };
-  const removeAt = (c, q) => { if (grid[c].two) grid[c] = {}; else delete grid[c]['q' + q]; update(); };
+  const removeAt = (c, q, rec = true) => { if (rec) snap(); if (grid[c].two) grid[c] = {}; else delete grid[c]['q' + q]; update(); };
   // ---- ドラッグ（パレットから・置いたゲートから） ----
   let drag = null;
   const cellAt = (x, y) => { const e = document.elementFromPoint(x, y); return e && e.closest ? e.closest('#qcCirc .qcell') : null; };
@@ -3489,7 +3522,7 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
   };
   addEventListener('pointermove', e => {
     if (!drag || e.pointerId !== drag.id) return;
-    if (!drag.moved && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) > 6) { drag.moved = true; document.body.appendChild(drag.gh); if (drag.from) removeAt(...drag.from); }
+    if (!drag.moved && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) > 6) { drag.moved = true; document.body.appendChild(drag.gh); if (drag.from) { snap(); removeAt(...drag.from, false); drag.snapped = true; } }
     if (!drag.moved) return;
     drag.gh.style.left = e.clientX + 'px'; drag.gh.style.top = e.clientY + 'px';
     const c = cellAt(e.clientX, e.clientY);
@@ -3498,7 +3531,7 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
   addEventListener('pointerup', e => {
     if (!drag || e.pointerId !== drag.id) return;
     const d = drag; drag = null; d.gh.remove(); if (d.over) d.over.classList.remove('over');
-    if (d.moved) { const c = cellAt(e.clientX, e.clientY); if (c) place(d.g, +c.dataset.c, +c.dataset.q); return; }
+    if (d.moved) { const c = cellAt(e.clientX, e.clientY); if (c) { place(d.g, +c.dataset.c, +c.dataset.q); if (d.snapped) hist.pop(); } return; }
     // ほとんど動かさなかった：パレットなら選択、置いたゲートなら削除
     if (!d.from) { sel = sel === d.g ? null : d.g; $('#qcPal').querySelectorAll('.qg').forEach(t => t.classList.toggle('sel', t.dataset.g === sel)); }
     else removeAt(...d.from);
@@ -3510,13 +3543,48 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
     if (cell && sel) { e.preventDefault(); e.stopPropagation(); place(sel, +cell.dataset.c, +cell.dataset.q); }
   });
   $('#qcRun').onclick = e => { e.currentTarget.blur(); run(); };
-  $('#qcClear').onclick = e => { e.currentTarget.blur(); tb.clear(); grid.forEach((_, i) => grid[i] = {}); update(); };
   $('#qcShots').onchange = () => { if (ran) run(); };
-  $('#qcDemo').onclick = e => {
-    e.currentTarget.blur(); tb.clear(); grid.forEach((_, i) => grid[i] = {}); update();
-    [['H', 0, 0], ['CX', 1, 0], ['M', 2, 0], ['M', 3, 1]].forEach(([g, c, q], k) => tb.later(() => place(g, c, q), 500 + k * 700));
-    tb.later(run, 500 + 4 * 700);
+  // ---- メニュー（File / Edit / View / Help） ----
+  const root = $('#qcTop').closest('.qcmp'), menus = [...root.querySelectorAll('.qc-menu')];
+  const closeMenus = () => menus.forEach(m => m.classList.remove('open'));
+  menus.forEach(m => m.firstElementChild.addEventListener('click', e => { e.stopPropagation(); const o = m.classList.contains('open'); closeMenus(); if (!o) m.classList.add('open'); refreshMenu(); }));
+  menus.forEach(m => m.addEventListener('mouseenter', () => { if (menus.some(x => x.classList.contains('open')) && !m.classList.contains('open')) { closeMenus(); m.classList.add('open'); refreshMenu(); } }));
+  document.addEventListener('pointerdown', e => { if (!e.target.closest('.qc-menu')) closeMenus(); });
+  const refreshMenu = () => {
+    $('#qcUndo').disabled = !hist.length; $('#qcRedo').disabled = !redo.length;
+    $('#qcVprob').textContent = root.classList.contains('no-prob') ? '' : '✓';
+    $('#qcVcode').textContent = root.classList.contains('no-code') ? '' : '✓';
+    $('#qcVtut').textContent = root.classList.contains('no-tut') ? '' : '✓';
   };
+  const clearAll = () => { tb.clear(); snap(); grid.forEach((_, i) => grid[i] = {}); update(); };
+  const ACT = {
+    new: () => { clearAll(); $('#qcTitle').textContent = 'Untitled circuit'; },
+    demo: () => {
+      clearAll(); $('#qcTitle').textContent = 'Bell state';
+      [['H', 0, 0], ['CX', 1, 0], ['M', 2, 0], ['M', 3, 1]].forEach(([g, c, q], k) => tb.later(() => place(g, c, q), 500 + k * 700));
+      tb.later(run, 500 + 4 * 700);
+    },
+    copy: () => { const t = $('#qcCode').innerText.split('\n').slice(1).join('\n'); const txt = 'from qiskit import QuantumCircuit\n\n' + t; if (navigator.clipboard) navigator.clipboard.writeText(txt).catch(() => {}); },
+    undo: () => { if (hist.length) { redo.push(JSON.stringify(grid)); restore(hist.pop()); } },
+    redo: () => { if (redo.length) { hist.push(JSON.stringify(grid)); restore(redo.pop()); } },
+    clear: clearAll,
+    vprob: () => root.classList.toggle('no-prob'),
+    vcode: () => root.classList.toggle('no-code'),
+    vtut: () => root.classList.toggle('no-tut'),
+    help: () => alert('ゲートは上の一覧から回路にドラッグして置きます（クリックで選んでから置いても OK）。\n置いたゲートは回路の外へドラッグするか、クリックすると消えます。\n「▶ 実行」で shots の回数だけ実行し、結果をヒストグラムで表示します。'),
+  };
+  root.querySelectorAll('.qc-drop button').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); e.currentTarget.blur(); closeMenus(); (ACT[b.dataset.act] || (() => {}))(); }));
+  // Help の「チュートリアルを表示」は常に表示にする
+  root.querySelectorAll('.qc-menu:last-child [data-act="vtut"]').forEach(b => b.dataset.act = 'showtut');
+  ACT.showtut = () => root.classList.remove('no-tut');
+  // Ctrl+Z / Ctrl+Y（このスライドを表示しているときだけ）
+  addEventListener('keydown', e => {
+    if (!root.closest('.slide').classList.contains('active') || document.activeElement === $('#qcTitle')) return;
+    const k = e.key.toLowerCase();
+    if ((e.ctrlKey || e.metaKey) && (k === 'z' || k === 'y')) { e.preventDefault(); e.stopImmediatePropagation(); (k === 'z' && !e.shiftKey ? ACT.undo : ACT.redo)(); }
+  }, true);
+  // 回路名の編集中は Enter で確定し、ページ送りのキーを止める
+  $('#qcTitle').addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') { e.preventDefault(); e.currentTarget.blur(); } });
   update();
 }
 
