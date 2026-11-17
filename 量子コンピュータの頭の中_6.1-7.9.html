@@ -2001,9 +2001,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
         <li class="pop" style="--d:.37s"><span class="num" style="background:var(--accent)">4</span>実行結果を検証する技術<em>コラム</em></li>
         <li class="agroup ag7 pop" style="--d:.39s">第7章 量子プログラミング入門編</li>
         <li class="pop" style="--d:.41s"><span class="num" style="background:var(--purple)">5</span>Qiskit と実行環境<em>7.1〜7.3</em></li>
-        <li class="pop" style="--d:.43s"><span class="num" style="background:var(--teal)">6</span>基本のプログラミング<em>7.5</em></li>
-        <li class="pop" style="--d:.45s"><span class="num" style="background:var(--red)">7</span>可視化・関数の対応・自分の PC で実行<em>7.6〜7.8</em></li>
-        <li class="pop" style="--d:.47s"><span class="num" style="background:var(--gold)">8</span>量子コンパイラ<em>7.9</em></li>
+        <li class="pop" style="--d:.47s"><span class="num" style="background:var(--gold)">6</span>量子コンパイラ<em>7.9</em></li>
         <li class="pop" style="--d:.49s"><span class="num" style="background:var(--ink)">✓</span>まとめ と 練習問題</li>
       </ul>
     </div>
@@ -2098,7 +2096,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <div class="body col" style="gap:14px;justify-content:flex-start">
     <div class="card pop" style="padding:8px 20px">
       <div class="mp-lbl" style="font-size:19px">0 番目の量子ビットにだけ H を適用する回路（図 6.1）</div>
-      <div class="ieq" style="gap:30px"><div style="width:360px"><div id="ntCircI"></div><div class="ctr" style="font-size:19px;font-weight:800;color:var(--muted)">I を描いた回路（H ⊗ I）</div></div><span class="ieq-eq" style="font-size:72px">=</span><div style="width:360px"><div id="ntCirc0"></div><div class="ctr" style="font-size:19px;font-weight:800;color:var(--muted)">I を省略した回路（H<sub>0</sub>）</div></div></div>
+      <div class="ieq" style="gap:30px"><div style="width:360px"><div id="ntCirc0"></div><div class="ctr" style="font-size:19px;font-weight:800;color:var(--muted)">I を省略した回路（H<sub>0</sub>）</div></div><span class="ieq-eq" style="font-size:72px">=</span><div style="width:360px"><div id="ntCircI"></div><div class="ctr" style="font-size:19px;font-weight:800;color:var(--muted)">I を描いた回路（H ⊗ I）</div></div></div>
     </div>
     <div class="point green pop" style="--d:.05s;margin-top:0;font-size:21px;border-left-color:var(--green);background:#e3f6ea">⚠️ 回路に H だけが描いてあっても、H は <b>2 × 2</b> の行列なので、そのままでは 2 量子ビット（4 成分のベクトル）にかけられない → <b style="color:#0a6b3a">1 番目の量子ビットには I ゲートがある</b> と考えて、<span class="math"><b>H ⊗ I</b></span>（<b>4 × 4</b> の行列）として計算する</div>
     <div class="g2" style="gap:18px">
@@ -2140,14 +2138,14 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
       <div class="cmpc pop" style="--c:var(--blue)">
         <div class="ch" style="font-size:22px">本書（第6章）</div>
         <div class="bo-arrow" style="color:var(--blue);font-size:22px">⟶　左から右へ 0 番目、1 番目</div>
-        <div class="bo-ket" style="font-size:84px"><span>|</span><span class="bo-d"><span class="dg" style="background:#fff1c2">0</span><span class="ix" style="background:var(--blue)">0 番目</span></span><span class="bo-d"><span class="dg" style="background:transparent">1</span><span class="ix" style="background:var(--blue)">1 番目</span></span><span>⟩</span></div>
+        <div class="bo-ket" style="font-size:84px"><span>|</span><span class="bo-d"><span class="dg" style="background:transparent">0</span><span class="ix" style="background:var(--blue)">0 番目</span></span><span class="bo-d"><span class="dg" style="background:transparent">1</span><span class="ix" style="background:var(--blue)">1 番目</span></span><span>⟩</span></div>
         <div class="bo-read"><div>0 番目の量子ビット<br><b>|0⟩</b></div><div>1 番目の量子ビット<br><b>|1⟩</b></div></div>
         <div class="ctr mt10" style="font-size:18px">量子アルゴリズムの説明で多い書き方</div>
       </div>
       <div class="cmpc pop" style="--c:var(--pink)">
         <div class="ch" style="font-size:22px">Qiskit など（第7章）</div>
         <div class="bo-arrow" style="color:var(--pink);font-size:22px">⟵　右から左へ 0 番目、1 番目</div>
-        <div class="bo-ket" style="font-size:84px"><span>|</span><span class="bo-d"><span class="dg" style="background:transparent">0</span><span class="ix" style="background:var(--pink)">1 番目</span></span><span class="bo-d"><span class="dg" style="background:#fff1c2">1</span><span class="ix" style="background:var(--pink)">0 番目</span></span><span>⟩</span></div>
+        <div class="bo-ket" style="font-size:84px"><span>|</span><span class="bo-d"><span class="dg" style="background:transparent">0</span><span class="ix" style="background:var(--pink)">1 番目</span></span><span class="bo-d"><span class="dg" style="background:transparent">1</span><span class="ix" style="background:var(--pink)">0 番目</span></span><span>⟩</span></div>
         <div class="bo-read"><div>0 番目の量子ビット<br><b>|1⟩</b></div><div>1 番目の量子ビット<br><b>|0⟩</b></div></div>
         <div class="ctr mt10" style="font-size:18px">量子プログラミング・ライブラリで多い書き方</div>
       </div>
@@ -2201,7 +2199,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
     <div class="col">
       <div class="defbox pop" style="font-size:18px;margin-top:10px">次のユニタリ行列を <b class="k">CNOT ゲート</b>（シー・ノット）という
         <div class="eq" style="font-size:26px;margin-top:4px"><span class="math">CNOT :=</span><span class="vec m4"><span>1</span><span>0</span><span>0</span><span>0</span><span>0</span><span>1</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>1</span><span>0</span><span>0</span><span>1</span><span>0</span></span></div></div>
-      <div class="point blue pop" style="--d:.1s;font-size:19px;margin-top:4px"><b>制御ビットは変化させない</b>。<br>制御ビットが <span class="math"><b>|1⟩</b></span> のときだけ、<b class="kb">標的ビットを反転</b> する（|0⟩ のときは何もしない）</div>
+      <div class="point blue pop" style="--d:.1s;font-size:19px;margin-top:4px"><b>制御ビットは変化させない</b>。<br>制御ビットが <span class="math"><b>|1⟩</b></span> のときだけ、<b class="kb">標的ビットを反転</b> する</div>
     </div>
     <div class="card pop" style="--d:.2s;padding:10px 14px">
       <div class="mp-lbl">CNOT ゲートの量子回路（左の丸をクリックすると 0 / 1 が切り替わる）</div>
@@ -2331,7 +2329,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
     <div class="col">
       <div class="defbox pop" style="font-size:17px;margin-top:10px">「量子状態を作成し、測定する」を何度も繰り返し、測定結果から量子状態 <span class="math">a|0⟩ + b|1⟩</span> のパラメータ（a と b）を推定する技術を <b class="k">量子状態トモグラフィ</b> という</div>
-      <div class="point blue pop" style="--d:.05s;margin-top:0;font-size:17px">推定した状態を <b>理論上の状態</b> と比べると、実機の <b class="kb">ノイズの影響を定量的に評価</b> できる（どれくらいずれているかを数値で表す）→ チューニングの手がかりになる</div>
+      <div class="point blue pop" style="--d:.05s;margin-top:0;font-size:17px">推定した状態を <b>理論上の状態</b> と比べると、実機の <b class="kb">ノイズの影響を定量的に評価</b> できる（どれくらいずれているかを数値で表す）→ <b>実機のチューニング</b> の手がかりになる</div>
       <div class="card pop" style="--d:.1s;padding:8px 14px">
         <div class="mp-lbl" style="text-align:left">必要な測定回数：推定精度 ε にするには約 <span class="math"><b>1/ε²</b></span> 回</div>
         <div class="g2" style="gap:8px;font-size:16px"><div class="stbox" style="padding:4px 10px">小数第 1 位：ε = 0.1<br><b class="math">1/ε² = 10² = 100 回</b></div><div class="stbox" style="padding:4px 10px">小数第 2 位：ε = 0.01<br><b class="math">1/ε² = 100² = 10000 回</b></div></div>
@@ -2373,7 +2371,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
     <div class="pd-src pop">『量子コンピュータの頭の中』</div>
     <div class="pd-no pop" style="--d:.05s">第 7 章</div>
     <h1 class="pd-title pop" style="--d:.15s">量子プログラミング入門編</h1>
-    <div class="pd-secs pop" style="--d:.3s"><span>SECTION 5　Qiskit と実行環境（7.1〜7.3）</span><span>SECTION 6　基本のプログラミング（7.5）</span><span>SECTION 7　可視化・関数の対応・自分の PC で実行（7.6〜7.8）</span><span>SECTION 8　量子コンパイラ（7.9）</span></div>
+    <div class="pd-secs pop" style="--d:.3s"><span>SECTION 5　Qiskit と実行環境（7.1〜7.3）</span><span>SECTION 6　量子コンパイラ（7.9）</span></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -2394,21 +2392,19 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 
 <!-- 7.1-7.3.1 -->
 <section class="slide" data-id="qk">
-  <div class="chap">第7章 ／ 7.1 この章で学ぶこと ・ 7.2 量子プログラミング言語・ライブラリ ・ 7.3.1 Qiskit の概要</div>
-  <h2>量子プログラミングと Qiskit<small>7.1〜7.3.1（pp.158–160）</small></h2>
+  <div class="chap">第7章 ／ 7.2 量子プログラミング言語・ライブラリ ・ 7.3.1 Qiskit の概要</div>
+  <h2>Qiskit（キスキット）とは<small>7.2・7.3.1（pp.158–160）</small></h2>
   <div class="body col" style="gap:14px">
-    <div class="g2 pop" style="gap:14px">
-      <div class="point" style="margin-top:0;font-size:17.5px"><b>量子プログラミング</b>：量子コンピュータ向けのプログラミング。シミュレータで動作を確認し、漠然としたイメージではなく <b class="k">体験を伴った理解</b> を深める</div>
-      <div class="point blue" style="margin-top:0;font-size:17.5px">量子コンピュータのハードウェアを開発する企業は、プログラミング言語・ライブラリも開発していることが多い。本書では IBM の <b class="kb">Qiskit（キスキット）</b></div>
-    </div>
+    <div class="point blue pop" style="margin-top:0;font-size:21px"><b class="kb" style="font-size:24px">Qiskit</b> は、IBM が開発している <b>量子プログラミング用のライブラリ</b>（本書で使用）。量子コンピュータのハードウェアを開発する企業は、プログラミング言語・ライブラリも開発していることが多い</div>
+    <div class="mp-lbl pop" style="--d:.05s;text-align:left;font-size:18px;margin-bottom:-6px">Qiskit の特徴</div>
     <div class="ic3">
       <div class="icard pop" style="--d:.1s"><div class="ih"><span class="ii">🐍</span>(1) Python で書ける</div><p>Python のライブラリとして動作。利用者が多い言語なので <b>導入しやすい</b></p></div>
       <div class="icard pop" style="--d:.15s"><div class="ih"><span class="ii">🖥️</span>(2) 実機でもシミュレータでも</div><p>シミュレータとして動作することも、量子コンピュータの <b>実機</b>（IBM Quantum）にアクセスして実行することもできる</p></div>
       <div class="icard pop" style="--d:.2s"><div class="ih"><span class="ii">🧰</span>(3) 機能が充実</div><p>提供している機能が充実しているため、<b>初心者を卒業しても</b> 利用しやすい</p></div>
     </div>
     <div class="g2 pop" style="--d:.25s;gap:14px">
-      <div class="icard" style="--c:var(--green)"><span class="tag2" style="background:var(--green)">無料</span><div class="ih">🔓 オープンソース・ソフトウェア</div><p>IBM が開発しているが OSS として公開されており、無料で利用できる</p></div>
-      <div class="icard" style="--c:var(--red)"><span class="tag2" style="background:var(--red)">注意</span><div class="ih">🔄 バージョンアップに注意</div><p>バージョンアップによって <b>インタフェースが変わる</b> ことがある（本書は 2023 年 5 月時点のバージョンで動作確認）</p></div>
+      <div class="icard" style="--c:var(--green)"><span class="tag2" style="background:var(--green)">無料</span><div class="ih">🔓 オープンソース・ソフトウェア</div><p>Qiskit は IBM が開発しているが OSS として公開されており、無料で利用できる</p></div>
+      <div class="icard" style="--c:var(--red)"><span class="tag2" style="background:var(--red)">注意</span><div class="ih">🔄 バージョンアップに注意</div><p>Qiskit はバージョンアップによって <b>インタフェースが変わる</b> ことがある（本書は 2023 年 5 月時点のバージョンで動作確認）</p></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -2469,320 +2465,13 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <div class="pageno"></div>
 </section>
 
-<!-- SECTION 6 -->
-<section class="slide door" style="--c:var(--teal)">
+<!-- SECTION 8 -->
+<section class="slide door" style="--c:var(--gold)">
   <div class="door-bg">6</div>
   <div class="door-wrap">
     <div class="door-num">6</div>
     <div>
-      <div class="door-label pop"><span class="door-book">第7章 量子プログラミング入門編</span>SECTION 6</div>
-      <h1 class="pop" style="--d:.1s">基本のプログラミング</h1>
-      <p class="door-lead pop" style="--d:.2s">H と CNOT の回路を Qiskit で動かす（7.5）</p>
-      <div class="door-topics pop" style="--d:.3s"><span>QuantumCircuit</span><span>h・cx・measure</span><span>shots</span></div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 7.5.1 起動 -->
-<section class="slide" data-id="la">
-  <div class="chap">第7章 ／ 7.5.1 IBM Quantum Lab の起動</div>
-  <h2>IBM Quantum Lab を起動して準備する<small>7.5.1・図 7.9〜7.12（pp.165–168）</small></h2>
-  <div class="body col" style="gap:12px">
-    <div class="launch pop" id="laSteps">
-      <div class="ls"><div class="lb">STEP 1</div><div class="lt">ログイン</div><div class="mock"><div class="mb" style="left:30%;top:28px;width:40%;height:22px">Sign in</div></div><div class="tiny mt6">ダッシュボード画面（図 7.5）</div></div>
-      <div class="ls"><div class="lb">STEP 2</div><div class="lt">「Launch Lab」</div><div class="mock"><div class="mb" style="left:52%;top:40px;width:36%;height:18px">Launch Lab</div><span class="click" style="left:80%;top:44px">👆</span></div><div class="tiny mt6">図 7.9</div></div>
-      <div class="ls"><div class="lb">STEP 3</div><div class="lt">「Launch Server」</div><div class="mock"><div class="mb" style="left:30%;top:36px;width:40%;height:18px">Launch Server</div><span class="click" style="left:62%;top:40px">👆</span></div><div class="tiny mt6">サーバが未起動なら（図 7.10）</div></div>
-      <div class="ls"><div class="lb">STEP 4</div><div class="lt">ノートブックを作成</div><div class="mock"><div class="mb" style="left:12%;top:26px;width:22%;height:28px;background:#dfe8ff">🌐</div><div class="mb" style="left:40%;top:26px;width:22%;height:28px;background:#fff">Py</div><span class="click" style="left:26%;top:44px">👆</span></div><div class="tiny mt6">Qiskit のアイコン（図 7.11）</div></div>
-    </div>
-    <div class="g2" style="grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:16px">
-      <div class="code c-sm pop" style="--d:.1s" id="laCode"><span class="cap">リスト 7.1：あらかじめ入力されたコード</span></div>
-      <div class="col" style="gap:8px">
-        <div class="point pop" style="--d:.15s;margin-top:0;font-size:16.5px">まずリスト 7.1 のセルを実行 → Qiskit の量子プログラミングに必要な <b class="k">ライブラリがインポート</b> される</div>
-        <div class="code c-sm pop" style="--d:.2s" id="laCode2"><span class="cap">リスト 7.2：バージョン確認</span></div>
-        <div class="tiny pop" style="--d:.25s">本書は qiskit 0.43.0（qiskit-terra 0.24.0）で動作確認（図 7.12）</div>
-      </div>
-    </div>
-    <div class="btns pop" style="--d:.3s;justify-content:center;margin-top:0"><button class="b" id="laAuto" data-autoplay>▶ 自動再生</button></div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 7.5.2 理論の確認 -->
-<section class="slide" data-id="tc">
-  <div class="chap">第7章 ／ 7.5.2 基本的なプログラミング方法</div>
-  <h2>実行する前に：結果を理論的に予想する<small>7.5.2（p.169）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
-    <div class="col">
-      <div class="card pop" style="padding:8px 14px"><div class="mp-lbl">図 7.6 の量子回路（＝ 図 6.8 と同じ）</div><div id="tcCirc"></div></div>
-      <div class="point blue pop" style="--d:.1s;margin-top:0;font-size:17px">⚠️ 量子プログラミングでは <b class="kb">バイト・オーダが第6章と逆</b>（右から左に 0, 1）。<span class="math">|01⟩</span> なら <b>0 番目が |1⟩</b>、1 番目が |0⟩</div>
-    </div>
-    <div class="col">
-      <div class="bo-tabs pop" id="tcTabs"><button data-m="0">第6章の書き方（左が 0 番目）</button><button data-m="1">Qiskit の書き方（右が 0 番目）</button></div>
-      <div class="card pop" style="--d:.1s;padding:14px 18px">
-        <div class="arw" id="tcArw" style="font-size:22px"></div>
-      </div>
-      <div class="point pop" style="--d:.2s;margin-top:0;font-size:17px">最後の状態を測定すると <span class="math">|00⟩</span> と <span class="math">|11⟩</span> が <b class="k">それぞれ確率 <span class="math">|1/√2|² = 1/2</span></b> で得られるはず。これを頭の片隅に置いて実装に入る</div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- リスト 7.3 -->
-<section class="slide" data-id="cb">
-  <div class="chap">第7章 ／ 7.5.2 基本的なプログラミング方法</div>
-  <h2>リスト 7.3：量子回路を組み立てる<small>pp.169–171</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
-    <div class="col">
-      <div class="code pop" id="cbCode"><span class="cap">リスト 7.3：量子回路の作成</span></div>
-      <div class="btns pop" style="--d:.1s;justify-content:center;margin-top:0"><button class="b" id="cbPrev">◀ 前の行</button><button class="b" id="cbNext">次の行 ▶</button><button class="b" id="cbAuto" data-autoplay>▶ 自動再生</button></div>
-    </div>
-    <div class="col">
-      <div class="card pop" style="--d:.1s;padding:8px 14px"><div class="mp-lbl">組み立て中の量子回路</div><div id="cbCirc"></div></div>
-      <div class="tg-desc pop" style="--d:.15s;font-size:17px" id="cbDesc"></div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- リスト 7.4・7.5 -->
-<section class="slide" data-id="rn">
-  <div class="chap">第7章 ／ 7.5.2 基本的なプログラミング方法</div>
-  <h2>リスト 7.4：実行と結果の取得<small>pp.171–172</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)">
-    <div class="col">
-      <div class="code pop" id="rnCode"><span class="cap">リスト 7.4：実行と結果取得</span></div>
-      <div class="numlist pop" style="--d:.1s;--c:var(--teal)">
-        <div><b class="n">4</b><span><b>バックエンド</b>（計算する所）を指定。<span class="mono">"qasm_simulator"</span> は量子コンピュータを模したシミュレータ（実機ではない）</span></div>
-        <div><b class="n">5</b><span><span class="mono">execute</span> で量子回路を <b>ジョブ</b>（実行単位）にまとめて実行。既定では <b class="k">1024 回</b> 実行（引数 <span class="mono">shots</span> で変更可）</span></div>
-        <div><b class="n">7</b><span>測定値ごとの <b>回数</b> をテキストで表示</span></div>
-      </div>
-    </div>
-    <div class="card pop" style="--d:.2s;padding:12px 16px">
-      <div class="pk jp" id="rnShots" data-label="shots" style="justify-content:center"></div>
-      <div class="hist mt10" id="rnHist" style="height:170px"></div>
-      <div class="hlabs"><span>00</span><span>01</span><span>10</span><span>11</span></div>
-      <div class="mp-lbl mt10" style="text-align:left">リスト 7.5：実行結果（print の出力）</div>
-      <div class="out" id="rnOut"></div>
-      <div class="btns" style="justify-content:center;margin-top:8px"><button class="b" id="rnGo">▶ もう一度実行</button><button class="b" id="rnAuto" data-autoplay>▶ 自動再生</button></div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 測定値は確率的 -->
-<section class="slide" data-id="pr">
-  <div class="chap">第7章 ／ 7.5.2 基本的なプログラミング方法</div>
-  <h2>測定値は確率的：「おおよそ半々」になる<small>p.172</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)">
-    <div class="col">
-      <div class="lead pop">リスト 7.5 は <span class="mono">{'00': 540, '11': 484}</span>。<b>実行するたびに</b> 回数が変化するので、あくまでも「<b class="k">おおよそ半々</b>」</div>
-      <div class="point pop" style="--d:.1s;font-size:17px">古典コンピュータとは異なるが、量子コンピュータとしては正しい動作。シミュレータで実行していても、量子コンピュータの <b>確率的な振る舞い</b> を再現している</div>
-      <div class="point blue pop" style="--d:.15s;font-size:17px;margin-top:0">「おおよそ半々」から <b class="kb">あまりにも外れた場合は、プログラムの誤りを疑おう</b></div>
-    </div>
-    <div class="card pop" style="--d:.2s;padding:12px 16px">
-      <div class="pk jp" id="prBug" data-label="プログラム" style="justify-content:center"></div>
-      <div class="mp-lbl mt10">1024 回の実行を 1 回として、何回も実行した「'00' の回数」</div>
-      <svg id="prSvg" viewBox="0 0 520 210" style="width:100%"></svg>
-      <div class="out ctr" id="prOut" style="font-size:15px"></div>
-      <div class="btns" style="justify-content:center;margin-top:8px"><button class="b" id="prGo">▶ 1 回実行</button><button class="b" id="prClr">消す</button><button class="b" id="prAuto" data-autoplay>▶ 自動再生</button></div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 7.5.3 特定の量子レジスタのみ測定 -->
-<section class="slide" data-id="ms">
-  <div class="chap">第7章 ／ 7.5.3 特定の量子レジスタのみを測定する方法</div>
-  <h2>measure 関数：測定する量子ビットを選ぶ<small>7.5.3・リスト 7.6（pp.172–173）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
-    <div class="col">
-      <div class="code pop" id="msCode"><span class="cap">リスト 7.6：量子回路の作成</span></div>
-      <div class="point pop" style="--d:.1s;margin-top:0;font-size:16.5px"><span class="mono">QuantumCircuit(2, 2)</span>：1 つ目の引数 ＝ <b>量子レジスタのサイズ</b>、2 つ目 ＝ <b class="k">古典レジスタのサイズ</b>（測定値を格納する場所を用意する）</div>
-    </div>
-    <div class="col">
-      <div class="pk jp pop" id="msPk" data-label="測定の書き方" style="justify-content:center"></div>
-      <div class="card pop" style="--d:.1s;padding:8px 14px"><div id="msCirc"></div></div>
-      <div class="tg-desc pop" style="--d:.15s;font-size:16.5px;min-height:96px" id="msDesc"></div>
-      <div class="btns pop" style="--d:.2s;justify-content:center;margin-top:0"><button class="b" id="msAuto" data-autoplay>▶ 自動再生</button></div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 7.5.4 レジスタを直接利用 -->
-<section class="slide" data-id="rg">
-  <div class="chap">第7章 ／ 7.5.4 レジスタを直接利用した実装</div>
-  <h2>レジスタを直接利用した実装<small>7.5.4・リスト 7.7（pp.174–175）</small></h2>
-  <div class="body col" style="gap:10px">
-    <div class="lead pop" style="font-size:17.5px !important">第9章の <b>量子テレポーテーション</b> では、古典レジスタの値によって量子ゲートを適用するか決める（古典プログラミングの if 文に似た処理）→ <b class="k">レジスタを直接利用した実装</b> が必要</div>
-    <div class="g2" style="gap:14px">
-      <div class="code c-sm pop" style="--d:.1s" id="rgA"><span class="cap">リスト 7.6（添え字で指定）</span></div>
-      <div class="code c-sm pop" style="--d:.15s" id="rgB"><span class="cap">リスト 7.7（レジスタを直接利用）</span></div>
-    </div>
-    <div class="g2" style="grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:14px;align-items:center">
-      <div class="tg-desc pop" style="--d:.2s;font-size:16.5px;min-height:70px" id="rgDesc"></div>
-      <div class="btns pop" style="--d:.25s;justify-content:center;margin-top:0"><button class="b" id="rgAuto" data-autoplay>▶ 自動再生</button></div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- SECTION 7 -->
-<section class="slide door" style="--c:var(--red)">
-  <div class="door-bg">7</div>
-  <div class="door-wrap">
-    <div class="door-num">7</div>
-    <div>
-      <div class="door-label pop"><span class="door-book">第7章 量子プログラミング入門編</span>SECTION 7</div>
-      <h1 class="pop" style="--d:.1s;font-size:64px">可視化・関数の対応・<br>自分の PC で実行</h1>
-      <p class="door-lead pop" style="--d:.2s">結果と回路を「見える化」する（7.6〜7.8）</p>
-      <div class="door-topics pop" style="--d:.3s"><span>plot_distribution</span><span>plot_histogram</span><span>draw</span><span>barrier</span><span>pip install</span></div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 7.6.1 実行結果の可視化 -->
-<section class="slide" data-id="pl">
-  <div class="chap">第7章 ／ 7.6.1 実行結果の可視化</div>
-  <h2>実行結果をグラフで表示する<small>7.6.1・リスト 7.8・7.9（pp.175–177）</small></h2>
-  <div class="body col" style="gap:10px">
-    <div class="lead pop">リスト 7.5 の出力（テキスト）だけでは視覚的に捉えづらい → Qiskit には <b>測定値の分布を表示する機能</b> がある（JupyterLab のような可視化できる環境が必要）</div>
-    <div class="g2" style="gap:16px">
-      <div class="card pop" style="--d:.1s;padding:10px 14px">
-        <div class="code c-sm"><div class="cl"><i>1</i><span><span class="fn">plot_distribution</span>(job.result().get_counts(circuit))</span></div></div>
-        <div class="mp-lbl mt10">図 7.13：確率分布を表示</div>
-        <div class="hist h-sm" id="plH1"></div><div class="hlabs"><span>00</span><span>11</span></div>
-      </div>
-      <div class="card pop" style="--d:.15s;padding:10px 14px">
-        <div class="code c-sm"><div class="cl"><i>1</i><span><span class="fn">plot_histogram</span>(job.result().get_counts(circuit))</span></div></div>
-        <div class="mp-lbl mt10">図 7.14：ヒストグラムを表示</div>
-        <div class="hist h-sm" id="plH2"></div><div class="hlabs"><span>00</span><span>11</span></div>
-      </div>
-    </div>
-    <div class="row pop" style="--d:.2s;justify-content:center;gap:14px"><span class="tiny">教科書：図 7.13 は 00 が 0.527・11 が 0.473、図 7.14 は 0.495・0.505（実行ごとに変わる）</span><button class="b" id="plGo">▶ もう一度実行</button><button class="b" id="plAuto" data-autoplay>▶ 自動再生</button></div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 7.6.2 量子回路の可視化 -->
-<section class="slide" data-id="dr">
-  <div class="chap">第7章 ／ 7.6.2 量子回路の可視化</div>
-  <h2>draw 関数：量子回路を描画する<small>7.6.2・リスト 7.10・図 7.15・7.16（pp.177–178）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)">
-    <div class="col">
-      <div class="code pop" id="drCode"><span class="cap">リスト 7.10：量子回路を描画</span></div>
-      <div class="pk jp pop" id="drPk" data-label="output =" style="--d:.1s"></div>
-      <div class="point pop" style="--d:.15s;margin-top:0;font-size:16.5px">量子回路全体が図として表示されるので <b class="k">デバッグなどに役立つ</b>。本書の量子回路の図も、この機能で表示したものがベース</div>
-    </div>
-    <div class="col">
-      <div class="drw pop" style="--d:.15s" id="drOut"></div>
-      <div class="tg-desc pop" style="--d:.2s;font-size:16.5px;min-height:60px" id="drDesc"></div>
-      <div class="btns pop" style="--d:.25s;justify-content:center;margin-top:0"><button class="b" id="drAuto" data-autoplay>▶ 自動再生</button></div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 7.6.3 barrier -->
-<section class="slide" data-id="br">
-  <div class="chap">第7章 ／ 7.6.3 量子回路の可視化をサポートする機能</div>
-  <h2>barrier：実装した順番通りに描画<small>7.6.3・図 7.17〜7.20（pp.178–181）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)">
-    <div class="col">
-      <div class="code c-sm pop" id="brCode"><span class="cap" id="brCap">リスト 7.11</span></div>
-      <div class="opt pop" style="--d:.1s" id="brOpt">
-        <label><input type="checkbox" data-o="bar"> circuit.barrier() を入れる</label>
-        <label><input type="checkbox" data-o="pb"> draw(…, plot_barriers=False)</label>
-        <label><input type="checkbox" data-o="init"> draw(…, initial_state=True)</label>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card pop" style="--d:.1s;padding:8px 14px"><div class="mp-lbl" id="brFig"></div><div id="brCirc"></div></div>
-      <div class="tg-desc pop" style="--d:.15s;font-size:16.5px;min-height:118px" id="brDesc"></div>
-      <div class="btns pop" style="--d:.2s;justify-content:center;margin-top:0"><button class="b" id="brAuto" data-autoplay>▶ 自動再生</button></div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 7.7 ゲートと関数の対応 -->
-<section class="slide" data-id="gf">
-  <div class="chap">第7章 ／ 7.7 ゲートと関数の対応</div>
-  <h2>量子ゲートと Qiskit の関数の対応<small>7.7・表 7.1（pp.181–182）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)">
-    <div class="col">
-      <table class="gf pop" id="gfT"><thead><tr><th>ゲート名</th><th>Qiskit の関数名</th><th>量子ビット数</th></tr></thead><tbody></tbody></table>
-      <div class="tiny pop" style="--d:.1s">基本的にはゲート名を <b>小文字</b> にすれば関数名になる（例外もある）</div>
-    </div>
-    <div class="col">
-      <div class="card pop" style="--d:.1s;padding:10px 14px">
-        <div class="code" id="gfCode" style="min-height:58px"></div>
-        <div id="gfCirc" class="mt10"></div>
-      </div>
-      <div class="tg-desc pop" style="--d:.15s;font-size:16.5px;min-height:100px" id="gfDesc"></div>
-      <div class="btns pop" style="--d:.2s;justify-content:center;margin-top:0"><button class="b" id="gfAuto" data-autoplay>▶ 自動再生</button></div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 7.8 自分の PC -->
-<section class="slide" data-id="pc">
-  <div class="chap">第7章 ／ 7.8 自分の PC で実行する方法</div>
-  <h2>自分の PC で実行する：インストール時の注意<small>7.8（pp.182–183）</small></h2>
-  <div class="body col" style="gap:14px">
-    <div class="lead pop">クラウドではなく自分の PC で実行するには Qiskit をインストールする（詳細は Qiskit のドキュメント）。<b>可視化の機能が必要かどうか</b> で指定するパッケージが変わる</div>
-    <div class="g2" style="gap:16px">
-      <div class="card pop" style="--d:.1s;padding:12px 16px;border-top:8px solid var(--green)">
-        <div class="mp-lbl" style="text-align:left;color:var(--green)">可視化の機能が <b>必要な場合</b>（おすすめ）</div>
-        <div class="term" id="pcT1"></div>
-        <div class="tiny mt6">plot_histogram や draw(output="mpl") などが使える</div>
-      </div>
-      <div class="card pop" style="--d:.15s;padding:12px 16px;border-top:8px solid #9a93bd">
-        <div class="mp-lbl" style="text-align:left;color:#6b6790">可視化の機能が <b>不要な場合</b></div>
-        <div class="term" id="pcT2"></div>
-        <div class="tiny mt6">最小限の構成</div>
-      </div>
-    </div>
-    <div class="point pop" style="--d:.2s;margin-top:0">可視化の機能があると便利なので、基本的には <b class="k"><span class="mono">qiskit[visualization]</span> をインストールした方がよい</b></div>
-    <div class="btns pop" style="--d:.25s;justify-content:center;margin-top:0"><button class="b" id="pcAuto" data-autoplay>▶ 自動再生</button></div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 補足：現在の Qiskit -->
-<section class="slide" data-id="nw">
-  <div class="chap">第7章 ／ 補足（教科書外）</div>
-  <h2>補足：現在の Qiskit での書き方<small>教科書出版後の変更</small></h2>
-  <div class="xtra">教科書外</div>
-  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
-    <div class="col">
-      <div class="lead pop">教科書でも「バージョンアップでインタフェースが変わることがある」と注意されている。2024 年の <b>Qiskit 1.0</b> 以降、次の点が変わった</div>
-      <div class="numlist pop" style="--d:.1s;--c:var(--teal)">
-        <div><b class="n">1</b><span><span class="mono">execute</span> 関数は <b>削除</b> → シミュレータの <span class="mono">run</span> を使う</span></div>
-        <div><b class="n">2</b><span>シミュレータは別パッケージ <span class="mono">qiskit-aer</span> の <span class="mono">AerSimulator</span></span></div>
-        <div><b class="n">3</b><span>IBM Quantum Lab は 2024 年に提供終了 → 自分の PC などで実行</span></div>
-      </div>
-      <div class="term pop" style="--d:.15s;font-size:15.5px"><span class="pr">$</span> pip install qiskit qiskit-aer matplotlib</div>
-      <div class="point blue pop" style="--d:.2s;margin-top:0;font-size:16px">回路を組み立てる部分（<span class="mono">QuantumCircuit</span>・<span class="mono">h</span>・<span class="mono">cx</span>・<span class="mono">measure</span>）は <b class="kb">教科書と同じ</b>。変わったのは「実行する」部分</div>
-    </div>
-    <div class="col">
-      <div class="code c-sm pop" style="--d:.1s" id="nwCode"><span class="cap">現在の書き方の例（リスト 7.3 + 7.4 相当）</span></div>
-      <div class="tiny pop" style="--d:.2s">出力の例：<span class="mono">{'00': 507, '11': 517}</span>（実行ごとに変わる）</div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- SECTION 8 -->
-<section class="slide door" style="--c:var(--gold)">
-  <div class="door-bg">8</div>
-  <div class="door-wrap">
-    <div class="door-num">8</div>
-    <div>
-      <div class="door-label pop"><span class="door-book">第7章 量子プログラミング入門編</span>SECTION 8 ／ 発展</div>
+      <div class="door-label pop"><span class="door-book">第7章 量子プログラミング入門編</span>SECTION 6 ／ 発展</div>
       <h1 class="pop" style="--d:.1s">量子コンパイラ</h1>
       <p class="door-lead pop" style="--d:.2s">人間が書いたプログラムを量子コンピュータ向けに変換する（7.9）</p>
       <div class="door-topics pop" style="--d:.3s"><span>トポロジー</span><span>SWAP で隣接させる</span><span>実行できるゲート</span><span>回路の最適化</span></div>
@@ -2797,7 +2486,6 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <h2>コンパイラと量子コンパイラ<small>7.9・7.9.1（pp.183–184）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
     <div class="col">
-      <div class="lead pop">CPU は足し算やメモリへのアクセスなど <b>単純な命令しか実行できない</b>（ソートのような命令はない。「x=1」のような文字列も直接渡せない）。CPU はバイナリで表現された命令を処理する</div>
       <div class="card pop" style="--d:.1s;padding:10px 14px">
         <svg id="cpSvg" viewBox="0 0 600 190" style="width:100%"></svg>
       </div>
@@ -2810,7 +2498,6 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
         <div><b class="n">2</b><span>ハードウェアで <b class="k">実行できるゲート</b> を考慮した量子回路に変換（7.9.3）</span></div>
         <div><b class="n">3</b><span><b class="k">短い量子回路</b> に変換（7.9.4）</span></div>
       </div>
-      <div class="icard pop" style="--d:.2s"><div class="ih">💡 ポイント</div><p>古典コンパイラが CPU アーキテクチャに依存したプログラムに変換するのと同じように、量子コンパイラも <b>ハードウェアに依存した量子回路</b> に変換してくれる。人間はトポロジーなどを気にせず実装できる</p></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -2822,14 +2509,13 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <h2>トポロジー：量子ビットの配置<small>7.9.2・図 7.21（pp.184–185）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr)">
     <div class="card pop" style="padding:6px 10px">
-      <div class="mp-lbl">図 7.21：ibm_washington（127 量子ビット）— 2 つクリックしてみよう</div>
+      <div class="mp-lbl">図 7.21：ibm_washington（127 量子ビット）のトポロジー</div>
       <svg class="topo" id="tpSvg" viewBox="0 0 700 420"></svg>
     </div>
     <div class="col">
-      <div class="defbox pop" style="font-size:16.5px;margin-top:12px">量子ビットの配置のことを <b class="k">トポロジー</b>（topology）と呼ぶ。線でつながった量子ビット同士だけ CNOT ゲートを実行できる</div>
-      <div class="tg-desc pop" style="--d:.1s;font-size:16.5px;min-height:150px" id="tpDesc"></div>
-      <div class="point blue pop" style="--d:.15s;margin-top:0;font-size:15.5px">ライブラリでは制御ビット・標的ビットを自由に指定できるが、<b>実際のハードウェアには制約</b> がある</div>
-      <div class="btns pop" style="--d:.2s;justify-content:center;margin-top:0"><button class="b" id="tpAuto" data-autoplay>▶ 自動再生</button></div>
+      <div class="defbox pop" style="font-size:18px;margin-top:12px">量子ビットの配置のことを <b class="k">トポロジー</b>（topology）と呼ぶ。線でつながった量子ビット同士だけ CNOT ゲートを実行できる</div>
+      <div class="point pop" style="--d:.1s;margin-top:0;font-size:17px">例：「0」と隣接しているのは「1」と「14」だけ → 「0」と CNOT を実行できるのは「1」と「14」だけ</div>
+      <div class="point blue pop" style="--d:.15s;margin-top:0;font-size:16.5px">※ ibm_washington は <b>2023 年 6 月 3 日に運用を終了</b> している（現在は別の実機が提供されている）</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -2841,20 +2527,21 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <h2>隣接していないなら SWAP で隣に連れてくる<small>図 7.22・7.23（pp.186–187）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
     <div class="col">
-      <div class="card pop" style="padding:8px 14px"><div class="mp-lbl">図 7.22：コンパイル前（q<sub>0</sub> と q<sub>2</sub> は隣接していない）</div><div id="scBefore"></div></div>
+      <div class="card pop" style="padding:8px 14px"><div class="mp-lbl">図 7.22：コンパイル前（量子ビット 0 と 2 は隣接していない）</div><div id="scBefore"></div></div>
       <div class="card pop" style="--d:.1s;padding:8px 14px"><div class="mp-lbl">図 7.23：トポロジーを考慮したコンパイル後</div><div id="scAfter"></div></div>
     </div>
     <div class="col">
+      <div class="point blue pop" style="margin-top:0;font-size:15.5px">q の添え字 ＝ <b class="kb">実機のトポロジー上の量子ビット番号</b>（q<sub>0</sub> は量子ビット「0」）。量子ビットそのものは動かせないので、SWAP で <b>中身の量子状態</b> を入れ替える</div>
       <div class="numlist pop" style="--d:.1s;--c:var(--gold)" id="scList">
-        <div><b class="n">1</b><span>SWAP で「1」と「2」を入れ替える</span></div>
-        <div><b class="n">2</b><span>「0」と（元々「2」だった）「1」の間で CNOT を実行</span></div>
-        <div><b class="n">3</b><span>SWAP で「1」と「2」を入れ替える（元の配置に戻る）</span></div>
+        <div><b class="n">1</b><span>SWAP で量子ビット「1」と「2」の <b>状態</b> を入れ替える</span></div>
+        <div><b class="n">2</b><span>「0」と「1」で CNOT（「1」の中身は元々「2」の状態）</span></div>
+        <div><b class="n">3</b><span>もう一度 SWAP して、状態を元の量子ビットに戻す</span></div>
       </div>
       <div class="card pop" style="--d:.15s;padding:8px 14px">
-        <div class="mp-lbl" id="scH">物理的な位置（線でつながった隣同士だけ CNOT 可）</div>
-        <svg class="sc-pos" id="scSvg" viewBox="0 0 440 150" style="width:100%"></svg>
+        <div class="mp-lbl" id="scH">実機の量子ビット（点線の枠）と中身の状態 ψ</div>
+        <svg class="sc-pos" id="scSvg" viewBox="0 0 440 136" style="width:100%;max-height:150px"></svg>
+        <div class="btns" style="justify-content:center;margin-top:2px"><button class="b" id="scAuto" data-autoplay>▶ 自動再生</button></div>
       </div>
-      <div class="btns pop" style="--d:.2s;justify-content:center;margin-top:0"><button class="b" id="scAuto" data-autoplay>▶ 自動再生</button></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -2867,14 +2554,18 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <div class="body cols" style="grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)">
     <div class="col">
       <div class="lead pop" style="line-height:2.1 !important">ibm_washington で直接実行できるゲートは <span class="gchip y">I</span> <span class="gchip y">X</span> <span class="gchip y">RZ</span> <span class="gchip y">√X</span> <span class="gchip y">CNOT</span> だけ。<b>H はない</b></div>
-      <div class="tiny pop" style="--d:.05s">RZ は Z を拡張したゲート、√X は 2 回実行すると X と同じになるゲート</div>
-      <div class="card pop" style="--d:.1s;padding:8px 14px"><div class="mp-lbl" id="hdFig">図 7.24：コンパイル前</div><div id="hdCirc"></div></div>
+      <div class="tiny pop" style="--d:.05s;font-size:16px">ブロッホ球では <b>RZ(θ) ＝ z 軸のまわりに θ 回転</b>、<b>√X ＝ x 軸のまわりに 90° 回転</b>（2 回で X ＝ 180° 回転）</div>
+      <div class="g2" style="gap:10px">
+        <div class="card pop" style="--d:.1s;padding:6px 10px"><div class="mp-lbl">図 7.24：コンパイル前</div><div id="hdCircB"></div></div>
+        <div class="card pop" style="--d:.12s;padding:6px 10px"><div class="mp-lbl">図 7.25：コンパイル後</div><div id="hdCirc"></div></div>
+      </div>
       <div class="point pop" style="--d:.15s;margin-top:0;font-size:17px"><span class="math" style="font-size:20px"><b>H = α · RZ(π/2) · √X · RZ(π/2)</b></span>（<span class="math">α = e<sup>iπ/4</sup></span>）<br><span class="math">|α| = 1</span> なので α 倍の違いは量子回路に影響しない → コンパイラが RZ と √X の組み合わせに変換</div>
     </div>
     <div class="card pop" style="--d:.2s;padding:10px 14px">
-      <div class="mp-lbl">行列で確かめる（RZ・√X の中身は補足）</div>
-      <div class="hd-steps cmx col" id="hdSteps" style="gap:8px"></div>
-      <div class="btns" style="justify-content:center;margin-top:8px"><button class="b" id="hdAuto" data-autoplay>▶ 自動再生</button></div>
+      <div class="mp-lbl">ブロッホ球で確かめる：|0⟩ に RZ(π/2) → √X → RZ(π/2) を順に適用</div>
+      <svg id="hdBloch" viewBox="0 20 420 310" style="width:100%;max-width:370px;display:block;margin:0 auto"></svg>
+      <div class="stbox" style="padding:6px 12px"><div class="sth" id="hdH"></div><div class="stf" id="hdF" style="font-size:17px"></div></div>
+      <div class="row" style="justify-content:center;gap:8px;margin-top:6px"><div class="pk" id="hdBtns" style="flex-wrap:nowrap"></div><button class="b" id="hdAuto" data-autoplay>▶ 自動再生</button></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -2892,8 +2583,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
       <div class="point pop" style="--d:.1s;margin-top:0;font-size:16.5px"><span class="math">X = H · Z · H</span>（第4章）なので、図 7.27 の量子回路を実行しても <b>同じ結果</b>。こちらは <b class="k">1 個の量子ゲート</b> で済む</div>
     </div>
     <div class="col">
-      <div class="icard pop" style="--d:.1s"><div class="ih">🎯 なぜ短くしたい？</div><p>実機では <b>ノイズを無視できない</b> ので、ゲート数が少ないほど計算精度が上がる。また量子状態は時間が経つと壊れてしまうため、<b>計算時間が短い（ゲート数が少ない）</b> ほど計算精度が上がる</p>
-        <div class="mt6"><div class="tiny">1 ゲートごとに少しずつ誤差が入るイメージ</div><div id="opBars"></div></div></div>
+      <div class="point blue pop" style="--d:.1s;margin-top:0;font-size:17px">ゲート数が少ないほど、ノイズの影響が小さくなり <b class="kb">計算精度が上がる</b></div>
       <div class="mp-lbl pop" style="--d:.15s;text-align:left">7.9.5 その他にも必要な機能</div>
       <div class="numlist pop" style="--d:.2s;--c:var(--gold)">
         <div><b class="n">・</b><span>量子ビットの制御装置が解釈できる <b>低レイヤの制御命令</b> に変換</span></div>
@@ -2908,15 +2598,12 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 <!-- 第7章まとめ -->
 <section class="slide">
   <div class="chap">Summary ／ 第7章</div>
-  <h2>第7章のまとめ<small>7.1（p.158）〜 7.9（p.189）</small></h2>
+  <h2>第7章のまとめ<small>7.2（p.158）〜 7.3・7.9（p.189）</small></h2>
   <div class="body sumlist">
     <div class="sl pop" style="--d:0s;--c:var(--purple)"><span class="sl-n">1</span><div><b class="k">Qiskit</b>：IBM が開発する OSS の Python ライブラリ。シミュレータでも実機でも実行できる（実機は待ち時間がある）</div></div>
-    <div class="sl pop" style="--d:.06s;--c:var(--teal)"><span class="sl-n">2</span><div>用語：<b>量子レジスタ</b>（一重線）・<b>古典レジスタ</b>（二重線）・<b>サイズ</b>。操作は左から右に実行</div></div>
-    <div class="sl pop" style="--d:.12s;--c:var(--teal)"><span class="sl-n">3</span><div><span class="mono">QuantumCircuit(2)</span> → <span class="mono">h(0)</span> → <span class="mono">cx(0, 1)</span> → <span class="mono">measure_all()</span> で組み立て、<span class="mono">execute</span> で 1024 回実行（shots）</div></div>
-    <div class="sl pop" style="--d:.18s;--c:var(--teal)"><span class="sl-n">4</span><div>結果は <span class="mono">{'00': 540, '11': 484}</span> のように <b class="k">確率的</b>。おおよそ半々から大きく外れたらバグを疑う。バイト・オーダは <b>右から</b> 0, 1</div></div>
-    <div class="sl pop" style="--d:.24s;--c:var(--red)"><span class="sl-n">5</span><div>可視化：<span class="mono">plot_distribution</span>・<span class="mono">plot_histogram</span>・<span class="mono">draw</span>。<span class="mono">barrier</span> で実装した順番通りに描画</div></div>
-    <div class="sl pop" style="--d:.30s;--c:var(--red)"><span class="sl-n">6</span><div>関数名は基本的にゲート名の小文字（<span class="mono">h, x, z, i/id, cx, ccx, swap, cswap</span>）。自分の PC では <span class="mono">pip install qiskit[visualization]</span></div></div>
-    <div class="sl pop" style="--d:.36s;--c:var(--gold)"><span class="sl-n">7</span><div><b class="k">量子コンパイラ</b>：トポロジー（SWAP を追加）・実行できるゲート（H → RZ, √X）・最適化（HZH → X）を考慮して変換</div></div>
+    <div class="sl pop" style="--d:.06s;--c:var(--purple)"><span class="sl-n">2</span><div>実行方法：<b>Quantum Composer</b>（ブラウザで回路を組み立てる）・<b>Google Colab</b>・<b>自分の PC</b>（教科書の IBM Quantum Lab は提供終了）</div></div>
+    <div class="sl pop" style="--d:.12s;--c:var(--gold)"><span class="sl-n">3</span><div><b class="k">量子コンパイラ</b>：人間が書いた量子回路を、ハードウェアに合わせた量子回路に変換する</div></div>
+    <div class="sl pop" style="--d:.18s;--c:var(--gold)"><span class="sl-n">4</span><div>変換の内容：<b>トポロジー</b>（隣接していなければ SWAP を追加）・<b>実行できるゲート</b>（H → RZ, √X）・<b>最適化</b>（HZH → X）</div></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -2941,11 +2628,11 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <div class="chap">Practice ／ 第7章</div>
   <h2>練習問題（第7章）<small>クリックで答え</small><button class="b qz-all" data-quiz-all>答えをぜんぶ表示</button></h2>
   <div class="body quiz q6x">
-    <div class="qz pop"><div class="qz-q"><span class="qz-no">Q1</span><span><span class="mono">QuantumCircuit(3, 2)</span> の 2 つの引数の意味は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">量子レジスタのサイズ <b>3</b>（量子ビット 3 個）と、古典レジスタのサイズ <b>2</b>（古典ビット 2 個）</span></div></div>
-    <div class="qz pop" style="--d:.05s"><div class="qz-q"><span class="qz-no">Q2</span><span>量子ビット 1 を制御ビット、量子ビット 0 を標的ビットにした CNOT を Qiskit で書くと？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b class="mono">circuit.cx(1, 0)</b>（引数は 制御, 標的 の順）</span></div></div>
+    <div class="qz pop"><div class="qz-q"><span class="qz-no">Q1</span><span>Qiskit を使う方法として紹介した 3 つは？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>Quantum Composer</b>・<b>Google Colab</b>・<b>自分の PC</b></span></div></div>
+    <div class="qz pop" style="--d:.05s"><div class="qz-q"><span class="qz-no">Q2</span><span>実機で動かす前にシミュレータで動作確認するのはなぜ？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">実機は <b>台数が少なく</b> 世界中で共有しているため、<b>待ち時間</b> が発生するから</span></div></div>
     <div class="qz pop" style="--d:.1s"><div class="qz-q"><span class="qz-no">Q3</span><span>Qiskit の結果で <span class="mono">'01'</span> と表示されたとき、量子ビット 0 の測定値は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>1</b>（バイト・オーダは右から 0, 1。右端が量子ビット 0）</span></div></div>
-    <div class="qz pop" style="--d:.15s"><div class="qz-q"><span class="qz-no">Q4</span><span>図 7.6 の回路を 1024 回実行して <span class="mono">{'00': 1024}</span> になった。何を疑う？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">プログラムの誤り（例：<b class="mono">h(0)</b> を書き忘れた）。理論上は 00 と 11 がおおよそ半々になるはず</span></div></div>
-    <div class="qz pop" style="--d:.2s"><div class="qz-q"><span class="qz-no">Q5</span><span>ibm_washington で量子ビット 0 と 2 の間で CNOT を実行するには？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">隣接していないので <b>SWAP で 1 と 2 を入れ替え</b> → 0 と 1 で CNOT → SWAP で元に戻す</span></div></div>
+    <div class="qz pop" style="--d:.15s"><div class="qz-q"><span class="qz-no">Q4</span><span>量子コンパイラは、人間が書いた量子回路を何に合わせて変換する？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">実機の <b>トポロジー</b>（量子ビットの配置）と <b>実行できるゲート</b>。さらに回路を <b>短く</b> する</span></div></div>
+    <div class="qz pop" style="--d:.2s"><div class="qz-q"><span class="qz-no">Q5</span><span>ibm_washington で量子ビット 0 と 2 の間で CNOT を実行するには？（0–1–2 が一列に並んでいる）</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">隣接していないので <b>SWAP で 1 と 2 を入れ替え</b> → 0 と 1 で CNOT → SWAP で元に戻す</span></div></div>
     <div class="qz pop" style="--d:.25s"><div class="qz-q"><span class="qz-no">Q6</span><span>量子コンパイラが <span class="math">H–Z–H</span> を <span class="math">X</span> 1 個に変換するのはなぜ嬉しい？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">同じ結果のまま <b>ゲート数・計算時間が減り</b>、ノイズの影響が小さくなって計算精度が上がるから</span></div></div>
   </div>
   <div class="pageno"></div>
@@ -3507,273 +3194,6 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
   onEnter.qq = () => { t = -1; };
 }
 
-/* ---------- 7.5.1 起動の手順 ---------- */
-{
-  codeBlock('#laCode', ['import numpy as np', '', '# Importing standard Qiskit libraries', 'from qiskit import QuantumCircuit, transpile, Aer, IBMQ', 'from qiskit.tools.jupyter import *', 'from qiskit.visualization import *', 'from ibm_quantum_widgets import *', 'from qiskit.providers.aer import QasmSimulator', '', '# Loading your IBM Quantum account(s)', 'provider = IBMQ.load_account()']);
-  codeBlock('#laCode2', ['import qiskit.tools.jupyter', '%qiskit_version_table']);
-  const ls = [...$('#laSteps').querySelectorAll('.ls')];
-  let i = -1;
-  const set = k => ls.forEach((e, j) => e.classList.toggle('on', j <= k));
-  set(3);
-  looper('#laAuto', () => { i = (i + 1) % 5; set(i === 4 ? 3 : i); }, 1300);
-  onEnter.la = () => { i = -1; };
-}
-
-/* ---------- 7.5.2 理論の確認（バイト・オーダの違い） ---------- */
-{
-  drawQC('#tcCirc', { n: 2, nc: 2, ops: BELL_OPS, colW: 74, maxW: '440px' });
-  const draw = m => {
-    const A = m ? [['|00⟩'], ['H<sub>0</sub>', `${R2}|0⟩(|0⟩ + |1⟩)`, '右側（0 番目）が重ね合わせに'], ['CNOT<sub>0,1</sub>', `${R2}(|00⟩ + |11⟩)`, '右（0 番目）が 1 なら左（1 番目）を反転']]
-      : [['|0⟩ ⊗ |0⟩'], ['H<sub>0</sub>', `${R2}(|0⟩ + |1⟩) ⊗ |0⟩`, '左側（0 番目）が重ね合わせに'], ['CNOT<sub>0,1</sub>', `${R2}(|00⟩ + |11⟩)`, '左（0 番目）が 1 なら右（1 番目）を反転']];
-    $('#tcArw').innerHTML = `<span>${A[0][0]}</span><span></span><span></span>` + A.slice(1).map(([g, s, n], i) =>
-      `<span></span><span class="ar" data-k="${i}"><b>${g}</b><i></i></span><span class="st" data-k="${i}">${s}</span><span></span><span></span><span class="tiny st" data-k="${i}" style="font-family:sans-serif;margin-top:-6px">${n}</span>`).join('');
-    const ps = [...$('#tcArw').querySelectorAll('[data-k]')];
-    requestAnimationFrame(() => requestAnimationFrame(() => ps.forEach(p => setTimeout(() => p.classList.add('on'), +p.dataset.k * 700))));
-  };
-  const t = tabs('#tcTabs', draw);
-  t(1);
-  onEnter.tc = () => t(t.cur());
-}
-
-/* ---------- リスト 7.3：量子回路を組み立てる ---------- */
-{
-  const code = codeBlock('#cbCode', ['# 量子回路の初期化', 'circuit = QuantumCircuit(2)', '', '# 量子回路の組み立て', 'circuit.h(0) # アダマール行列を適用', 'circuit.cx(0, 1) # CNOTを適用', '', '# 測定', 'circuit.measure_all()']);
-  const ops = [{ g: 'H', q: 0, col: 0, k: 1 }, { g: 'CX', c: 0, t: 1, col: 1, k: 2 }, { g: 'BAR', col: 2, k: 3 }, { g: 'M', q: 0, cb: 0, col: 3, k: 3 }, { g: 'M', q: 1, cb: 1, col: 4, k: 3 }];
-  const qc = drawQC('#cbCirc', { n: 2, nc: 2, cname: 'meas', cK: 3, ops, colW: 64, maxW: '470px' });
-  const D = [
-    [2, '<b>2 行目</b>：量子回路 <span class="mono">QuantumCircuit</span> を初期化。引数は <b class="k">量子回路のサイズ</b>（2 量子ビット）。量子ビットの添え字は 0 と 1 で、図 7.6 の q<sub>0</sub> と q<sub>1</sub> に対応'],
-    [5, '<b>5 行目</b>：量子ビット 0 にアダマール行列を適用 → <span class="mono">circuit.h(0)</span>。複数の量子ビットに適用するなら <span class="mono">circuit.h([0, 1])</span> のように <b class="k">添え字のリスト</b> を指定'],
-    [6, '<b>6 行目</b>：CNOT ゲートを適用 → <span class="mono">circuit.cx(0, 1)</span>。<b class="k">制御ビットは量子ビット 0、標的ビットは量子ビット 1</b>'],
-    [9, '<b>9 行目</b>：<span class="mono">measure_all</span> で <b class="k">すべての量子ビットを測定</b> し、測定値（0 か 1）を古典レジスタに格納（Qiskit では古典レジスタ meas と barrier が自動で追加される）'],
-    [[2, 5, 6, 9], '⚠️ ここまでは量子回路を <b class="k">組み立てただけ</b> で、まだ実行されていない。量子ビットを操作する命令を直接書くので、古典言語より <b>アセンブリ言語に近いイメージ</b>'],
-  ];
-  let k = 0;
-  const show = () => { code.on(D[k][0], true); qc.set(k, true); $('#cbDesc').innerHTML = D[k][1]; };
-  $('#cbPrev').onclick = e => { e.currentTarget.blur(); k = Math.max(0, k - 1); show(); };
-  $('#cbNext').onclick = e => { e.currentTarget.blur(); k = Math.min(D.length - 1, k + 1); show(); };
-  show();
-  looper('#cbAuto', () => { k = (k + 1) % D.length; show(); }, 2600);
-  onEnter.cb = () => { k = D.length - 1; };
-}
-
-/* ---------- リスト 7.4・7.5：実行と結果 ---------- */
-{
-  const code = codeBlock('#rnCode', ['from qiskit import execute', '', '# 実行と結果取得', 'backend = Aer.get_backend("qasm_simulator") # バックエンドを指定', 'job = execute(circuit, backend) # 量子プログラムを実行', 'result = job.result() # 結果を取得', 'print(result.get_counts(circuit)) # 結果をテキスト表示']);
-  const h = hist('#rnHist', 4, .7);
-  const tb = timerBag();
-  let N = 1024;
-  const run = () => {
-    tb.clear();
-    code.set(5, N === 1024 ? 'job = execute(circuit, backend) # 量子プログラムを実行' : `job = execute(circuit, backend, shots=${N}) # 実行`);
-    h([0, 0, 0, 0], ['', '', '', '']); $('#rnOut').textContent = '';
-    [4, 5, 6].forEach((n, i) => tb.later(() => code.on(n), i * 380));
-    const k0 = binom(N, .5), cnt = [k0, 0, 0, N - k0];
-    tb.later(() => {
-      code.on(7);
-      h(cnt.map(c => c / N), cnt.map(String));
-      $('#rnOut').textContent = `{'00': ${k0}, '11': ${N - k0}}`;
-    }, 1150);
-  };
-  const pk = picker('#rnShots', [{ label: '100', n: 100 }, { label: '1024（既定）', n: 1024 }, { label: '8192', n: 8192 }], it => { N = it.n; run(); });
-  pk(1);
-  $('#rnGo').addEventListener('click', e => { e.currentTarget.blur(); run(); });
-  looper('#rnAuto', run, 2600);
-}
-
-/* ---------- 測定値は確率的：何回も実行する ---------- */
-{
-  const svg = $('#prSvg'), X0 = 30, X1 = 500, BY = 170;
-  const X = c => X0 + (X1 - X0) * c / 1024;
-  el('rect', { x: X(464), y: 20, width: X(560) - X(464), height: BY - 20, fill: '#d6f3e2', stroke: 'var(--green)', 'stroke-dasharray': '4 3' }, svg);
-  el('text', { x: X(512), y: 15, 'text-anchor': 'middle', 'font-size': 13, 'font-weight': 800, fill: '#0a6b3a' }, svg).textContent = 'おおよそ半々';
-  el('line', { x1: X0, y1: BY, x2: X1, y2: BY, stroke: '#1f1a3d', 'stroke-width': 3 }, svg);
-  [0, 256, 512, 768, 1024].forEach(c => { el('line', { x1: X(c), y1: BY, x2: X(c), y2: BY + 6, stroke: '#1f1a3d', 'stroke-width': 2 }, svg); el('text', { x: X(c), y: BY + 22, 'text-anchor': 'middle', 'font-size': 13, 'font-family': 'Consolas,monospace' }, svg).textContent = c; });
-  el('text', { x: X1, y: BY + 38, 'text-anchor': 'end', 'font-size': 12, fill: '#6b6790' }, svg).textContent = "'00' の回数（1024 回中）";
-  const dots = el('g', {}, svg);
-  const stack = {};
-  let bug = 0;
-  const go = () => {
-    const k0 = bug === 0 ? binom(1024, .5) : bug === 1 ? 1024 : 0;
-    const bin = Math.round(k0 / 12); stack[bin] = (stack[bin] || 0) + 1;
-    const c = el('circle', { cx: X(k0), cy: 20, r: 6, fill: bug ? 'var(--red)' : 'var(--purple)', stroke: '#1f1a3d', 'stroke-width': 1.5 }, dots);
-    const ty = BY - 8 - (stack[bin] - 1) * 11;
-    c.animate([{ transform: 'translateY(0)' }, { transform: `translateY(${ty - 20}px)` }], { duration: 400, easing: 'ease-in', fill: 'forwards' });
-    $('#prOut').innerHTML = bug === 0 ? `{'00': ${k0}, '11': ${1024 - k0}}` : bug === 1 ? "{'00': 1024}　← 半々から大きく外れた！ h(0) を忘れている" : "{'11': 1024}　← 半々から大きく外れた！ h を x と書き間違えている";
-  };
-  const clr = () => { dots.innerHTML = ''; for (const k in stack) delete stack[k]; $('#prOut').textContent = ''; };
-  const pk = picker('#prBug', [{ label: '正しい（h → cx）' }, { label: 'h(0) を書き忘れ' }, { label: 'h(0) を x(0) と書き間違え' }], (it, i) => { bug = i; clr(); });
-  pk(0);
-  $('#prGo').addEventListener('click', e => { e.currentTarget.blur(); go(); });
-  $('#prClr').addEventListener('click', e => { e.currentTarget.blur(); clr(); });
-  let t = 0;
-  looper('#prAuto', () => { t++; if (t % 16 === 0) { pk(bug === 0 ? 1 + (t / 16) % 2 : 0); } go(); }, 450);
-  onEnter.pr = () => { t = 0; pk(0); };
-}
-
-/* ---------- 7.5.3 特定の量子レジスタのみを測定 ---------- */
-{
-  const code = codeBlock('#msCode', ['# 量子回路の初期化', 'circuit = QuantumCircuit(2, 2)', '', '# 量子回路の組み立て', 'circuit.h(0) # アダマール行列を適用', 'circuit.cx(0, 1) # CNOTを適用', '', '# 測定', 'circuit.measure([0, 1], [0, 1])']);
-  const M = [
-    { label: 'measure([0, 1], [0, 1])', l2: 'circuit = QuantumCircuit(2, 2)', l9: 'circuit.measure([0, 1], [0, 1])', ops: [{ g: 'M', q: 0, cb: 0, col: 2 }, { g: 'M', q: 1, cb: 1, col: 3 }],
-      d: '<b>リスト 7.6</b>：1 つ目の引数 ＝ 測定する <b>量子レジスタの添え字のリスト</b>、2 つ目 ＝ 測定結果を書き込む <b class="k">古典レジスタの添え字のリスト</b>。量子レジスタ 0 → 古典レジスタ 0、量子レジスタ 1 → 古典レジスタ 1' },
-    { label: 'measure(0, 0)', l2: 'circuit = QuantumCircuit(2, 2)', l9: 'circuit.measure(0, 0)', ops: [{ g: 'M', q: 0, cb: 0, col: 2 }],
-      d: '<b>1 個の量子レジスタだけ</b> 測定するときは、リストではなく <span class="mono">measure(0, 0)</span> のように <b class="k">添え字の数字</b> を指定できる。量子ビット 1 は測定しない' },
-    { label: 'measure_all()', l2: 'circuit = QuantumCircuit(2)', l9: 'circuit.measure_all()', ops: [{ g: 'BAR', col: 2 }, { g: 'M', q: 0, cb: 0, col: 3 }, { g: 'M', q: 1, cb: 1, col: 4 }], cname: 'meas',
-      d: '<b>リスト 7.3</b>：<span class="mono">measure_all</span> は <b class="k">すべての量子ビット</b> を測定する（古典レジスタは自動で用意される）。<b>特定の量子ビットだけ</b> 測定したいときは measure 関数を使う' },
-    { label: '（応用）measure([0, 1], [1, 0])', l2: 'circuit = QuantumCircuit(2, 2)', l9: 'circuit.measure([0, 1], [1, 0])', ops: [{ g: 'M', q: 0, cb: 1, col: 2 }, { g: 'M', q: 1, cb: 0, col: 3 }],
-      d: '（応用）2 つのリストは <b>順番に対応</b> する：量子レジスタ 0 → <b class="k">古典レジスタ 1</b>、量子レジスタ 1 → <b class="k">古典レジスタ 0</b>' },
-  ];
-  const pk = picker('#msPk', M, it => {
-    code.set(2, it.l2); code.set(9, it.l9); code.on([2, 9]);
-    drawQC('#msCirc', { n: 2, nc: 2, cname: it.cname, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'CX', c: 0, t: 1, col: 1 }, ...it.ops], cols: 5, colW: 66, maxW: '470px' });
-    $('#msDesc').innerHTML = it.d;
-  });
-  pk(0);
-  looper('#msAuto', () => pk((pk.cur() + 1) % M.length), 2800);
-}
-
-/* ---------- 7.5.4 レジスタを直接利用 ---------- */
-{
-  const A = codeBlock('#rgA', ['', '', '', '# 量子回路の初期化', '', '', 'circuit = QuantumCircuit(2, 2)', '', '# 量子回路の組み立て', 'circuit.h(0) # アダマール行列を適用', 'circuit.cx(0, 1) # CNOTを適用', '', '# 測定', 'circuit.measure([0, 1], [0, 1])']);
-  const B = codeBlock('#rgB', ['from qiskit import QuantumCircuit', 'from qiskit import ClassicalRegister, QuantumRegister', '', '# 量子回路の初期化', 'qr = QuantumRegister(2, "q") # 量子レジスタを作成', 'cr = ClassicalRegister(2, "c") # 古典レジスタを作成', 'circuit = QuantumCircuit(qr, cr) # レジスタを使い量子回路を初期化', '', '# 量子回路の組み立て', 'circuit.h(qr[0]) # アダマール行列を適用', 'circuit.cx(qr[0], qr[1]) # CNOTを適用', '', '# 測定', 'circuit.measure(qr, cr)']);
-  // 行番号はリスト 7.7 にそろえ、リスト 7.6 側の空行は番号を隠す
-  $('#rgA').querySelectorAll('.cl').forEach((c, i) => { c.querySelector('i').textContent = [, , , 1, , , 2, 3, 4, 5, 6, 7, 8, 9][i] ?? ''; });
-  const P = [
-    [[7], [5, 6, 7], '<b>初期化</b>（7.7 の 5〜7 行目）：<span class="mono">QuantumRegister</span> で量子レジスタ、<span class="mono">ClassicalRegister</span> で古典レジスタを作り（引数はサイズと名前）、それを使って <span class="mono">QuantumCircuit(qr, cr)</span> を初期化'],
-    [[10], [10], '<b>H</b>（10 行目）：レジスタは添え字を使って <b class="k">配列のようにアクセス</b> できる。<span class="mono">qr[0]</span> が量子ビット 0 のレジスタ'],
-    [[11], [11], '<b>CNOT</b>（11 行目）：レジスタの指定方法はアダマール行列の場合と同様。<span class="mono">cx(qr[0], qr[1])</span>'],
-    [[14], [14], '<b>測定</b>（14 行目）：<span class="mono">measure(qr, cr)</span>。最初の引数に測定する量子レジスタ、2 番目の引数に測定結果を格納する <b class="k">古典レジスタ</b> を指定'],
-  ];
-  let k = 0;
-  const show = () => { A.on(P[k][0], true); B.on(P[k][1], true); $('#rgDesc').innerHTML = P[k][2]; };
-  show();
-  looper('#rgAuto', () => { k = (k + 1) % P.length; show(); }, 2600);
-  onEnter.rg = () => { k = P.length - 1; };
-}
-
-/* ---------- 7.6.1 実行結果の可視化 ---------- */
-{
-  const h1 = hist('#plH1', 2, .62), h2 = hist('#plH2', 2, .62);
-  const set = (h, p) => h([p, 1 - p], [p.toFixed(3), (1 - p).toFixed(3)]);
-  set(h1, .527); set(h2, .495);
-  const go = () => { set(h1, binom(1024, .5) / 1024); set(h2, binom(1024, .5) / 1024); };
-  $('#plGo').addEventListener('click', e => { e.currentTarget.blur(); go(); });
-  looper('#plAuto', go, 1800);
-  onEnter.pl = () => { set(h1, .527); set(h2, .495); };
-}
-
-/* ---------- 7.6.2 draw 関数 ---------- */
-{
-  const code = codeBlock('#drCode', ['circuit.draw(output="mpl")']);
-  const TXT = [
-    '     ┌───┐     ┌─┐   ',
-    'q_0: ┤ H ├──■──┤M├───',
-    '     └───┘┌─┴─┐└╥┘┌─┐',
-    'q_1: ─────┤ X ├─╫─┤M├',
-    '          └───┘ ║ └╥┘',
-    'c: 2/═══════════╩══╩═',
-    '                0  1 '].join('\n');
-  const F = [
-    { label: '"mpl"', d: '<b>matplotlib 形式</b> で出力（図 7.6）。本書の量子回路の図はこの機能で表示したものがベース' },
-    { label: '"text"', d: '<b>テキスト形式</b>（いわゆる <b class="k">アスキー・アート</b>）で出力（図 7.15）。CNOT の標的ビットは X と表示される' },
-    { label: '"latex"', d: '<b>LaTeX 形式</b> で出力（図 7.16）。論文などで見かける白黒の形式' },
-  ];
-  const pk = picker('#drPk', F, (it, i) => {
-    code.set(1, `circuit.draw(output=${it.label})`); code.on(1);
-    const out = $('#drOut');
-    if (i === 1) out.innerHTML = `<pre>${TXT}</pre>`;
-    else { out.innerHTML = '<div style="width:100%"></div>'; drawQC(out.firstChild, { n: 2, nc: 2, ops: BELL_OPS, colW: 74, style: i === 2 ? 'latex' : '', maxW: '470px' }); }
-    $('#drDesc').innerHTML = it.d;
-  });
-  pk(0);
-  looper('#drAuto', () => pk((pk.cur() + 1) % 3), 2400);
-}
-
-/* ---------- 7.6.3 barrier ---------- */
-{
-  const code = codeBlock('#brCode', ['# 量子回路の初期化', 'circuit = QuantumCircuit(2, 2)', '', '# 量子回路の組み立て', 'circuit.h(0)', 'circuit.x(0)', 'circuit.h(1)', 'circuit.barrier()', '', '# 測定', 'circuit.measure([0, 1], [0, 1])', '', '# 量子回路を可視化', 'circuit.draw(output="mpl")']);
-  const O = { bar: false, pb: false, init: false };
-  const inputs = [...$('#brOpt').querySelectorAll('input')];
-  const draw = () => {
-    inputs.forEach(i => { i.checked = O[i.dataset.o]; i.parentElement.classList.toggle('on', i.checked); });
-    code.show(8, O.bar);
-    const args = ['output="mpl"', ...(O.pb ? ['plot_barriers=False'] : []), ...(O.init ? ['initial_state=True'] : [])];
-    code.set(14, `circuit.draw(${args.join(', ')})`);
-    code.on([...(O.bar ? [8] : []), ...(O.pb || O.init ? [14] : [])]);
-    $('#brCap').textContent = O.bar ? (O.init ? 'リスト 7.12 ＋ 7.14' : O.pb ? 'リスト 7.12 ＋ 7.13' : 'リスト 7.12') : 'リスト 7.11';
-    let ops, fig, d;
-    const base = [{ g: 'H', q: 0, col: 0 }, { g: 'X', q: 0, col: 1 }, { g: 'H', q: 1, col: 0 }];
-    if (!O.bar) {
-      ops = [...base, { g: 'M', q: 1, cb: 1, col: 1 }, { g: 'M', q: 0, cb: 0, col: 2 }];
-      fig = '図 7.17：X ゲートと測定が同じタイミングになっている';
-      d = '各ゲートを適用した後に測定しているのに、図では <b class="k">X ゲートと q<sub>1</sub> の測定が縦に並んでいる</b>。理論的に同一の表現を保ったまま、Qiskit が量子回路を最適化するように動作するため' + (O.pb ? '<br><span class="tiny">（barrier がないので plot_barriers を指定しても変化なし）</span>' : '');
-    } else {
-      ops = [...base, ...(O.pb ? [] : [{ g: 'BAR', col: 2 }]), { g: 'M', q: 0, cb: 0, col: 3 }, { g: 'M', q: 1, cb: 1, col: 4 }];
-      fig = O.pb ? '図 7.19：barrier が表示されない' : O.init ? '図 7.20：初期値が表示される' : '図 7.18：X ゲートの後に測定している';
-      d = O.pb ? '<span class="mono">plot_barriers=False</span>：barrier（縦の点線）を <b>表示しない</b>。表示されなくても、実装した順番通りに描画される'
-        : '<span class="mono">barrier()</span> を入れると、Qiskit は <b class="k">barrier をまたがった最適化を行わない</b> → 実装した順番通りに可視化される（縦の点線が barrier）';
-    }
-    if (O.init) d += '<br><span class="mono">initial_state=True</span>：量子回路の左側に <b>初期値 |0⟩</b> を表示する。plot_barriers と同時に使うこともできる';
-    $('#brFig').textContent = fig;
-    drawQC('#brCirc', { n: 2, nc: 2, ops, init: O.init, cols: 5, colW: 60, maxW: '470px' });
-    $('#brDesc').innerHTML = d;
-  };
-  inputs.forEach(i => i.addEventListener('change', () => { O[i.dataset.o] = i.checked; draw(); }));
-  draw();
-  const seq = [{ bar: false, pb: false, init: false }, { bar: true, pb: false, init: false }, { bar: true, pb: true, init: false }, { bar: true, pb: false, init: true }];
-  let t = 0;
-  looper('#brAuto', () => { t = (t + 1) % seq.length; Object.assign(O, seq[t]); draw(); }, 2800);
-  onEnter.br = () => { t = -1; };
-}
-
-/* ---------- 7.7 ゲートと関数の対応 ---------- */
-{
-  const R = [
-    ['単位行列 I', 'i または id', 1, 'circuit.id(0)  # circuit.i(0) でも可', [{ g: 'I', q: 0, col: 0 }], '何もしないゲート。関数名は <span class="mono">i</span> と <span class="mono">id</span> のどちらでも動作する（量子回路では普通は描かない）'],
-    ['パウリ行列 X', 'x', 1, 'circuit.x(0)', [{ g: 'X', q: 0, col: 0 }], '<b>ビット反転</b>（古典コンピュータの NOT）。量子コンピュータではビット反転を行うゲートはパウリ行列 X'],
-    ['パウリ行列 Z', 'z', 1, 'circuit.z(0)', [{ g: 'Z', q: 0, col: 0 }], '<b>位相反転</b>：|1⟩ の係数の符号を反転'],
-    ['アダマール行列 H', 'h', 1, 'circuit.h(0)', [{ g: 'H', q: 0, col: 0 }], '<b>重ね合わせ</b> を作る・ほどく'],
-    ['CNOT', 'cx', 2, 'circuit.cx(0, 1)  # 制御, 標的', [{ g: 'CX', c: 0, t: 1, col: 0 }], 'CNOT（Controlled NOT）はビット反転がパウリ行列 X なので <b class="k">Controlled X</b> とも言う → 関数名が <span class="mono">cx</span> になっているのはこのため'],
-    ['CCNOT', 'ccx', 3, 'circuit.ccx(0, 1, 2)', [{ g: 'CX', c: [0, 1], t: 2, col: 0 }], '制御ビットが 2 つの CNOT（Controlled-Controlled X）。<b>3 量子ビット</b> のゲートで、第8章で説明'],
-    ['SWAP', 'swap', 2, 'circuit.swap(0, 1)', [{ g: 'SW', a: 0, b: 1, col: 0 }], '2 つの量子ビットを <b>入れ替える</b>'],
-    ['CSWAP', 'cswap', 3, 'circuit.cswap(0, 1, 2)', [{ g: 'SW', a: 1, b: 2, c: 0, col: 0 }], '制御ビットつきの SWAP（Controlled SWAP）。<b>3 量子ビット</b> のゲートで、第8章で説明'],
-  ];
-  $('#gfT tbody').innerHTML = R.map((r, i) => `<tr data-i="${i}"><td>${r[0]}</td><td class="f">${r[1]}</td><td>${r[2]}</td></tr>`).join('');
-  const trs = [...$('#gfT').querySelectorAll('tbody tr')];
-  let cur = 0;
-  const set = i => {
-    cur = i; const r = R[i];
-    trs.forEach((t, j) => t.classList.toggle('on', i === j));
-    codeBlock('#gfCode', [r[3]]);
-    drawQC('#gfCirc', { n: r[2], ops: r[4], colW: 90, rowH: 50, maxW: '260px' });
-    $('#gfDesc').innerHTML = `<b class="t">${r[0]}</b> → <span class="mono" style="color:var(--accent-d);font-weight:800">${r[1]}</span><br>${r[5]}`;
-  };
-  trs.forEach((t, i) => t.addEventListener('click', () => set(i)));
-  set(4);
-  looper('#gfAuto', () => set((cur + 1) % R.length), 2200);
-  onEnter.gf = () => { cur = -1; };
-}
-
-/* ---------- 7.8 pip install（タイプ表示） ---------- */
-{
-  const tb = timerBag();
-  const type = (id, s, delay) => {
-    const t = $(id); t.innerHTML = '<span class="pr">$</span> <span class="cur"></span>';
-    [...s].forEach((ch, i) => tb.later(() => { t.innerHTML = `<span class="pr">$</span> ${esc(s.slice(0, i + 1))}<span class="cur"></span>`; }, delay + i * 55));
-    tb.later(() => { t.innerHTML = `<span class="pr">$</span> ${esc(s)}<br><span style="color:#7fe08f">✓ インストール完了</span>`; }, delay + s.length * 55 + 500);
-  };
-  const run = () => { tb.clear(); type('#pcT1', 'pip install qiskit[visualization]', 200); type('#pcT2', 'pip install qiskit', 2300); };
-  $('#pcT1').innerHTML = '<span class="pr">$</span> pip install qiskit[visualization]';
-  $('#pcT2').innerHTML = '<span class="pr">$</span> pip install qiskit';
-  looper('#pcAuto', run, 5200);
-}
-
-/* ---------- 補足：現在の Qiskit ---------- */
-{
-  const c = codeBlock('#nwCode', ['from qiskit import QuantumCircuit, transpile', 'from qiskit_aer import AerSimulator', '', 'circuit = QuantumCircuit(2)', 'circuit.h(0)', 'circuit.cx(0, 1)', 'circuit.measure_all()', '', 'sim = AerSimulator() # シミュレータ', 'job = sim.run(transpile(circuit, sim), shots=1024)', 'print(job.result().get_counts())']);
-  c.on([2, 9, 10, 11]);
-}
-
 /* ---------- 7.9 コンパイラの図 ---------- */
 {
   const svg = $('#cpSvg');
@@ -3800,7 +3220,7 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
   arrow(186, 226, 149, '1.4s'); arrow(346, 386, 149, '1.4s');
 }
 
-/* ---------- 7.9.2 トポロジー（ibm_washington） ---------- */
+/* ---------- 7.9.2 トポロジー（ibm_washington）：静止画。「0」と隣接する「1」「14」を強調 ---------- */
 {
   const svg = $('#tpSvg');
   const pos = {}, adj = {};
@@ -3813,54 +3233,24 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
   rows.forEach(([s, , len]) => { for (let i = 0; i < len - 1; i++) add(s + i, s + i + 1); });
   const atCol = (r, c) => rows[r][0] + c - rows[r][1];
   conn.forEach(([s, cols], r) => cols.forEach((c, i) => { const id = s + i; pos[id] = [XC(c), YR(r) + 32]; add(atCol(r, c), id); add(id, atCol(r + 1, c)); }));
-  const eEl = {};
   const gE = el('g', {}, svg), gN = el('g', {}, svg);
-  edges.forEach(([a, b]) => { eEl[a + '-' + b] = eEl[b + '-' + a] = el('line', { x1: pos[a][0], y1: pos[a][1], x2: pos[b][0], y2: pos[b][1], class: 'ed' }, gE); });
-  const nEl = {};
+  edges.forEach(([a, b]) => el('line', { x1: pos[a][0], y1: pos[a][1], x2: pos[b][0], y2: pos[b][1], class: 'ed' + (a === 0 || b === 0 ? ' on' : '') }, gE));
   Object.keys(pos).forEach(id => {
-    const g = el('g', { class: 'nd' }, gN); el('circle', { cx: pos[id][0], cy: pos[id][1], r: 11 }, g);
-    el('text', { x: pos[id][0], y: pos[id][1] + .5 }, g).textContent = id; nEl[id] = g;
-    g.addEventListener('click', () => pick(+id));
+    const g = el('g', { class: 'nd' + (+id === 0 ? ' end' : adj[0].includes(+id) ? ' nb' : '') }, gN); el('circle', { cx: pos[id][0], cy: pos[id][1], r: 11 }, g);
+    el('text', { x: pos[id][0], y: pos[id][1] + .5 }, g).textContent = id;
   });
-  const bfs = (a, b) => { const prev = { [a]: -1 }, q = [a]; while (q.length) { const u = q.shift(); if (u === b) break; for (const v of adj[u]) if (!(v in prev)) { prev[v] = u; q.push(v); } } const p = []; for (let u = b; u !== -1; u = prev[u]) p.unshift(u); return p; };
-  const clear = () => { Object.values(nEl).forEach(g => g.setAttribute('class', 'nd')); Object.values(eEl).forEach(e => e.setAttribute('class', 'ed')); };
-  let sel = [];
-  const showNb = a => {
-    clear(); nEl[a].setAttribute('class', 'nd end');
-    adj[a].forEach(v => { nEl[v].setAttribute('class', 'nd nb'); eEl[a + '-' + v].setAttribute('class', 'ed on'); });
-    $('#tpDesc').innerHTML = `「${a}」と隣接しているのは <b class="k">「${adj[a].join('」と「')}」だけ</b>。<br>そのため「${a}」の量子ビットと CNOT 操作ができるのは ${adj[a].map(v => `「${v}」`).join('と')} だけ<br><span class="tiny">もう 1 つクリックすると経路を表示</span>`;
-  };
-  const showPath = (a, b) => {
-    clear();
-    const p = bfs(a, b), d = p.length - 1;
-    p.forEach((u, i) => { nEl[u].setAttribute('class', 'nd ' + (i === 0 || i === d ? 'end' : 'on')); if (i) eEl[p[i - 1] + '-' + u].setAttribute('class', 'ed on'); });
-    $('#tpDesc').innerHTML = d === 1 ? `「${a}」と「${b}」は <b class="k">隣接している</b> → そのまま CNOT を実行できる ✓`
-      : `「${a}」と「${b}」は隣接していない（最短で ${d} 本の線）。<br>→ <b class="k">SWAP を ${d - 1} 回</b> 使って隣接させてから CNOT を実行（元の配置に戻すならさらに ${d - 1} 回）`;
-  };
-  const pick = id => {
-    sel.push(id);
-    if (sel.length === 1) showNb(id);
-    else if (sel[0] === sel[1]) { sel = [id]; showNb(id); }
-    else { showPath(sel[0], sel[1]); sel = []; }
-  };
-  const demo = [[0], [0, 2], [0, 14], [20, 39], [0, 40], [5, 122], [62], [13, 113]];
-  let t = -1;
-  const step = () => { t = (t + 1) % demo.length; sel = []; demo[t].forEach(pick); };
-  step();
-  looper('#tpAuto', step, 2600);
-  onEnter.tp = () => { t = -1; };
 }
 
 /* ---------- 7.9.2 SWAP 経由の CNOT ---------- */
 {
-  drawQC('#scBefore', { n: 3, ops: [{ g: 'CX', c: 0, t: 2, col: 0 }], colW: 80, rowH: 40, top: 26, maxW: '250px' });
+  drawQC('#scBefore', { n: 3, ops: [{ g: 'CX', c: 0, t: 2, col: 0 }], colW: 80, rowH: 40, top: 26, maxW: '190px' });
   const qa = drawQC('#scAfter', { n: 3, ops: [{ g: 'SW', a: 1, b: 2, col: 0, k: 1 }, { g: 'CX', c: 0, t: 1, col: 1, k: 2 }, { g: 'SW', a: 1, b: 2, col: 2, k: 3 }], colW: 70, rowH: 40, top: 26, maxW: '320px' });
   const svg = $('#scSvg'), PX = [80, 220, 360], PY = 64;
   el('line', { x1: PX[0], y1: PY, x2: PX[2], y2: PY, stroke: '#9a93bd', 'stroke-width': 5 }, svg);
   const link = el('line', { x1: PX[0], y1: PY, x2: PX[1], y2: PY, stroke: 'var(--accent)', 'stroke-width': 9, opacity: 0, 'stroke-linecap': 'round' }, svg);
-  PX.forEach((x, i) => { el('text', { x, y: PY + 52, 'text-anchor': 'middle', 'font-size': 14, 'font-weight': 800, fill: '#6b6790', 'font-family': 'sans-serif' }, svg).textContent = `位置「${i}」`; });
+  PX.forEach((x, i) => { el('rect', { x: x - 34, y: PY - 34, width: 68, height: 68, rx: 14, fill: 'none', stroke: '#9a93bd', 'stroke-width': 2.5, 'stroke-dasharray': '5 4' }, svg); el('text', { x, y: PY + 54, 'text-anchor': 'middle', 'font-size': 14, 'font-weight': 800, fill: '#6b6790', 'font-family': 'sans-serif' }, svg).textContent = `量子ビット「${i}」= q${'₀₁₂'[i]}`; });
   const cols = ['var(--blue)', '#9a93bd', 'var(--pink)'];
-  const balls = [0, 1, 2].map(i => { const g = el('g', { class: 'sc-ball' }, svg); el('circle', { cx: 0, cy: 0, r: 24, fill: cols[i] }, g); text(g, 0, 1, `q_{${i}}`, {}); return g; });
+  const balls = [0, 1, 2].map(i => { const g = el('g', { class: 'sc-ball' }, svg); el('circle', { cx: 0, cy: 0, r: 24, fill: cols[i] }, g); text(g, 0, 1, `ψ_{${i}}`, {}); return g; });
   const msg = el('text', { x: 220, y: 22, 'text-anchor': 'middle', 'font-size': 15, 'font-weight': 800, fill: '#1f1a3d', 'font-family': 'sans-serif' }, svg);
   const place = (at, anim = true) => at.forEach((p, i) => { balls[i].style.transition = anim ? '' : 'none'; balls[i].style.transform = `translate(${PX[p]}px,${PY}px)`; });
   const items = [...$('#scList').children];
@@ -3868,48 +3258,71 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
   const show = () => {
     qa.set(s); items.forEach((e, i) => e.style.background = i === s - 1 ? '#fff1c2' : '');
     link.setAttribute('opacity', s === 2 ? 1 : 0);
-    if (s === 0) { place([0, 1, 2], false); msg.textContent = 'q₀ と q₂ は隣接していない → 直接 CNOT できない ✘'; }
-    if (s === 1) { place([0, 2, 1]); msg.textContent = '① SWAP で位置「1」と「2」を入れ替え'; }
-    if (s === 2) { place([0, 2, 1]); msg.textContent = '② 隣同士になった q₀（制御）と q₂（標的）で CNOT ✓'; }
-    if (s === 3) { place([0, 1, 2]); msg.textContent = '③ もう一度 SWAP して元の配置に戻す'; }
+    if (s === 0) { place([0, 1, 2], false); msg.textContent = '「0」と「2」は隣接していない → 直接 CNOT できない ✘'; }
+    if (s === 1) { place([0, 2, 1]); msg.textContent = '① SWAP で「1」と「2」の状態を入れ替え'; }
+    if (s === 2) { place([0, 2, 1]); msg.textContent = '② 「0」と「1」で CNOT（ψ₀ が制御、ψ₂ が標的）✓'; }
+    if (s === 3) { place([0, 1, 2]); msg.textContent = '③ もう一度 SWAP して元に戻す'; }
   };
   show();
   looper('#scAuto', () => { s = (s + 1) % 4; show(); }, 2000);
   onEnter.sc = () => { s = -1; };
 }
 
-/* ---------- 7.9.3 H を RZ・√X で作る ---------- */
+/* ---------- 7.9.3 H を RZ・√X で作る：ブロッホ球で回転を見る ---------- */
 {
-  const E = (s) => `e<sup>${s}</sup>`;
-  const steps = [
-    `<div class="eqrow" style="font-size:19px"><span>RZ(π/2) =</span>${matN([[E('−iπ/4'), '0'], ['0', E('iπ/4')]])}<span class="tiny">（RZ(θ) = diag(e<sup>−iθ/2</sup>, e<sup>iθ/2</sup>)：補足）</span></div>`,
-    `<div class="eqrow" style="font-size:19px"><span>√X =</span><span>½</span>${matN([['1+i', '1−i'], ['1−i', '1+i']])}<span class="tiny">（√X · √X = X）</span></div>`,
-    `<div class="eqrow" style="font-size:19px"><span>RZ(π/2) · √X · RZ(π/2) =</span><span>${FR('1−i', '2')}</span>${matN([['1', '1'], ['1', '−1']])}<span>=</span><span>${E('−iπ/4')}</span><span>·</span>${R2}${matN([['1', '1'], ['1', '−1']])}</div>`,
-    `<div class="eqrow" style="font-size:19px"><span>α = ${E('iπ/4')} をかけると</span><span>${E('iπ/4')} · ${E('−iπ/4')} = 1</span></div><div class="eqrow" style="font-size:22px;justify-content:center"><span>α · RZ(π/2) · √X · RZ(π/2) =</span>${R2}${matN([['1', '1'], ['1', '−1']])}<span>=</span><span class="res">H ✓</span></div>`,
+  drawQC('#hdCircB', { n: 1, nc: 1, names: ['q'], ops: [{ g: 'H', q: 0, col: 0 }, { g: 'M', q: 0, cb: 0, col: 1 }], colW: 58, maxW: '170px' });
+  const qa = drawQC('#hdCirc', { n: 1, nc: 1, names: ['q'], ops: [{ g: 'RZ', q: 0, col: 0, k: 1 }, { g: 'SX', q: 0, col: 1, k: 2 }, { g: 'RZ', q: 0, col: 2, k: 3 }, { g: 'M', q: 0, cb: 0, col: 3, k: 9 }], colW: 52, maxW: '250px' });
+  const svg = $('#hdBloch'), CX = 205, CY = 170, R = 130;
+  // 斜めから見た投影：x 軸は手前左下、y 軸は右、z 軸は上
+  const P = ([x, y, z]) => [CX + R * (0.92 * y - 0.42 * x), CY - R * (0.9 * z - 0.3 * x)];
+  const pts = f => Array.from({ length: 73 }, (_, i) => f(i / 72 * 2 * Math.PI)).map(P).map(p => p.join(',')).join(' ');
+  el('circle', { cx: CX, cy: CY, r: R * 1.0, fill: '#f6f2ff', stroke: '#1f1a3d', 'stroke-width': 2 }, svg);
+  el('polyline', { points: pts(t => [Math.cos(t), Math.sin(t), 0]), fill: 'none', stroke: '#9a93bd', 'stroke-width': 1.5, 'stroke-dasharray': '4 3' }, svg);
+  const axis = (v, lab, dx, dy) => { const a = P(v.map(x => -x)), b = P(v); el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: '#9a93bd', 'stroke-width': 1.5 }, svg); const t = el('text', { x: b[0] + dx, y: b[1] + dy, 'font-size': 17, fill: '#1f1a3d', 'text-anchor': 'middle', 'font-family': 'Cambria Math,serif' }, svg); t.textContent = lab; };
+  axis([0, 0, 1], '|0⟩', 0, -10); axis([1, 0, 0], 'x', -10, 20); axis([0, 1, 0], 'y', 14, 6);
+  { const b = P([0, 0, -1]); el('text', { x: b[0], y: b[1] + 22, 'font-size': 17, 'text-anchor': 'middle', fill: '#1f1a3d', 'font-family': 'Cambria Math,serif' }, svg).textContent = '|1⟩'; }
+  // H|0⟩ = |+⟩ の目標位置
+  const tg = P([1, 0, 0]);
+  el('circle', { cx: tg[0], cy: tg[1], r: 13, fill: 'none', stroke: 'var(--green)', 'stroke-width': 3, 'stroke-dasharray': '4 3' }, svg);
+  el('text', { x: tg[0] - 16, y: tg[1] - 16, 'font-size': 14, 'font-weight': 800, fill: '#0a6b3a', 'text-anchor': 'end', 'font-family': 'sans-serif' }, svg).textContent = 'H|0⟩ = |+⟩';
+  const trail = el('polyline', { points: '', fill: 'none', stroke: 'var(--accent)', 'stroke-width': 3.5, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, svg);
+  const arm = el('line', { x1: CX, y1: CY, x2: CX, y2: CY, stroke: 'var(--pink)', 'stroke-width': 4, 'stroke-linecap': 'round' }, svg);
+  const dot = el('circle', { cx: CX, cy: CY, r: 10, fill: 'var(--pink)', stroke: '#1f1a3d', 'stroke-width': 2 }, svg);
+  const rot = (v, ax, a) => { const [x, y, z] = v, c = Math.cos(a), s = Math.sin(a); return ax === 'z' ? [c * x - s * y, s * x + c * y, z] : [x, c * y - s * z, s * y + c * z]; };
+  const S = [
+    { h: '① 初期状態 |0⟩', f: 'ブロッホ球の北極（z 軸の上）' },
+    { h: '② RZ(π/2)：z 軸のまわりに 90° 回転', f: '|0⟩ は z 軸の上にあるので <b>動かない</b>', ax: 'z' },
+    { h: '③ √X：x 軸のまわりに 90° 回転', f: '北極から赤道（−y の位置）へ倒れる', ax: 'x' },
+    { h: '④ RZ(π/2)：z 軸のまわりに 90° 回転', f: '赤道上を回って <b>x 軸（|+⟩）</b> に到着 → <span class="res">H|0⟩ と同じ ✓</span>', ax: 'z' },
   ];
-  $('#hdSteps').innerHTML = steps.map(s => `<div class="stp stbox" style="padding:6px 12px">${s}</div>`).join('');
-  const ss = [...$('#hdSteps').querySelectorAll('.stp')];
-  let k = 3;
-  const show = () => {
-    const kk = Math.min(k, 3);
-    ss.forEach((e, i) => e.classList.toggle('on', i <= kk));
-    const after = kk >= 3;
-    $('#hdFig').textContent = after ? '図 7.25：コンパイル後（RZ と √X の組み合わせ）' : '図 7.24：コンパイル前';
-    drawQC('#hdCirc', { n: 1, nc: 1, names: ['q'], ops: after ? [{ g: 'RZ', q: 0, col: 0 }, { g: 'SX', q: 0, col: 1 }, { g: 'RZ', q: 0, col: 2 }, { g: 'M', q: 0, cb: 0, col: 3 }] : [{ g: 'H', q: 0, col: 0 }, { g: 'M', q: 0, cb: 0, col: 1 }], cols: 4, colW: 62, maxW: '360px' });
+  $('#hdBtns').innerHTML = S.map((s, i) => `<button data-k="${i}">${'①②③④'[i]}</button>`).join('');
+  let k = 0, raf = 0;
+  const vecAt = n => { let v = [0, 0, 1]; for (let i = 1; i <= n; i++) v = rot(v, S[i].ax, Math.PI / 2); return v; };
+  const put = (v, path) => {
+    const p = P(v); arm.setAttribute('x2', p[0]); arm.setAttribute('y2', p[1]); dot.setAttribute('cx', p[0]); dot.setAttribute('cy', p[1]);
+    trail.setAttribute('points', path.map(P).map(q => q.join(',')).join(' '));
   };
-  show();
-  // 自動再生：0→1→2→3（少し止まる）を繰り返す
-  looper('#hdAuto', () => { k = (k + 1) % 5; show(); }, 1700);
-  onEnter.hd = () => { k = -1; };
+  const pathTo = n => { const out = [[0, 0, 1]]; let v = [0, 0, 1]; for (let i = 1; i <= n; i++) { for (let j = 1; j <= 24; j++) out.push(rot(v, S[i].ax, Math.PI / 2 * j / 24)); v = rot(v, S[i].ax, Math.PI / 2); } return out; };
+  const show = (n, anim) => {
+    cancelAnimationFrame(raf);
+    k = n; qa.set(n === 0 ? 0 : n);
+    $('#hdBtns').querySelectorAll('button').forEach((b, i) => b.classList.toggle('on', i === n));
+    $('#hdH').textContent = S[n].h; $('#hdF').innerHTML = S[n].f;
+    if (!anim || n === 0) { put(vecAt(n), pathTo(n)); return; }
+    const base = pathTo(n - 1), v0 = vecAt(n - 1), t0 = performance.now();
+    const f = ts => { const t = Math.min((ts - t0) / 900, 1), e = t < .5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2; const pp = base.slice();
+      for (let j = 1; j <= Math.round(24 * e); j++) pp.push(rot(v0, S[n].ax, Math.PI / 2 * j / 24)); const v = rot(v0, S[n].ax, Math.PI / 2 * e); pp.push(v); put(v, pp); if (t < 1) raf = requestAnimationFrame(f); };
+    raf = requestAnimationFrame(f);
+  };
+  $('#hdBtns').querySelectorAll('button').forEach(b => b.addEventListener('click', e => { e.currentTarget.blur(); const n = +b.dataset.k; show(n, n === k + 1); }));
+  show(3, false);
+  looper('#hdAuto', () => show((k + 1) % 4, true), 1800);
+  onEnter.hd = () => { k = 3; };
 }
 
 /* ---------- 7.9.4 HZH → X ---------- */
 {
   let opt = false;
-  const bars = $('#opBars');
-  bars.innerHTML = [['最適化前（3 ゲート）', .97, 'var(--blue)'], ['最適化後（1 ゲート）', .99, 'var(--green)']].map(([l, v, c]) =>
-    `<div class="row" style="gap:6px;margin-top:3px;font-size:13.5px"><span style="width:150px;font-weight:800">${l}</span><div style="flex:1;height:16px;border:2px solid var(--ink);border-radius:6px;background:#f3effc;position:relative;overflow:hidden"><i style="position:absolute;left:0;top:0;bottom:0;width:${(v - .9) * 1000}%;background:${c}"></i></div><span class="mono" style="width:48px;text-align:right">${Math.round(v * 100)}%</span></div>`).join('') +
-    '<div class="tiny">（1 ゲートで 1% ずつ誤差が入ると仮定。横軸は 90%〜100%）</div>';
   const draw = () => {
     $('#opFig').textContent = opt ? '図 7.27：最適化後（1 個の量子ゲート）' : '図 7.26：最適化前（3 個の量子ゲート）';
     drawQC('#opCirc', { n: 1, nc: 1, names: ['q'], ops: opt ? [{ g: 'X', q: 0, col: 1 }, { g: 'M', q: 0, cb: 0, col: 3 }] : [{ g: 'H', q: 0, col: 0 }, { g: 'Z', q: 0, col: 1 }, { g: 'H', q: 0, col: 2 }, { g: 'M', q: 0, cb: 0, col: 3 }], cols: 4, colW: 64, maxW: '380px' });
