@@ -1893,6 +1893,13 @@ svg.topo{display:block;width:100%;height:auto;user-select:none}
 @media print{.code .cl.on{background:none;box-shadow:none}}
 
 /* ===== 改訂で追加したスライド用 ===== */
+.qc-top{padding-right:0 !important}
+.qc-top button.qc-save,.qc-top button.qc-setup{height:100%;border-radius:0 !important;display:flex;align-items:center;gap:14px;font:400 16px "Helvetica Neue",Arial,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif !important;padding:0 20px !important;cursor:pointer}
+.qc-top button.qc-save{background:transparent !important;color:#78a9ff !important}
+.qc-top button.qc-save:hover{background:#393939 !important}
+.qc-top button.qc-setup{background:var(--blue) !important;color:#fff !important;min-width:200px;justify-content:space-between}
+.qc-top button.qc-setup:hover{filter:brightness(1.1)}
+.qc-sel{width:100%;background:#393939;color:#f4f4f4;border:0;border-bottom:1px solid #8d8d8d;font-size:16px;padding:9px 12px;margin-bottom:10px}
 .qc-menu.need > button{animation:qcNeedM 1s ease-in-out infinite}
 @keyframes qcNeedM{0%,100%{box-shadow:inset 0 0 0 0 rgba(255,213,61,0)}50%{box-shadow:inset 0 0 0 3px rgba(255,213,61,.9)}}
 .qcmp{position:relative}
@@ -2057,7 +2064,7 @@ svg.topo{display:block;width:100%;height:auto;user-select:none}
 .tut-body h3{margin:0;font-size:22px}
 .tut-body .td{font-size:17px;line-height:1.6}
 .tut-body .code{font-size:13.5px;line-height:1.45}
-.tut-out{font:600 14px/1.45 Consolas,Menlo,monospace;background:#fafafa;border:2px solid #d7d7d7;border-left:6px solid #f9ab00;border-radius:8px;padding:6px 12px;white-space:pre;overflow:hidden}
+.tut-out{font:600 13.5px/1.3 Consolas,Menlo,monospace;background:#fafafa;border:2px solid #d7d7d7;border-left:6px solid #f9ab00;border-radius:8px;padding:4px 12px 6px;white-space:pre;overflow:hidden}
 .tut-out .lb{font:800 12px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:#9a93bd;display:block;margin-bottom:2px}
 .tut-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto}
 .tut-note{font-size:14px;color:var(--muted);font-weight:700}
@@ -2373,7 +2380,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 <!-- バイト・オーダ：コードで実感 (1) -->
 <section class="slide" data-id="bo2">
   <div class="chap">第6章 ／ 6.2.2 記法の工夫 ・ 第7章を先取り</div>
-  <h2>コードで実感：Qiskit のビット表記は右が 0 番目<small>バイト・オーダの違い</small></h2>
+  <h2>コードで実感：Qiskit のビット表記は右が 0 番目</h2>
   <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)">
     <div class="col">
       <div class="code pop" id="bo2Code"><span class="cap">Qiskit：1 つの量子ビットだけ操作して確率を表示</span></div>
@@ -2681,8 +2688,17 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
         <div class="qc-menu"><button>View</button></div>
         <div class="qc-menu"><button>Help</button></div>
         <span class="sp"></span>
-        <label>shots <select id="qcShots"><option>100</option><option selected>1024</option><option>4096</option></select></label>
-        <button class="run" id="qcRun">▶ 実行</button></div>
+        <button class="qc-save" id="qcSave">Save file <svg viewBox="0 0 20 20" width="20" height="20"><path d="M10 3v10M5.5 8.5 10 13l4.5-4.5M4 16h12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="qc-setup" id="qcSetup">Set up and run <svg viewBox="0 0 20 20" width="20" height="20"><rect x="5" y="5" width="10" height="10" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="8" y="8" width="4" height="4" fill="currentColor"/><path d="M8 2v3M12 2v3M8 15v3M12 15v3M2 8h3M2 12h3M15 8h3M15 12h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button></div>
+      <div class="qc-dlg" id="qcRunDlg" hidden><div class="qc-dlg-box" style="width:470px">
+        <button class="qc-dlg-x" data-rd="cancel" title="閉じる">✕</button>
+        <div class="qc-dlg-in">
+          <h3>Set up and run</h3>
+          <p>この練習用エディタでは、ブラウザの中のシミュレータで実行します（実機には接続しません）。</p>
+          <div class="qc-rh" style="grid-template-columns:1fr"><span>Shots（実行する回数）*</span></div>
+          <select id="qcShots" class="qc-sel"><option>100</option><option selected>1024</option><option>4096</option></select>
+        </div>
+        <div class="qc-dlg-foot"><button data-rd="cancel">Cancel</button><button class="ok" id="qcRun">Run</button></div>
+      </div></div>
       <div class="qc-dlg" id="qcDlg" hidden><div class="qc-dlg-box">
         <button class="qc-dlg-x" data-dlg="cancel" title="閉じる">✕</button>
         <div class="qc-dlg-in">
@@ -2703,7 +2719,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
         <div class="qc-center">
           <div class="qc-row"><div class="qc-circ" id="qcCirc"></div><div class="qc-code" id="qcCode"></div></div>
           <div class="qc-panels">
-            <div class="qc-panel"><div class="qc-ph">確率（Probabilities）<small>　測定する直前の状態。回路を変えるとすぐ変わる</small></div><div class="qc-bars" id="qcProb"></div><div class="qc-bl" id="qcProbL"></div></div>
+            <div class="qc-panel"><div class="qc-ph">確率（Probabilities）<small id="qcProbS"></small></div><div class="qc-bars" id="qcProb"></div><div class="qc-bl" id="qcProbL"></div></div>
             <div class="qc-panel"><div class="qc-ph">実行結果（Histogram）<small id="qcShotsL"></small></div><div class="qc-bars hist" id="qcHist"></div><div class="qc-bl" id="qcHistL"></div></div>
           </div>
         </div>
@@ -2711,7 +2727,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
           <h4>チュートリアル：2 つの量子ビットを重ね合わせにしよう</h4>
           <div style="text-align:right;margin-top:-4px"><button class="b" id="qcDemo2" style="font-size:12px;padding:2px 10px">見本を自動で作る</button></div>
           <div id="qcSteps"></div>
-          <div class="qc-toast" id="qcToast"></div><div class="qc-ok" id="qcOk">🎉 完成！ <b>00・01・10・11</b> がそれぞれ約 1/4 ずつ出る ＝ 2 つの量子ビットがそれぞれ重ね合わせ<br>次は H の後に CNOT を足すとどうなるか試そう</div>
+          <div class="qc-toast" id="qcToast"></div><div class="qc-ok" id="qcOk">🎉 完成！ <b>00・01・10・11</b> がそれぞれ約 1/4 ずつ出る<br>次は H の後に CNOT を足すとどうなるか試そう</div>
           <div class="qc-tip">ゲートはドラッグで置く（クリックで選んでから置いても OK）。置いたゲートはクリックで選択（Shift で複数）、Delete キーか枠の外へドラッグで削除。ビット列は Qiskit と同じく <b>右が 0 番目</b></div>
         </div>
       </div>
@@ -3272,7 +3288,7 @@ drawQC('#nt2Circ', { n: 2, init: true, top: 46, ops: [{ g: 'H', q: 0, col: 0 }, 
 
 /* ---------- バイト・オーダ：コードで実感 ---------- */
 {
-  const code = codeBlock('#bo2Code', ['from qiskit import QuantumCircuit', 'from qiskit.quantum_info import Statevector', '', 'qc = QuantumCircuit(2)  # 初期状態は |00⟩', 'qc.x(0)', '', '# 各測定結果を得る確率を表示', 'probs = Statevector(qc).probabilities_dict()', 'for k, p in probs.items():', '    print(k, round(float(p), 3))']);
+  const code = codeBlock('#bo2Code', ['from qiskit import QuantumCircuit', 'from qiskit.quantum_info import Statevector', '', 'qc = QuantumCircuit(2)  # 初期状態は 全ビット |0⟩', 'qc.x(0)', '', '# 各測定結果を得る確率を表示', 'probs = Statevector(qc).probabilities_dict()', 'for k, p in probs.items():', '    print(k, round(float(p), 3))']);
   const C = [
     { label: 'qc.x(0)', line: 'qc.x(0)  # 0 番目の量子ビットに X', book: 'X<sub>0</sub>(|0⟩ ⊗ |0⟩)<br>= |1⟩ ⊗ |0⟩ = <b class="k">|10⟩</b><br><span style="font-size:17px">|10⟩ を確率 1 で得る</span>', p: { '01': 1 }, note: '右端（0 番目）が 1' },
     { label: 'qc.x(1)', line: 'qc.x(1)  # 1 番目の量子ビットに X', book: 'X<sub>1</sub>(|0⟩ ⊗ |0⟩)<br>= |0⟩ ⊗ |1⟩ = <b class="k">|01⟩</b><br><span style="font-size:17px">|01⟩ を確率 1 で得る</span>', p: { '10': 1 }, note: '左端（1 番目）が 1' },
@@ -3554,7 +3570,7 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
     { t: '<b>Edit → Manage registers</b> で、量子ビットと古典ビットを <b>2 つずつ</b> にする（初期設定は 4 つずつ）', need: 'REG' },
     { t: '<b>H</b> を <b>q[0]</b> と <b>q[1]</b> の両方に置く', need: 'H' },
     { t: '<b>測定</b> を H より右の q[0] と q[1] の両方に置く', need: 'M' },
-    { t: '右上の <b>▶ 実行</b> を押して結果を見る', need: null },
+    { t: '右上の <b>Set up and run</b> → <b>Run</b> で実行して結果を見る', need: null },
   ];
   const progress = () => {
     const rOk = NQ === 2 && NC === 2;
@@ -3569,13 +3585,53 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
     $('#qcOk').style.display = cur === -1 ? 'block' : 'none';
     $('#qcPal').querySelectorAll('.qg').forEach(t => t.classList.toggle('need', cur >= 0 && STEPS[cur].need === t.dataset.g));
     root.querySelectorAll('.qc-menu').forEach(m => m.classList.toggle('need', cur === 0 && m.firstElementChild.textContent === 'Edit'));
-    $('#qcRun').style.boxShadow = cur === 3 ? '0 0 0 4px rgba(255,213,61,.6)' : '';
+    $('#qcSetup').style.boxShadow = cur === 3 ? 'inset 0 0 0 3px var(--yellow)' : '';
+  };
+  // 測定のたびに 0・1 の両方に枝分かれさせて、測定結果の確率を正確に求める
+  const exactDist = () => {
+    const D = 1 << NQ;
+    let br = [{ s: Array.from({ length: D }, (_, i) => (i ? [0, 0] : [1, 0])), w: 1, cb: {} }];
+    const meas = new Set();
+    grid.forEach(col => {
+      if (col.two) {
+        const { g, a, b } = col.two;
+        br.forEach(x => { const s = x.s; for (let i = 0; i < D; i++) {
+          if (g === 'CX' && (i >> a & 1) && !(i >> b & 1)) { const j = i | 1 << b; [s[i], s[j]] = [s[j], s[i]]; }
+          if (g === 'SW' && (i >> a & 1) && !(i >> b & 1)) { const j = (i & ~(1 << a)) | 1 << b; [s[i], s[j]] = [s[j], s[i]]; } } });
+        return;
+      }
+      for (let q = 0; q < NQ; q++) {
+        const o = col['q' + q]; if (!o) continue;
+        if (o.g === 'M') {
+          meas.add(q);
+          br = br.flatMap(x => {
+            const p1 = x.s.reduce((t, a, i) => t + (i >> q & 1 ? a[0] * a[0] + a[1] * a[1] : 0), 0);
+            return [0, 1].flatMap(v => { const pv = v ? p1 : 1 - p1; if (pv < 1e-12) return []; const n = Math.sqrt(pv);
+              return [{ s: x.s.map((a, i) => ((i >> q & 1) === v ? [a[0] / n, a[1] / n] : [0, 0])), w: x.w * pv, cb: { ...x.cb, [q]: v } }]; });
+          });
+          continue;
+        }
+        const M = U[o.g];
+        br.forEach(x => { const s = x.s, ns = s.slice(); for (let i = 0; i < D; i++) if (!(i >> q & 1)) { const j = i | 1 << q; ns[i] = ca(cm(M[0][0], s[i]), cm(M[0][1], s[j])); ns[j] = ca(cm(M[1][0], s[i]), cm(M[1][1], s[j])); } x.s = ns; });
+      }
+    });
+    return { br, meas };
   };
   const update = (keepRun = false) => {
-    if (!keepRun) { ran = false; clearHist('▶ 実行 を押すと、ここに結果が出る'); }
+    if (!keepRun) { ran = false; clearHist('「Set up and run」→「Run」で実行すると、ここに結果が出る'); }
     drawCirc();
-    const { p } = simulate();
-    $('#qcProb').closest('.qc-panels').classList.toggle('wide', NQ >= 4);
+    const { br, meas } = exactDist();
+    if (meas.size) {
+      const ms = [...meas].sort((a, b) => b - a), keys = Array.from({ length: 1 << ms.length }, (_, v) => v.toString(2).padStart(ms.length, '0'));
+      const pr = keys.map(k => br.filter(x => ms.map(q => x.cb[q]).join('') === k).reduce((t, x) => t + x.w, 0));
+      $('#qcProb').closest('.qc-panels').classList.toggle('wide', keys.length > 8);
+      bars('#qcProb', '#qcProbL', keys, pr, pr.map(v => (keys.length > 4 ? `${Math.round(v * 100)}` : `${Math.round(v * 1000) / 10}%`)));
+      $('#qcProbS').textContent = `　測定する ${ms.map(q => CL[q].s).join(', ')} の値が出る確率`;
+      code(); drawTut(); return;
+    }
+    $('#qcProbS').textContent = '　測定がないときは、量子状態の各ビット列の確率';
+    const p = br[0].s.map(a => a[0] * a[0] + a[1] * a[1]);
+    $('#qcProb').closest('.qc-panels').classList.toggle('wide', p.length > 8);
     bars('#qcProb', '#qcProbL', p.map((_, i) => i.toString(2).padStart(NQ, '0')), p, p.map(v => (p.length > 4 ? `${Math.round(v * 100)}` : `${Math.round(v * 1000) / 10}%`)));
     code(); drawTut();
   };
@@ -3639,7 +3695,27 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
     if (cell && sel) { e.preventDefault(); e.stopPropagation(); place(sel, +cell.dataset.c, +cell.dataset.q); }
     else if (selSet.size) { selSet.clear(); drawCirc(); }
   });
-  $('#qcRun').onclick = e => { e.currentTarget.blur(); run(); };
+  const runDlg = $('#qcRunDlg');
+  $('#qcSetup').onclick = e => { e.currentTarget.blur(); runDlg.hidden = false; };
+  runDlg.querySelectorAll('[data-rd="cancel"]').forEach(b => b.onclick = () => { runDlg.hidden = true; });
+  runDlg.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Escape') runDlg.hidden = true; });
+  $('#qcRun').onclick = e => { e.currentTarget.blur(); runDlg.hidden = true; run(); };
+  // OpenQASM 2.0 のファイルとして保存
+  const qasm = () => {
+    const L = ['OPENQASM 2.0;', 'include "qelib1.inc";', ...regs.q.map(x => `qreg ${x.name}[${x.n}];`), ...regs.c.map(x => `creg ${x.name}[${x.n}];`)];
+    grid.forEach(col => {
+      if (col.two) { L.push(`${col.two.g === 'CX' ? 'cx' : 'swap'} ${QL[col.two.a]},${QL[col.two.b]};`); return; }
+      for (let q = 0; q < NQ; q++) { const o = col['q' + q]; if (o) L.push(o.g === 'M' ? `measure ${QL[q]} -> ${CL[q].s};` : `${o.g === 'I' ? 'id' : o.g.toLowerCase()} ${QL[q]};`); }
+    });
+    return L.join('\n') + '\n';
+  };
+  $('#qcSave').onclick = e => {
+    e.currentTarget.blur();
+    const name = ($('#qcTitle').textContent.trim() || 'circuit').replace(/[^\w\-]+/g, '_');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([qasm()], { type: 'text/plain' })); a.download = name + '.qasm';
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    toast(`${name}.qasm（OpenQASM 2.0）を保存しました`);
+  };
   $('#qcShots').onchange = () => { if (ran) run(); };
   // ---- メニュー（Edit だけ開く） ----
   const menus = [...root.querySelectorAll('.qc-menu')].filter(m => m.querySelector('.qc-drop'));
@@ -3728,13 +3804,13 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
   $('#qcDemo2').onclick = e => {
     e.currentTarget.blur(); clearAll(); $('#qcTitle').textContent = 'Two superpositions';
     tb.later(() => { snap(); regs = { q: [{ name: 'q', n: 2 }], c: [{ name: 'c', n: 2 }] }; layout(); grid.forEach((_, i) => grid[i] = {}); update(); toast('量子ビット 2 個・古典ビット 2 個に設定しました'); }, 400);
-    [['H', 0, 0], ['H', 0, 1], ['M', 1, 0], ['M', 1, 1]].forEach(([g, c, q], k) => tb.later(() => place(g, c, q), 1200 + k * 650));
+    [['H', 0, 0], ['H', 0, 1], ['M', 1, 0], ['M', 2, 1]].forEach(([g, c, q], k) => tb.later(() => place(g, c, q), 1200 + k * 650));
     tb.later(run, 1200 + 4 * 650);
   };
 
   // キーボード操作（このスライドを表示しているときだけ）
   addEventListener('keydown', e => {
-    if (!root.closest('.slide').classList.contains('active') || document.activeElement === $('#qcTitle') || !dlg.hidden) return;
+    if (!root.closest('.slide').classList.contains('active') || document.activeElement === $('#qcTitle') || !dlg.hidden || !$('#qcRunDlg').hidden) return;
     const k = e.key.toLowerCase(), mod = e.ctrlKey || e.metaKey;
     let f = null;
     if (mod && k === 'z') f = e.shiftKey ? ACT.redo : ACT.undo;
