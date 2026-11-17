@@ -1893,6 +1893,40 @@ svg.topo{display:block;width:100%;height:auto;user-select:none}
 @media print{.code .cl.on{background:none;box-shadow:none}}
 
 /* ===== 改訂で追加したスライド用 ===== */
+.mxc{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:16px}
+.mxp{background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:8px 14px;border-top:9px solid var(--c)}
+.mxp .mh{font-weight:900;font-size:18px;color:var(--c);text-align:center}
+.mxp .eqrow{justify-content:center;font-size:20px;gap:6px;flex-wrap:nowrap}
+.mxp .vec{font-size:18px}
+.mxp .nt{text-align:center;font-size:15px;color:var(--muted);font-weight:700}
+.ng{color:var(--red);font-weight:900;font-size:26px}
+.op2{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,.62fr);gap:10px;align-items:center}
+.op2 .card{padding:8px 12px}
+.op2 .eqm{font:900 40px "Cambria Math","Times New Roman",serif;color:var(--accent-d)}
+.map3{display:flex;gap:8px;justify-content:center;margin-top:4px}
+.map3 span{background:#fff;border:2px solid var(--ink);border-radius:999px;padding:1px 12px;font:700 17px "Cambria Math","Times New Roman",serif;white-space:nowrap}
+/* Colab チュートリアル */
+.tut{display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;height:100%;min-height:0}
+.tut-nav{display:flex;flex-direction:column;gap:8px}
+.tut-nav button{text-align:left;font:800 15px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;border:2.5px solid var(--ink);border-radius:12px;background:#fff;padding:8px 10px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);color:var(--ink);display:flex;gap:8px;align-items:center}
+.tut-nav button i{font-style:normal;flex:none;width:26px;height:26px;border-radius:50%;background:#f9ab00;color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid var(--ink);font-size:14px}
+.tut-nav button.on{background:#fff4d6}
+.tut-nav button.on i{background:#e8710a}
+.tut-main{background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.tut-bar{background:#f1f3f4;border-bottom:2px solid #d7d7d7;padding:5px 12px;display:flex;align-items:center;gap:8px;font:700 13px Consolas,Menlo,monospace;color:#5f6368}
+.tut-bar b{background:#fff;border:1.5px solid #c8c8c8;border-radius:999px;padding:1px 12px;font-weight:600}
+.tut-body{padding:8px 16px;display:flex;flex-direction:column;gap:6px;min-height:0;flex:1}
+.tut-body h3{margin:0;font-size:22px}
+.tut-body .td{font-size:17px;line-height:1.6}
+.tut-body .code{font-size:13.5px;line-height:1.45}
+.tut-out{font:600 14px/1.45 Consolas,Menlo,monospace;background:#fafafa;border:2px solid #d7d7d7;border-left:6px solid #f9ab00;border-radius:8px;padding:6px 12px;white-space:pre;overflow:hidden}
+.tut-out .lb{font:800 12px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:#9a93bd;display:block;margin-bottom:2px}
+.tut-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto}
+.tut-note{font-size:14px;color:var(--muted);font-weight:700}
+.thist{display:flex;align-items:flex-end;gap:14px;height:78px;padding:0 6px;border-bottom:2.5px solid var(--ink)}
+.thist div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font:700 12px Consolas,monospace}
+.thist i{display:block;width:42px;background:#e8710a;border:2px solid var(--ink);border-bottom:0;border-radius:6px 6px 0 0;transition:height .6s}
+.thist span{margin-top:2px}
 .rq{margin-top:auto;border-top:2.5px dashed #d9d4ea;padding-top:8px;font-size:16px;line-height:1.6}
 .rq-bar{display:flex;gap:8px;justify-content:center}
 .rq .b{font-size:14px;padding:4px 14px}
@@ -2115,9 +2149,13 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
       <div class="ieq" style="gap:30px"><div style="width:360px"><div id="ntCirc0"></div><div class="ctr" style="font-size:19px;font-weight:800;color:var(--muted)">I を省略した回路</div></div><span class="ieq-eq" style="font-size:72px">=</span><div style="width:360px"><div id="ntCircI"></div><div class="ctr" style="font-size:19px;font-weight:800;color:var(--muted)">I を描いた回路（H ⊗ I）</div></div></div>
     </div>
     <div class="point green pop" style="--d:.05s;margin-top:0;font-size:23px;border-left-color:var(--green);background:#e3f6ea">0 番目の量子ビットにだけゲートがかかっている場合、<b style="color:#0a6b3a">1 番目以降の量子ビットには I ゲートがかかっている</b> と考える</div>
-    <div class="g2" style="gap:18px">
-      <div class="point pop" style="--d:.1s;margin-top:0;font-size:20px">H は <b>2 × 2</b> の行列なので、そのままでは 2 量子ビット（4 成分のベクトル）にかけられない → <span class="math"><b>H ⊗ I</b></span>（<b>4 × 4</b> の行列）として計算する</div>
-      <div class="point blue pop" style="--d:.15s;margin-top:0;font-size:20px"><b>I は量子状態に影響しない</b> ので、回路では I を描かないのが一般的</div>
+    <div class="mxc">
+      <div class="mxp pop" style="--d:.1s;--c:var(--red)"><div class="mh">H（2 × 2）だけでは…</div>
+        <div class="eqrow"><span><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span></span><span class="vec m2" style=""><span>1</span><span>1</span><span>1</span><span>−1</span></span><span><span class="vec " style="font-size:15px"><span>1</span><span>0</span><span>0</span><span>0</span></span></span><span class="ng">✘</span></div>
+        <div class="nt">2 × 2 の行列に 4 成分のベクトルはかけられない</div></div>
+      <div class="mxp pop" style="--d:.15s;--c:var(--green)"><div class="mh">H ⊗ I（4 × 4）なら計算できる</div>
+        <div class="eqrow"><span><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span></span><span class="vec m4" style="font-size:15px;column-gap:8px"><span>1</span><span>0</span><span>1</span><span>0</span><span>0</span><span>1</span><span>0</span><span>1</span><span>1</span><span>0</span><span>−1</span><span>0</span><span>0</span><span>1</span><span>0</span><span>−1</span></span><span class="vec " style="font-size:15px"><span>1</span><span>0</span><span>0</span><span>0</span></span><span>=</span><span><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span></span><span class="vec " style="font-size:15px"><span>1</span><span>0</span><span>1</span><span>0</span></span><span>=</span><span class="res" style="font-size:18px"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|00⟩ + |10⟩)</span></div>
+        <div class="nt">|0⟩ ⊗ |0⟩ = (1, 0, 0, 0) に 4 × 4 の行列をかける</div></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -2140,7 +2178,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
     </div>
     <div class="g2" style="gap:18px">
       <div class="point pop" style="--d:.1s;margin-top:0;font-size:22px">添え字 0 ＝「<b class="k">0 番目の量子ビットに H を適用する</b>」<br><span style="font-size:18px">量子プログラミングにあわせて、添え字は 0 から数える</span></div>
-      <div class="point blue pop" style="--d:.15s;margin-top:0;font-size:22px">同様に、1 番目の量子ビットにだけ H をかけるなら<br><span class="math" style="font-size:28px">I ⊗ H = <b>H<sub>1</sub></b></span></div>
+      <div class="point blue pop" style="--d:.15s;margin-top:0;font-size:20px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:10px;align-items:center"><div>同様に、1 番目の量子ビットにだけ H をかけるなら<br><span class="math" style="font-size:28px">I ⊗ H = <b>H<sub>1</sub></b></span></div><div id="ntCircH1"></div></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -2372,7 +2410,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
         <div class="mp-lbl" style="text-align:left">必要な測定回数：推定精度 ε にするには約 <span class="math"><b>1/ε²</b></span> 回</div>
         <div class="g2" style="gap:8px;font-size:16px"><div class="stbox" style="padding:4px 10px">小数第 1 位：ε = 0.1<br><b class="math">1/ε² = 10² = 100 回</b></div><div class="stbox" style="padding:4px 10px">小数第 2 位：ε = 0.01<br><b class="math">1/ε² = 100² = 10000 回</b></div></div>
       </div>
-      <div class="point pop" style="--d:.15s;margin-top:0;font-size:15.5px">z 方向の測定だけでは <span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩+|1⟩)</span> と <span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩−|1⟩)</span> を区別できない（どちらも |0⟩ の確率 1/2）→ <b class="k">3 種類の方向</b> から測定する。小数第 2 位までなら 3 × 10000 = <b>30000 回</b></div>
+      <div class="point pop" style="--d:.15s;margin-top:0;font-size:15.5px">z 方向の測定だけでは <span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩+|1⟩)</span> と <span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩−|1⟩)</span> を区別できない（どちらも |0⟩ の確率 1/2）。よって、<b class="k">x, y, z の 3 種類の方向</b> から測定する。小数第 2 位までなら 3 × 10000 = <b>30000 回</b></div>
     </div>
     <div class="card pop" style="--d:.2s;padding:10px 14px">
       <div class="pk" id="tqK" data-label="状態" style="justify-content:center"></div>
@@ -2503,6 +2541,29 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <div class="pageno"></div>
 </section>
 
+<!-- 7.3.2 Google Colab で Qiskit を動かす（チュートリアル） -->
+<section class="slide" data-id="colab">
+  <div class="chap">第7章 ／ 7.3.2 Qiskit の実行方法 ・ 補足（教科書外）</div>
+  <h2>Google Colab で Qiskit を動かす<small>チュートリアル</small></h2>
+  <div class="xtra">教科書外</div>
+  <div class="body">
+    <div class="tut">
+      <div class="tut-nav" id="tutNav"></div>
+      <div class="tut-main">
+        <div class="tut-bar"><span>●●●</span><b>colab.research.google.com</b><span id="tutPage"></span></div>
+        <div class="tut-body">
+          <h3 id="tutH"></h3>
+          <div class="td" id="tutD"></div>
+          <div class="code" id="tutCode"><span class="cap">セルに入力して ▶（Shift + Enter）</span></div>
+          <div class="tut-out" id="tutOut"></div>
+          <div class="tut-foot"><span class="tut-note" id="tutNote"></span><div class="btns" style="margin:0;flex-wrap:nowrap;flex:none"><button class="b" id="tutPrev">◀ 前へ</button><button class="b" id="tutRun">▶ 実行（デモ）</button><button class="b" id="tutNext">次へ ▶</button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
 <!-- SECTION 8 -->
 <section class="slide door" style="--c:var(--gold)">
   <div class="door-bg">6</div>
@@ -2565,11 +2626,12 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <h2>隣接していないなら SWAP で隣に連れてくる<small>図 7.22・7.23（pp.186–187）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
     <div class="col">
-      <div class="card pop" style="padding:8px 14px"><div class="mp-lbl">図 7.22：コンパイル前（量子ビット 0 と 2 は隣接していない）</div><div id="scBefore"></div></div>
+      <div class="card pop" style="padding:8px 14px"><div class="mp-lbl">図 7.22：コンパイル前（q<sub>0</sub>（実機「0」）と q<sub>2</sub>（実機「2」）は隣接していない）</div><div id="scBefore"></div></div>
       <div class="card pop" style="--d:.1s;padding:8px 14px"><div class="mp-lbl">図 7.23：トポロジーを考慮したコンパイル後</div><div id="scAfter"></div></div>
     </div>
     <div class="col">
-      <div class="point blue pop" style="margin-top:0;font-size:15.5px">q の添え字 ＝ <b class="kb">実機のトポロジー上の量子ビット番号</b>（q<sub>0</sub> は量子ビット「0」）。量子ビットそのものは動かせないので、SWAP で <b>中身の量子状態</b> を入れ替える</div>
+      <div class="point blue pop" style="margin-top:0;font-size:15px;padding:8px 14px">q<sub>0</sub>, q<sub>1</sub>, q<sub>2</sub> を <b class="kb">実機のどの量子ビットに割り当てるか</b> もコンパイラが決める。この例では：
+        <div class="map3"><span>q₀ → 実機「0」</span><span>q₁ → 実機「1」</span><span>q₂ → 実機「2」</span></div></div>
       <div class="numlist pop" style="--d:.1s;--c:var(--gold)" id="scList">
         <div><b class="n">1</b><span>SWAP で量子ビット「1」と「2」の <b>状態</b> を入れ替える</span></div>
         <div><b class="n">2</b><span>「0」と「1」で CNOT（「1」の中身は元々「2」の状態）</span></div>
@@ -2612,11 +2674,14 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 <section class="slide" data-id="op">
   <div class="chap">第7章 ／ 7.9.4 短い量子回路に変換 ・ 7.9.5 その他の機能</div>
   <h2>回路を短くする最適化とその他の機能<small>7.9.4・7.9.5・図 7.26・7.27（pp.188–189）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)">
+  <div class="body cols" style="grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr)">
     <div class="col">
-      <div class="card pop" style="padding:8px 14px"><div class="mp-lbl" id="opFig">図 7.26：最適化前（3 個の量子ゲート）</div><div id="opCirc"></div>
-        <div class="eqrow ctr" style="justify-content:center;font-size:24px"><span id="opEq">H · Z · H = X</span></div>
-        <div class="btns" style="justify-content:center;margin-top:4px"><button class="b" id="opAuto" data-autoplay>▶ 自動再生</button></div></div>
+      <div class="op2 pop">
+        <div class="card"><div class="mp-lbl">図 7.26：最適化前（3 個）</div><div id="opCircA"></div></div>
+        <div class="eqm">⟹</div>
+        <div class="card" style="border-color:var(--green)"><div class="mp-lbl" style="color:#0a6b3a">図 7.27：最適化後（1 個）</div><div id="opCircB"></div></div>
+      </div>
+      <div class="eqrow pop" style="--d:.05s;justify-content:center;font-size:28px"><span>H · Z · H = <span class="res">X</span></span></div>
       <div class="point pop" style="--d:.1s;margin-top:0;font-size:16.5px"><span class="math">X = H · Z · H</span>（第4章）なので、図 7.27 の量子回路を実行しても <b>同じ結果</b>。こちらは <b class="k">1 個の量子ゲート</b> で済む</div>
     </div>
     <div class="col">
@@ -2647,33 +2712,19 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 
 <!-- 練習問題 第6章 -->
 <section class="slide" data-id="quiz6">
-  <div class="chap">Practice ／ 第6章</div>
-  <h2>練習問題（第6章）<small>クリックで答え</small><button class="b qz-all" data-quiz-all>答えをぜんぶ表示</button></h2>
+  <div class="chap">Practice</div>
+  <h2>練習問題<small>クリックで答え</small><button class="b qz-all" data-quiz-all>答えをぜんぶ表示</button></h2>
   <div class="body quiz q6x">
     <div class="qz pop"><div class="qz-q"><span class="qz-no">Q1</span><span><span class="math">X ⊗ I</span> と <span class="math">H ⊗ H ⊗ H</span> を、それぞれ短く書くと？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b class="math">X<sub>0</sub></b>（0 番目にだけ X）と <b class="math">H<sup>⊗3</sup></b></span></div></div>
-    <div class="qz pop" style="--d:.05s"><div class="qz-q"><span class="qz-no">Q2</span><span><span class="math">CNOT<sub>0,1</sub>(|1⟩ ⊗ |1⟩)</span> は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b class="math">|1⟩ ⊗ |0⟩</b>（制御ビットが |1⟩ なので標的ビットを反転）</span></div></div>
-    <div class="qz pop" style="--d:.1s"><div class="qz-q"><span class="qz-no">Q3</span><span><span class="math">CNOT<sub>1,0</sub>(|0⟩ ⊗ |1⟩)</span> は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b class="math">|1⟩ ⊗ |1⟩</b>（1 番目が制御ビット。|1⟩ なので 0 番目を反転）</span></div></div>
-    <div class="qz pop" style="--d:.15s"><div class="qz-q"><span class="qz-no">Q4</span><span><span class="math">SWAP(|1⟩ ⊗ |0⟩)</span> は？ また <span class="math">SWAP<sub>0,1</sub></span> と <span class="math">SWAP<sub>1,0</sub></span> の関係は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b class="math">|0⟩ ⊗ |1⟩</b>。入れ替えは対称なので <b class="math">SWAP<sub>0,1</sub> = SWAP<sub>1,0</sub></b></span></div></div>
+    <div class="qz pop" style="--d:.1s"><div class="qz-q"><span class="qz-no">Q2</span><span><span class="math">CNOT<sub>1,0</sub>(|0⟩ ⊗ |1⟩)</span> は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b class="math">|1⟩ ⊗ |1⟩</b>（1 番目が制御ビット。|1⟩ なので 0 番目を反転）</span></div></div>
+    <div class="qz pop" style="--d:.15s"><div class="qz-q"><span class="qz-no">Q3</span><span><span class="math">SWAP(|1⟩ ⊗ |0⟩)</span> は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b class="math">|0⟩ ⊗ |1⟩</b>（0 番目と 1 番目が入れ替わる）</span></div></div>
+    <div class="qz pop" style="--d:.17s"><div class="qz-q"><span class="qz-no">Q4</span><span><span class="math">|0⟩ ⊗ |0⟩</span> の 0 番目に X、1 番目に H を適用する（<span class="math">X ⊗ H</span>）と、どんな状態になる？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><span class="math">X|0⟩ ⊗ H|0⟩ = |1⟩ ⊗ <span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩ + |1⟩) = <b><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|10⟩ + |11⟩)</b></span></span></div></div>
     <div class="qz pop" style="--d:.2s"><div class="qz-q"><span class="qz-no">Q5</span><span><span class="math">|1⟩ ⊗ |0⟩</span> から始めて H<sub>0</sub> → CNOT<sub>0,1</sub> を適用した状態は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|00⟩ − |11⟩)</b>（H|1⟩ = (|0⟩−|1⟩)/√2 なので）</span></div></div>
     <div class="qz pop" style="--d:.25s"><div class="qz-q"><span class="qz-no">Q6</span><span>Qiskit で <span class="mono">qc.x(1)</span> だけを適用して測定すると、結果の文字列は？ 本書の書き方では？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">Qiskit は <b class="mono">'10'</b>（右端が 0 番目）。本書の書き方では <b class="math">|0⟩ ⊗ |1⟩ = |01⟩</b></span></div></div>
   </div>
   <div class="pageno"></div>
 </section>
 
-<!-- 練習問題 第7章 -->
-<section class="slide" data-id="quiz7">
-  <div class="chap">Practice ／ 第7章</div>
-  <h2>練習問題（第7章）<small>クリックで答え</small><button class="b qz-all" data-quiz-all>答えをぜんぶ表示</button></h2>
-  <div class="body quiz q6x">
-    <div class="qz pop"><div class="qz-q"><span class="qz-no">Q1</span><span>Qiskit を使う方法として紹介した 3 つは？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>Quantum Composer</b>・<b>Google Colab</b>・<b>自分の PC</b></span></div></div>
-    <div class="qz pop" style="--d:.05s"><div class="qz-q"><span class="qz-no">Q2</span><span>実機で動かす前にシミュレータで動作確認するのはなぜ？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">実機は <b>台数が少なく</b> 世界中で共有しているため、<b>待ち時間</b> が発生するから</span></div></div>
-    <div class="qz pop" style="--d:.1s"><div class="qz-q"><span class="qz-no">Q3</span><span>Qiskit の結果で <span class="mono">'01'</span> と表示されたとき、量子ビット 0 の測定値は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>1</b>（バイト・オーダは右から 0, 1。右端が量子ビット 0）</span></div></div>
-    <div class="qz pop" style="--d:.15s"><div class="qz-q"><span class="qz-no">Q4</span><span>量子コンパイラは、人間が書いた量子回路を何に合わせて変換する？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">実機の <b>トポロジー</b>（量子ビットの配置）と <b>実行できるゲート</b>。さらに回路を <b>短く</b> する</span></div></div>
-    <div class="qz pop" style="--d:.2s"><div class="qz-q"><span class="qz-no">Q5</span><span>ibm_washington で量子ビット 0 と 2 の間で CNOT を実行するには？（0–1–2 が一列に並んでいる）</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">隣接していないので <b>SWAP で 1 と 2 を入れ替え</b> → 0 と 1 で CNOT → SWAP で元に戻す</span></div></div>
-    <div class="qz pop" style="--d:.25s"><div class="qz-q"><span class="qz-no">Q6</span><span>量子コンパイラが <span class="math">H–Z–H</span> を <span class="math">X</span> 1 個に変換するのはなぜ嬉しい？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">同じ結果のまま <b>ゲート数・計算時間が減り</b>、ノイズの影響が小さくなって計算精度が上がるから</span></div></div>
-  </div>
-  <div class="pageno"></div>
-</section>
 </div></div>
 <div id="ui">
   <button id="btnPrev">◀</button><span id="counter"></span><button id="btnNext">▶</button>
@@ -3037,6 +3088,7 @@ const BELL_OPS = [{ g: 'H', q: 0, col: 0 }, { g: 'CX', c: 0, t: 1, col: 1 }, { g
 /* ---------- 6.2.2 記法：I を描いた回路 ＝ I を省略した回路 ---------- */
 drawQC('#ntCircI', { n: 2, init: true, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'I', q: 1, col: 0 }], colW: 110, rowH: 66, maxW: '320px' });
 drawQC('#ntCirc0', { n: 2, init: true, ops: [{ g: 'H', q: 0, col: 0 }], colW: 110, rowH: 66, maxW: '320px' });
+drawQC('#ntCircH1', { n: 2, init: true, top: 30, ops: [{ g: 'H', q: 1, col: 0 }, { g: 'BOX', c0: 0, c1: 0, q0: 1, q1: 1, label: 'H_{1}' }], colW: 80, rowH: 52, maxW: '250px' });
 drawQC('#ntCircH0', { n: 2, init: true, top: 48, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'BOX', c0: 0, c1: 0, q0: 0, q1: 0, label: 'H_{0}' }], colW: 110, rowH: 70, maxW: '340px' });
 drawQC('#nt2Circ', { n: 2, init: true, top: 46, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'H', q: 1, col: 0 }, { g: 'BOX', c0: 0, c1: 0, label: 'H ⊗ H' }], colW: 110, rowH: 76, maxW: '400px' });
 
@@ -3150,6 +3202,67 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
   const pk = picker('#swK', KETS.map((k, i) => ({ label: k, i })), it => play(it.i));
   pk(1);
   looper('#swAuto', () => pk((pk.cur() + 1) % 4), 2600);
+}
+
+/* ---------- Google Colab で Qiskit を動かす（チュートリアル） ---------- */
+{
+  const DRAW = ['        ┌───┐      ░ ┌─┐   ', '   q_0: ┤ H ├──■───░─┤M├───', '        └───┘┌─┴─┐ ░ └╥┘┌─┐', '   q_1: ─────┤ X ├─░──╫─┤M├', '             └───┘ ░  ║ └╥┘', 'meas: 2/══════════════╩══╩═', '                      0  1 '].join('\n');
+  const S = [
+    { t: 'Colab を開く', h: '① Google Colab を開いて、ノートブックを作る',
+      d: 'ブラウザで <b>colab.research.google.com</b> を開き、Google アカウントでログイン →「<b>ノートブックを新規作成</b>」。灰色の枠（<b>セル</b>）にコードを書き、▶ ボタンか <b>Shift + Enter</b> で実行する。PC へのインストールは不要',
+      code: ['print("Hello, Qiskit!")'], out: 'Hello, Qiskit!', note: 'Google アカウントがあれば無料で使える' },
+    { t: 'Qiskit を入れる', h: '② Qiskit をインストールする',
+      d: '先頭の <b class="mono">!</b> は「コマンドとして実行する」という意味。<b>qiskit</b>（本体）、<b>qiskit-aer</b>（シミュレータ）、<b>qiskit-ibm-runtime</b>（実機に接続）を入れる',
+      code: ['!pip install qiskit qiskit-aer qiskit-ibm-runtime'], out: 'Successfully installed qiskit-2.x.x qiskit-aer-0.x.x qiskit-ibm-runtime-0.x.x …', note: 'Colab を開き直したときは、もう一度インストールする' },
+    { t: '回路を作る', h: '③ 量子回路を作って表示する',
+      d: '2 量子ビットの回路に H と CNOT を入れて、両方を測定する（第6章の量子もつれの回路）。<span class="mono">draw()</span> で回路の図を表示できる',
+      code: ['from qiskit import QuantumCircuit', '', 'qc = QuantumCircuit(2)', 'qc.h(0)        # 0 番目に H', 'qc.cx(0, 1)    # 制御 0、標的 1 の CNOT', 'qc.measure_all()', 'print(qc.draw())'], out: DRAW, note: 'この回路は、このあと実機でも使う' },
+    { t: 'シミュレータで実行', h: '④ シミュレータで実行する',
+      d: '普通のコンピュータで量子コンピュータの動きをまねする <b>AerSimulator</b> で 1024 回実行し、測定結果の回数を表示する',
+      code: ['from qiskit import transpile', 'from qiskit_aer import AerSimulator', '', 'sim = AerSimulator()', 'job = sim.run(transpile(qc, sim), shots=1024)', 'print(job.result().get_counts())'], sim: true, note: '00 と 11 がおおよそ半々。01・10 は出ない' },
+    { t: 'API キーを用意', h: '⑤ IBM Quantum に接続する準備',
+      d: '<b>quantum.cloud.ibm.com</b>（IBM Quantum Platform）で無料アカウントを作り、<b>API キー</b> を作成。Colab 左側の 🔑（<b>シークレット</b>）に <span class="mono">IBM_TOKEN</span> という名前で登録しておく',
+      code: ['from google.colab import userdata', 'from qiskit_ibm_runtime import QiskitRuntimeService', '', 'service = QiskitRuntimeService(', '    channel="ibm_quantum_platform",', '    token=userdata.get("IBM_TOKEN"))   # API キーはコードに直接書かない'], out: '（エラーが出なければ接続の準備は完了）', note: '⚠️ API キーは他人に見せない・共有するノートブックに書かない' },
+    { t: '実機で実行（デモ）', h: '⑥ 実機で実行する（デモ）',
+      d: '空いている実機を選び、<b>量子コンパイラ</b>で実機用に変換して実行する（実機は共有なので <b>待ち時間</b> がある）',
+      code: ['from qiskit.transpiler import generate_preset_pass_manager', 'from qiskit_ibm_runtime import SamplerV2', 'backend = service.least_busy(operational=True, simulator=False)', 'pm = generate_preset_pass_manager(backend=backend, optimization_level=1)', 'isa_qc = pm.run(qc)    # 実機用に変換（量子コンパイラ）', 'job = SamplerV2(mode=backend).run([isa_qc], shots=1024)', 'print(job.result()[0].data.meas.get_counts())'],
+      real: true, note: '※ 実機の結果は毎回変わる' },
+  ];
+  $('#tutNav').innerHTML = S.map((s, i) => `<button data-i="${i}"><i>${i + 1}</i>${s.t}</button>`).join('');
+  const bs = [...$('#tutNav').querySelectorAll('button')];
+  const tb = timerBag();
+  let k = 0;
+  const hist = c => '<div class="thist">' + ['00', '01', '10', '11'].map(x => `<div>${c[x] || 0}<i style="height:${(c[x] || 0) / 1024 * 100}px"></i><span>${x}</span></div>`).join('') + '</div>';
+  const out = $('#tutOut');
+  const run = () => {
+    tb.clear();
+    const s = S[k];
+    if (s.sim) {
+      const a = binom(1024, .5);
+      const c = { '00': a, '11': 1024 - a };
+      out.innerHTML = `<span class="lb">出力</span>{'00': ${a}, '11': ${1024 - a}}` + hist(c);
+    } else if (s.real) {
+      const c = { '00': 488, '11': 507, '01': 14, '10': 15 };
+      out.innerHTML = '<span class="lb">出力（デモ）</span>QUEUED　<span style="color:#9a93bd">… 実機の順番を待っています</span>';
+      tb.later(() => { out.innerHTML = '<span class="lb">出力（デモ）</span>RUNNING　<span style="color:#9a93bd">… 実機で計算中</span>'; }, 1200);
+      tb.later(() => { out.innerHTML = `<span class="lb">出力（デモ：実機のノイズを再現したシミュレータ FakeFez で得た出力例）</span>{'10': 15, '11': 507, '00': 488, '01': 14}　<span style="color:var(--red)">← ノイズで 01・10 も少し出る</span>` + hist(c); }, 2400);
+    } else out.innerHTML = `<span class="lb">出力</span>${s.out.replace(/&/g, '&amp;').replace(/</g, '&lt;')}`;
+  };
+  const show = i => {
+    tb.clear();
+    k = i; const s = S[i];
+    bs.forEach((b, j) => b.classList.toggle('on', j === i));
+    $('#tutPage').textContent = `ステップ ${i + 1} / ${S.length}`;
+    $('#tutH').textContent = s.h; $('#tutD').innerHTML = s.d; $('#tutNote').innerHTML = s.note;
+    codeBlock('#tutCode', s.code);
+    $('#tutRun').style.display = s.sim || s.real ? '' : 'none';
+    if (s.sim || s.real) out.innerHTML = '<span class="lb">出力</span><span style="color:#9a93bd">「▶ 実行（デモ）」を押すと出力が表示される</span>'; else run();
+  };
+  bs.forEach((b, i) => b.addEventListener('click', e => { e.currentTarget.blur(); show(i); }));
+  $('#tutPrev').onclick = e => { e.currentTarget.blur(); show(Math.max(0, k - 1)); };
+  $('#tutNext').onclick = e => { e.currentTarget.blur(); show(Math.min(S.length - 1, k + 1)); };
+  $('#tutRun').onclick = e => { e.currentTarget.blur(); run(); };
+  show(0);
 }
 
 /* ---------- 7.3.2 Quantum Composer の操作動画 ---------- */
@@ -3344,7 +3457,7 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
   const svg = $('#scSvg'), PX = [80, 220, 360], PY = 64;
   el('line', { x1: PX[0], y1: PY, x2: PX[2], y2: PY, stroke: '#9a93bd', 'stroke-width': 5 }, svg);
   const link = el('line', { x1: PX[0], y1: PY, x2: PX[1], y2: PY, stroke: 'var(--accent)', 'stroke-width': 9, opacity: 0, 'stroke-linecap': 'round' }, svg);
-  PX.forEach((x, i) => { el('rect', { x: x - 34, y: PY - 34, width: 68, height: 68, rx: 14, fill: 'none', stroke: '#9a93bd', 'stroke-width': 2.5, 'stroke-dasharray': '5 4' }, svg); el('text', { x, y: PY + 54, 'text-anchor': 'middle', 'font-size': 14, 'font-weight': 800, fill: '#6b6790', 'font-family': 'sans-serif' }, svg).textContent = `量子ビット「${i}」= q${'₀₁₂'[i]}`; });
+  PX.forEach((x, i) => { el('rect', { x: x - 34, y: PY - 34, width: 68, height: 68, rx: 14, fill: 'none', stroke: '#9a93bd', 'stroke-width': 2.5, 'stroke-dasharray': '5 4' }, svg); el('text', { x, y: PY + 54, 'text-anchor': 'middle', 'font-size': 14, 'font-weight': 800, fill: '#6b6790', 'font-family': 'sans-serif' }, svg).textContent = `実機「${i}」← q${'₀₁₂'[i]}`; });
   const cols = ['var(--blue)', '#9a93bd', 'var(--pink)'];
   const balls = [0, 1, 2].map(i => { const g = el('g', { class: 'sc-ball' }, svg); el('circle', { cx: 0, cy: 0, r: 24, fill: cols[i] }, g); text(g, 0, 1, `ψ_{${i}}`, {}); return g; });
   const msg = el('text', { x: 220, y: 22, 'text-anchor': 'middle', 'font-size': 15, 'font-weight': 800, fill: '#1f1a3d', 'font-family': 'sans-serif' }, svg);
@@ -3425,18 +3538,10 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
   onEnter.hd = () => { k = 3; };
 }
 
-/* ---------- 7.9.4 HZH → X ---------- */
-{
-  let opt = false;
-  const draw = () => {
-    $('#opFig').textContent = opt ? '図 7.27：最適化後（1 個の量子ゲート）' : '図 7.26：最適化前（3 個の量子ゲート）';
-    drawQC('#opCirc', { n: 1, nc: 1, names: ['q'], ops: opt ? [{ g: 'X', q: 0, col: 1 }, { g: 'M', q: 0, cb: 0, col: 3 }] : [{ g: 'H', q: 0, col: 0 }, { g: 'Z', q: 0, col: 1 }, { g: 'H', q: 0, col: 2 }, { g: 'M', q: 0, cb: 0, col: 3 }], cols: 4, colW: 64, maxW: '380px' });
-    $('#opEq').innerHTML = opt ? '<span class="res">X</span>（同じ結果・ゲート数 1）' : 'H · Z · H = X';
-  };
-  draw();
-  looper('#opAuto', () => { opt = !opt; draw(); }, 2000);
-  onEnter.op = () => { opt = true; };
-}
+/* ---------- 7.9.4 HZH → X：最適化前と後を並べて表示 ---------- */
+drawQC('#opCircA', { n: 1, nc: 1, names: ['q'], ops: [{ g: 'H', q: 0, col: 0 }, { g: 'Z', q: 0, col: 1 }, { g: 'H', q: 0, col: 2 }, { g: 'M', q: 0, cb: 0, col: 3 }], colW: 60 });
+drawQC('#opCircB', { n: 1, nc: 1, names: ['q'], ops: [{ g: 'X', q: 0, col: 0 }, { g: 'M', q: 0, cb: 0, col: 1 }], colW: 60 });
+
 /* ---------- 復習問題：カードをクリックすると答えが出る（もう一度押すと隠れる） ---------- */
 {
   document.querySelectorAll('.qz').forEach(q => q.addEventListener('click', () => {
@@ -3464,7 +3569,7 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
     sl.querySelector('[data-quiz-all]').textContent = '答えをぜんぶ表示';
   };
   window.onEnter = window.onEnter || {};
-  ['quiz6', 'quiz7'].forEach(id => onEnter[id] = reset(id));
+  ['quiz6'].forEach(id => onEnter[id] = reset(id));
   // 印刷（配布資料）では答えも見えるようにする
   addEventListener('beforeprint', () => document.querySelectorAll('.qz, .qgb').forEach(q => q.classList.add(q.classList.contains('qz') ? 'open' : 'shown')));
 }
