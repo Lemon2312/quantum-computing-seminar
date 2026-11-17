@@ -1893,6 +1893,10 @@ svg.topo{display:block;width:100%;height:auto;user-select:none}
 @media print{.code .cl.on{background:none;box-shadow:none}}
 
 /* ===== 改訂で追加したスライド用 ===== */
+.qw2 .icard{padding:16px 18px}
+.qw2 .icard .ih{font-size:24px;margin:8px 0 10px}
+.qw2 .icard .ii{font-size:34px}
+.qw2 .icard p{font-size:19px;line-height:1.7}
 .nz2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
 .nzc{border:2.5px solid var(--ink);border-radius:14px;padding:6px 10px 8px;border-top:8px solid var(--c);background:#fff}
 .nzc .nh{font-weight:900;font-size:16px;text-align:center;color:var(--c)}
@@ -2091,11 +2095,12 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 <section class="slide" data-id="nt">
   <div class="chap">第6章 ／ 6.2.2 記法の工夫</div>
   <h2>H ⊗ I を H<sub>0</sub> と書く<small>6.2.2・図 6.1（pp.140–141）</small></h2>
-  <div class="body col" style="gap:18px;justify-content:flex-start">
-    <div class="card pop" style="padding:12px 20px">
+  <div class="body col" style="gap:14px;justify-content:flex-start">
+    <div class="card pop" style="padding:8px 20px">
       <div class="mp-lbl" style="font-size:19px">0 番目の量子ビットにだけ H を適用する回路（図 6.1）</div>
       <div class="ieq" style="gap:30px"><div style="width:360px"><div id="ntCircI"></div><div class="ctr" style="font-size:19px;font-weight:800;color:var(--muted)">I を描いた回路（H ⊗ I）</div></div><span class="ieq-eq" style="font-size:72px">=</span><div style="width:360px"><div id="ntCirc0"></div><div class="ctr" style="font-size:19px;font-weight:800;color:var(--muted)">I を省略した回路（H<sub>0</sub>）</div></div></div>
     </div>
+    <div class="point green pop" style="--d:.05s;margin-top:0;font-size:21px;border-left-color:var(--green);background:#e3f6ea">⚠️ 回路に H だけが描いてあっても、H は <b>2 × 2</b> の行列なので、そのままでは 2 量子ビット（4 成分のベクトル）にかけられない → <b style="color:#0a6b3a">1 番目の量子ビットには I ゲートがある</b> と考えて、<span class="math"><b>H ⊗ I</b></span>（<b>4 × 4</b> の行列）として計算する</div>
     <div class="g2" style="gap:18px">
       <div class="point pop" style="--d:.1s;margin-top:0;font-size:22px"><b>I は量子状態に影響しない</b> → 回路でも何も描かないのが一般的。そこで <span class="math">H ⊗ I</span> の「I」を省略して <span class="math" style="font-size:30px"><b>H<sub>0</sub></b></span> と書く</div>
       <div class="point blue pop" style="--d:.15s;margin-top:0;font-size:22px">添え字 0 ＝「<b class="kb">0 番目の量子ビットに H を適用する</b>」<br><span style="font-size:18px">量子プログラミングにあわせて、添え字は 0 から数える。同様に <span class="math">I ⊗ H = H<sub>1</sub></span></span></div>
@@ -2125,24 +2130,29 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <div class="pageno"></div>
 </section>
 
-<!-- バイトオーダ -->
+<!-- バイトオーダ：本書と Qiskit の比較 -->
 <section class="slide" data-id="bo">
   <div class="chap">第6章 ／ 6.2.2 記法の工夫</div>
   <h2>量子ビットの順番に注意：バイト・オーダ<small>p.141</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)">
-    <div class="col">
-      <div class="icard pop" style="--d:.1s;--c:var(--blue)"><span class="tag2">本書（第6章）</span><div class="ih">⟶ 左から右へ 0, 1, …</div><p>|0⟩ ⊗ |1⟩ なら <b>|0⟩ が 0 番目</b>、|1⟩ が 1 番目。量子アルゴリズムの説明で多い書き方</p></div>
-      <div class="icard pop" style="--d:.15s;--c:var(--pink)"><span class="tag2" style="background:var(--pink)">Qiskit など（第7章）</span><div class="ih">⟵ 右から左へ 0, 1, …</div><p>|0⟩ ⊗ |1⟩ なら <b>|1⟩ が 0 番目</b>、|0⟩ が 1 番目。量子プログラミング・ライブラリで多い書き方</p></div>
-      <div class="point pop" style="--d:.2s;font-size:17px;margin-top:0">非常に混乱しやすい！ <b>第7章でコードを書くときにもう一度出てくる</b></div>
+  <div class="body col" style="gap:16px">
+    <div class="mp-lbl pop" style="font-size:20px">例：同じ <span class="math">|01⟩</span> でも、読み方が逆になる</div>
+    <div class="cmp2">
+      <div class="cmpc pop" style="--c:var(--blue)">
+        <div class="ch" style="font-size:22px">本書（第6章）</div>
+        <div class="bo-arrow" style="color:var(--blue);font-size:22px">⟶　左から右へ 0 番目、1 番目</div>
+        <div class="bo-ket" style="font-size:84px"><span>|</span><span class="bo-d"><span class="dg" style="background:#fff1c2">0</span><span class="ix" style="background:var(--blue)">0 番目</span></span><span class="bo-d"><span class="dg" style="background:transparent">1</span><span class="ix" style="background:var(--blue)">1 番目</span></span><span>⟩</span></div>
+        <div class="bo-read"><div>0 番目の量子ビット<br><b>|0⟩</b></div><div>1 番目の量子ビット<br><b>|1⟩</b></div></div>
+        <div class="ctr mt10" style="font-size:18px">量子アルゴリズムの説明で多い書き方</div>
+      </div>
+      <div class="cmpc pop" style="--c:var(--pink)">
+        <div class="ch" style="font-size:22px">Qiskit など（第7章）</div>
+        <div class="bo-arrow" style="color:var(--pink);font-size:22px">⟵　右から左へ 0 番目、1 番目</div>
+        <div class="bo-ket" style="font-size:84px"><span>|</span><span class="bo-d"><span class="dg" style="background:transparent">0</span><span class="ix" style="background:var(--pink)">1 番目</span></span><span class="bo-d"><span class="dg" style="background:#fff1c2">1</span><span class="ix" style="background:var(--pink)">0 番目</span></span><span>⟩</span></div>
+        <div class="bo-read"><div>0 番目の量子ビット<br><b>|1⟩</b></div><div>1 番目の量子ビット<br><b>|0⟩</b></div></div>
+        <div class="ctr mt10" style="font-size:18px">量子プログラミング・ライブラリで多い書き方</div>
+      </div>
     </div>
-    <div class="card pop" style="--d:.2s;padding:14px 18px">
-      <div class="mp-lbl">例：|01⟩ をどう読むか</div>
-      <div class="bo-ket mt14" id="boKet"></div>
-      <div class="bo-arrow" id="boArr"></div>
-      <div class="bo-read" id="boRead"></div>
-      <div class="bo-tabs mt14" id="boTabs"><button data-m="0">本書：左から 0, 1</button><button data-m="1">Qiskit：右から 0, 1</button></div>
-      <div class="btns" style="justify-content:center;margin-top:10px"><button class="b" id="boAuto" data-autoplay>▶ 自動再生</button></div>
-    </div>
+    <div class="point pop" style="--d:.2s;font-size:19px;margin-top:0">非常に混乱しやすい！ <b>第7章でコードを書くときにもう一度出てくる</b></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -2150,7 +2160,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 <!-- バイト・オーダ：コードで実感 (1) -->
 <section class="slide" data-id="bo2">
   <div class="chap">第6章 ／ 6.2.2 記法の工夫 ・ 第7章を先取り</div>
-  <h2>コードで実感：Qiskit の確率の表示は右が 0 番目<small>バイト・オーダの違い</small></h2>
+  <h2>コードで実感：Qiskit のビット表記は右が 0 番目<small>バイト・オーダの違い</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)">
     <div class="col">
       <div class="code pop" id="bo2Code"><span class="cap">Qiskit：1 つの量子ビットだけ操作して確率を表示</span></div>
@@ -2426,33 +2436,15 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 
 <!-- 7.3.2 3 つの実行方法 -->
 <section class="slide" data-id="qw">
-  <div class="chap">第7章 ／ 7.3.2 Qiskit の実行方法 ・ 7.3.3 IBM Quantum のアカウント作成</div>
-  <h2>Qiskit の代表的な 3 つの実行方法<small>7.3.2・7.3.3・図 7.8（pp.160–165）</small></h2>
-  <div class="body col" style="gap:12px">
+  <div class="chap">第7章 ／ 7.3.2 Qiskit の実行方法</div>
+  <h2>Qiskit の代表的な 3 つの実行方法<small>7.3.2（pp.160–162）</small></h2>
+  <div class="body col qw2" style="gap:18px;justify-content:center">
     <div class="ic3">
       <div class="icard pop" style="--c:var(--blue)"><span class="tag2">ブラウザ</span><div class="ih"><span class="ii">🧩</span>Quantum Composer</div><p>IBM Quantum の機能。ブラウザから <b>ビジュアルに</b> 量子回路を組み立てて実行できる（図 7.2）</p></div>
-      <div class="icard pop" style="--d:.06s;--c:var(--purple)"><span class="tag2" style="background:var(--purple)">本書で使用</span><div class="ih"><span class="ii">📓</span>IBM Quantum Lab</div><p>JupyterLab でインタラクティブにプログラミング。Python や Qiskit が <b>インストール済み</b> なので準備不要（図 7.3）</p></div>
+      <div class="icard pop" style="--d:.06s;--c:var(--purple)"><span class="tag2" style="background:var(--purple)">ブラウザ</span><div class="ih"><span class="ii">📓</span>Google Colab</div><p>Google の無料サービス。ブラウザで Python のノートブックを実行できる。<span class="mono">pip install qiskit</span> で Qiskit を入れれば、<b>PC へのインストール不要</b> で使える</p></div>
       <div class="icard pop" style="--d:.12s;--c:var(--green)"><span class="tag2" style="background:var(--green)">7.8 で説明</span><div class="ih"><span class="ii">💻</span>自分の PC</div><p>自分のコンピュータで実行。<b>Python や Qiskit のインストール</b> が必要</p></div>
     </div>
-    <div class="g2" style="grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:14px">
-      <div class="card pop" style="--d:.15s;padding:8px 14px">
-        <div class="mp-lbl">図 7.8：IBM Quantum Lab で実行するイメージ</div>
-        <div class="net" id="qwNet">
-          <div class="nd" style="left:10px"><span class="ni">🧑‍💻</span>ユーザー</div>
-          <div class="line" style="left:90px;width:260px"></div>
-          <div class="nd" style="left:170px;top:2px"><span class="ni" style="font-size:36px">☁️</span>インターネット</div>
-          <div class="cloudbox"><span>IBM Quantum</span></div>
-          <div class="nd" style="right:150px;top:34px"><span class="ni">📓</span>lab（JupyterLab）</div>
-          <div class="nd" style="right:22px;top:34px"><span class="ni">⚙️</span>シミュレーション</div>
-          <div class="pkt" id="qwPkt"></div>
-        </div>
-        <div class="tiny ctr">ブラウザでアクセスするだけで、計算は IBM Quantum 側で行われる</div>
-      </div>
-      <div class="col" style="gap:8px">
-        <div class="point pop" style="--d:.2s;margin-top:0;font-size:16.5px">Composer・Lab を使うには IBM Quantum の <b class="k">アカウント登録（無料）</b> が必要（7.3.3）</div>
-        <div class="point blue pop" style="--d:.25s;margin-top:0;font-size:16px">⚠️ <b>教科書出版後の変更</b>：IBM Quantum Lab は 2024 年に提供を終了。現在は <b>自分の PC</b> か Google Colab などで実行するのが一般的（→ 7.8 の後の補足）</div>
-      </div>
-    </div>
+    <div class="tiny pop" style="--d:.2s;font-size:17px">※ 教科書で使っている IBM Quantum Lab（JupyterLab の実行環境、図 7.3）は 2024 年に提供を終了したため、ここでは代わりに Google Colab を紹介</div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -3261,26 +3253,9 @@ function gateWidget(root, M, name, mapRoot) {
 const BELL_OPS = [{ g: 'H', q: 0, col: 0 }, { g: 'CX', c: 0, t: 1, col: 1 }, { g: 'M', q: 0, cb: 0, col: 2 }, { g: 'M', q: 1, cb: 1, col: 3 }];
 
 /* ---------- 6.2.2 記法：I を描いた回路 ＝ I を省略した回路 ---------- */
-drawQC('#ntCircI', { n: 2, init: true, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'I', q: 1, col: 0 }], colW: 110, rowH: 70 });
-drawQC('#ntCirc0', { n: 2, init: true, ops: [{ g: 'H', q: 0, col: 0 }], colW: 110, rowH: 70 });
+drawQC('#ntCircI', { n: 2, init: true, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'I', q: 1, col: 0 }], colW: 110, rowH: 62, maxW: '300px' });
+drawQC('#ntCirc0', { n: 2, init: true, ops: [{ g: 'H', q: 0, col: 0 }], colW: 110, rowH: 62, maxW: '300px' });
 drawQC('#nt2Circ', { n: 2, init: true, top: 46, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'H', q: 1, col: 0 }, { g: 'BOX', c0: 0, c1: 0, label: 'H ⊗ H' }], colW: 110, rowH: 76, maxW: '400px' });
-
-/* ---------- バイトオーダ ---------- */
-{
-  let ket = '01', mode = 0;
-  const draw = () => {
-    const ix = mode === 0 ? [0, 1] : [1, 0], col = mode === 0 ? 'var(--blue)' : 'var(--pink)';
-    $('#boKet').innerHTML = `<span>|</span>${[0, 1].map(p => `<span class="bo-d"><span class="dg" style="background:${ix[p] === 0 ? '#fff1c2' : 'transparent'}">${ket[p]}</span><span class="ix" style="background:${col}">${ix[p]} 番目</span></span>`).join('')}<span>⟩</span>`;
-    $('#boArr').innerHTML = mode === 0 ? '⟶　左から右へ 0 番目、1 番目' : '⟵　右から左へ 0 番目、1 番目';
-    $('#boArr').style.color = col;
-    const q0 = ket[ix.indexOf(0)], q1 = ket[ix.indexOf(1)];
-    $('#boRead').innerHTML = `<div>0 番目の量子ビット<br><b>|${q0}⟩</b></div><div>1 番目の量子ビット<br><b>|${q1}⟩</b></div>`;
-  };
-  const tb = tabs('#boTabs', m => { mode = m; draw(); });
-  tb(0);
-  let t = 0;
-  looper('#boAuto', () => { t++; tb(t % 2); }, 1600);
-}
 
 /* ---------- バイト・オーダ：コードで実感 ---------- */
 {
@@ -3530,23 +3505,6 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
   draw();
   looper('#qqAuto', () => { t = (t + 1) % 9; draw(); }, 800);
   onEnter.qq = () => { t = -1; };
-}
-
-/* ---------- 7.3.2 図 7.8 のパケット ---------- */
-{
-  const pkt = $('#qwPkt'), net = $('#qwNet');
-  let ph = 0;
-  const step = () => {
-    const w = net.clientWidth || 600, pts = [40, 210, w - 205, w - 70, w - 205, 210, 40];
-    ph = (ph + 1) % pts.length;
-    pkt.style.transition = ph === 0 ? 'none' : 'left .7s ease-in-out, opacity .3s';
-    pkt.style.left = pts[ph] + 'px';
-    pkt.style.opacity = 1;
-    pkt.style.background = ph >= 4 ? 'var(--green)' : 'var(--accent)';
-  };
-  let tm = null;
-  onEnter.qw = () => { clearInterval(tm); ph = -1; step(); tm = setInterval(step, 850); };
-  stoppers.push(() => clearInterval(tm));
 }
 
 /* ---------- 7.5.1 起動の手順 ---------- */
