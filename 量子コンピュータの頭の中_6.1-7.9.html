@@ -1893,6 +1893,14 @@ svg.topo{display:block;width:100%;height:auto;user-select:none}
 @media print{.code .cl.on{background:none;box-shadow:none}}
 
 /* ===== 改訂で追加したスライド用 ===== */
+.rq{margin-top:auto;border-top:2.5px dashed #d9d4ea;padding-top:8px;font-size:16px;line-height:1.6}
+.rq-bar{display:flex;gap:8px;justify-content:center}
+.rq .b{font-size:14px;padding:4px 14px}
+.rq .b.rq-ans{border-color:var(--accent-d);color:var(--accent-d)}
+.rq-q{margin-top:6px;min-height:0}
+.rq-q:empty{display:none}
+.rq-a{margin-top:6px;background:#fff1c2;border-radius:8px;padding:4px 10px}
+.rq .eq.inline .frac{font-size:.9em}
 .bl4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 10px}
 .bl4 .blc{text-align:center}
 .bl4 .blh{font:800 15px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:var(--ink)}
@@ -1936,12 +1944,12 @@ svg.topo{display:block;width:100%;height:auto;user-select:none}
 /* 「カーソル」モード（パソコンで道具を何も選んでいないとき）：普通のカーソルで文字を選択・コピーできる */
 body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default;cursor:auto}
 .rv3c{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
-.rvc{background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:10px 16px 12px;border-top:10px solid var(--c);display:flex;flex-direction:column;gap:9px;font-size:18px;line-height:1.6}
+.rvc{background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:8px 16px 10px;border-top:10px solid var(--c);display:flex;flex-direction:column;gap:6px;font-size:17px;line-height:1.55}
 .rvc .rh{font-weight:900;font-size:21px}
 .rvc .rh small{font-size:13px;color:var(--muted);font-weight:700;margin-left:6px}
 .rvc .eqrow{font-size:21px;justify-content:center;gap:6px}
 .rvc .vec{font-size:18px}
-.rvc .rnb{background:#f6f2ff;border-radius:10px;padding:6px 12px;font-size:17px;line-height:1.6}
+.rvc .rnb{background:#f6f2ff;border-radius:10px;padding:4px 12px;font-size:16px;line-height:1.55}
 .rvc .rgl{display:grid;grid-template-columns:auto auto 1fr;gap:4px 8px;align-items:center;font:400 18px "Cambria Math","Times New Roman",serif}
 .rvc .rgl .gn{color:#fff;font-weight:900;border:2px solid var(--ink);border-radius:7px;padding:0 8px;text-align:center}
 .rvc .rgl .vec{font-size:16px;padding:0 6px}
@@ -2044,6 +2052,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
       <div class="ctr">（a, b は複素数、<span class="math"><b>|a|² + |b|² = 1</b></span>）</div>
       <div class="rnb"><b>測定</b> すると確率 <span class="math"><b>|a|²</b></span> で |0⟩、確率 <span class="math"><b>|b|²</b></span> で |1⟩ を得る。測定後の状態は得られた方に <b class="k">変化する</b></div>
       <div class="rnb">例：<span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩ + |1⟩)</span> → |0⟩ も |1⟩ も確率 1/2</div>
+      <div class="rq" id="rq1"><div class="rq-bar"><button class="b rq-new">🎲 確率の問題</button><button class="b rq-ans" style="display:none">答えを見る</button></div><div class="rq-q"></div><div class="rq-a" style="display:none"></div></div>
     </div>
     <div class="rvc pop" style="--d:.1s;--c:var(--blue)">
       <div class="rh">② 量子ゲート<small>第4章</small></div>
@@ -2054,6 +2063,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
         <span class="gn" style="background:var(--blue)">H</span><span style="white-space:nowrap"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span><span class="vec m2"><span>1</span><span>1</span><span>1</span><span>−1</span></span></span><span>H|0⟩ = <span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩ + |1⟩)<br>H|1⟩ = <span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩ − |1⟩)</span>
         <span class="gn" style="background:#9a93bd">I</span><span class="vec m2"><span>1</span><span>0</span><span>0</span><span>1</span></span><span>何もしない</span>
       </div>
+      <div class="rq" id="rq2"><div class="rq-bar"><button class="b rq-new">🎲 ゲートの問題</button><button class="b rq-ans" style="display:none">答えを見る</button></div><div class="rq-q"></div><div class="rq-a" style="display:none"></div></div>
     </div>
     <div class="rvc pop" style="--d:.2s;--c:var(--green)">
       <div class="rh">③ 2 量子ビットの量子状態<small>第5章</small></div>
@@ -2062,6 +2072,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
       <div class="ctr">（<span class="math"><b>|a|² + |b|² + |c|² + |d|² = 1</b></span>）</div>
       <div class="rnb"><b>測定</b> すると確率 <span class="math"><b>|a|²</b></span> で |00⟩、<span class="math"><b>|b|²</b></span> で |01⟩、<span class="math"><b>|c|²</b></span> で |10⟩、<span class="math"><b>|d|²</b></span> で |11⟩ を得る</div>
       <div class="rnb">例：<span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|00⟩ + |11⟩)</span> → |00⟩ も |11⟩ も確率 1/2</div>
+      <div class="rq" id="rq3"><div class="rq-bar"><button class="b rq-new">🎲 確率の問題（2 量子ビット）</button><button class="b rq-ans" style="display:none">答えを見る</button></div><div class="rq-q"></div><div class="rq-a" style="display:none"></div></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -2965,6 +2976,64 @@ function gateWidget(root, M, name, mapRoot) {
    ===================================================================== */
 const BELL_OPS = [{ g: 'H', q: 0, col: 0 }, { g: 'CX', c: 0, t: 1, col: 1 }, { g: 'M', q: 0, cb: 0, col: 2 }, { g: 'M', q: 1, cb: 1, col: 3 }];
 
+/* ---------- 復習：ランダムに出題（① 1 量子ビットの確率 ② ゲートの作用 ③ 2 量子ビットの確率） ---------- */
+{
+  const Fq = (n, d) => `<span class="eq inline">${FR(n, d)}</span>`;
+  // 係数の大きさ：[表示, 2 乗]
+  const AMP = { '1/2': [Fq('1', '2'), '1/4'], '1/√2': [Fq('1', '√2'), '1/2'], '√3/2': [Fq('√3', '2'), '3/4'], '3/5': [Fq('3', '5'), '9/25'],
+    '4/5': [Fq('4', '5'), '16/25'], '1/√3': [Fq('1', '√3'), '1/3'], '√2/√3': [Fq('√2', '√3'), '2/3'] };
+  const PAIRS = [['1/√2', '1/√2'], ['√3/2', '1/2'], ['1/2', '√3/2'], ['3/5', '4/5'], ['4/5', '3/5'], ['1/√3', '√2/√3'], ['√2/√3', '1/√3']];
+  const PH = [['+', ''], ['−', ''], ['+', 'i'], ['−', 'i']];
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  // 係数つきの項（first なら先頭の + を省く）
+  const term = (k, [s, im], ket, first) => `${first ? (s === '−' ? '−' : '') : ` ${s} `}${im}${AMP[k][0]}${ket}`;
+  const absq = (k, [s, im]) => `|${s === '−' ? '−' : ''}${im}${AMP[k][0]}|² = <b>${AMP[k][1]}</b>`;
+
+  const q1 = () => {
+    const [a, b] = pick(PAIRS), pa = pick([PH[0], PH[0], PH[1]]), pb = pick(PH), t = Math.random() < .5 ? 0 : 1;
+    const st = term(a, pa, '|0⟩', true) + term(b, pb, '|1⟩');
+    return [`<span class="math">|φ⟩ = ${st}</span> を測定したとき、<b>|${t}⟩</b> を得る確率は？`,
+      `確率は係数の絶対値の 2 乗：${t ? absq(b, pb) : absq(a, pa)}`];
+  };
+
+  const ST = { z0: '|0⟩', z1: '|1⟩', p: `${R2}(|0⟩ + |1⟩)`, m: `${R2}(|0⟩ − |1⟩)` };
+  const TBL = { X: { z0: '|1⟩', z1: '|0⟩', p: ST.p, m: `−${ST.m}` }, Z: { z0: '|0⟩', z1: '−|1⟩', p: ST.m, m: ST.p }, H: { z0: ST.p, z1: ST.m, p: '|0⟩', m: '|1⟩' } };
+  const q2 = () => {
+    if (Math.random() < .55) {
+      const g = pick(['X', 'Z', 'H']), s = pick(['z0', 'z1', 'p', 'm']);
+      const arg = s.startsWith('z') ? ST[s] : `{${ST[s]}}`;
+      return [`<span class="math">${ST[s]}</span> に <b>${g}</b> ゲートを作用させた状態は？`, `<span class="math">${g}${arg} = <b>${TBL[g][s]}</b></span>`];
+    }
+    const [a, b] = pick(PAIRS), pb = pick(PH), g = pick(['X', 'Z']);
+    const st = term(a, PH[0], '|0⟩', true) + term(b, pb, '|1⟩');
+    const res = g === 'X' ? term(b, pb, '|0⟩', true) + term(a, PH[0], '|1⟩')
+      : term(a, PH[0], '|0⟩', true) + term(b, [pb[0] === '+' ? '−' : '+', pb[1]], '|1⟩');
+    const why = g === 'X' ? 'X は |0⟩ と |1⟩ を入れ替える' : 'Z は |1⟩ の係数の符号を反転する';
+    return [`<span class="math">${st}</span> に <b>${g}</b> ゲートを作用させた状態は？`, `<span class="math"><b>${res}</b></span>（${why}）`];
+  };
+
+  const TEMPL = [['1/2', '1/2', '1/2', '1/2'], ['1/√2', '1/√2', '0', '0'], ['1/√2', '1/2', '1/2', '0'], ['1/√3', '1/√3', '1/√3', '0'], ['3/5', '4/5', '0', '0'], ['√3/2', '1/2', '0', '0'], ['1/2', '1/2', '1/√2', '0']];
+  const q3 = () => {
+    const mags = pick(TEMPL).slice().sort(() => Math.random() - .5);
+    const phs = mags.map(() => pick([PH[0], PH[0], PH[1], PH[2], PH[3]]));
+    let st = '', first = true;
+    mags.forEach((m, i) => { if (m === '0') return; st += term(m, phs[i], KETS[i], first); first = false; });
+    const nz = mags.map((m, i) => i).filter(i => mags[i] !== '0'), z = mags.map((m, i) => i).filter(i => mags[i] === '0');
+    const t = z.length && Math.random() < .15 ? pick(z) : pick(nz);
+    return [`<span class="math">|φ⟩ = ${st}</span> を測定したとき、<b>${KETS[t]}</b> を得る確率は？`,
+      mags[t] === '0' ? `${KETS[t]} の項がない（係数 0）ので確率は <b>0</b>` : `確率は係数の絶対値の 2 乗：${absq(mags[t], phs[t])}`];
+  };
+
+  const setup = (id, gen) => {
+    const r = $(id), q = r.querySelector('.rq-q'), a = r.querySelector('.rq-a'), bA = r.querySelector('.rq-ans');
+    r.querySelector('.rq-new').addEventListener('click', e => { e.currentTarget.blur(); const [qq, aa] = gen(); q.innerHTML = qq; a.innerHTML = aa; a.style.display = 'none'; bA.style.display = ''; });
+    bA.addEventListener('click', e => { e.currentTarget.blur(); a.style.display = ''; bA.style.display = 'none'; });
+    return () => { q.innerHTML = ''; a.style.display = 'none'; bA.style.display = 'none'; };
+  };
+  const resets = [setup('#rq1', q1), setup('#rq2', q2), setup('#rq3', q3)];
+  onEnter.rv = () => resets.forEach(f => f());
+}
+
 /* ---------- 6.2.2 記法：I を描いた回路 ＝ I を省略した回路 ---------- */
 drawQC('#ntCircI', { n: 2, init: true, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'I', q: 1, col: 0 }], colW: 110, rowH: 66, maxW: '320px' });
 drawQC('#ntCirc0', { n: 2, init: true, ops: [{ g: 'H', q: 0, col: 0 }], colW: 110, rowH: 66, maxW: '320px' });
@@ -3318,7 +3387,16 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
     T(P([1, 0, 0])[0] - 12, P([1, 0, 0])[1] + 16, '|+⟩'); T(P([-1, 0, 0])[0] + 12, P([-1, 0, 0])[1] - 6, '|−⟩'); T(P([0, 1, 0])[0] + 10, P([0, 1, 0])[1] + 4, 'y');
     let end = o.v; AX.forEach(ax => { end = rot(end, ax, Math.PI / 2); });
     const tg = P(end);
-    el('circle', { cx: tg[0], cy: tg[1], r: 11, fill: 'none', stroke: 'var(--green)', 'stroke-width': 3, 'stroke-dasharray': '4 3' }, svg);
+    // 終点（ゴール）とスタートを強調：中心から外向きにラベルを置く
+    const mark = (q, col, fill, lab) => {
+      el('circle', { cx: q[0], cy: q[1], r: 14, fill, stroke: col, 'stroke-width': 3.5 }, svg);
+      let dx = q[0] - CX, dy = q[1] - CY; const L = Math.hypot(dx, dy) || 1; dx /= L; dy /= L;
+      if (L < 30) { dx = 0; dy = -1; }
+      const t = el('text', { x: q[0] + dx * 30, y: q[1] + dy * 24 + 5, 'font-size': 14, 'font-weight': 900, fill: col, 'text-anchor': 'middle', 'font-family': '"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif', stroke: '#fff', 'stroke-width': 4, 'paint-order': 'stroke' }, svg);
+      t.textContent = lab;
+    };
+    mark(tg, '#0a8a48', 'rgba(20,163,90,.25)', 'ゴール');
+    mark(P(o.v), 'var(--blue)', 'rgba(59,108,255,.22)', 'スタート');
     const trail = el('polyline', { points: '', fill: 'none', stroke: 'var(--accent)', 'stroke-width': 3, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, svg);
     const arm = el('line', { x1: CX, y1: CY, x2: CX, y2: CY, stroke: 'var(--pink)', 'stroke-width': 3.5, 'stroke-linecap': 'round' }, svg);
     const dot = el('circle', { cx: CX, cy: CY, r: 7.5, fill: 'var(--pink)', stroke: '#1f1a3d', 'stroke-width': 2 }, svg);
