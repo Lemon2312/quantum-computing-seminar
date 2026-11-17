@@ -1893,6 +1893,15 @@ svg.topo{display:block;width:100%;height:auto;user-select:none}
 @media print{.code .cl.on{background:none;box-shadow:none}}
 
 /* ===== 改訂で追加したスライド用 ===== */
+.tut-io{display:flex;flex-direction:column;gap:6px;min-height:0}
+.tut-io.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:start}
+.tut-io.two .tut-out{font-size:12px}
+.tut-edit{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tut-edit[hidden]{display:none}
+.tut-edit .sp{flex:1}
+.tut-edit button{font:700 14px Consolas,Menlo,monospace;border:2px solid var(--ink);border-radius:8px;background:#fff;padding:3px 9px;cursor:pointer;box-shadow:2px 2px 0 var(--ink);color:var(--ink)}
+.tut-edit button[data-act]{font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;font-size:13px;background:#fff4d6}
+.tut-edit button:disabled{opacity:.4;cursor:default}
 .qc-top button.qc-save{cursor:default}
 .qc-sign{position:absolute;inset:0;z-index:60;display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);background:#262626;color:#f4f4f4;font-family:"Helvetica Neue",Arial,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif}
 .qc-sign[hidden]{display:none}
@@ -2716,7 +2725,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
           <div class="qs-sel">地域を選ぶ <span>⌄</span></div>
           <button class="qs-go" disabled>続ける <span>→</span></button>
           <div class="qs-or"><span>または</span></div>
-          <button class="qs-back" id="qcSignBack">元の画面に戻る <span>↩</span></button>
+          <button class="qs-back" id="qcSignBack">サインイン <span>→</span></button>
         </div>
         <div class="qs-right"></div>
       </div>
@@ -2770,8 +2779,9 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
         <div class="tut-body">
           <h3 id="tutH"></h3>
           <div class="td" id="tutD"></div>
-          <div class="code" id="tutCode"><span class="cap">セルに入力して ▶（Shift + Enter）</span></div>
-          <div class="tut-out" id="tutOut"></div>
+          <div class="tut-edit" id="tutEdit" hidden></div>
+          <div class="tut-io" id="tutIO"><div class="code" id="tutCode"><span class="cap">セルに入力して ▶（Shift + Enter）</span></div>
+          <div class="tut-out" id="tutOut"></div></div>
           <div class="tut-foot"><span class="tut-note" id="tutNote"></span><div class="btns" style="margin:0;flex-wrap:nowrap;flex:none"><button class="b" id="tutPrev">◀ 前へ</button><button class="b" id="tutRun">▶ 実行（デモ）</button><button class="b" id="tutNext">次へ ▶</button></div></div>
         </div>
       </div>
@@ -3419,29 +3429,74 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
   looper('#swAuto', () => pk((pk.cur() + 1) % 4), 2600);
 }
 
-/* ---------- Google Colab で Qiskit を動かす（チュートリアル） ---------- */
+/* ---------- Google Colab で Qiskit を動かす（チュートリアル・③ で回路を自由に変えられる） ---------- */
 {
-  const DRAW = ['        ┌───┐      ░ ┌─┐   ', '   q_0: ┤ H ├──■───░─┤M├───', '        └───┘┌─┴─┐ ░ └╥┘┌─┐', '   q_1: ─────┤ X ├─░──╫─┤M├', '             └───┘ ░  ║ └╥┘', 'meas: 2/══════════════╩══╩═', '                      0  1 '].join('\n');
+  // ---- 回路（2 量子ビット）：ステップ ③ で編集し、④・⑥ でも同じ回路を使う ----
+  const DEFAULT = [{ g: 'h', q: 0 }, { g: 'cx', c: 0, t: 1 }];
+  let ops = DEFAULT.map(o => ({ ...o }));
+  const MAXOPS = 6;
+  const opCode = o => (o.g === 'cx' ? `qc.cx(${o.c}, ${o.t})` : `qc.${o.g}(${o.q})`);
+  // Qiskit の draw() のテキスト出力に合わせた回路図（ゲートを左から順に並べる）
+  const drawText = () => {
+    const R = ['        ', '   q_0: ', '        ', '   q_1: ', '        '];
+    const cell = o => {
+      if (o.g === 'cx') return o.c === 0 ? ['     ', '──■──', '┌─┴─┐', '┤ X ├', '└───┘'] : ['┌───┐', '┤ X ├', '└─┬─┘', '──■──', '     '];
+      const G = o.g.toUpperCase();
+      return o.q === 0 ? ['┌───┐', `┤ ${G} ├`, '└───┘', '─────', '     '] : ['     ', '─────', '┌───┐', `┤ ${G} ├`, '└───┘'];
+    };
+    let w = 0;
+    ops.forEach(o => { cell(o).forEach((s, r) => { R[r] += s; }); w += 5; });
+    const tail = [[' ', '─', ' ', '─', ' '], ['░', '░', '░', '░', '░'], [' ', '─', ' ', '─', ' '], ['┌─┐', '┤M├', '└╥┘', '─╫─', ' ║ '], ['   ', '───', '┌─┐', '┤M├', '└╥┘']];
+    tail.forEach(t => t.forEach((s, r) => { R[r] += s; }));
+    w += 3;
+    return [...R, 'meas: 2/' + '═'.repeat(w) + '═╩══╩═', '        ' + ' '.repeat(w) + ' 0  1 '].join('\n');
+  };
+  // 状態ベクトル（添字 = q1*2 + q0）→ 測定結果 '00'〜'11'（Qiskit と同じく右が 0 番目）の確率
+  const probs = () => {
+    let s = [1, 0, 0, 0];
+    const r = Math.SQRT1_2;
+    ops.forEach(o => {
+      const n = s.slice();
+      if (o.g === 'cx') { for (let i = 0; i < 4; i++) if ((i >> o.c & 1) && !(i >> o.t & 1)) { const j = i | 1 << o.t; [n[i], n[j]] = [s[j], s[i]]; } }
+      else for (let i = 0; i < 4; i++) if (!(i >> o.q & 1)) {
+        const j = i | 1 << o.q, a = s[i], b = s[j];
+        if (o.g === 'h') { n[i] = r * (a + b); n[j] = r * (a - b); }
+        if (o.g === 'x') { n[i] = b; n[j] = a; }
+        if (o.g === 'z') { n[i] = a; n[j] = -b; }
+      }
+      s = n;
+    });
+    return Object.fromEntries(['00', '01', '10', '11'].map((k, i) => [k, s[i] * s[i]]));
+  };
+  const sample = (p, N = 1024) => { const ks = Object.keys(p), c = {}; for (let k = 0; k < N; k++) { let x = Math.random(), i = 0; for (; i < 3; i++) { x -= p[ks[i]]; if (x < 0) break; } c[ks[i]] = (c[ks[i]] || 0) + 1; } return c; };
+  const noisy = p => {
+    const e = .015, dep = .03, ks = Object.keys(p), out = {};
+    ks.forEach(j => { out[j] = 0; ks.forEach(i => { let w = 1; for (let b = 0; b < 2; b++) w *= i[b] !== j[b] ? e : 1 - e; out[j] += p[i] * w; }); out[j] = (1 - dep) * out[j] + dep / 4; });
+    return out;
+  };
+  const dict = c => '{' + Object.entries(c).sort((a, b) => b[1] - a[1]).map(([k, v]) => `'${k}': ${v}`).join(', ') + '}';
+  const theory = () => { const p = probs(); return '理論上は ' + Object.entries(p).filter(([, v]) => v > 1e-9).map(([k, v]) => `${k}：${Math.round(v * 1000) / 10}%`).join('、'); };
+
   const S = [
     { t: 'Colab を開く', h: '① Google Colab を開いて、ノートブックを作る',
       d: 'ブラウザで <b>colab.research.google.com</b> を開き、Google アカウントでログイン →「<b>ノートブックを新規作成</b>」。灰色の枠（<b>セル</b>）にコードを書き、▶ ボタンか <b>Shift + Enter</b> で実行する。PC へのインストールは不要',
-      code: ['print("Hello, Qiskit!")'], out: 'Hello, Qiskit!', note: 'Google アカウントがあれば無料で使える' },
+      code: () => ['print("Hello, Qiskit!")'], out: () => 'Hello, Qiskit!', note: () => 'Google アカウントがあれば無料で使える' },
     { t: 'Qiskit を入れる', h: '② Qiskit をインストールする',
       d: '先頭の <b class="mono">!</b> は「コマンドとして実行する」という意味。<b>qiskit</b>（本体）、<b>qiskit-aer</b>（シミュレータ）、<b>qiskit-ibm-runtime</b>（実機に接続）を入れる',
-      code: ['!pip install qiskit qiskit-aer qiskit-ibm-runtime'], out: 'Successfully installed qiskit-2.x.x qiskit-aer-0.x.x qiskit-ibm-runtime-0.x.x …', note: 'Colab を開き直したときは、もう一度インストールする' },
-    { t: '回路を作る', h: '③ 量子回路を作って表示する',
-      d: '2 量子ビットの回路に H と CNOT を入れて、両方を測定する（第6章の量子もつれの回路）。<span class="mono">draw()</span> で回路の図を表示できる',
-      code: ['from qiskit import QuantumCircuit', '', 'qc = QuantumCircuit(2)', 'qc.h(0)        # 0 番目に H', 'qc.cx(0, 1)    # 制御 0、標的 1 の CNOT', 'qc.measure_all()', 'print(qc.draw())'], out: DRAW, note: 'この回路は、このあと実機でも使う' },
+      code: () => ['!pip install qiskit qiskit-aer qiskit-ibm-runtime'], out: () => 'Successfully installed qiskit-2.x.x qiskit-aer-0.x.x qiskit-ibm-runtime-0.x.x …', note: () => 'Colab を開き直したときは、もう一度インストールする' },
+    { t: '回路を作る', h: '③ 量子回路を作って表示する', edit: true,
+      d: '下のボタンでゲートを足したり消したりして、<b>回路を自由に変えられる</b>（コードと回路の図が変わる）。最後に両方を測定する',
+      code: () => ['from qiskit import QuantumCircuit', '', 'qc = QuantumCircuit(2)', ...ops.map(opCode), 'qc.measure_all()', 'print(qc.draw())'], out: drawText, note: () => 'この回路を、このあとシミュレータと実機（デモ）で動かす' },
     { t: 'シミュレータで実行', h: '④ シミュレータで実行する',
-      d: '普通のコンピュータで量子コンピュータの動きをまねする <b>AerSimulator</b> で 1024 回実行し、測定結果の回数を表示する',
-      code: ['from qiskit import transpile', 'from qiskit_aer import AerSimulator', '', 'sim = AerSimulator()', 'job = sim.run(transpile(qc, sim), shots=1024)', 'print(job.result().get_counts())'], sim: true, note: '00 と 11 がおおよそ半々。01・10 は出ない' },
+      d: '普通のコンピュータで量子コンピュータの動きをまねする <b>AerSimulator</b> で 1024 回実行し、③ で作った回路の測定結果の回数を表示する',
+      code: () => ['from qiskit import transpile', 'from qiskit_aer import AerSimulator', '', 'sim = AerSimulator()', 'job = sim.run(transpile(qc, sim), shots=1024)', 'print(job.result().get_counts())'], sim: true, note: theory },
     { t: 'API キーを用意', h: '⑤ IBM Quantum に接続する準備',
       d: '<b>quantum.cloud.ibm.com</b>（IBM Quantum Platform）で無料アカウントを作り、<b>API キー</b> を作成。Colab 左側の 🔑（<b>シークレット</b>）に <span class="mono">IBM_TOKEN</span> という名前で登録しておく',
-      code: ['from google.colab import userdata', 'from qiskit_ibm_runtime import QiskitRuntimeService', '', 'service = QiskitRuntimeService(', '    channel="ibm_quantum_platform",', '    token=userdata.get("IBM_TOKEN"))   # API キーはコードに直接書かない'], out: '（エラーが出なければ接続の準備は完了）', note: '⚠️ API キーは他人に見せない・共有するノートブックに書かない' },
+      code: () => ['from google.colab import userdata', 'from qiskit_ibm_runtime import QiskitRuntimeService', '', 'service = QiskitRuntimeService(', '    channel="ibm_quantum_platform",', '    token=userdata.get("IBM_TOKEN"))   # API キーはコードに直接書かない'], out: () => '（エラーが出なければ接続の準備は完了）', note: () => '⚠️ API キーは他人に見せない・共有するノートブックに書かない' },
     { t: '実機で実行（デモ）', h: '⑥ 実機で実行する（デモ）',
       d: '空いている実機を選び、<b>量子コンパイラ</b>で実機用に変換して実行する（実機は共有なので <b>待ち時間</b> がある）',
-      code: ['from qiskit.transpiler import generate_preset_pass_manager', 'from qiskit_ibm_runtime import SamplerV2', 'backend = service.least_busy(operational=True, simulator=False)', 'pm = generate_preset_pass_manager(backend=backend, optimization_level=1)', 'isa_qc = pm.run(qc)    # 実機用に変換（量子コンパイラ）', 'job = SamplerV2(mode=backend).run([isa_qc], shots=1024)', 'print(job.result()[0].data.meas.get_counts())'],
-      real: true, note: '※ 実機の結果は毎回変わる' },
+      code: () => ['from qiskit.transpiler import generate_preset_pass_manager', 'from qiskit_ibm_runtime import SamplerV2', 'backend = service.least_busy(operational=True, simulator=False)', 'pm = generate_preset_pass_manager(backend=backend, optimization_level=1)', 'isa_qc = pm.run(qc)    # 実機用に変換（量子コンパイラ）', 'job = SamplerV2(mode=backend).run([isa_qc], shots=1024)', 'print(job.result()[0].data.meas.get_counts())'],
+      real: true, note: () => '※ 実機の結果は毎回変わる' },
   ];
   $('#tutNav').innerHTML = S.map((s, i) => `<button data-i="${i}"><i>${i + 1}</i>${s.t}</button>`).join('');
   const bs = [...$('#tutNav').querySelectorAll('button')];
@@ -3449,29 +3504,45 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
   let k = 0;
   const hist = c => '<div class="thist">' + ['00', '01', '10', '11'].map(x => `<div>${c[x] || 0}<i style="height:${(c[x] || 0) / 1024 * 100}px"></i><span>${x}</span></div>`).join('') + '</div>';
   const out = $('#tutOut');
+  const esc2 = t => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
   const run = () => {
     tb.clear();
     const s = S[k];
-    if (s.sim) {
-      const a = binom(1024, .5);
-      const c = { '00': a, '11': 1024 - a };
-      out.innerHTML = `<span class="lb">出力</span>{'00': ${a}, '11': ${1024 - a}}` + hist(c);
-    } else if (s.real) {
-      const c = { '00': 488, '11': 507, '01': 14, '10': 15 };
+    if (s.sim) { const c = sample(probs()); out.innerHTML = `<span class="lb">出力</span>${dict(c)}` + hist(c); }
+    else if (s.real) {
+      const c = sample(noisy(probs()));
       out.innerHTML = '<span class="lb">出力（デモ）</span>QUEUED　<span style="color:#9a93bd">… 実機の順番を待っています</span>';
       tb.later(() => { out.innerHTML = '<span class="lb">出力（デモ）</span>RUNNING　<span style="color:#9a93bd">… 実機で計算中</span>'; }, 1200);
-      tb.later(() => { out.innerHTML = `<span class="lb">出力（デモ：実機のノイズを再現したシミュレータ FakeFez で得た出力例）</span>{'10': 15, '11': 507, '00': 488, '01': 14}　<span style="color:var(--red)">← ノイズで 01・10 も少し出る</span>` + hist(c); }, 2400);
-    } else out.innerHTML = `<span class="lb">出力</span>${s.out.replace(/&/g, '&amp;').replace(/</g, '&lt;')}`;
+      tb.later(() => { out.innerHTML = `<span class="lb">出力（デモ：実機のノイズを再現した出力のイメージ）</span>${dict(c)}　<span style="color:var(--red)">← ノイズで理論上 0 の結果も少し出る</span>` + hist(c); }, 2400);
+    } else out.innerHTML = `<span class="lb">出力</span>${esc2(s.out())}`;
   };
+  // ③ の編集ボタン
+  const ED = [['h', 0], ['h', 1], ['x', 0], ['x', 1], ['z', 0], ['z', 1], ['cx', 0], ['cx', 1]];
+  const edit = $('#tutEdit');
+  edit.innerHTML = ED.map(([g, q]) => `<button data-g="${g}" data-q="${q}">${g === 'cx' ? `cx(${q}, ${1 - q})` : `${g}(${q})`}</button>`).join('') + '<span class="sp"></span><button data-act="undo">1 つ戻す</button><button data-act="reset">最初の回路に戻す</button>';
+  const refreshEdit = () => {
+    codeBlock('#tutCode', S[2].code()); run(); $('#tutNote').innerHTML = S[2].note();
+    edit.querySelectorAll('[data-g]').forEach(b => b.disabled = ops.length >= MAXOPS);
+    edit.querySelector('[data-act="undo"]').disabled = !ops.length;
+  };
+  edit.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return; b.blur();
+    if (b.dataset.g) { const q = +b.dataset.q; ops.push(b.dataset.g === 'cx' ? { g: 'cx', c: q, t: 1 - q } : { g: b.dataset.g, q }); }
+    else if (b.dataset.act === 'undo') ops.pop();
+    else ops = DEFAULT.map(o => ({ ...o }));
+    refreshEdit();
+  });
   const show = i => {
     tb.clear();
     k = i; const s = S[i];
     bs.forEach((b, j) => b.classList.toggle('on', j === i));
     $('#tutPage').textContent = `ステップ ${i + 1} / ${S.length}`;
-    $('#tutH').textContent = s.h; $('#tutD').innerHTML = s.d; $('#tutNote').innerHTML = s.note;
-    codeBlock('#tutCode', s.code);
+    $('#tutH').textContent = s.h; $('#tutD').innerHTML = s.d; $('#tutNote').innerHTML = s.note();
+    edit.hidden = !s.edit; $('#tutIO').classList.toggle('two', !!s.edit);
+    codeBlock('#tutCode', s.code());
     $('#tutRun').style.display = s.sim || s.real ? '' : 'none';
-    if (s.sim || s.real) out.innerHTML = '<span class="lb">出力</span><span style="color:#9a93bd">「▶ 実行（デモ）」を押すと出力が表示される</span>'; else run();
+    if (s.edit) refreshEdit();
+    else if (s.sim || s.real) out.innerHTML = '<span class="lb">出力</span><span style="color:#9a93bd">「▶ 実行（デモ）」を押すと出力が表示される</span>'; else run();
   };
   bs.forEach((b, i) => b.addEventListener('click', e => { e.currentTarget.blur(); show(i); }));
   $('#tutPrev').onclick = e => { e.currentTarget.blur(); show(Math.max(0, k - 1)); };
@@ -3740,7 +3811,7 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
     if (cell && sel) { e.preventDefault(); e.stopPropagation(); place(sel, +cell.dataset.c, +cell.dataset.q); }
     else if (selSet.size) { selSet.clear(); drawCirc(); }
   });
-  // Set up and run：実機を使うためのサインイン画面（イメージ）を出す。「元の画面に戻る」以外は動かない
+  // Set up and run：実機を使うためのサインイン画面（イメージ）を出す。「サインイン」以外は動かない
   $('#qcSetup').onclick = e => { e.currentTarget.blur(); closeMenusSafe(); $('#qcSign').hidden = false; ran = true; drawTut(); };
   $('#qcSignBack').onclick = e => { e.currentTarget.blur(); $('#qcSign').hidden = true; };
   // Save file は押しても何もしない
