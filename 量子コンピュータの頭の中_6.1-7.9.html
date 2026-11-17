@@ -1893,6 +1893,7 @@ svg.topo{display:block;width:100%;height:auto;user-select:none}
 @media print{.code .cl.on{background:none;box-shadow:none}}
 
 /* ===== 改訂で追加したスライド用 ===== */
+.slide[data-id="tq"] .point{font-size:15.5px !important;line-height:1.55 !important;padding:7px 14px !important}
 .mxc{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:16px}
 .mxp{background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:8px 14px;border-top:9px solid var(--c)}
 .mxp .mh{font-weight:900;font-size:18px;color:var(--c);text-align:center}
@@ -2404,13 +2405,13 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <h2>量子状態トモグラフィ<small>図 6.10・6.11（pp.154–156）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
     <div class="col">
-      <div class="defbox pop" style="font-size:17px;margin-top:10px">「量子状態を作成し、測定する」を何度も繰り返し、測定結果から量子状態 <span class="math">a|0⟩ + b|1⟩</span> のパラメータ（a と b）を推定する技術を <b class="k">量子状態トモグラフィ</b> という</div>
-      <div class="point blue pop" style="--d:.05s;margin-top:0;font-size:17px">推定した状態を <b>理論上の状態</b> と比べると、実機の <b class="kb">ノイズの影響を定量的に評価</b> できる（どれくらいずれているかを数値で表す）→ <b>実機のチューニング</b> の手がかりになる</div>
+      <div class="defbox pop" style="font-size:16px;margin-top:10px;line-height:1.6">「量子状態を作成し、測定する」を何度も繰り返し、測定結果から量子状態 <span class="math">a|0⟩ + b|1⟩</span> のパラメータ（a と b）を推定する技術を <b class="k">量子状態トモグラフィ</b> という</div>
+      <div class="point blue pop" style="--d:.05s;margin-top:0;font-size:15.5px;line-height:1.5">推定した状態を <b>理論上の状態</b> と比べると、実機の <b class="kb">ノイズの影響を定量的に評価</b> できる（どれくらいずれているかを数値で表す）→ <b>実機のチューニング</b> の手がかりになる</div>
       <div class="card pop" style="--d:.1s;padding:8px 14px">
         <div class="mp-lbl" style="text-align:left">必要な測定回数：推定精度 ε にするには約 <span class="math"><b>1/ε²</b></span> 回</div>
         <div class="g2" style="gap:8px;font-size:16px"><div class="stbox" style="padding:4px 10px">小数第 1 位：ε = 0.1<br><b class="math">1/ε² = 10² = 100 回</b></div><div class="stbox" style="padding:4px 10px">小数第 2 位：ε = 0.01<br><b class="math">1/ε² = 100² = 10000 回</b></div></div>
       </div>
-      <div class="point pop" style="--d:.15s;margin-top:0;font-size:15.5px">z 方向の測定だけでは <span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩+|1⟩)</span> と <span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩−|1⟩)</span> を区別できない（どちらも |0⟩ の確率 1/2）。よって、<b class="k">x, y, z の 3 種類の方向</b> から測定する。小数第 2 位までなら 3 × 10000 = <b>30000 回</b></div>
+      <div class="point pop" style="--d:.15s;margin-top:0;font-size:14.5px;line-height:1.5">z 方向の測定だけでは <span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩+|1⟩)</span> と <span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩−|1⟩)</span> を区別できない（どちらも |0⟩ の確率 1/2）。よって、<b class="k">x, y, z の 3 種類の方向</b> から測定する。小数第 2 位までなら 3 × 10000 = <b>30000 回</b><br>→ 回数が膨大になるため、<b class="k">より少ない回数で推定する効率的な手法</b>（例：古典シャドウ）も研究されている</div>
     </div>
     <div class="card pop" style="--d:.2s;padding:10px 14px">
       <div class="pk" id="tqK" data-label="状態" style="justify-content:center"></div>
@@ -2480,7 +2481,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
     </div>
     <div class="g2 pop" style="--d:.25s;gap:14px">
       <div class="icard" style="--c:var(--green)"><span class="tag2" style="background:var(--green)">無料</span><div class="ih">🔓 オープンソース・ソフトウェア</div><p>Qiskit は IBM が開発しているが OSS として公開されており、無料で利用できる</p></div>
-      <div class="icard" style="--c:var(--red)"><span class="tag2" style="background:var(--red)">注意</span><div class="ih">🔄 バージョンアップに注意</div><p>Qiskit はバージョンアップによって <b>インタフェースが変わる</b> ことがある（本書は 2023 年 5 月時点のバージョンで動作確認）</p></div>
+      <div class="icard" style="--c:var(--red)"><span class="tag2" style="background:var(--red)">注意</span><div class="ih">🔄 バージョンアップに注意</div><p>Qiskit はバージョンアップによって <b>インタフェースが変わる</b> ことがある</p></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -2588,7 +2589,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
       <div class="card pop" style="--d:.1s;padding:10px 14px">
         <svg id="cpSvg" viewBox="0 0 600 190" style="width:100%"></svg>
       </div>
-      <div class="point pop" style="--d:.15s;margin-top:0;font-size:17px">人間が分かる表現で書いたプログラムを、CPU で実行できる命令に変換するのが <b>コンパイラ</b>。量子コンピュータ向けのコンパイラを <b class="k">量子コンパイラ</b>（quantum compiler）と呼ぶ<span class="tiny">（本書ではトランスパイラと区別しない）</span></div>
+      <div class="point pop" style="--d:.15s;margin-top:0;font-size:17px">人間が分かる表現で書いたプログラムを、CPU で実行できる命令に変換するのが <b>コンパイラ</b>。量子コンピュータ向けのコンパイラを <b class="k">量子コンパイラ</b>（quantum compiler）と呼ぶ</div>
     </div>
     <div class="col">
       <div class="mp-lbl pop" style="text-align:left">量子コンパイラに備わっている主な機能（7.9.1）</div>
@@ -2662,7 +2663,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
       <div class="point pop" style="--d:.15s;margin-top:0;font-size:17px"><span class="math" style="font-size:21px"><b>H = e<sup>iπ/4</sup> · RZ(π/2) · √X · RZ(π/2)</b></span><br><span class="math">|e<sup>iπ/4</sup>| = 1</span> なので、e<sup>iπ/4</sup> 倍の違いは量子回路に影響しない → コンパイラが RZ と √X の組み合わせに変換</div>
     </div>
     <div class="card pop" style="--d:.2s;padding:8px 12px">
-      <div class="mp-lbl">ブロッホ球：RZ(π/2) → √X → RZ(π/2) を順に適用（緑の点線 ＝ H の結果）</div>
+      <div class="mp-lbl">ブロッホ球：RZ(π/2) → √X → RZ(π/2) を順に適用</div>
       <div class="bl4" id="hdBl4"></div>
       <div class="row" style="justify-content:center;gap:8px;margin-top:4px"><div class="pk" id="hdBtns" style="flex-wrap:nowrap"></div><button class="b" id="hdAuto" data-autoplay>▶ 自動再生</button></div>
     </div>
@@ -2682,7 +2683,6 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
         <div class="card" style="border-color:var(--green)"><div class="mp-lbl" style="color:#0a6b3a">図 7.27：最適化後（1 個）</div><div id="opCircB"></div></div>
       </div>
       <div class="eqrow pop" style="--d:.05s;justify-content:center;font-size:28px"><span>H · Z · H = <span class="res">X</span></span></div>
-      <div class="point pop" style="--d:.1s;margin-top:0;font-size:16.5px"><span class="math">X = H · Z · H</span>（第4章）なので、図 7.27 の量子回路を実行しても <b>同じ結果</b>。こちらは <b class="k">1 個の量子ゲート</b> で済む</div>
     </div>
     <div class="col">
       <div class="point blue pop" style="--d:.1s;margin-top:0;font-size:17px">ゲート数が少ないほど、ノイズの影響が小さくなり <b class="kb">計算精度が上がる</b></div>
@@ -2718,7 +2718,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
     <div class="qz pop"><div class="qz-q"><span class="qz-no">Q1</span><span><span class="math">X ⊗ I</span> と <span class="math">H ⊗ H ⊗ H</span> を、それぞれ短く書くと？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b class="math">X<sub>0</sub></b>（0 番目にだけ X）と <b class="math">H<sup>⊗3</sup></b></span></div></div>
     <div class="qz pop" style="--d:.1s"><div class="qz-q"><span class="qz-no">Q2</span><span><span class="math">CNOT<sub>1,0</sub>(|0⟩ ⊗ |1⟩)</span> は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b class="math">|1⟩ ⊗ |1⟩</b>（1 番目が制御ビット。|1⟩ なので 0 番目を反転）</span></div></div>
     <div class="qz pop" style="--d:.15s"><div class="qz-q"><span class="qz-no">Q3</span><span><span class="math">SWAP(|1⟩ ⊗ |0⟩)</span> は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b class="math">|0⟩ ⊗ |1⟩</b>（0 番目と 1 番目が入れ替わる）</span></div></div>
-    <div class="qz pop" style="--d:.17s"><div class="qz-q"><span class="qz-no">Q4</span><span><span class="math">|0⟩ ⊗ |0⟩</span> の 0 番目に X、1 番目に H を適用する（<span class="math">X ⊗ H</span>）と、どんな状態になる？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><span class="math">X|0⟩ ⊗ H|0⟩ = |1⟩ ⊗ <span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩ + |1⟩) = <b><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|10⟩ + |11⟩)</b></span></span></div></div>
+    <div class="qz pop" style="--d:.17s"><div class="qz-q"><span class="qz-no">Q4</span><span><span class="math">(X ⊗ H)(|0⟩ ⊗ |0⟩) = ？</span></span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><span class="math">X|0⟩ ⊗ H|0⟩ = |1⟩ ⊗ <span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩ + |1⟩) = <b><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|10⟩ + |11⟩)</b></span></span></div></div>
     <div class="qz pop" style="--d:.2s"><div class="qz-q"><span class="qz-no">Q5</span><span><span class="math">|1⟩ ⊗ |0⟩</span> から始めて H<sub>0</sub> → CNOT<sub>0,1</sub> を適用した状態は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|00⟩ − |11⟩)</b>（H|1⟩ = (|0⟩−|1⟩)/√2 なので）</span></div></div>
     <div class="qz pop" style="--d:.25s"><div class="qz-q"><span class="qz-no">Q6</span><span>Qiskit で <span class="mono">qc.x(1)</span> だけを適用して測定すると、結果の文字列は？ 本書の書き方では？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">Qiskit は <b class="mono">'10'</b>（右端が 0 番目）。本書の書き方では <b class="math">|0⟩ ⊗ |1⟩ = |01⟩</b></span></div></div>
   </div>
