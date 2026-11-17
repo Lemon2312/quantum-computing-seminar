@@ -1893,6 +1893,8 @@ svg.topo{display:block;width:100%;height:auto;user-select:none}
 @media print{.code .cl.on{background:none;box-shadow:none}}
 
 /* ===== 改訂で追加したスライド用 ===== */
+.qc-menu.need > button{animation:qcNeedM 1s ease-in-out infinite}
+@keyframes qcNeedM{0%,100%{box-shadow:inset 0 0 0 0 rgba(255,213,61,0)}50%{box-shadow:inset 0 0 0 3px rgba(255,213,61,.9)}}
 .qcmp{position:relative}
 .qc-lab div{height:var(--rh,56px) !important}
 .qc-lab div.c{height:var(--ch,40px) !important;font-size:16px}
@@ -2344,7 +2346,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 <!-- バイトオーダ：本書と Qiskit の比較 -->
 <section class="slide" data-id="bo">
   <div class="chap">第6章 ／ 6.2.2 記法の工夫</div>
-  <h2>量子ビットの順番に注意：バイト・オーダ<small>p.141</small></h2>
+  <h2>量子ビットの順番に注意<small>p.141</small></h2>
   <div class="body col" style="gap:16px">
     <div class="mp-lbl pop" style="font-size:20px">例：同じ <span class="math">|01⟩</span> でも、読み方が逆になる</div>
     <div class="cmp2">
@@ -2706,10 +2708,10 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
           </div>
         </div>
         <div class="qc-tut">
-          <h4>チュートリアル：量子もつれを作ろう</h4>
+          <h4>チュートリアル：2 つの量子ビットを重ね合わせにしよう</h4>
           <div style="text-align:right;margin-top:-4px"><button class="b" id="qcDemo2" style="font-size:12px;padding:2px 10px">見本を自動で作る</button></div>
           <div id="qcSteps"></div>
-          <div class="qc-toast" id="qcToast"></div><div class="qc-ok" id="qcOk">🎉 完成！ <b>00 と 11 だけ</b> がおおよそ半々で出る ＝ 量子もつれ<br>次は X を足したり、量子ビットを増やしたりして試そう</div>
+          <div class="qc-toast" id="qcToast"></div><div class="qc-ok" id="qcOk">🎉 完成！ <b>00・01・10・11</b> がそれぞれ約 1/4 ずつ出る ＝ 2 つの量子ビットがそれぞれ重ね合わせ<br>次は H の後に CNOT を足すとどうなるか試そう</div>
           <div class="qc-tip">ゲートはドラッグで置く（クリックで選んでから置いても OK）。置いたゲートはクリックで選択（Shift で複数）、Delete キーか枠の外へドラッグで削除。ビット列は Qiskit と同じく <b>右が 0 番目</b></div>
         </div>
       </div>
@@ -2859,9 +2861,9 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
         <div class="card" style="border-color:var(--green)"><div class="mp-lbl" style="color:#0a6b3a">図 7.27：最適化後（1 個）</div><div id="opCircB"></div></div>
       </div>
       <div class="eqrow pop" style="--d:.05s;justify-content:center;font-size:28px"><span>H · Z · H = <span class="res">X</span></span></div>
+      <div class="point blue pop" style="--d:.1s;margin-top:0;font-size:17px">ゲート数が少ないほど、ノイズの影響が小さくなり <b class="kb">計算精度が上がる</b></div>
     </div>
     <div class="col">
-      <div class="point blue pop" style="--d:.1s;margin-top:0;font-size:17px">ゲート数が少ないほど、ノイズの影響が小さくなり <b class="kb">計算精度が上がる</b></div>
       <div class="mp-lbl pop" style="--d:.15s;text-align:left">7.9.5 その他にも必要な機能</div>
       <div class="numlist pop" style="--d:.2s;--c:var(--gold)">
         <div><b class="n">・</b><span>量子ビットの制御装置が解釈できる <b>低レイヤの制御命令</b> に変換</span></div>
@@ -3444,7 +3446,7 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
 /* ---------- Quantum Composer 風の回路エディタ（チュートリアル付き・レジスタ設定可） ---------- */
 {
   const NCOL = 7, MAXQ = 4, MAXC = 4;
-  let regs = { q: [{ name: 'q', n: 2 }], c: [{ name: 'c', n: 2 }] };
+  let regs = { q: [{ name: 'q', n: 4 }], c: [{ name: 'c', n: 4 }] };
   let NQ = 2, NC = 2, QL = [], CL = [];
   // 量子ビット k のラベル QL[k]（例 'q[0]'）、古典ビット k の所属 CL[k] = { ri: レジスタ番号, i: レジスタ内の番号, s: 'c[0]' }
   const layout = () => {
@@ -3549,22 +3551,24 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
   };
   // ---- チュートリアル ----
   const STEPS = [
-    { t: '<b>H</b> を <b>1 本目の量子ビット</b>（q[0]）にドラッグする', need: 'H' },
-    { t: '<b>CNOT</b> を H より右の <b>1 本目</b> に置く（1 本目が制御、2 本目が標的）', need: 'CX' },
-    { t: '<b>測定</b> を 1 本目と 2 本目の両方に置く', need: 'M' },
+    { t: '<b>Edit → Manage registers</b> で、量子ビットと古典ビットを <b>2 つずつ</b> にする（初期設定は 4 つずつ）', need: 'REG' },
+    { t: '<b>H</b> を <b>q[0]</b> と <b>q[1]</b> の両方に置く', need: 'H' },
+    { t: '<b>測定</b> を H より右の q[0] と q[1] の両方に置く', need: 'M' },
     { t: '右上の <b>▶ 実行</b> を押して結果を見る', need: null },
   ];
   const progress = () => {
-    const cH = grid.findIndex(c => c.q0 && c.q0.g === 'H');
-    const cX = grid.findIndex((c, i) => i > cH && cH >= 0 && c.two && c.two.g === 'CX' && c.two.a === 0 && c.two.b === 1);
-    const mOk = cX >= 0 && [0, 1].every(q => grid.some((c, i) => i > cX && c['q' + q] && c['q' + q].g === 'M'));
-    return [cH >= 0, cX >= 0, mOk, mOk && ran];
+    const rOk = NQ === 2 && NC === 2;
+    const colH = q => grid.findIndex(c => c['q' + q] && c['q' + q].g === 'H');
+    const hOk = rOk && [0, 1].every(q => colH(q) >= 0);
+    const mOk = hOk && [0, 1].every(q => grid.some((c, i) => i > colH(q) && c['q' + q] && c['q' + q].g === 'M'));
+    return [rOk, hOk, mOk, mOk && ran];
   };
   const drawTut = () => {
     const d = progress(), cur = d.indexOf(false);
     $('#qcSteps').innerHTML = STEPS.map((s, i) => `<div class="qc-step ${d[i] ? 'done' : i === cur ? 'cur' : ''}"><b class="n">${d[i] ? '✓' : i + 1}</b><span>${s.t}</span></div>`).join('');
     $('#qcOk').style.display = cur === -1 ? 'block' : 'none';
     $('#qcPal').querySelectorAll('.qg').forEach(t => t.classList.toggle('need', cur >= 0 && STEPS[cur].need === t.dataset.g));
+    root.querySelectorAll('.qc-menu').forEach(m => m.classList.toggle('need', cur === 0 && m.firstElementChild.textContent === 'Edit'));
     $('#qcRun').style.boxShadow = cur === 3 ? '0 0 0 4px rgba(255,213,61,.6)' : '';
   };
   const update = (keepRun = false) => {
@@ -3722,11 +3726,12 @@ $('#crMapI').innerHTML = [0, 1, 2, 3].map(i => `<span>|${i >> 1}${i & 1}⟩</spa
   };
   root.querySelectorAll('.qc-drop button').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); e.currentTarget.blur(); closeMenus(); (ACT[b.dataset.act] || (() => {}))(); }));
   $('#qcDemo2').onclick = e => {
-    e.currentTarget.blur(); clearAll(); $('#qcTitle').textContent = 'Bell state';
-    if (NQ < 2 || NC < 2) { toast('見本には量子ビット・古典ビットが 2 つ以上必要です'); return; }
-    [['H', 0, 0], ['CX', 1, 0], ['M', 2, 0], ['M', 3, 1]].forEach(([g, c, q], k) => tb.later(() => place(g, c, q), 500 + k * 700));
-    tb.later(run, 500 + 4 * 700);
+    e.currentTarget.blur(); clearAll(); $('#qcTitle').textContent = 'Two superpositions';
+    tb.later(() => { snap(); regs = { q: [{ name: 'q', n: 2 }], c: [{ name: 'c', n: 2 }] }; layout(); grid.forEach((_, i) => grid[i] = {}); update(); toast('量子ビット 2 個・古典ビット 2 個に設定しました'); }, 400);
+    [['H', 0, 0], ['H', 0, 1], ['M', 1, 0], ['M', 1, 1]].forEach(([g, c, q], k) => tb.later(() => place(g, c, q), 1200 + k * 650));
+    tb.later(run, 1200 + 4 * 650);
   };
+
   // キーボード操作（このスライドを表示しているときだけ）
   addEventListener('keydown', e => {
     if (!root.closest('.slide').classList.contains('active') || document.activeElement === $('#qcTitle') || !dlg.hidden) return;
