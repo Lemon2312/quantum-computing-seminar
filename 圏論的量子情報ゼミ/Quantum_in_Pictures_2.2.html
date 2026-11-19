@@ -1443,8 +1443,18 @@ if (document.fonts) document.fonts.ready.then(fitFigures);
 
 /* ---------- スライド制御 ---------- */
 const stage = $('#stage');
+/* 右上の道具（#penbar）がスライドの文字に重ならないように、ステージを少し縮めて下げる。
+   道具の下端がスライドの上の余白（40px）より下に来るときだけ動かす */
 function fit() {
-  const s = Math.min(innerWidth / 1280, innerHeight / 720);
+  const W = innerWidth, H = innerHeight;
+  let s = Math.min(W / 1280, H / 720), top = H / 2;
+  const pb = document.getElementById('penbar');
+  const pbB = pb && getComputedStyle(pb).display !== 'none' ? pb.getBoundingClientRect().bottom + 4 : 0;
+  if (pbB > (H - 720 * s) / 2 + 40 * s) {
+    s = Math.min(W / 1280, (H - pbB) / 680);
+    top = pbB - 40 * s + 360 * s;
+  }
+  stage.style.top = top + 'px';
   stage.style.transform = `translate(-50%,-50%) scale(${s})`;
 }
 addEventListener('resize', fit); fit();
