@@ -464,6 +464,36 @@ ul.plain li .ico{border-radius:50%;border:2px solid var(--ink);box-shadow:none;b
 /* 「カーソル」モード（既定。道具を何も選んでいないとき）：普通のカーソルで文字を選択・コピーできる（6.1-7.9 v44 と同じ） */
 body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default;cursor:auto}
 .rlab{margin:18px 0 2px;font-size:17px;font-weight:900;color:var(--muted);letter-spacing:.1em;border-bottom:1.5px dashed #d8d4e6;padding-bottom:2px}
+
+/* ---------- 余白を減らす：図は本文の高さいっぱい、文字は大きく ---------- */
+h2{margin:4px 0 14px}
+.body.cols{align-items:stretch;gap:28px}
+.body.cols > .card{display:flex;flex-direction:column;justify-content:center;min-height:0}
+.body.cols > div:not(.card){display:flex;flex-direction:column;justify-content:center}
+.stp svg.dg{flex:1 1 0;height:auto;min-height:0}
+#msgDiag{flex:1;min-height:0;display:flex}
+#msgDiag svg.dg{height:100%}
+ul.plain li{font-size:25px;line-height:1.5;margin:10px 0;gap:12px}
+ul.plain li .ico{width:40px;height:40px;font-size:21px}
+.lead{font-size:25px;line-height:1.6}
+.bigmsg{font-size:34px}
+.point{font-size:24px;line-height:1.55;padding:14px 20px}
+.rlab{font-size:19px}
+.sumlist{gap:16px !important}
+.sumlist .sl{font-size:25px !important;padding:14px 22px !important}
+.sl-n{width:42px;height:42px;font-size:21px}
+.body.wide-fig{display:flex;flex-direction:column;gap:12px}
+.body.wide-fig > .card{flex:1;min-height:0;display:flex;flex-direction:column}
+.sumlist{gap:20px !important}
+.sumlist .sl{font-size:26px !important;padding:16px 24px !important}
+.slide[data-id="rocket"] ul.plain li,.slide[data-id="linked"] ul.plain li{font-size:23px}
+.slide[data-id="rocket"] .point,.slide[data-id="linked"] .point{font-size:22px}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) ul.plain li{font-size:29px;margin:16px 0}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) ul.plain li .ico{width:46px;height:46px;font-size:24px}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) .lead{font-size:29px}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) .point{font-size:27px}
+.slide[data-id="msg"] .lead{font-size:28px}
+.slide[data-id="msg"] .bigmsg{font-size:38px}
 </style>
 </head>
 <body>
@@ -501,7 +531,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <div class="body cols" style="grid-template-columns:1fr 1.25fr">
     <div class="card pop"><div id="msgDiag"></div></div>
     <div>
-      <p class="lead pop">箱と線の図は、ぱっと見では物理らしくありません。<br><b>空間</b> も <b>時間</b> も出てこないように見えます。</p>
+      <p class="lead pop">箱と線の図は、ぱっと見では<br>物理らしくありません。<br><b>空間</b> も <b>時間</b> も出てこないように見えます。</p>
       <div class="bigmsg pop" style="--d:.1s">でも実は…<br>図はいつでも <b class="k">空間と時間の中で<br>起きていること</b> として読める！</div>
     </div>
   </div>
@@ -527,7 +557,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 <section class="slide" data-id="stack">
   <div class="chap">SECTION 1 ／ 時間はどこに隠れている？</div>
   <h2>縦に積んだ箱 ＝ 時間の順番<small>1.2（時間）</small></h2>
-  <div class="body cols" style="grid-template-columns:1fr 1fr">
+  <div class="body cols" style="grid-template-columns:0.75fr 1fr">
     <div class="card stp pop" id="dgStack" style="--h:360px"></div>
     <div>
       <ul class="plain">
@@ -545,10 +575,10 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 <section class="slide" data-id="recipe">
   <div class="chap">SECTION 1 ／ 例：小麦・水・熱からパンを作る</div>
   <h2>パンのレシピも、下から上が作業の順番<small>1.2（時間）</small></h2>
-  <div class="body cols" style="grid-template-columns:1fr 1fr">
+  <div class="body cols" style="grid-template-columns:0.68fr 1fr">
     <div class="card stp pop" id="dgRecipe" style="--h:450px"></div>
     <div>
-      <p class="lead pop">小麦・水・熱からパンを作る（簡略化した）レシピ</p>
+      <p class="lead pop">小麦・水・熱からパンを作るレシピ</p>
       <ul class="plain">
         <li class="pop" style="--d:.06s"><span class="ico">│</span><span><b>線</b> ＝ もの（小麦・小麦粉・生地・パン）</span></li>
         <li class="pop" style="--d:.12s"><span class="ico">□</span><span><b>箱</b> ＝ 作業（砕く・混ぜる・焼く）</span></li>
@@ -596,7 +626,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 <section class="slide" data-id="side">
   <div class="chap">SECTION 2 ／ 空間はどこに隠れている？</div>
   <h2>横に並べた箱 ＝ 別々の場所<small>1.2（空間）</small></h2>
-  <div class="body cols" style="grid-template-columns:1fr 1fr">
+  <div class="body cols" style="grid-template-columns:0.85fr 1fr">
     <div class="card stp pop" id="dgSide" style="--h:350px"></div>
     <div>
       <ul class="plain">
@@ -612,7 +642,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 <section class="slide" data-id="world">
   <div class="chap">SECTION 2 ／ 例：3 人の友人が世界の別々の場所で</div>
   <h2>横の位置の違い ＝ 場所の違い<small>1.2（空間）</small></h2>
-  <div class="body" style="display:flex;flex-direction:column;justify-content:center;gap:12px">
+  <div class="body wide-fig">
     <div class="card stp pop" id="dgWorld" style="--h:265px;padding:12px 18px"></div>
   </div>
   <div class="pageno"></div>
@@ -637,13 +667,13 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 <section class="slide" data-id="family">
   <div class="chap">SECTION 3 ／ 時間と空間を 1 つの図に</div>
   <h2>1 つの図で、時間と空間をいっしょに表せる<small>1.2（時空）</small></h2>
-  <div class="body cols" style="grid-template-columns:1.1fr 1fr">
+  <div class="body cols" style="grid-template-columns:1.15fr 1fr">
     <div class="card stp pop" id="dgFamily" style="--h:360px"></div>
     <div>
       <ul class="plain">
         <li class="pop"><span class="ico">🏫</span><span>昼間、<b>子ども</b> は学校で勉強し</span></li>
         <li class="pop" style="--d:.06s"><span class="ico">🏢</span><span><b>親</b> は会社で働く</span></li>
-        <li class="pop" style="--d:.12s"><span class="ico">🏠</span><span>そのあと、みんな家に帰って <b>いっしょに夕食</b><span style="white-space:nowrap">（<b class="k">相互作用</b>）</span></span></li>
+        <li class="pop" style="--d:.12s"><span class="ico">🏠</span><span>そのあと、みんな家に帰って<br><b style="white-space:nowrap">いっしょに夕食</b><span style="white-space:nowrap">（<b class="k">相互作用</b>）</span></span></li>
       </ul>
     </div>
   </div>
@@ -669,7 +699,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 <section class="slide" data-id="friends">
   <div class="chap">SECTION 4 ／ 2 人の友人が粒子に箱をかける</div>
   <h2>点線で 2 人の箱を分ける<small>1.2（時空）</small></h2>
-  <div class="body cols" style="grid-template-columns:1fr 1fr">
+  <div class="body cols" style="grid-template-columns:0.95fr 1fr">
     <div class="card stp pop" id="dgFriends" style="--h:370px"></div>
     <div>
       <p class="lead pop">家の中の別々の部屋（寝室・台所・居間…）で、人が何かをしている図だと考えてもよい。</p>
@@ -687,7 +717,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 <section class="slide" data-id="rocket">
   <div class="chap">SECTION 4 ／ カップを時間と空間で考える</div>
   <h2>カップ ＝ 昔 Chi が送り出した 2 つの粒子<small>1.2（時空）</small></h2>
-  <div class="body cols" style="grid-template-columns:1.35fr 1fr">
+  <div class="body cols" style="grid-template-columns:1.5fr 1fr">
     <div class="card stp pop" id="dgRocket" style="--h:350px;padding:12px 16px"></div>
     <div>
       <ul class="plain">
@@ -705,7 +735,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 <section class="slide" data-id="linked">
   <div class="chap">SECTION 4 ／ 離れていてもつながっている</div>
   <h2>離れても、2 つの粒子は線でつながったまま<small>1.2（時空）</small></h2>
-  <div class="body cols" style="grid-template-columns:1.35fr 1fr">
+  <div class="body cols" style="grid-template-columns:1.5fr 1fr">
     <div class="card stp pop" id="dgLinked" style="--h:360px;padding:12px 16px"></div>
     <div>
       <ul class="plain">
@@ -984,7 +1014,8 @@ function recipe(s, { ox = 0, oy = 0, id, bad = false, finalOn = 4 }) {
 /* ---------- 横に並べた箱：別々の場所 ---------- */
 {
   const card = $('#dgSide'), s = svgIn(card, 470, 380);
-  spaceAxis(s, 352, 30, 455);
+  s.setAttribute('viewBox', '75 20 395 360');
+  spaceAxis(s, 352, 85, 455);
   wire(s, 'M170,315 V204', { on: 1 }); wire(s, 'M170,156 V40', { on: 2 });
   wire(s, 'M330,315 V204', { on: 1 }); wire(s, 'M330,156 V40', { on: 2 });
   box(s, 170, 180, '♠', { on: 1 }); box(s, 330, 180, '♣', { on: 1 });
