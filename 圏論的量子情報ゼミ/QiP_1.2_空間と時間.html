@@ -534,11 +534,11 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
     <div>
       <ul class="plain">
         <li class="pop"><span class="ico">□</span><span>2 つの箱を <b>上下に積んで</b>、線でつなぐ</span></li>
-        <li class="pop" style="--d:.08s"><span class="ico">1</span><span>まず下の箱 <b class="k suit">◇</b> が作用する</span></li>
-        <li class="pop" style="--d:.16s"><span class="ico">2</span><span>次に上の箱 <b class="k suit">♡</b> が、<b>◇ の出力</b> に作用する</span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">1</span><span>まず下の箱 <b class="suit">◇</b> が作用する</span></li>
+        <li class="pop" style="--d:.16s"><span class="ico">2</span><span>次に上の箱 <b class="suit">♡</b> が、<b><span class="suit">◇</span> の出力</b> に作用する</span></li>
       </ul>
       <div class="point frag">図は <b>下から上へ</b> 読む。<br>縦方向 ＝ <b class="k">時間の流れ</b></div>
-      <div class="quote frag">“you can always think of box ◇ being applied first and then box ♡ being applied to the output of box ◇.”<small>— Quantum in Pictures, 1.2</small></div>
+      <div class="quote frag">“you can always think of box <span class="suit">◇</span> being applied first and then box <span class="suit">♡</span> being applied to the output of box <span class="suit">◇</span>.”<small>— Quantum in Pictures, 1.2</small></div>
     </div>
     <div class="card stp pop" id="dgStack" style="--d:.2s;--h:360px"></div>
   </div>
@@ -560,7 +560,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
       <div class="point frag">箱の <b>出力</b> が、上の箱の <b>入力</b> になる。<br>途中の線（小麦粉・生地）も「もの」を表している</div>
       <div class="point blue frag">横から入ってくる線（水・熱）は、<b>その作業の時に加わる材料</b></div>
     </div>
-    <div class="card stp pop" id="dgRecipe" style="--d:.2s;--h:370px"></div>
+    <div class="card stp pop" id="dgRecipe" style="--d:.2s;--h:450px"></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -570,7 +570,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <div class="chap">SECTION 1 ／ 作業の順番は大切</div>
   <h2>順番を入れ替えると…？<small>1.2（時間）</small></h2>
   <div class="body cols" style="grid-template-columns:1.45fr 1fr">
-    <div class="card stp pop" id="dgOrder" style="--h:375px;padding:12px 16px"></div>
+    <div class="card stp pop" id="dgOrder" style="--h:470px;padding:12px 16px"></div>
     <div>
       <ul class="plain">
         <li class="pop" style="--d:.1s"><span class="ico" style="color:var(--accent)">✓</span><span>砕く → <b>混ぜる</b> → <b>焼く</b><br>→ いい香りの <b>パン</b> 🍞</span></li>
@@ -610,7 +610,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
         <li class="pop" style="--d:.16s"><span class="ico">📍</span><span>ただし <b class="kb">別々の場所</b> で</span></li>
       </ul>
       <div class="point blue frag">横方向 ＝ <b class="kb">空間（場所）</b><br>ピンクの点線「いま」は、<b>同じ瞬間</b> を表す横線</div>
-      <div class="quote frag">“the two boxes ♠ and ♣ are being applied to their inputs at the same time but in different places.”<small>— Quantum in Pictures, 1.2</small></div>
+      <div class="quote frag">“the two boxes <span class="suit">♠</span> and <span class="suit">♣</span> are being applied to their inputs at the same time but in different places.”<small>— Quantum in Pictures, 1.2</small></div>
     </div>
     <div class="card stp pop" id="dgSide" style="--d:.2s;--h:350px"></div>
   </div>
@@ -727,13 +727,13 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
         <h3>縦につなぐ ＝ 順次合成<small>sequential composition</small></h3>
         <div id="ntSeq" style="width:150px"></div>
         <div class="formula suit">♡ ∘ ◇</div>
-        <div class="nt">「<b>◇ のあとに ♡</b>」（時間の順番）<br><span class="muted" style="font-size:16px">式では右から左に読む点に注意（◇ が先）</span></div>
+        <div class="nt">「<b><span class="suit">◇</span> のあとに <span class="suit">♡</span></b>」（時間の順番）<br><span class="muted" style="font-size:16px">式では右から左に読む点に注意（<span class="suit">◇</span> が先）</span></div>
       </div>
       <div class="card pop" style="--d:.12s">
         <h3>横に並べる ＝ 並列合成<small>parallel composition</small></h3>
         <div id="ntPar" style="width:220px"></div>
         <div class="formula suit">♠ ⊗ ♣</div>
-        <div class="nt">「<b>♠ と ♣ を同時に、別々の場所で</b>」<br><span class="muted" style="font-size:16px">⊗ はテンソル積の記号</span></div>
+        <div class="nt">「<b><span class="suit">♠</span> と <span class="suit">♣</span> を同時に、別々の場所で</b>」<br><span class="muted" style="font-size:16px">⊗ はテンソル積の記号</span></div>
       </div>
     </div>
     <div class="point blue frag">この 2 種類の「つなぎ方」を数学的に整理したものが、圏論（<b>モノイダル圏</b>）の考え方につながる。<br>ゼミ名の「圏論的量子情報」の土台になる見方</div>
@@ -761,7 +761,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <div class="chap">Practice ／ 1.2</div>
   <h2>復習問題<small>クリックで答え</small><button class="b qz-all" data-quiz-all>答えをぜんぶ表示</button></h2>
   <div class="body quiz q6">
-    <div class="qz pop" style="--d:0.00s"><div class="qz-q"><span class="qz-no">Q1</span><span>箱 <b class="suit">◇</b> の上に箱 <b class="suit">♡</b> を積んで線でつないだ。先に作用するのはどっち？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b class="suit">◇</b>（下の箱）。<b class="suit">♡</b> は ◇ の出力に作用する。図は下から上へ読む</span></div></div>
+    <div class="qz pop" style="--d:0.00s"><div class="qz-q"><span class="qz-no">Q1</span><span>箱 <b class="suit">◇</b> の上に箱 <b class="suit">♡</b> を積んで線でつないだ。先に作用するのはどっち？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b class="suit">◇</b>（下の箱）。<b class="suit">♡</b> は <span class="suit">◇</span> の出力に作用する。図は下から上へ読む</span></div></div>
     <div class="qz pop" style="--d:0.05s"><div class="qz-q"><span class="qz-no">Q2</span><span>横に並べた 2 つの箱 <b class="suit">♠</b>・<b class="suit">♣</b> は、時間と空間の中でどう考えられる？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>同じ時刻</b> に、<b>別々の場所</b> で作用している</span></div></div>
     <div class="qz pop" style="--d:0.10s"><div class="qz-q"><span class="qz-no">Q3</span><span>パンのレシピで「混ぜる」と「焼く」の上下を入れ替えると？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">パンではなく <b>べちゃべちゃの泥</b>。上下の順番 ＝ 時間の順番なので結果が変わる</span></div></div>
     <div class="qz pop" style="--d:0.15s"><div class="qz-q"><span class="qz-no">Q4</span><span>家族の図で、子どもと親が同じ箱に入るのはどこ？ それはいつ？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>家</b>（夕食）。学校・会社より <b>上</b> にあるので、<b>後</b> の出来事</span></div></div>
@@ -923,6 +923,12 @@ function stepper(card, caps, { interval = 1900, hold = 3000 } = {}) {
   set(0);
 }
 
+/* 動かさない図：ステップ k までに出る文字（途中の線の名前・結果）をすべて表示する。線・箱は色をつけず墨色のまま。再生ボタン・説明文はつけない */
+function staticFig(card, k) {
+  card.querySelectorAll('.appear[data-on]').forEach(e => e.classList.toggle('on', k >= +e.dataset.on));
+  card.querySelectorAll('[data-only]').forEach(e => e.classList.toggle('hide', !e.dataset.only.split(',').includes(String(k))));
+}
+
 /* ---------- タイトル：時空の中の図（「いま」の線が下から上へ動き続ける） ---------- */
 {
   const s = svgIn($('#tDiag'), 440, 362);
@@ -966,9 +972,9 @@ function stepper(card, caps, { interval = 1900, hold = 3000 } = {}) {
   label(s, 210, 26, '出力', { a: 'start' });
   stepper(card, [
     '下から入力がやってくる（図は <b class="k">下から上へ</b> 読む）',
-    'まず <b class="k suit">◇</b> が作用する',
-    '◇ の <b>出力</b> が、線を通って上へ進む',
-    '次に <b class="k suit">♡</b> が、◇ の出力に作用する',
+    'まず <b class="suit">◇</b> が作用する',
+    '<span class="suit">◇</span> の <b>出力</b> が、線を通って上へ進む',
+    '次に <b class="suit">♡</b> が、<span class="suit">◇</span> の出力に作用する',
     '<b>下 → 上</b> の並び ＝ <b class="k">時間の順番</b>',
   ]);
 }
@@ -994,33 +1000,23 @@ function recipe(s, { ox = 0, oy = 0, id, bad = false, finalOn = 4 }) {
   label(g, B, 428, m3[0], { c: 'wl big' });
   label(g, X - 12, (Y[0] + Y[1]) / 2, '小麦粉', { a: 'end', cls: 'appear', on: 1 });
   label(g, X - 12, (Y[1] + Y[2]) / 2, bad ? '焼いた小麦粉' : '生地', { a: 'end', cls: 'appear', on: 2 });
-  label(g, X - 12, 52, bad ? '🟫 泥…' : '🍞 パン', { c: 'res', a: 'end', cls: 'appear', on: 3 });
+  const res = label(g, X - 12, 52, bad ? '🟫 泥' : '🍞 パン', { c: 'res', a: 'end', cls: 'appear', on: 3 });
+  if (bad) res.style.fill = 'var(--blue)';
   return g;
 }
 {
   const card = $('#dgRecipe'), s = svgIn(card, 360, 445);
   recipe(s, { ox: 10, finalOn: 4 });
-  stepper(card, [
-    '材料：🌾 小麦・💧 水・🔥 熱（<b>線 ＝ もの</b>、<b>箱 ＝ 作業</b>）',
-    '① 小麦を <b class="k">砕く</b> → 小麦粉',
-    '② 小麦粉と水を <b class="k">混ぜる</b> → 生地',
-    '③ 生地をオーブンの熱で <b class="k">焼く</b> → パン',
-    'できあがり 🍞　<b>下から上へ</b> ＝ 作業の順番',
-  ]);
+  staticFig(card, 4);
 }
 {
   const card = $('#dgOrder'), s = svgIn(card, 760, 480);
-  label(s, 185, 14, '✅ 正しい順番', { c: 'head' });
-  label(s, 575, 14, '❌ 先に焼いてから混ぜる', { c: 'head' });
+  label(s, 185, 14, '✓ 正しい順番', { c: 'head' }).style.fill = 'var(--accent-d)';
+  label(s, 575, 14, '✗ 先に焼いてから混ぜる', { c: 'head' }).style.fill = 'var(--blue)';
   el('line', { x1: 385, y1: 0, x2: 385, y2: 470, class: 'sep' }, s);
   recipe(s, { ox: 15, oy: 34, finalOn: 3 });
   recipe(s, { ox: 405, oy: 34, bad: true, finalOn: 3 });
-  stepper(card, [
-    '同じ材料・同じ 3 つの作業。違うのは <b>順番</b> だけ',
-    'どちらも、まず小麦を <b>砕いて</b> 小麦粉にする',
-    '左：小麦粉に水を <b>混ぜる</b> ／ 右：小麦粉を先に <b>焼いてしまう</b>',
-    '左は <b class="k">パン</b> 🍞、右は <b class="k">べちゃべちゃの泥</b>！ 上下の順番 ＝ 時間の順番',
-  ]);
+  staticFig(card, 3);
 }
 
 /* ---------- 横に並べた箱：同時・別の場所 ---------- */
@@ -1161,7 +1157,7 @@ function solar(s, idp) {
   label(s, 330, 286, '↔ どれだけ離れていても', { c: 'wl appear', on: 2 }).setAttribute('style', 'fill:var(--pink);font-weight:900');
   stepper(card, [
     '粒子を受け取った。2 人はこれを <b>どう使ってもよい</b>',
-    'たとえば Andrea は <b class="k suit">♡</b>、Blaise は <b class="k suit">◇</b> をかける',
+    'たとえば Andrea は <b class="suit">♡</b>、Blaise は <b class="suit">◇</b> をかける',
     'どれだけ離れていても、2 つの粒子は <b class="k">線でつながったまま</b>！',
   ]);
 }
