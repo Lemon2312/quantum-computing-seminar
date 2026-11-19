@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.2 空間と時間の導入 ― Quantum in Pictures</title>
+<style>
+:root{
+  --ink:#1f1a3d; --muted:#6b6790; --line:#1f1a3d; --bg:#fffaf0;
+  --accent:#ff6b1a; --accent-d:#e04e00; --accent-l:#fff1c2;
+  --blue:#3b6cff; --blue-l:#dfe8ff; --green:#14a35a;
+  --off:#b9b5d0; --pink:#ff4f9a; --yellow:#ffd53d; --purple:#8a5cff;
+  --hard:4px 4px 0 var(--ink);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{margin:0;height:100%;background:#1e293b;overflow:hidden;
+  font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;color:var(--ink)}
+#viewport{position:fixed;inset:0}
+#stage{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform-origin:center center;
+  background:var(--bg);box-shadow:0 20px 60px rgba(0,0,0,.4);overflow:hidden}
+
+/* ---------- slides ---------- */
+.slide{position:absolute;inset:0;padding:44px 64px 50px;opacity:0;pointer-events:none;
+  transform:translateX(60px);transition:opacity .55s ease,transform .55s ease;display:flex;flex-direction:column}
+.slide.past{transform:translateX(-60px)}
+.slide.active{opacity:1;transform:none;pointer-events:auto}
+.slide::before{content:"";position:absolute;left:0;top:0;right:0;height:6px;
+  background:linear-gradient(90deg,var(--accent),#facc15 50%,var(--blue))}
+.chap{font-size:15px;color:var(--muted);letter-spacing:.05em}
+h2{font-size:38px;margin:6px 0 22px;padding-left:16px;border-left:10px solid var(--accent);line-height:1.25}
+h2 small{font-size:22px;color:var(--muted);font-weight:500;margin-left:12px}
+.pageno{position:absolute;right:30px;bottom:16px;font-size:14px;color:var(--muted)}
+.body{flex:1;min-height:0}
+p,li{font-size:23px;line-height:1.6}
+ul{margin:0;padding-left:1.2em}
+li{margin:6px 0}
+b.k{color:var(--accent-d)}
+b.kb{color:var(--blue)}
+.muted{color:var(--muted)}
+.cols{display:grid;grid-template-columns:1.25fr 1fr;gap:30px;align-items:center;height:100%}
+.cols.even{grid-template-columns:1fr 1fr}
+.cols.wide{grid-template-columns:1.7fr 1fr}
+.card{background:#fff;border-radius:18px;box-shadow:0 6px 24px rgba(15,23,42,.08);padding:18px 22px}
+.point{background:var(--accent-l);border-left:7px solid var(--accent);padding:12px 18px;border-radius:10px;font-size:22px;line-height:1.55;margin-top:14px}
+.point.blue{background:var(--blue-l);border-left-color:var(--blue)}
+.hint{font-size:16px;color:var(--muted);margin-top:6px}
+.formula{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:30px;background:#fff;border-radius:12px;
+  padding:10px 20px;display:inline-block;box-shadow:0 3px 12px rgba(15,23,42,.08)}
+sub{font-size:.65em}
+.center{display:flex;justify-content:center;align-items:center}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+button.b{font:inherit;font-size:16px;padding:7px 16px;border-radius:999px;border:2px solid var(--blue);background:#fff;color:var(--blue);cursor:pointer;font-weight:700}
+button.b:hover{background:var(--blue-l)}
+button.b.playing{background:var(--blue);color:#fff}
+
+/* fragments & entrance animations */
+.frag{opacity:0;transform:translateY(18px);transition:opacity .45s ease,transform .45s ease}
+.frag.vis{opacity:1;transform:none}
+.slide.active .pop{animation:pop .6s cubic-bezier(.2,.8,.3,1.2) both;animation-delay:var(--d,0s)}
+@keyframes pop{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+
+/* title */
+.title-wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:30px;align-items:center;height:100%}
+.title-wrap h1{font-size:54px;line-height:1.25;margin:0 0 14px}
+.title-wrap .sub{font-size:30px;color:var(--accent-d);font-weight:700;margin-bottom:34px}
+.title-wrap .meta{font-size:20px;color:var(--muted);line-height:1.8}
+.agenda li{font-size:27px;margin:16px 0;list-style:none;display:flex;align-items:center;gap:16px}
+.agenda .num{width:46px;height:46px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;flex:none}
+.agenda .new{background:var(--accent)}
+.tag{font-size:15px;background:var(--accent);color:#fff;border-radius:999px;padding:2px 12px;font-weight:700}
+details{background:#fff;border-radius:12px;padding:10px 18px;margin:10px 0;box-shadow:0 3px 12px rgba(15,23,42,.06);font-size:22px}
+details summary{cursor:pointer;font-weight:700}
+details[open] summary{color:var(--accent-d)}
+details div{margin-top:8px;line-height:1.6;color:#334155}
+
+/* ---------- UI ---------- */
+#ui{position:fixed;left:0;right:0;bottom:0;height:40px;display:flex;align-items:center;gap:10px;padding:0 14px;
+  color:#cbd5e1;font-size:14px;opacity:.25;transition:opacity .3s;z-index:10}
+#ui:hover{opacity:1}
+#ui button{background:#334155;color:#fff;border:0;border-radius:6px;padding:5px 12px;cursor:pointer;font:inherit}
+#progress{position:fixed;left:0;bottom:0;height:4px;background:var(--accent);transition:width .4s;z-index:11}
+
+/* ---------- 一覧モード ---------- */
+#ovHead{display:none}
+body.overview{overflow:auto}
+body.overview #viewport{position:static;padding:64px 24px 60px}
+body.overview #ovHead{display:flex;position:fixed;left:0;right:0;top:0;height:52px;align-items:center;gap:16px;padding:0 24px;
+  background:#0f172a;color:#e2e8f0;font-size:16px;z-index:12}
+body.overview #ovHead b{font-size:18px}
+body.overview #ovHead b,body.overview #ovHead button{white-space:nowrap}
+@media (max-width:900px){body.overview #ovHead span{display:none}}
+body.overview #ovHead button{background:var(--accent);color:#fff;border:0;border-radius:6px;padding:6px 14px;cursor:pointer;font:inherit;font-weight:700;margin-left:auto}
+body.overview #stage{position:static;transform:none!important;width:auto;height:auto;overflow:visible;background:none;box-shadow:none;
+  display:grid;grid-template-columns:repeat(var(--cols,4),var(--ow,256px));gap:22px}
+/* 縮小は zoom ではなく transform で行う（iPad の Safari は zoom の扱いが異なり、中身の位置がずれるため）。
+   transform は並べるときの大きさに影響しないので、負の余白で縮小後の大きさ（--ow × --oh）に合わせる */
+body.overview .slide{position:relative;inset:auto;width:1280px;height:720px;opacity:1;pointer-events:auto;
+  transform:scale(var(--z,.2));transform-origin:0 0;margin:0 calc(var(--ow,256px) - 1280px) calc(var(--oh,144px) - 720px) 0;
+  cursor:pointer;background:var(--bg);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);outline:0 solid var(--accent);transition:outline-width .15s}
+body.overview .slide *{pointer-events:none}
+body.overview .slide:hover{outline-width:14px}
+body.overview .slide.current{outline-width:22px}
+body.overview .frag{opacity:1;transform:none}
+body.overview .bar-fill{width:var(--w);transition:none}
+body.overview .slide{overflow:hidden}
+/* 一覧ではページ番号を右下の札にして、中身と重なっても読めるようにする */
+body.overview .slide .pageno{font-size:40px;font-weight:900;color:#fff;background:var(--ink);border-radius:16px;padding:2px 20px;bottom:14px;right:14px;z-index:6}
+body.overview #ui,body.overview #progress{display:none}
+
+/* ---------- ポップ調デザイン（太枠・ずらし影・弾むアニメ） ---------- */
+html,body{background:#2a2350}
+#stage{background:
+  radial-gradient(circle at 92% 8%,#ffd6e8 0 120px,transparent 121px),
+  radial-gradient(circle at 4% 96%,#d4f4ff 0 150px,transparent 151px),
+  radial-gradient(circle at 98% 92%,#fff0b3 0 70px,transparent 71px),
+  radial-gradient(#e9e2cf 1.4px,transparent 1.6px) 0 0/22px 22px,
+  var(--bg)}
+.slide{transition:opacity .45s ease,transform .6s cubic-bezier(.3,1.5,.5,1)}
+.slide::before{height:10px;background:repeating-linear-gradient(90deg,var(--accent) 0 80px,var(--yellow) 80px 160px,var(--pink) 160px 240px,var(--blue) 240px 320px)}
+.chap{font-weight:700;color:var(--pink);letter-spacing:.08em}
+h2{border-left:none;padding-left:54px;position:relative}
+h2::before{content:"";position:absolute;left:0;top:50%;width:34px;height:34px;margin-top:-17px;border-radius:10px;
+  background:linear-gradient(135deg,var(--yellow),var(--accent) 55%,var(--pink));border:3px solid var(--ink);transform:rotate(-12deg);box-shadow:3px 3px 0 var(--ink)}
+.slide.active h2::before{animation:wiggle 1s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes wiggle{from{transform:rotate(-120deg) scale(.3)}to{transform:rotate(-12deg)}}
+h2 small{white-space:nowrap;background:var(--accent-l);color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:2px 14px;font-size:18px;font-weight:700;vertical-align:middle}
+b.k{color:var(--accent-d);background:linear-gradient(transparent 62%,#ffe58a 62%)}
+b.kb{color:var(--blue);background:linear-gradient(transparent 62%,#cfe0ff 62%)}
+.card{border:3px solid var(--ink);border-radius:22px;box-shadow:6px 6px 0 var(--ink)}
+.point{border:2.5px solid var(--ink);border-left:10px solid var(--accent);border-radius:16px;box-shadow:var(--hard)}
+.point.blue{border-left-color:var(--blue)}
+.formula{border:2.5px solid var(--ink);box-shadow:var(--hard)}
+button.b{border:2.5px solid var(--ink);background:var(--yellow);color:var(--ink);box-shadow:3px 3px 0 var(--ink);transition:transform .1s,box-shadow .1s}
+button.b:hover{background:#ffe06b;transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+button.b:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+button.b.playing{background:var(--pink);color:#fff}
+.slide.active .pop{animation:pop .7s cubic-bezier(.3,1.6,.5,1) both;animation-delay:var(--d,0s)}
+@keyframes pop{from{opacity:0;transform:translateY(30px) scale(.85) rotate(-2deg)}to{opacity:1;transform:none}}
+.frag{transform:translateY(18px) scale(.95);transition:opacity .4s ease,transform .5s cubic-bezier(.3,1.6,.5,1)}
+
+.bitex span,.quote,.tile,details{border:2.5px solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
+table.tt{border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);border-collapse:separate;border-spacing:0}
+table.tt th,table.tt td{border:0;border-right:1.5px solid #d9d4ea;border-bottom:1.5px solid #d9d4ea}
+table.tt th{background:#ece6ff;border-bottom:2.5px solid var(--ink)}
+table.tt th.out{background:#ffe1c7}
+table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
+
+.wire{stroke-width:5}
+.gate path,.gate circle{stroke:var(--ink);stroke-width:3.5}
+.gate.on path:not(.xorback),.gate.on circle{fill:#ffe1c7;stroke:var(--ink)}
+.gate.on path.xorback{stroke:var(--ink)}
+.gate.on{filter:drop-shadow(3px 3px 0 var(--accent))}
+.inp circle{stroke-width:3.5}
+.inp.on circle{stroke:var(--ink)}
+.lamp circle{stroke:var(--ink)}
+.lamp.on circle{fill:var(--yellow);stroke:var(--ink);filter:drop-shadow(0 0 12px rgba(255,213,61,.95))}
+.fa rect{stroke:var(--ink);rx:16}
+.fa.active rect{fill:#fff1c2;stroke:var(--ink);filter:drop-shadow(4px 4px 0 var(--accent))}
+.ca-grid .hl{background:#fff1c2;border:2px dashed var(--accent)}
+.bar-bg{background:#ece6ff;border:2px solid var(--ink)}
+.bar-fill.a{background:linear-gradient(90deg,var(--accent),var(--pink))}
+
+.title-wrap h1{font-size:64px;background:linear-gradient(transparent 70%,#ffe58a 70%) no-repeat;display:inline;line-height:1.3;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.title-wrap .sub{color:var(--pink);margin-top:18px;margin-bottom:22px;font-size:23px;white-space:nowrap}
+.tchaps{display:flex;flex-direction:column;gap:12px}
+.tchap{display:flex;align-items:center;gap:12px;background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:3px 3px 0 var(--ink);padding:6px 14px 6px 6px}
+.tchap .tno{background:var(--c);color:#fff;font-weight:900;border:2px solid var(--ink);border-radius:10px;padding:2px 10px;font-size:18px;flex:none}
+.tchap .tname{font-weight:900;font-size:21px}
+.tchap .tsec{margin-left:auto;font-size:14px;color:var(--muted);font-weight:700;white-space:nowrap}
+.agenda .num{border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);background:var(--blue)}
+.agenda li:nth-child(3) .num{background:var(--pink)}
+.agenda li:nth-child(4) .num{background:var(--green)}
+.agenda li:nth-child(6) .num{background:var(--purple)}
+.agenda li:nth-child(7) .num{background:var(--accent)}
+.agenda .new{background:var(--accent)}
+.tag{background:var(--pink);border:2px solid var(--ink);white-space:nowrap;flex:none}
+
+/* 目次の教科書の章見出し */
+.agenda li.agroup{font-size:17px;font-weight:900;color:var(--pink);letter-spacing:.06em;margin:14px 0 -4px;border-bottom:2.5px dashed #e3dcf2;padding-bottom:4px}
+.agenda li.agroup:first-child{margin-top:0}
+
+/* 教科書の章の扉（本の章扉風） */
+.partdoor .pd-wrap{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-bottom:40px}
+.pd-src{font-size:18px;font-weight:700;color:var(--muted);letter-spacing:.08em}
+.pd-no{margin-top:14px;font-size:30px;font-weight:900;color:#fff;background:var(--c);border:3px solid var(--ink);border-radius:999px;padding:4px 26px;box-shadow:4px 4px 0 var(--ink);letter-spacing:.12em}
+.pd-title{font-size:68px;line-height:1.25;margin:22px 0 26px;background:linear-gradient(transparent 70%,#ffe58a 70%);display:inline;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.pd-secs{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:22px}
+.pd-secs span{background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:4px 18px;font-size:19px;font-weight:700;box-shadow:3px 3px 0 var(--ink)}
+.pd-secs span.add{background:var(--accent-l)}
+.pd-bg{position:absolute;left:0;right:0;bottom:4px;display:flex;justify-content:center;color:var(--c);opacity:.13;font-size:84px;pointer-events:none}
+.pd-bg .eq{font-size:50px;gap:14px}
+.pd-bg .vec{border-width:5px;border-radius:40px;padding:4px 26px;line-height:1.15}
+
+/* 復習問題：カードをクリックすると答えが出る */
+.quiz{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;gap:12px 16px;align-content:center}
+.qz{display:flex;flex-direction:column;background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:10px 14px;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.qz:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.qz-q{display:flex;gap:10px;align-items:flex-start;font-size:17px;line-height:1.5;font-weight:600}
+.qz-no{flex:none;background:var(--blue);color:#fff;font-weight:900;font-size:14px;border:2px solid var(--ink);border-radius:999px;padding:1px 9px;margin-top:2px}
+.qz-a{margin-top:auto;padding-top:8px;min-height:40px;display:flex;align-items:center;border-top:2px dashed #e3dcf2;font-size:17px;line-height:1.5}
+.qz-hide{color:var(--muted);font-weight:800;font-size:15px}
+.qz-ans{display:none;color:#1f1a3d}
+.qz.open{background:#fffaf0}
+.qz.open .qz-no{background:var(--green)}
+.qz.open .qz-hide{display:none}
+.qz.open .qz-ans{display:inline;animation:qzIn .4s cubic-bezier(.3,1.6,.5,1)}
+@keyframes qzIn{from{opacity:0;transform:translateY(6px) scale(.96)}to{opacity:1;transform:none}}
+.quiz.q2{grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:auto}
+.quiz.q2 .qz{grid-column:span 2}
+.quiz.q2 .qz.dia{grid-column:span 3}
+.quiz.q2 .qz.wide .qzc{max-height:200px}
+.quiz.q2 .qz-q{font-size:16px}
+.quiz.q2 .qz-a{font-size:15.5px;min-height:34px}
+.qz-q > span:last-child{min-width:0;flex:1}
+.qzc{display:block;width:100%;max-height:170px;margin:6px auto 0;font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif}
+.qzc .qg{fill:#f1ecff;stroke:#1f1a3d;stroke-width:2.5;stroke-dasharray:6 4}
+.qzc .g-q{font-size:26px;font-weight:900;fill:#8a5cff}
+.qzc .g-ans{display:none;font-weight:900;fill:#1f1a3d}
+.qz.open .qzc .qg{fill:#fff1c2;stroke-dasharray:none}
+.qz.open .qzc .g-q{display:none}
+.qz.open .qzc .g-ans{display:inline}
+.quiz.q3{grid-auto-rows:auto}
+.quiz.q3 .qz{min-height:118px}
+.quiz.q3 .qz:last-child{grid-column:span 2}
+.qzc.qzbloch{max-height:145px}
+.qgb{cursor:pointer}
+.qgb:hover .qg{fill:#e6dcff}
+.qgb.shown .qg{fill:#fff1c2;stroke-dasharray:none}
+.qgb.shown .g-q{display:none}
+.qgb.shown .g-ans{display:inline;animation:qzIn .35s cubic-bezier(.3,1.6,.5,1)}
+h2 .qz-all{font-size:14px;padding:4px 14px;margin-left:16px;vertical-align:middle}
+
+/* 章の扉スライド */
+.door-wrap{position:relative;display:grid;grid-template-columns:auto 1fr;gap:64px;align-items:center;height:100%;padding:0 40px}
+.door-num{width:210px;height:210px;border-radius:46px;background:var(--c);color:#fff;border:5px solid var(--ink);box-shadow:10px 10px 0 var(--ink);
+  display:flex;align-items:center;justify-content:center;font-size:140px;font-weight:900;font-family:Consolas,Menlo,monospace;transform:rotate(-6deg)}
+.slide.active .door-num{animation:doorIn .9s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes doorIn{from{opacity:0;transform:rotate(-120deg) scale(.3)}to{opacity:1;transform:rotate(-6deg)}}
+.door-label{font-size:22px;font-weight:900;letter-spacing:.14em;color:var(--c)}
+.door-label .door-book{display:block;font-size:16px;letter-spacing:.04em;color:var(--muted);margin-bottom:2px}
+.door-label .tag{font-size:15px;letter-spacing:0;vertical-align:middle;margin-left:8px}
+.door h1{font-size:80px;line-height:1.15;margin:6px 0 4px}
+.door-lead{font-size:32px;font-weight:700;color:var(--muted);margin:0 0 30px}
+.door-topics{display:flex;flex-wrap:wrap;gap:12px}
+.door-topics span{background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:4px 18px;font-size:19px;font-weight:700;box-shadow:3px 3px 0 var(--ink)}
+.door-bg{position:absolute;right:-20px;bottom:-150px;font-size:600px;font-weight:900;line-height:1;color:var(--c);opacity:.09;
+  font-family:Consolas,Menlo,monospace;pointer-events:none}
+#progress{height:6px;background:linear-gradient(90deg,var(--accent),var(--pink),var(--blue))}
+
+/* ---------- レーザーポインター（Apple Pencil） ---------- */
+#stage{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body:not(.overview) #stage{touch-action:none}
+#laser{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none;z-index:5}
+body.overview #laser{display:none}
+/* 黒ペン（Apple Pencil で書き込み） */
+#ink{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none;z-index:4}
+#penbar{position:fixed;right:12px;top:14px;z-index:20;display:flex;align-items:center;gap:4px;background:#fff;border:2.5px solid var(--ink);
+  border-radius:999px;box-shadow:3px 3px 0 var(--ink);padding:4px;touch-action:manipulation;opacity:.85}
+#penbar:hover{opacity:1}
+#penbar button{height:38px;min-width:38px;border-radius:999px;border:2px solid transparent;background:none;font:inherit;font-size:14px;font-weight:800;
+  color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;padding:0 10px}
+#penbar button.on{background:var(--accent-l);border-color:var(--ink)}
+#penbar .sep{width:2px;height:24px;background:#e3dcf2;border-radius:1px}
+body.overview #ink,body.overview #penbar{display:none}
+
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{overflow:visible;background:#fff}
+  #viewport{position:static}
+  #stage{position:static;transform:none!important;box-shadow:none;width:auto;height:auto;overflow:visible;background:none}
+  .slide{position:relative;width:1280px;height:720px;opacity:1;transform:none;page-break-after:always;background:var(--bg)}
+  .frag{opacity:1;transform:none}
+  #ui,#progress,.btns,.hint,#laser,#penbar{display:none}
+}
+.sumlist{display:flex;flex-direction:column;gap:12px;justify-content:center}
+.sl{display:flex;gap:14px;align-items:center;background:#fff;border:2.5px solid var(--ink);border-left:12px solid var(--c);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:10px 18px;font-size:21px;line-height:1.5}
+.sl-n{flex:none;width:36px;height:36px;border-radius:50%;background:var(--c);color:#fff;font-weight:900;font-size:18px;display:flex;align-items:center;justify-content:center;border:2px solid var(--ink)}
+.sl-s{font-size:16px;color:var(--muted);margin-left:4px}
+.ag-t{margin:4px 0 0;padding:0}
+.ag-t li{font-size:18px !important;margin:2px 0 !important;gap:10px !important}
+.ag-t li em{font-style:normal;font-size:13px;font-weight:800;color:var(--muted);margin-left:auto;padding-left:10px;white-space:nowrap}
+.ag-t .num{width:28px !important;height:28px !important;font-size:14px;border-width:2px !important;box-shadow:2px 2px 0 var(--ink) !important}
+.ag-t li.agroup{font-size:13px !important;margin:6px 0 0 !important;padding-bottom:1px}
+
+/* ---------- 1.2 空間と時間：図（箱と線）の部品 ---------- */
+@keyframes flow{from{stroke-dashoffset:16}to{stroke-dashoffset:0}}
+.book-en{font-size:15px;color:var(--muted);font-weight:700;font-style:italic}
+svg.dg{display:block;width:100%;height:var(--h,380px);user-select:none;overflow:visible;
+  font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic UI",Meiryo,sans-serif}
+.dg .wr{fill:none;stroke:var(--ink);stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round;transition:stroke .45s}
+.dg .wr.on{stroke:var(--accent)}
+.dg .bx rect{fill:#fff;stroke:var(--ink);stroke-width:3.5;transition:fill .35s}
+.dg .bx{transition:filter .35s}
+.dg .bx.on rect{fill:var(--accent-l)}
+.dg .bx.now rect{fill:var(--yellow)}
+.dg .bx.now{filter:drop-shadow(4px 4px 0 var(--accent))}
+.dg .sym{font-size:30px;font-weight:900;text-anchor:middle;dominant-baseline:central;fill:var(--ink);
+  font-family:"Segoe UI Symbol","Apple Symbols","DejaVu Sans","Noto Sans Symbols2",sans-serif}
+.dg .sym .sub{font-size:16px;font-family:Consolas,Menlo,monospace}
+.dg .nm{font-size:18px;font-weight:900;text-anchor:middle;dominant-baseline:central;fill:var(--ink)}
+.dg .nm .en{font-size:12px;font-weight:700;fill:var(--muted)}
+.dg .ic{font-size:34px;text-anchor:middle;dominant-baseline:central}
+.dg .wl{font-size:16px;font-weight:800;fill:var(--muted)}
+.dg .wl.big{font-size:20px;fill:var(--ink)}
+.dg .res{font-size:22px;font-weight:900;fill:var(--accent-d)}
+.dg .appear{opacity:0;transition:opacity .45s}
+.dg .appear.on{opacity:1}
+.dg [data-only]{transition:opacity .45s}
+.dg .hide{opacity:0 !important}
+.dg .ax{stroke:#a9a3c4;stroke-width:3;fill:none;stroke-linecap:round}
+.dg .axh{fill:#a9a3c4}
+.dg .axl{font-size:15px;font-weight:900;fill:#8f88b3}
+.dg .now-line{transition:transform .9s cubic-bezier(.3,1.25,.5,1)}
+.dg .now-line line{stroke:var(--pink);stroke-width:3;stroke-dasharray:10 7}
+.dg .now-line text{fill:var(--pink);font-weight:900;font-size:16px}
+.dg .sep{stroke:#a9a3c4;stroke-width:3;stroke-dasharray:12 9}
+.dg .who{font-size:20px;font-weight:900;fill:#8f88b3;text-anchor:middle}
+.dg .tok{transition:opacity .3s}
+.dg .tok circle{stroke:var(--ink);stroke-width:3}
+.dg .tok text{fill:#fff;font-weight:900;font-size:16px;text-anchor:middle;dominant-baseline:central}
+.dg .flowl{fill:none;stroke:#fff;stroke-width:2.4;stroke-dasharray:4 12;stroke-linecap:round;opacity:0;transition:opacity .3s}
+.dg .flowl.on{opacity:.95;animation:flow .55s linear infinite}
+.dg .glow{fill:none;stroke:var(--pink);stroke-width:16;stroke-linecap:round;opacity:0;transition:opacity .4s}
+.dg .glow.on{animation:glowp 1.3s ease-in-out infinite}
+@keyframes glowp{0%,100%{opacity:.18}50%{opacity:.5}}
+.dg .orbit{fill:none;stroke:#cfc8e3;stroke-width:2.5}
+.dg .panel{fill:#d4f4ff;stroke:var(--ink);stroke-width:3}
+.dg .mer{fill:none;stroke:#fff;stroke-width:2}
+.dg .head{font-size:20px;font-weight:900;text-anchor:middle}
+
+/* ステップ再生のカード */
+.stp{display:flex;flex-direction:column;gap:6px}
+.stp .cap{min-height:62px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:19px;font-weight:700;line-height:1.45;
+  background:#fffaf0;border:2px dashed #d9d4ea;border-radius:12px;padding:4px 12px}
+.stp .cap.go{animation:capIn .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes capIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.stp-ctl{display:flex;align-items:center;justify-content:center;gap:10px}
+.stp-ctl button.b{margin:0}
+.stp-ctl button.sm{padding:5px 12px}
+.dots{display:flex;gap:6px}
+.dots span{width:14px;height:14px;border-radius:50%;border:2px solid var(--ink);background:#fff;cursor:pointer;transition:background .3s}
+.dots span.on{background:var(--accent)}
+
+/* 本文まわり */
+.lead{font-size:22px;line-height:1.6;margin:0 0 10px}
+ul.plain{list-style:none;padding:0;margin:0}
+ul.plain li{font-size:21px;line-height:1.55;margin:8px 0;display:flex;gap:10px;align-items:flex-start}
+ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5px solid var(--ink);background:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:2px 2px 0 var(--ink)}
+.quote{font-size:16px;line-height:1.5;margin-top:12px;font-style:italic}
+.quote small{font-style:normal}
+.suit{font-family:"Segoe UI Symbol","Apple Symbols","DejaVu Sans",sans-serif;font-weight:900;font-style:normal}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;align-items:center;font-size:20px;margin-top:6px}
+.kv .kk{background:var(--ink);color:#fff;font-weight:900;border-radius:10px;padding:2px 12px;font-size:17px;text-align:center}
+.kv .kk.t{background:var(--accent)}
+.kv .kk.s{background:var(--blue)}
+.kv .kk.ts{background:var(--purple)}
+.bigmsg{font-size:30px;font-weight:900;line-height:1.45;margin:6px 0 14px}
+.tagx{display:inline-block;font-size:14px;font-weight:900;color:#fff;background:var(--purple);border:2px solid var(--ink);border-radius:999px;padding:1px 12px;vertical-align:middle;margin-left:10px}
+.notation{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.notation .card{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 18px}
+.notation h3{margin:0;font-size:22px}
+.notation h3 small{display:block;text-align:center;font-size:14px;color:var(--muted);font-weight:700}
+.notation .formula{font-size:38px;margin-top:4px}
+.notation .nt{font-size:18px;line-height:1.5;text-align:center}
+.slide[data-id="quiz"] .qz{min-height:150px}
+.slide[data-id="quiz"] .qz-q{font-size:21px}
+.slide[data-id="quiz"] .qz-a{font-size:19px}
+.quiz.q6{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tdg{--h:330px}
+.tdg .now-line{transition:none;animation:sweep 5s cubic-bezier(.45,0,.55,1) infinite}
+@keyframes sweep{0%{transform:translateY(300px)}80%,100%{transform:translateY(25px)}}
+.suit{background:none !important;font-size:1.12em}
+.stp .cap>span{display:block}
+.quote{padding:8px 14px}
+
+/* =====================================================================
+   圏論的量子情報ゼミのテーマ：ストリング図（箱と線）と ZX 図の雰囲気
+   墨色の線、緑 = Z スパイダー、赤 = X スパイダー、藍 = 補助色、方眼紙の背景、明朝の見出し
+   ===================================================================== */
+:root{
+  --ink:#1c1b2e; --muted:#6d6a80; --line:#1c1b2e; --bg:#fbfaf5;
+  --accent:#17935f; --accent-d:#0f7048; --accent-l:#e1f3ea;
+  --blue:#c43c4c; --blue-l:#fbe4e6; --green:#17935f;
+  --pink:#4a47a3; --purple:#4a47a3; --yellow:#e6f0c8;
+  --hard:0 2px 0 var(--ink);
+  --serif:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP","Noto Serif CJK JP","Times New Roman",serif;
+}
+html,body{background:#191827}
+#stage{background:
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220' fill='none' stroke='%231c1b2e' stroke-width='3' opacity='.06'%3E%3Cpath d='M60 0V70L30 130V220M60 70L100 125M140 0V60L100 125M140 60L175 220M100 125V220'/%3E%3Ccircle cx='60' cy='70' r='14' fill='%2317935f'/%3E%3Ccircle cx='140' cy='60' r='14' fill='%23c43c4c'/%3E%3Ccircle cx='100' cy='125' r='14' fill='%2317935f'/%3E%3C/svg%3E") right -30px bottom -40px/330px no-repeat,
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' fill='none' stroke='%231c1b2e' stroke-width='3' opacity='.05'%3E%3Cpath d='M30 0V70C30 125 120 125 120 70V0M170 200V120M80 200V150C80 110 170 110 170 150'/%3E%3Crect x='145' y='40' width='50' height='36' rx='4' fill='%23fbfaf5'/%3E%3Cpath d='M170 0V40M170 76V120'/%3E%3C/svg%3E") left -90px top 250px/230px no-repeat,
+  linear-gradient(#efece2 1px,transparent 1px) 0 0/24px 24px,
+  linear-gradient(90deg,#efece2 1px,transparent 1px) 0 0/24px 24px,
+  var(--bg)}
+.slide{transition:opacity .5s ease,transform .6s ease}
+.slide::before{height:4px;background:linear-gradient(90deg,var(--accent),var(--purple) 50%,var(--blue))}
+#progress{height:4px;background:linear-gradient(90deg,var(--accent),var(--purple),var(--blue))}
+@keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.slide.active .pop{animation:pop .6s ease both;animation-delay:var(--d,0s)}
+.frag{transform:translateY(12px);transition:opacity .4s ease,transform .45s ease}
+
+/* 見出し：明朝＋スパイダー（ノードと足）の印 */
+.chap{color:var(--purple);font-weight:700;letter-spacing:.14em}
+h2{font-family:var(--serif);font-weight:700;padding-left:56px}
+h2::before{width:40px;height:40px;margin-top:-20px;border:0;border-radius:0;box-shadow:none;transform:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cg stroke='%231c1b2e' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M20 20L20 2M20 20L5 36M20 20L35 36'/%3E%3C/g%3E%3Ccircle cx='20' cy='20' r='10' fill='%2317935f' stroke='%231c1b2e' stroke-width='3'/%3E%3C/svg%3E") center/contain no-repeat}
+@keyframes nodeIn{from{opacity:0;transform:scale(.3) rotate(-90deg)}to{opacity:1;transform:none}}
+.slide.active h2::before{animation:nodeIn .8s cubic-bezier(.3,1.4,.5,1) both}
+h2 small{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;background:#fff;border:1.5px solid var(--ink);color:var(--muted)}
+b.k{color:var(--accent-d);background:linear-gradient(transparent 64%,var(--accent-l) 64%)}
+b.kb{color:var(--blue);background:linear-gradient(transparent 64%,var(--blue-l) 64%)}
+
+/* カード・枠：細い墨の線、ずらし影はやめて控えめに */
+.card{border:2px solid var(--ink);border-radius:14px;box-shadow:0 2px 0 var(--ink),0 12px 28px rgba(28,27,46,.07)}
+.point{background:var(--accent-l);border:1.5px solid var(--ink);border-left:7px solid var(--accent);border-radius:10px;box-shadow:none}
+.point.blue{background:var(--blue-l);border-left-color:var(--blue)}
+.formula{border:1.5px solid var(--ink);box-shadow:none;font-family:"Cambria Math","STIX Two Math","Times New Roman",serif}
+.quote{font-family:var(--serif);border:1.5px solid var(--ink);border-left:5px solid var(--purple);box-shadow:none;background:#fff}
+button.b{background:#fff;color:var(--ink);border:2px solid var(--ink);box-shadow:0 2px 0 var(--ink)}
+button.b:hover{background:var(--accent-l);transform:none;box-shadow:0 2px 0 var(--ink)}
+button.b:active{transform:translateY(2px);box-shadow:none}
+button.b.playing{background:var(--ink);color:#fff}
+ul.plain li .ico{border-radius:50%;border:2px solid var(--ink);box-shadow:none;background:#fff;font-family:var(--serif);font-weight:900;font-size:19px}
+.stp .cap{background:#fff;border:1.5px dashed #c9c5da}
+.dots span{border-width:1.5px}
+.dots span.on{background:var(--accent)}
+.kv .kk{border-radius:999px}
+.kv .kk.ts{background:var(--purple)}
+
+/* タイトル */
+.title-wrap h1{font-family:var(--serif);background:linear-gradient(transparent 80%,rgba(23,147,95,.2) 80%) no-repeat}
+.title-wrap .sub{font-family:var(--serif);font-style:italic;color:var(--purple)}
+.agenda .num{border-radius:50%;border:2px solid var(--ink) !important;box-shadow:none !important}
+.agenda li.agroup{color:var(--purple);border-bottom:1.5px dashed #d8d4e6}
+
+/* 扉：大きな番号を「線の上のノード（スパイダー）」に */
+.door h1{font-family:var(--serif)}
+.door-label{letter-spacing:.18em}
+.door-num{position:relative;width:180px;height:180px;border-radius:50%;border:4px solid var(--ink);box-shadow:0 0 0 10px rgba(255,255,255,.7);
+  transform:none;font-family:var(--serif);font-size:110px}
+.door-num::before,.door-num::after{content:"";position:absolute;left:50%;width:5px;margin-left:-2.5px;height:320px;background:var(--ink)}
+.door-num::before{bottom:100%}
+.door-num::after{top:100%}
+@keyframes doorNode{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
+.slide.active .door-num{animation:doorNode .8s cubic-bezier(.3,1.4,.5,1) both}
+.door-bg{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:560px;right:30px;bottom:-170px;opacity:.07}
+.door-topics span{border:1.5px solid var(--ink);box-shadow:none}
+
+/* まとめ・復習問題 */
+.sl{border:1.5px solid var(--ink);border-left:8px solid var(--c);border-radius:12px;box-shadow:none;background:#fff}
+.qz{border:2px solid var(--ink);border-radius:14px;box-shadow:0 2px 0 var(--ink)}
+.qz:hover{transform:none;box-shadow:0 2px 0 var(--ink),0 8px 18px rgba(28,27,46,.1)}
+.qz-no{background:var(--purple)}
+.qz.open{background:#f4faf6}
+
+/* 図：今の箱は緑の縁と淡い光、済んだ箱は淡い緑 */
+.dg .bx.on rect{fill:#f1f9f4}
+.dg .bx.now rect{fill:#fff;stroke:var(--accent);stroke-width:4.5}
+.dg .bx.now{filter:drop-shadow(0 0 7px rgba(23,147,95,.5))}
+.dg .panel{fill:#eef3fb}
+#penbar{border:2px solid var(--ink);box-shadow:0 2px 0 var(--ink)}
+
+/* 「カーソル」モード（既定。道具を何も選んでいないとき）：普通のカーソルで文字を選択・コピーできる（6.1-7.9 v44 と同じ） */
+body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default;cursor:auto}
+.rlab{margin:18px 0 2px;font-size:17px;font-weight:900;color:var(--muted);letter-spacing:.1em;border-bottom:1.5px dashed #d8d4e6;padding-bottom:2px}
+
+/* ---------- 余白を減らす：図は本文の高さいっぱい、文字は大きく ---------- */
+h2{margin:4px 0 14px}
+.body.cols{align-items:stretch;gap:28px}
+.body.cols > .card{display:flex;flex-direction:column;justify-content:center;min-height:0}
+.body.cols > div:not(.card){display:flex;flex-direction:column;justify-content:center}
+.stp svg.dg{flex:1 1 0;height:auto;min-height:0}
+#msgDiag{flex:1;min-height:0;display:flex}
+#msgDiag svg.dg{height:100%}
+ul.plain li{font-size:25px;line-height:1.5;margin:10px 0;gap:12px}
+ul.plain li .ico{width:40px;height:40px;font-size:21px}
+.lead{font-size:25px;line-height:1.6}
+.bigmsg{font-size:34px}
+.point{font-size:24px;line-height:1.55;padding:14px 20px}
+.rlab{font-size:19px}
+.sumlist{gap:16px !important}
+.sumlist .sl{font-size:25px !important;padding:14px 22px !important}
+.sl-n{width:42px;height:42px;font-size:21px}
+.body.wide-fig{display:flex;flex-direction:column;gap:12px}
+.body.wide-fig > .card{flex:1;min-height:0;display:flex;flex-direction:column}
+.sumlist{gap:20px !important}
+.sumlist .sl{font-size:26px !important;padding:16px 24px !important}
+.slide[data-id="rocket"] ul.plain li,.slide[data-id="linked"] ul.plain li{font-size:23px}
+.slide[data-id="rocket"] .point,.slide[data-id="linked"] .point{font-size:22px}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) ul.plain li{font-size:29px;margin:16px 0}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) ul.plain li .ico{width:46px;height:46px;font-size:24px}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) .lead{font-size:29px}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) .point{font-size:27px}
+.stp-ctl{white-space:nowrap}
+.body.wide-fig{justify-content:center;align-items:center}
+/* 動かさない図（.frozen）：光る線・流れる点線も止める */
+.frozen .dg .glow.on{animation:none;opacity:.32}
+.frozen .dg .flowl.on{animation:none}
+
+/* 2 ページ：見出しの代わりに、この節の主張を図の横に大きく */
+.slide[data-id="msg"] .chap{margin-bottom:18px}
+.keymsg{font-family:var(--serif);font-size:56px;font-weight:900;line-height:1.45}
+</style>
+</head>
+<body>
+<div id="ovHead"><b>スライド一覧</b><span>クリックでそのスライドへ ／ ← → で選択、Enter で開く、O / Esc で戻る</span><button id="btnOvClose">一覧を閉じる</button></div>
+<div id="viewport"><div id="stage">
+
+
+<!-- 1. タイトル -->
+<section class="slide" data-id="title">
+  <div class="title-wrap">
+    <div>
+      <div class="chap pop">『Quantum in Pictures』 ゼミ資料 ／ 圏論的量子情報ゼミ</div>
+      <h1 class="pop" style="--d:.1s">1.2<br>空間と時間の導入</h1>
+      <div class="sub pop" style="--d:.2s">― 1.2 Introducing space and time ―</div>
+      <ul class="agenda ag-t">
+        <li class="agroup pop" style="--d:.25s">目次</li>
+        <li class="pop" style="--d:.27s"><span class="num" style="background:var(--accent)">1</span>時間：箱を <b>縦</b> につなぐ<em>パンのレシピ</em></li>
+        <li class="pop" style="--d:.29s"><span class="num" style="background:var(--blue)">2</span>空間：箱を <b>横</b> に並べる<em>3 人の友人</em></li>
+        <li class="pop" style="--d:.31s"><span class="num" style="background:var(--purple)">3</span>時間と空間をいっしょに<em>家族の 1 日</em></li>
+        <li class="pop" style="--d:.32s"><span class="num" style="background:var(--ink)">4</span>カップ：離れてもつながる 2 つの粒子<em>Andrea・Blaise・Chi</em></li>
+        <li class="pop" style="--d:.33s"><span class="num" style="background:#8f88b3">✓</span>まとめ</li>
+      </ul>
+    </div>
+    <div class="card pop" style="--d:.4s;padding:14px 18px">
+      <div id="tDiag"></div>
+      <div class="hint" style="text-align:center;font-size:17px;font-weight:700">縦 ＝ <b style="color:var(--accent-d)">時間</b>（下から上へ）　横 ＝ <b style="color:var(--blue)">空間</b>（場所）</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. この節の主張 -->
+<section class="slide" data-id="msg">
+  <div class="chap">第1章 ／ 1.2 Introducing space and time ／ 1.2 のねらい</div>
+  <div class="body cols" data-min-text="560" style="grid-template-columns:1fr 1.25fr">
+    <div class="card pop"><div id="msgDiag"></div></div>
+    <div>
+      <div class="keymsg pop" style="--d:.15s">箱と線の図は<br>いつでも<br><b class="k">時空の中の出来事</b><br>として読める</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉 1 -->
+<section class="slide door" style="--c:var(--accent)">
+  <div class="door-bg">∘</div>
+  <div class="door-wrap">
+    <div class="door-num">1</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">1.2 Introducing space and time</span>SECTION 1</div>
+      <h1 class="pop" style="--d:.1s">時間</h1>
+      <p class="door-lead pop" style="--d:.2s">箱を <b>縦に積んで</b> 線でつなぐと…</p>
+      <div class="door-topics pop" style="--d:.3s"><span>下から上へ読む</span><span>パンのレシピ</span><span>順番が大事</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 縦に積む -->
+<section class="slide" data-id="stack">
+  <div class="chap">SECTION 1 ／ 時間はどこに隠れている？</div>
+  <h2>縦に積んだ箱 ＝ 時間の順番<small>1.2（時間）</small></h2>
+  <div class="body cols" style="grid-template-columns:0.75fr 1fr">
+    <div class="card stp pop" id="dgStack" style="--h:360px"></div>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">□</span><span>2 つの箱を <b>上下に積んで</b>、線でつなぐ</span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">1</span><span>まず下の箱 <b class="suit">◇</b> が作用する</span></li>
+        <li class="pop" style="--d:.16s"><span class="ico">2</span><span>次に上の箱 <b class="suit">♡</b> が、<b><span class="suit">◇</span> の出力</b> に作用する</span></li>
+      </ul>
+      <div class="point frag">図は <b>下から上へ</b> 読む。<br>縦方向 ＝ <b class="k">時間の流れ</b></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- パンのレシピ -->
+<section class="slide" data-id="recipe">
+  <div class="chap">SECTION 1 ／ 例：小麦・水・熱からパンを作る</div>
+  <h2>パンのレシピも、下から上が作業の順番<small>1.2（時間）</small></h2>
+  <div class="body cols" style="grid-template-columns:0.68fr 1fr">
+    <div class="card stp pop" id="dgRecipe" style="--h:450px"></div>
+    <div>
+      <p class="lead pop">小麦・水・熱からパンを作るレシピ</p>
+      <ul class="plain">
+        <li class="pop" style="--d:.06s"><span class="ico">│</span><span><b>線</b> ＝ もの（小麦・小麦粉・生地・パン）</span></li>
+        <li class="pop" style="--d:.12s"><span class="ico">□</span><span><b>箱</b> ＝ 作業（砕く・混ぜる・焼く）</span></li>
+        <li class="pop" style="--d:.18s"><span class="ico">∘</span><span>下から順に <b>① 砕く → ② 混ぜる → ③ 焼く</b></span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 順番が大事 -->
+<section class="slide" data-id="order">
+  <div class="chap">SECTION 1 ／ 作業の順番は大切</div>
+  <h2>上下を入れ替えると、結果が変わる<small>1.2（時間）</small></h2>
+  <div class="body cols" style="grid-template-columns:1.45fr 1fr">
+    <div class="card stp pop" id="dgOrder" style="--h:470px;padding:12px 16px"></div>
+    <div>
+      <div class="point pop" style="--d:.1s;margin-top:0"><b>操作</b>：「混ぜる」と「焼く」の<br><b style="white-space:nowrap">上下を入れ替える</b><br>＝ <b class="k" style="white-space:nowrap">時間の順番を入れ替える</b></div>
+      <div class="rlab frag">結果</div>
+      <ul class="plain">
+        <li class="frag"><span class="ico" style="color:var(--accent)">✓</span><span>砕く → <b>混ぜる</b> → <b>焼く</b><br>→ いい香りの <b>パン</b> 🍞</span></li>
+        <li class="frag"><span class="ico" style="color:var(--blue)">✗</span><span>砕く → <b>焼く</b> → <b>混ぜる</b><br>→ <b>べちゃべちゃの泥</b> 🟫</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉 2 -->
+<section class="slide door" style="--c:var(--blue)">
+  <div class="door-bg">⊗</div>
+  <div class="door-wrap">
+    <div class="door-num">2</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">1.2 Introducing space and time</span>SECTION 2</div>
+      <h1 class="pop" style="--d:.1s">空間</h1>
+      <p class="door-lead pop" style="--d:.2s">箱を <b>横に並べる</b> と…</p>
+      <div class="door-topics pop" style="--d:.3s"><span>別々の場所</span><span>メキシコ・ブルキナファソ・ベトナム</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 横に並べる -->
+<section class="slide" data-id="side">
+  <div class="chap">SECTION 2 ／ 空間はどこに隠れている？</div>
+  <h2>横に並べた箱 ＝ 別々の場所<small>1.2（空間）</small></h2>
+  <div class="body cols" style="grid-template-columns:0.85fr 1fr">
+    <div class="card stp pop" id="dgSide" style="--h:350px"></div>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">⊗</span><span>2 つの箱 <b class="suit">♠</b> と <b class="suit">♣</b> を <b>横に並べる</b></span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">📍</span><span><b class="kb">別々の場所</b> で作用する</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 3 人の友人 -->
+<section class="slide" data-id="world">
+  <div class="chap">SECTION 2 ／ 例：3 人の友人が世界の別々の場所で</div>
+  <h2>横の位置の違い ＝ 場所の違い<small>1.2（空間）</small></h2>
+  <div class="body wide-fig">
+    <div class="card stp pop" id="dgWorld" style="--h:265px;padding:12px 18px"></div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉 3 -->
+<section class="slide door" style="--c:var(--purple)">
+  <div class="door-bg">×</div>
+  <div class="door-wrap">
+    <div class="door-num">3</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">1.2 Introducing space and time</span>SECTION 3</div>
+      <h1 class="pop" style="--d:.1s">時間と空間を<br>いっしょに</h1>
+      <p class="door-lead pop" style="--d:.2s">縦と横を 1 つの図の中で組み合わせる</p>
+      <div class="door-topics pop" style="--d:.3s"><span>家族の 1 日</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 家族の 1 日 -->
+<section class="slide" data-id="family">
+  <div class="chap">SECTION 3 ／ 時間と空間を 1 つの図に</div>
+  <h2>1 つの図で、時間と空間をいっしょに表せる<small>1.2（時空）</small></h2>
+  <div class="body cols" style="grid-template-columns:1.15fr 1fr">
+    <div class="card stp pop" id="dgFamily" style="--h:360px"></div>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">🏫</span><span>昼間、<b>子ども</b> は学校で勉強し</span></li>
+        <li class="pop" style="--d:.06s"><span class="ico">🏢</span><span><b>親</b> は会社で働く</span></li>
+        <li class="pop" style="--d:.12s"><span class="ico">🏠</span><span>そのあと、みんな家に帰って<br><b style="white-space:nowrap">いっしょに夕食</b><span style="white-space:nowrap">（<b class="k">相互作用</b>）</span></span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉 4 -->
+<section class="slide door" style="--c:var(--ink)">
+  <div class="door-bg">⋃</div>
+  <div class="door-wrap">
+    <div class="door-num">4</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">1.2 Introducing space and time</span>SECTION 4</div>
+      <h1 class="pop" style="--d:.1s">カップ</h1>
+      <p class="door-lead pop" style="--d:.2s">下でつながった 2 本の線は、時空の中で何？</p>
+      <div class="door-topics pop" style="--d:.3s"><span>点線でグループ分け</span><span>Chi の発射台</span><span>離れてもつながったまま</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 2 人の友人と粒子 -->
+<section class="slide" data-id="friends">
+  <div class="chap">SECTION 4 ／ 2 人の友人が粒子に箱をかける</div>
+  <h2>点線で 2 人の箱を分ける<small>1.2（時空）</small></h2>
+  <div class="body cols" data-min-text="500" style="grid-template-columns:0.95fr 1fr">
+    <div class="card stp pop" id="dgFriends" style="--h:370px"></div>
+    <div>
+      <p class="lead pop">左図は、別々の場所で、人が何かを<br>している図だと考えてもよい。</p>
+      <ul class="plain">
+        <li class="pop" style="--d:.06s"><span class="ico">👧</span><span><b>Andrea</b>（左）が箱 <b class="suit">♠₁, ♠₂, ♠₃</b> を順にかける</span></li>
+        <li class="pop" style="--d:.12s"><span class="ico">👦</span><span><b>Blaise</b>（右）が箱 <b class="suit">♣₁, ♣₂, ♣₃</b> を順にかける</span></li>
+      </ul>
+      <div class="point frag">でも、下で 2 本の線をつないでいる<br><b class="k">カップ ⋃</b> は、時間と空間の中で何だろう？</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- カップの正体 -->
+<section class="slide" data-id="rocket">
+  <div class="chap">SECTION 4 ／ カップを時間と空間で考える</div>
+  <h2>カップ ＝ 昔 Chi が 2 つの粒子を送り出した発射台<small>1.2（時空）</small></h2>
+  <div class="body cols" data-min-text="480" style="grid-template-columns:1.5fr 1fr">
+    <div class="card stp pop" id="dgRocket" style="--h:350px;padding:12px 16px"></div>
+    <div>
+      <ul class="plain">
+        <li class="pop" style="--d:.06s"><span class="ico">🧑</span><span>ずっと昔、別の友人 <b>Chi</b> が 2 つの粒子を用意</span></li>
+        <li class="pop" style="--d:.12s"><span class="ico">🚀</span><span>ロケットで Andrea と Blaise に 1 つずつ送った</span></li>
+        <li class="pop" style="--d:.18s"><span class="ico">🪐</span><span>2 人は <b>太陽系の反対側どうし</b> かもしれない</span></li>
+      </ul>
+      <div class="point frag">カップ ⋃ の一番下 ＝ <b class="k">過去</b>（Chi が粒子を送り出した時）<br>左右に分かれていく ＝ 粒子が <b class="kb">別々の場所</b> へ運ばれていく</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 遠く離れてもつながっている -->
+<section class="slide" data-id="linked">
+  <div class="chap">SECTION 4 ／ 離れていてもつながっている</div>
+  <h2>離れても、2 つの粒子は線でつながったまま<small>1.2（時空）</small></h2>
+  <div class="body cols" data-min-text="480" style="grid-template-columns:1.5fr 1fr">
+    <div class="card stp pop" id="dgLinked" style="--h:360px;padding:12px 16px"></div>
+    <div>
+      <ul class="plain">
+        <li class="pop" style="--d:.06s"><span class="ico">🎁</span><span>粒子を受け取った 2 人は、<b style="white-space:nowrap">何をしてもよい</b></span></li>
+        <li class="pop" style="--d:.12s"><span class="ico">□</span><span>そのままにしても、箱をかけてもよい</span></li>
+      </ul>
+      <div class="point blue frag">このつながりを使うと、<b>とんでもない量子の現象</b> が起こせる！ → この先の章へ</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+
+<!-- まとめ -->
+<section class="slide">
+  <div class="chap">Summary ／ 1.2</div>
+  <h2>1.2 のまとめ<small>Introducing space and time</small></h2>
+  <div class="body sumlist">
+    <div class="sl pop" style="--d:0.00s;--c:var(--accent)"><span class="sl-n">1</span><div>箱と線の図はいつでも <b class="k">時空の中の出来事</b> として読める</div></div>
+    <div class="sl pop" style="--d:0.07s;--c:var(--accent)"><span class="sl-n">2</span><div><b>縦に積む ＝ 時間</b>：下の箱が先、上の箱はその出力に作用する（図は <b>下から上へ</b>）</div></div>
+    <div class="sl pop" style="--d:0.14s;--c:var(--accent)"><span class="sl-n">3</span><div><b>順番は大事</b>：パンのレシピで「混ぜる」と「焼く」を入れ替えると泥になる</div></div>
+    <div class="sl pop" style="--d:0.21s;--c:var(--blue)"><span class="sl-n">4</span><div><b>横に並べる ＝ 空間</b>：別々の場所で作用する（Andrea・Blaise・Chi）</div></div>
+    <div class="sl pop" style="--d:0.28s;--c:var(--ink)"><span class="sl-n">5</span><div><b class="k">カップ ⋃</b> ＝ 昔 Chi が 2 つの粒子を送り出した発射台。どれだけ離れても <b>線でつながったまま</b> → 量子の不思議へ</div></div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+
+</div></div>
+<div id="ui">
+  <button id="btnPrev">◀</button><span id="counter"></span><button id="btnNext">▶</button>
+  <button id="btnFs">全画面 (F)</button>
+  <button id="btnOv">一覧 (O)</button>
+  <span>← → / Space でページ送り</span>
+</div>
+<div id="progress"></div>
+<div id="penbar" aria-label="ペンの道具">
+  <button data-tool="none" class="on" title="普通のカーソル（文字の選択・コピーができる）">🖱️ カーソル</button>
+  <button data-tool="laser" title="レーザーポインター（書き込みは残らない）">🔴 レーザー</button>
+  <button data-tool="pen" title="黒ペンで書き込む (P)">✏️ 黒ペン</button>
+  <button data-tool="eraser" title="消しゴム（なぞった線を消す）">🧽 消す</button>
+  <button data-tool="lasso" title="投げ縄：書き込みを囲んで選択・移動・複製 (L)">➰ 投げ縄</button>
+  <button id="inkPaste" title="コピーした書き込みを貼り付け (V)" disabled>📌 貼り付け</button>
+  <span class="sep"></span>
+  <button id="inkUndo" title="元に戻す (Z)">↩️</button>
+  <button id="inkClear" title="このスライドの書き込みを全部消す">🗑️</button>
+</div>
+<script>
+const NS = 'http://www.w3.org/2000/svg';
+const $ = s => document.querySelector(s);
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+const stoppers = [];
+window.onEnter = window.onEnter || {};
+
+/* =====================================================================
+   1.2 空間と時間：箱と線の図を描く道具
+   ===================================================================== */
+function svgIn(root, w, h) {
+  const s = el('svg', { viewBox: `0 0 ${w} ${h}`, class: 'dg' });
+  root.appendChild(s);
+  return s;
+}
+// data-on="k"：k 番目のステップから点灯 ／ data-only="k,l"：そのステップの間だけ表示
+function opt(e, o) {
+  if (o.on != null) e.dataset.on = o.on;
+  if (o.only != null) e.dataset.only = o.only;
+  if (o.cls) e.classList.add(...o.cls.split(' '));
+  return e;
+}
+const wire = (s, d, o = {}) => opt(el('path', { d, class: 'wr' }, s), o);
+function label(s, x, y, str, o = {}) {
+  const t = opt(el('text', { x, y, class: o.c || 'wl', 'text-anchor': o.a || 'middle', 'dominant-baseline': 'central' }, s), o);
+  t.textContent = str;
+  return t;
+}
+/* 箱：sym は ◇ などの記号。o.sub で下付きの番号、o.name で文字の箱、o.icon で絵文字つきの大きな箱 */
+function box(s, x, y, sym, o = {}) {
+  const w = o.w || 64, h = o.h || 48;
+  const g = opt(el('g', { class: 'bx' }, s), o);
+  el('rect', { x: x - w / 2, y: y - h / 2, width: w, height: h, rx: 10 }, g);
+  if (o.icon) {
+    el('text', { x, y: y - 13, class: 'ic' }, g).textContent = o.icon;
+    el('text', { x, y: y + 24, class: 'nm' }, g).textContent = sym;
+  } else if (o.name) {
+    const t = el('text', { x, y: y + 1, class: 'nm' }, g);
+    t.textContent = sym;
+    if (o.en) { const e = el('tspan', { class: 'en', dx: 5 }, t); e.textContent = o.en; }
+  } else {
+    const t = el('text', { x: o.sub ? x - 5 : x, y: y + 1, class: 'sym' }, g);
+    t.textContent = sym;
+    if (o.sub) { const e = el('tspan', { class: 'sub', dy: 9 }, t); e.textContent = o.sub; }
+  }
+  return g;
+}
+/* 時間の矢印（縦・下から上）と空間の矢印（横・左から右） */
+function timeAxis(s, x, y0, y1, txt = '時間') {
+  el('line', { x1: x, y1: y0, x2: x, y2: y1 + 6, class: 'ax' }, s);
+  el('path', { d: `M${x - 8},${y1 + 12} L${x},${y1} L${x + 8},${y1 + 12} Z`, class: 'axh' }, s);
+  const t = el('text', { x: x - 12, y: (y0 + y1) / 2, class: 'axl', 'text-anchor': 'middle', transform: `rotate(-90 ${x - 12} ${(y0 + y1) / 2})` }, s);
+  t.textContent = txt + ' →';
+}
+function spaceAxis(s, y, x0, x1, txt = '空間') {
+  el('line', { x1: x0, y1: y, x2: x1 - 6, y2: y, class: 'ax' }, s);
+  el('path', { d: `M${x1 - 12},${y - 8} L${x1},${y} L${x1 - 12},${y + 8} Z`, class: 'axh' }, s);
+  label(s, (x0 + x1) / 2, y + 16, txt + ' →', { c: 'axl' });
+}
+/* 「いま」を表す横の点線。ys はステップごとの高さ */
+function nowLine(s, x0, x1, ys, txt = 'いま') {
+  const g = el('g', { class: 'now-line', 'data-y': ys.join('|') }, s);
+  el('line', { x1: x0, y1: 0, x2: x1, y2: 0 }, g);
+  if (txt) el('text', { x: x1, y: -9, 'text-anchor': 'end' }, g).textContent = txt;
+  return g;
+}
+/* 線に沿って動く玉（粒子）。path は id 付きの path、ts はステップごとの位置（0〜1、負なら非表示） */
+function token(s, pathId, ts, { r = 11, fill = 'var(--accent)', txt = '' } = {}) {
+  const g = el('g', { class: 'tok', 'data-path': pathId, 'data-t': ts.join('|') }, s);
+  el('circle', { r, cx: 0, cy: 0, fill }, g);
+  if (txt) el('text', { x: 0, y: 1 }, g).textContent = txt;
+  return g;
+}
+function moveTok(e, t) {
+  const p = document.getElementById(e.dataset.path), L = p.getTotalLength();
+  const from = e._t == null || e._t < 0 ? t : e._t;
+  e._t = t;
+  cancelAnimationFrame(e._raf);
+  if (t < 0) { e.style.opacity = 0; return; }
+  e.style.opacity = 1;
+  const t0 = performance.now(), D = 950;
+  const f = now => {
+    const u = Math.min(1, (now - t0) / D), k = u < .5 ? 2 * u * u : 1 - (-2 * u + 2) ** 2 / 2;
+    const q = p.getPointAtLength(L * (from + (t - from) * k));
+    e.setAttribute('transform', `translate(${q.x},${q.y})`);
+    if (u < 1) e._raf = requestAnimationFrame(f);
+  };
+  f(t0);
+  if (from !== t) e._raf = requestAnimationFrame(f);
+}
+
+/* ステップ再生：カードの下に ▶ 自動再生・◀ ▶ ボタンをつける（図の下の説明文は既定でつけない。cap: true で表示） */
+function stepper(card, caps, { interval = 1900, hold = 3000, cap: showCap = false } = {}) {
+  const n = caps.length;
+  const cap = document.createElement('div'); cap.className = 'cap';
+  const ctl = document.createElement('div'); ctl.className = 'stp-ctl';
+  ctl.innerHTML = `<button class="b" data-autoplay>▶ 自動再生</button><button class="b sm" data-a="-1">◀</button>`
+    + `<span class="dots">${'<span></span>'.repeat(n)}</span><button class="b sm" data-a="1">▶</button>`;
+  if (showCap) card.append(cap); card.append(ctl);
+  const play = ctl.querySelector('[data-autoplay]'), dots = [...ctl.querySelectorAll('.dots span')];
+  let k = 0, timer = null;
+  function set(s) {
+    k = s;
+    card.querySelectorAll('[data-on]').forEach(e => { const v = +e.dataset.on; e.classList.toggle('on', k >= v); e.classList.toggle('now', k === v); });
+    card.querySelectorAll('[data-only]').forEach(e => e.classList.toggle('hide', !e.dataset.only.split(',').includes(String(k))));
+    card.querySelectorAll('[data-y]').forEach(e => { const ys = e.dataset.y.split('|'); e.style.transform = `translate(0px,${ys[Math.min(k, ys.length - 1)]}px)`; });
+    card.querySelectorAll('[data-t]').forEach(e => { const ts = e.dataset.t.split('|'); moveTok(e, +ts[Math.min(k, ts.length - 1)]); });
+    if (showCap) { cap.innerHTML = `<span>${caps[k]}</span>`; cap.classList.remove('go'); void cap.offsetWidth; cap.classList.add('go'); }
+    dots.forEach((d, i) => d.classList.toggle('on', i <= k));
+  }
+  function stop() { clearTimeout(timer); timer = null; play.textContent = '▶ 自動再生'; play.classList.remove('playing'); }
+  function tick() { set(k === n - 1 ? 0 : k + 1); timer = setTimeout(tick, k === n - 1 ? hold : interval); }
+  play.addEventListener('click', e => {
+    e.stopPropagation(); play.blur();
+    if (timer) return stop();
+    play.textContent = '■ 停止'; play.classList.add('playing');
+    set(0); timer = setTimeout(tick, interval);
+  });
+  ctl.querySelectorAll('[data-a]').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation(); b.blur(); stop();
+    set(Math.max(0, Math.min(n - 1, k + +b.dataset.a)));
+  }));
+  dots.forEach((d, i) => d.addEventListener('click', e => { e.stopPropagation(); stop(); set(i); }));
+  stoppers.push(stop);
+  set(0);
+}
+
+/* 動かさない図：ステップ k までに出る文字（途中の線の名前・結果）をすべて表示する。線・箱は色をつけず墨色のまま。再生ボタン・説明文はつけない */
+function staticFig(card, k, all = false) {
+  card.querySelectorAll(all ? '[data-on]' : '.appear[data-on]').forEach(e => e.classList.toggle('on', k >= +e.dataset.on));
+  card.querySelectorAll('[data-only]').forEach(e => e.classList.toggle('hide', !e.dataset.only.split(',').includes(String(k))));
+}
+
+/* ---------- タイトル：時空の中の図（「いま」の線が下から上へ動き続ける） ---------- */
+{
+  const s = svgIn($('#tDiag'), 440, 362);
+  s.classList.add('tdg');
+  timeAxis(s, 26, 320, 20);
+  spaceAxis(s, 330, 26, 430);
+  wire(s, 'M150,25 V255 C150,320 330,320 330,255 V25');
+  box(s, 150, 110, '♡');
+  box(s, 330, 175, '◇');
+  label(s, 150, 14, 'Andrea', { c: 'who' }); label(s, 330, 14, 'Blaise', { c: 'who' });
+  el('line', { x1: 240, y1: 8, x2: 240, y2: 318, class: 'sep' }, s);
+  nowLine(s, 40, 430, [0]);
+}
+
+/* ---------- 1.2 のねらい：縦 ＝ 時間、横 ＝ 空間 ---------- */
+{
+  const s = svgIn($('#msgDiag'), 460, 400);
+  s.style.setProperty('--h', '400px');
+  timeAxis(s, 30, 360, 25, '時間（先 → 後）');
+  spaceAxis(s, 372, 30, 450, '空間（場所）');
+  wire(s, 'M150,345 V30'); wire(s, 'M330,345 V30');
+  box(s, 150, 260, '◇'); box(s, 150, 120, '♡');
+  box(s, 330, 190, '♠');
+  label(s, 150, 352, '場所 A', { c: 'axl' }); label(s, 330, 352, '場所 B', { c: 'axl' });
+  label(s, 205, 260, '先', { c: 'wl big', a: 'start' });
+  label(s, 205, 120, '後', { c: 'wl big', a: 'start' });
+}
+
+/* ---------- 縦に積んだ箱：◇ のあとに ♡ ---------- */
+{
+  const card = $('#dgStack'), s = svgIn(card, 380, 400);
+  timeAxis(s, 40, 380, 20);
+  el('path', { id: 'pStack', d: 'M190,385 V15', fill: 'none' }, s);
+  wire(s, 'M190,385 V286', { on: 1 }); wire(s, 'M190,238 V156', { on: 3 }); wire(s, 'M190,108 V15', { on: 4 });
+  token(s, 'pStack', [0, .332, .508, .684, 1]);
+  box(s, 190, 262, '◇', { on: 1 });
+  box(s, 190, 132, '♡', { on: 3 });
+  label(s, 238, 262, '① 先', { c: 'wl big appear', a: 'start', on: 1 });
+  label(s, 238, 132, '② 後', { c: 'wl big appear', a: 'start', on: 3 });
+  label(s, 210, 375, '入力', { a: 'start' });
+  label(s, 210, 26, '出力', { a: 'start' });
+  stepper(card, [
+    '下から入力がやってくる（図は <b class="k">下から上へ</b> 読む）',
+    'まず <b class="suit">◇</b> が作用する',
+    '<span class="suit">◇</span> の <b>出力</b> が、線を通って上へ進む',
+    '次に <b class="suit">♡</b> が、<span class="suit">◇</span> の出力に作用する',
+    '<b>下 → 上</b> の並び ＝ <b class="k">時間の順番</b>',
+  ]);
+}
+
+/* ---------- パンのレシピ（good：砕く→混ぜる→焼く ／ bad：砕く→焼く→混ぜる） ---------- */
+function recipe(s, { ox = 0, oy = 0, id, bad = false, finalOn = 4 }) {
+  const g = el('g', { transform: `translate(${ox},${oy})` }, s);
+  const X = 140, A = 250, B = 320;            // 本線、2 番目の箱の材料、3 番目の箱の材料
+  const Y = [330, 228, 126], H = 42, W = 116;  // 箱の高さ
+  wire(g, `M${X},410 V${Y[0] + H / 2}`, { on: 1 });
+  wire(g, `M${X},${Y[0] - H / 2} V${Y[1] + H / 2}`, { on: 2 });
+  wire(g, `M${X},${Y[1] - H / 2} V${Y[2] + H / 2}`, { on: 3 });
+  wire(g, `M${X},${Y[2] - H / 2} V20`, { on: finalOn });
+  wire(g, `M${A},410 V300 C${A},268 ${X + 36},282 ${X + 36},${Y[1] + H / 2}`, { on: 2 });
+  wire(g, `M${B},410 V200 C${B},162 ${X + 36},180 ${X + 36},${Y[2] + H / 2}`, { on: 3 });
+  const water = ['💧 水', '混ぜる', 'mix'], heat = ['🔥 熱', '焼く', 'bake'];
+  const [m2, m3] = bad ? [heat, water] : [water, heat];
+  box(g, X, Y[0], '砕く', { name: 1, en: 'crush', w: W, h: H, on: 1 });
+  box(g, X, Y[1], m2[1], { name: 1, en: m2[2], w: W, h: H, on: 2 });
+  box(g, X, Y[2], m3[1], { name: 1, en: m3[2], w: W, h: H, on: 3 });
+  label(g, X, 428, '🌾 小麦', { c: 'wl big' });
+  label(g, A, 428, m2[0], { c: 'wl big' });
+  label(g, B, 428, m3[0], { c: 'wl big' });
+  label(g, X - 12, (Y[0] + Y[1]) / 2, '小麦粉', { a: 'end', cls: 'appear', on: 1 });
+  label(g, X - 12, (Y[1] + Y[2]) / 2, bad ? '焼いた小麦粉' : '生地', { a: 'end', cls: 'appear', on: 2 });
+  const res = label(g, X - 12, 52, bad ? '🟫 泥' : '🍞 パン', { c: 'res', a: 'end', cls: 'appear', on: 3 });
+  if (bad) res.style.fill = 'var(--blue)';
+  return g;
+}
+{
+  const card = $('#dgRecipe'), s = svgIn(card, 360, 445);
+  recipe(s, { ox: 10, finalOn: 4 });
+  staticFig(card, 4);
+}
+{
+  const card = $('#dgOrder'), s = svgIn(card, 760, 480);
+  label(s, 185, 14, '✓ 正しい順番', { c: 'head' }).style.fill = 'var(--accent-d)';
+  label(s, 575, 14, '✗ 先に焼いてから混ぜる', { c: 'head' }).style.fill = 'var(--blue)';
+  el('line', { x1: 385, y1: 0, x2: 385, y2: 470, class: 'sep' }, s);
+  recipe(s, { ox: 15, oy: 34, finalOn: 3 });
+  recipe(s, { ox: 405, oy: 34, bad: true, finalOn: 3 });
+  staticFig(card, 3);
+}
+
+/* ---------- 横に並べた箱：別々の場所 ---------- */
+{
+  const card = $('#dgSide'), s = svgIn(card, 470, 380);
+  s.setAttribute('viewBox', '75 20 395 360');
+  spaceAxis(s, 352, 85, 455);
+  wire(s, 'M170,315 V204', { on: 1 }); wire(s, 'M170,156 V40', { on: 2 });
+  wire(s, 'M330,315 V204', { on: 1 }); wire(s, 'M330,156 V40', { on: 2 });
+  box(s, 170, 180, '♠', { on: 1 }); box(s, 330, 180, '♣', { on: 1 });
+  label(s, 170, 332, '場所 A', { c: 'axl' }); label(s, 330, 332, '場所 B', { c: 'axl' });
+  staticFig(card, 2);
+}
+
+/* ---------- 3 人の友人：メキシコ・ブルキナファソ・ベトナム ---------- */
+{
+  const card = $('#dgWorld'), s = svgIn(card, 960, 340);
+  el('rect', { x: 20, y: 20, width: 920, height: 270, rx: 135, class: 'panel' }, s);
+  [120, 240, 360, 480, 600, 720, 840].forEach(x => {
+    const rx = Math.abs(480 - x) * .9 + 8;
+    el('ellipse', { cx: 480, cy: 155, rx, ry: 133, class: 'mer' }, s);
+  });
+  [[95], [155], [215]].forEach(([y]) => el('line', { x1: 40, y1: y, x2: 920, y2: y, class: 'mer' }, s));
+  const P = [[200, '🌎', '♠', 'Andrea', 'メキシコ'], [480, '🌍', '♣', 'Blaise', 'ブルキナファソ'], [760, '🌏', '◇', 'Chi', 'ベトナム']];
+  P.forEach(([x, globe, sym, who, where]) => {
+    el('text', { x: x - 85, y: 160, class: 'ic', 'font-size': 84, style: 'font-size:84px;opacity:.9' }, s).textContent = globe;
+    label(s, x - 85, 230, '🧍', { c: 'ic' });
+    wire(s, `M${x + 20},275 V199`, { on: 1 }); wire(s, `M${x + 20},151 V35`, { on: 2 });
+    box(s, x + 20, 175, sym, { on: 1 });
+    label(s, x, 318, `${who}（${where}）`, { c: 'wl big' });
+  });
+  staticFig(card, 2);
+}
+
+/* ---------- 家族の 1 日 ---------- */
+{
+  const card = $('#dgFamily'), s = svgIn(card, 600, 470);
+  timeAxis(s, 26, 440, 20);
+  spaceAxis(s, 452, 26, 590);
+  wire(s, 'M190,440 V362', { on: 1 }); wire(s, 'M430,440 V362', { on: 1 });
+  wire(s, 'M190,278 C190,215 270,225 270,165', { on: 2 }); wire(s, 'M430,278 C430,215 350,225 350,165', { on: 2 });
+  wire(s, 'M270,75 V15', { on: 3 }); wire(s, 'M350,75 V15', { on: 3 });
+  box(s, 190, 320, '学校', { icon: '🏫', w: 150, h: 84, on: 1 });
+  box(s, 430, 320, '会社', { icon: '🏢', w: 150, h: 84, on: 1 });
+  box(s, 310, 120, '家（夕食）', { icon: '🏠', w: 190, h: 90, on: 3 });
+  label(s, 178, 420, '子ども', { a: 'end' }); label(s, 442, 420, '親', { a: 'start' });
+  label(s, 258, 30, '子ども', { a: 'end' }); label(s, 362, 30, '親', { a: 'start' });
+  label(s, 214, 222, '子ども', { a: 'end' }); label(s, 406, 222, '親', { a: 'start' });
+  const nl = nowLine(s, 45, 590, [405, 320, 215, 120], '');
+  ['🕗 朝', '🕛 昼', '🕔 夕方', '🕖 夜'].forEach((t, i) => {
+    const e = el('text', { x: 590, y: -9, 'text-anchor': 'end', 'data-only': i }, nl); e.textContent = t;
+  });
+  stepper(card, [
+    '🕗 朝：子どもと親が出かける',
+    '🕛 昼：子どもは <b class="k">学校</b>、親は <b class="k">会社</b>（<b class="kb">同時・別の場所</b>）',
+    '🕔 夕方：みんな家に向かう（線が学校・会社から家へつながる）',
+    '🕖 夜：<b class="k">家</b> でいっしょに夕食（同じ場所に集まる）',
+  ]);
+}
+
+/* ---------- Andrea と Blaise と 2 つの粒子（カップでつながっている） ---------- */
+{
+  const card = $('#dgFriends'), s = svgIn(card, 520, 440);
+  el('line', { x1: 260, y1: 8, x2: 260, y2: 432, class: 'sep' }, s);
+  label(s, 205, 30, 'Andrea', { c: 'who' }); label(s, 315, 30, 'Blaise', { c: 'who' });
+  wire(s, 'M150,45 V345 C150,415 370,415 370,345 V45');
+  el('path', { d: 'M150,345 C150,415 370,415 370,345', class: 'glow', 'data-on': 4 }, s);
+  [[290, '1'], [200, '2'], [110, '3']].forEach(([y, n], i) => {
+    box(s, 150, y, '♠', { sub: n, on: i + 1 });
+    box(s, 370, y, '♣', { sub: n, on: i + 1 });
+  });
+  label(s, 260, 368, '？', { c: 'res', only: 4, style: '' }).setAttribute('style', 'font-size:40px;fill:var(--pink)');
+  nowLine(s, 40, 500, [375, 290, 200, 110, 60]);
+  stepper(card, [
+    '左が Andrea、右が Blaise。<b>縦の点線</b> で 2 人の箱を分けている',
+    '2 人とも、自分の粒子に 1 つ目の箱をかける',
+    '続けて 2 つ目の箱（下から上へ ＝ 時間の順）',
+    '3 つ目の箱までかけ終えた',
+    'では、下でつながっている <b class="k">カップ ⋃</b> は時間と空間の中で何？',
+  ]);
+}
+
+/* ---------- カップ ＝ 昔 Chi が送った 2 つの粒子（太陽系の反対側へ） ---------- */
+function solar(s, idp) {
+  const C = [330, 175];
+  [[70, 26], [125, 46], [180, 66]].forEach(([rx, ry]) => el('ellipse', { cx: C[0], cy: C[1], rx, ry, class: 'orbit' }, s));
+  for (let i = 0; i < 12; i++) {
+    const a = i * Math.PI / 6;
+    el('line', { x1: C[0] + 32 * Math.cos(a), y1: C[1] + 32 * Math.sin(a), x2: C[0] + 44 * Math.cos(a), y2: C[1] + 44 * Math.sin(a), stroke: '#ff6b1a', 'stroke-width': 4, 'stroke-linecap': 'round' }, s);
+  }
+  el('circle', { cx: C[0], cy: C[1], r: 28, fill: '#ffd53d', stroke: '#ff6b1a', 'stroke-width': 4 }, s);
+  el('circle', { cx: 270, cy: 157, r: 9, fill: '#b5651d', stroke: 'var(--ink)', 'stroke-width': 2 }, s);
+  el('circle', { cx: 448, cy: 205, r: 11, fill: '#3b9cff', stroke: 'var(--ink)', 'stroke-width': 2 }, s);
+  el('circle', { cx: 444, cy: 202, r: 4, fill: '#14a35a' }, s);
+  el('ellipse', { cx: 245, cy: 125, rx: 22, ry: 6, fill: 'none', stroke: '#8a5cff', 'stroke-width': 3 }, s);
+  el('circle', { cx: 245, cy: 125, r: 11, fill: '#b48cd6', stroke: 'var(--ink)', 'stroke-width': 2 }, s);
+  el('line', { x1: 220, y1: 10, x2: 220, y2: 400, class: 'sep' }, s);
+  el('line', { x1: 440, y1: 10, x2: 440, y2: 400, class: 'sep' }, s);
+  const L = 'M330,385 C250,385 245,335 175,335 C110,335 100,300 100,62';
+  const R = 'M330,385 C410,385 415,335 485,335 C550,335 560,300 560,62';
+  el('path', { id: idp + 'L', d: L, fill: 'none' }, s);
+  el('path', { id: idp + 'R', d: R, fill: 'none' }, s);
+  label(s, 100, 22, 'Andrea', { c: 'who' }); label(s, 560, 22, 'Blaise', { c: 'who' });
+  label(s, 330, 405, 'Chi', { c: 'who' });
+  return [L, R];
+}
+{
+  const card = $('#dgRocket'), s = svgIn(card, 660, 420);
+  const [L, R] = solar(s, 'pRk');
+  wire(s, L, { on: 2 }); wire(s, R, { on: 2 });
+  token(s, 'pRkL', [0, .5, 1], { r: 17, fill: '#e63946', txt: 'A' });
+  token(s, 'pRkR', [0, .5, 1], { r: 17, fill: '#3b6cff', txt: 'B' });
+  label(s, 330, 352, '🚀 出発！', { c: 'wl big', only: 1 });
+  stepper(card, [
+    'ずっと昔、友人の <b>Chi</b> が 2 つの粒子（A・B）を用意した',
+    '粒子を <b>ロケット</b> に乗せて、Andrea と Blaise に送り出す 🚀',
+    '<b class="kb">太陽系の反対側どうし</b> に届いた。<br>カップ ⋃ ＝ 同じところ（Chi）から分かれた 2 つの粒子',
+  ]);
+}
+{
+  const card = $('#dgLinked'), s = svgIn(card, 660, 420);
+  const [L, R] = solar(s, 'pLk');
+  const full = 'M100,62 C100,300 110,335 175,335 C245,335 250,385 330,385 C410,385 415,335 485,335 C550,335 560,300 560,62';
+  el('path', { d: full, class: 'glow', 'data-on': 2 }, s);
+  wire(s, L); wire(s, R);
+  el('path', { d: full, class: 'flowl', 'data-on': 2 }, s);
+  box(s, 100, 118, '♡', { on: 1 }); box(s, 560, 118, '◇', { on: 1 });
+  el('line', { x1: 118, y1: 268, x2: 542, y2: 268, stroke: 'var(--pink)', 'stroke-width': 3, 'data-on': 2, class: 'appear' }, s);
+  label(s, 330, 286, '↔ どれだけ離れていても繋がっている', { c: 'wl appear', on: 2 }).setAttribute('style', 'fill:var(--pink);font-weight:900');
+  staticFig(card, 2, true);
+  card.classList.add('frozen');
+}
+
+
+/* ---------- 図と枠のすき間をなくす ----------
+   1) 図の中で何も描いていない部分を viewBox から切り落とす（描いたものの外側に少しだけ余白を残す）
+   2) 本文の高さ・幅に収まる最大の大きさで図を描き、枠（カード）は図の大きさにぴったり合わせる
+      （図と文章が左右に並ぶページでは、図の列の幅を図に合わせ、残りを文章に使う） */
+function fitFigures() {
+  document.querySelectorAll('.body.cols, .body.wide-fig').forEach(body => {
+    const card = body.querySelector(':scope > .card'), svg = card && card.querySelector('svg.dg');
+    if (!svg) return;
+    if (!svg.dataset.cropped) {
+      const bb = svg.getBBox(), m = 14;
+      svg.setAttribute('viewBox', `${bb.x - m} ${bb.y - m} ${bb.width + 2 * m} ${bb.height + 2 * m}`);
+      svg.dataset.cropped = 1;
+    }
+    const vb = svg.viewBox.baseVal, r = vb.width / vb.height;
+    const cs = getComputedStyle(card), px = v => parseFloat(cs[v]) || 0;
+    const padX = px('paddingLeft') + px('paddingRight') + px('borderLeftWidth') + px('borderRightWidth');
+    const padY = px('paddingTop') + px('paddingBottom') + px('borderTopWidth') + px('borderBottomWidth');
+    const ctl = card.querySelector('.stp-ctl'), ctlH = ctl ? ctl.offsetHeight + 8 : 0;
+    const cols = body.classList.contains('cols');
+    let otherH = 0;
+    if (!cols) [...body.children].forEach(c => { if (c !== card) otherH += c.offsetHeight + 12; });
+    const minText = cols ? +(body.dataset.minText || 420) + 28 : 0;
+    const h = Math.min(body.clientHeight - padY - ctlH - otherH, (body.clientWidth - padX - minText) / r), w = h * r;
+    // 再生ボタンの列が折り返さない幅は確保する（ボタンの幅の合計 ＋ すき間）
+    const minW = ctl ? [...ctl.children].reduce((s, c) => s + c.offsetWidth, 0) + 10 * (ctl.children.length - 1) : 0;
+    if (svg.parentElement !== card) svg.parentElement.style.flex = 'none';
+    Object.assign(svg.style, { width: w + 'px', height: h + 'px', flex: 'none' });
+    Object.assign(card.style, { alignSelf: 'center', flex: 'none', width: Math.ceil(Math.max(w, minW) + padX) + 'px', height: 'auto' });
+    if (cols) body.style.gridTemplateColumns = `${Math.ceil(Math.max(w, minW) + padX)}px 1fr`;
+  });
+}
+fitFigures();
+if (document.fonts) document.fonts.ready.then(fitFigures);
+
+/* ---------- 復習問題：カードをクリックすると答えが出る（もう一度押すと隠れる） ---------- */
+{
+  document.querySelectorAll('.qz').forEach(q => q.addEventListener('click', () => {
+    const open = q.classList.toggle('open');
+    q.querySelectorAll('.qgb').forEach(g => g.classList.toggle('shown', open));
+  }));
+  // 図の ? は 1 つずつクリックで開ける。全部開いたら答えの文も出す
+  document.querySelectorAll('.qgb').forEach(g => g.addEventListener('click', e => {
+    e.stopPropagation();
+    g.classList.toggle('shown');
+    const q = g.closest('.qz'), all = [...q.querySelectorAll('.qgb')];
+    q.classList.toggle('open', all.every(x => x.classList.contains('shown')));
+  }));
+  document.querySelectorAll('[data-quiz-all]').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation(); b.blur();
+    const qs = [...b.closest('.slide').querySelectorAll('.qz')], open = !qs.every(q => q.classList.contains('open'));
+    qs.forEach(q => { q.classList.toggle('open', open); q.querySelectorAll('.qgb').forEach(g => g.classList.toggle('shown', open)); });
+    b.textContent = open ? '答えをぜんぶ隠す' : '答えをぜんぶ表示';
+  }));
+  // スライドを開くたびに答えを隠した状態に戻す
+  const reset = id => () => {
+    const sl = document.querySelector(`.slide[data-id="${id}"]`);
+    sl.querySelectorAll('.qz').forEach(q => q.classList.remove('open'));
+    sl.querySelectorAll('.qgb').forEach(g => g.classList.remove('shown'));
+    sl.querySelector('[data-quiz-all]').textContent = '答えをぜんぶ表示';
+  };
+  window.onEnter = window.onEnter || {};
+  onEnter.quiz = reset('quiz');
+  // 印刷（配布資料）では答えも見えるようにする
+  addEventListener('beforeprint', () => document.querySelectorAll('.qz, .qgb').forEach(q => q.classList.add(q.classList.contains('qz') ? 'open' : 'shown')));
+}
+/* ---------- スライド制御 ---------- */
+const stage = $('#stage');
+function fit() {
+  const s = Math.min(innerWidth / 1280, innerHeight / 720);
+  stage.style.transform = `translate(-50%,-50%) scale(${s})`;
+}
+addEventListener('resize', fit); fit();
+
+const slides = [...document.querySelectorAll('.slide')];
+slides.forEach((s, i) => { const p = s.querySelector('.pageno'); if (p) p.textContent = `${i + 1} / ${slides.length}`; });
+let cur = 0;
+const frags = s => [...s.querySelectorAll('.frag')];
+function showFrag(f, on) {
+  f.classList.toggle('vis', on);
+  if (f.dataset.slideClass) f.closest('.slide').classList.toggle(f.dataset.slideClass, on);
+}
+function go(n, showAll = false) {
+  if (n < 0 || n >= slides.length) return;
+  stoppers.forEach(f => f());
+  cur = n;
+  slides.forEach((s, i) => { s.classList.toggle('active', i === n); s.classList.toggle('past', i < n); });
+  frags(slides[n]).forEach(f => showFrag(f, showAll));
+  $('#counter').textContent = `${n + 1} / ${slides.length}`;
+  $('#progress').style.width = `${(n + 1) / slides.length * 100}%`;
+  history.replaceState(null, '', '#' + (n + 1));
+  const id = slides[n].dataset.id;
+  if (window.onEnter && onEnter[id]) onEnter[id]();
+  // 自動再生ボタンのあるスライドは、開いた時点で再生を始める（ボタンで停止できる）
+  slides[n].querySelectorAll('[data-autoplay]').forEach(b => b.click());
+  ink.render();
+}
+function next() {
+  const f = frags(slides[cur]).find(x => !x.classList.contains('vis'));
+  if (f) showFrag(f, true); else go(cur + 1);
+}
+function prev() {
+  const v = frags(slides[cur]).filter(x => x.classList.contains('vis'));
+  if (v.length) showFrag(v[v.length - 1], false); else go(cur - 1, true);
+}
+function fullscreen() {
+  if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen();
+}
+let overview = false;
+function layoutOverview() {
+  const cols = innerWidth < 900 ? 2 : innerWidth < 1400 ? 3 : 4;
+  const w = (document.body.clientWidth - 48 - 22 * (cols - 1)) / cols;
+  stage.style.setProperty('--cols', cols);
+  stage.style.setProperty('--z', w / 1280);
+  stage.style.setProperty('--ow', `${w}px`);
+  stage.style.setProperty('--oh', `${w * 720 / 1280}px`);
+}
+function markCurrent() { slides.forEach((s, i) => s.classList.toggle('current', i === cur)); }
+function toggleOverview(on = !overview) {
+  overview = on;
+  document.body.classList.toggle('overview', on);
+  if (on) {
+    stoppers.forEach(f => f());
+    layoutOverview(); markCurrent();
+    slides[cur].scrollIntoView({ block: 'center' });
+  } else {
+    document.body.scrollTop = 0;
+    go(cur);
+  }
+}
+slides.forEach((s, i) => s.addEventListener('click', () => {
+  if (!overview) return;
+  cur = i; toggleOverview(false);
+}));
+addEventListener('resize', () => { if (overview) layoutOverview(); });
+addEventListener('keydown', e => {
+  // 動画を操作しているときの Space・矢印キーは動画に任せる
+  if (e.target.tagName === 'VIDEO' && [' ', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+  if (overview) {
+    if (['o', 'O', 'Escape'].includes(e.key)) toggleOverview(false);
+    else if (e.key === 'Enter') { e.preventDefault(); toggleOverview(false); }
+    else if (['ArrowRight', 'ArrowLeft'].includes(e.key)) {
+      e.preventDefault();
+      cur = Math.max(0, Math.min(slides.length - 1, cur + (e.key === 'ArrowRight' ? 1 : -1)));
+      markCurrent(); slides[cur].scrollIntoView({ block: 'nearest' });
+    }
+    return;
+  }
+  if(e.target.closest('.slide-resource-links'))return;
+  if (e.target.closest('#qcWebSearch, .qc-walkthrough, #quantumLab, #qcSign, #qcAccount, #qcCloudLogin, #qcCloudHome, #qcInstances, #qcInstanceWizard, #qcViz, .cv-modal, .qj-page, .qj-notice, .qj-data-modal, .qpd-overlay') || ['SUMMARY','INPUT','SELECT','TEXTAREA','BUTTON'].includes(e.target.tagName)) return;
+  if (e.key === 'p' || e.key === 'P') return ink.setTool(ink.tool() === 'pen' ? 'none' : 'pen');
+  if (e.key === 'z' || e.key === 'Z') return ink.undo();
+  if (e.key === 'o' || e.key === 'O') return toggleOverview(true);
+  if (['ArrowRight', 'PageDown', ' ', 'Enter', 'ArrowDown'].includes(e.key)) { e.preventDefault(); next(); }
+  else if (['ArrowLeft', 'PageUp', 'Backspace', 'ArrowUp'].includes(e.key)) { e.preventDefault(); prev(); }
+  else if (e.key === 'Home') go(0);
+  else if (e.key === 'End') go(slides.length - 1);
+  else if (e.key === 'f' || e.key === 'F') fullscreen();
+});
+let tx = null;
+// スライダー操作や Apple Pencil のタッチはスワイプのページ送りに使わない
+addEventListener('touchstart', e => tx = laser.blocksSwipe(e.touches[0]) || e.target.closest('input,select,textarea,.qj-page,.qj-data-modal,#qcViz,.qpd-overlay') ? null : e.touches[0].clientX, { passive: true });
+addEventListener('touchend', e => {
+  if (tx === null || overview) return;
+  const dx = e.changedTouches[0].clientX - tx; tx = null;
+  if (Math.abs(dx) > 60) dx < 0 ? next() : prev();
+});
+// Apple Pencil のタッチは、Safari のスクリブル（手書き入力）・スクロール・拡大鏡などの判定に使わせない。
+// これらが働くと、速く書いたときにペンの動きが一瞬ページに届かなくなり、固まって見えるため。
+// タッチの既定の動作を止めるとクリックも起きなくなるので、ペンで軽くタップしたときはこちらでクリックを送る
+let penTap = null;
+const findPen = e => penTap && [...e.changedTouches].find(t => t.identifier === penTap.id);
+stage.addEventListener('touchstart', e => {
+  const t = e.changedTouches[0];
+  if (t.touchType !== 'stylus' || overview || e.target.closest('input')) return;
+  e.preventDefault();
+  penTap = { id: t.identifier, x: t.clientX, y: t.clientY, target: e.target, moved: 0 };
+}, { passive: false });
+stage.addEventListener('touchmove', e => {
+  const t = findPen(e);
+  if (!t) return;
+  e.preventDefault();
+  penTap.moved = Math.max(penTap.moved, Math.hypot(t.clientX - penTap.x, t.clientY - penTap.y));
+}, { passive: false });
+stage.addEventListener('touchend', e => {
+  const t = findPen(e);
+  if (!t) return;
+  const { target, moved } = penTap;
+  penTap = null;
+  // ほとんど動かさなかったときはタップとみなしてクリックを送る（ボタン・回路の入力・復習問題のカードなど）
+  if (moved < 8) {
+    if (typeof target.click === 'function') target.click();
+    else target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: t.clientX, clientY: t.clientY }));
+  }
+});
+stage.addEventListener('touchcancel', () => { penTap = null; });
+$('#btnNext').onclick = e => { e.currentTarget.blur(); next(); };
+$('#btnPrev').onclick = e => { e.currentTarget.blur(); prev(); };
+$('#btnFs').onclick = e => { e.currentTarget.blur(); fullscreen(); };
+$('#btnOv').onclick = e => { e.currentTarget.blur(); toggleOverview(true); };
+$('#btnOvClose').onclick = e => { e.currentTarget.blur(); toggleOverview(false); };
+addEventListener('beforeprint', () => slides.forEach(s => frags(s).forEach(f => showFrag(f, true))));
+/* ---------- 黒ペン・消しゴム・投げ縄 ----------
+   右上の道具で「黒ペン」を選ぶと、Apple Pencil（パソコンではマウス）でスライドに書き込める。指では書かない（指はスワイプやタップに使う）。
+   ペン先で軽くタップしただけのときは線を残さず、ボタンや入力の丸のクリックとして扱う。
+   書き込みはスライドごとに保持し、ページを戻ると再表示される（再読み込みで消える）。
+   「投げ縄」で書き込みを囲むと選択できる。選択した線はドラッグで移動、枠のボタンで複製・コピー・削除。
+   コピーした線は別のスライドに移ってから「貼り付け」で貼れる（ページをまたいだ複製）。 */
+const ink = (() => {
+  const W = 1280, H = 720, COLOR = '#111', SEL = '#3b6cff', PAD = 12;
+  const canvas = document.createElement('canvas');
+  canvas.id = 'ink';
+  stage.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  const bar = $('#penbar');
+  const pages = slides.map(() => ({ strokes: [], undo: [] }));
+  let tool = 'none', active = null;
+  document.body.classList.add('tool-none');
+  // 投げ縄の選択（sel.items は選択中の線そのもの）とクリップボード（ページをまたいで使う）
+  let sel = null, clip = null, lassoPts = null;
+
+  // 選択中の線の操作ボタン（スライドの中に置くので、スライドと一緒に拡大縮小される）
+  const lbar = document.createElement('div');
+  lbar.id = 'lassoBar';
+  lbar.innerHTML = '<button data-act="dup" title="複製 (D)">⧉ 複製</button><button data-act="copy" title="コピー：別のスライドで貼り付けできる (C)">📋 コピー</button><button data-act="del" title="削除 (Delete)">🗑️ 削除</button>';
+  stage.appendChild(lbar);
+  const st = document.createElement('style');
+  st.textContent = `
+#lassoBar{position:absolute;z-index:6;display:none;gap:4px;background:#fff;border:2.5px solid #1f1a3d;border-radius:999px;box-shadow:3px 3px 0 #1f1a3d;padding:3px}
+#lassoBar button{border:0;background:none;font:800 14px "Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;color:#1f1a3d;border-radius:999px;padding:5px 10px;cursor:pointer;white-space:nowrap}
+#lassoBar button:hover{background:#dfe8ff}
+#penbar button:disabled{opacity:.35;cursor:default}
+#inkToast{position:absolute;left:50%;bottom:58px;transform:translateX(-50%);z-index:7;background:#1f1a3d;color:#fff;font:800 15px sans-serif;border-radius:999px;padding:6px 16px;opacity:0;transition:opacity .3s;pointer-events:none}
+#inkToast.on{opacity:.92}
+body.overview #lassoBar,body.overview #inkToast{display:none!important}`;
+  document.head.appendChild(st);
+  const toastEl = document.createElement('div');
+  toastEl.id = 'inkToast';
+  stage.appendChild(toastEl);
+  let toastT = 0;
+  const toast = msg => { toastEl.textContent = msg; toastEl.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('on'), 1600); };
+
+  function resize() {
+    const k = Math.min(4096 / W, stage.getBoundingClientRect().width / W * (devicePixelRatio || 1));
+    canvas.width = Math.round(W * k); canvas.height = Math.round(H * k);
+    render();
+  }
+  // 筆圧で太さを変え、点の中点を結ぶ曲線でなめらかにする。i 番目の区間は p[i-1]・p[i]・p[i+1] で決まる
+  const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+  function drawSeg(p, i) {
+    const m0 = i === 1 ? p[0] : mid(p[i - 1], p[i]);
+    const m1 = i === p.length - 1 ? p[i] : mid(p[i], p[i + 1]);
+    ctx.lineWidth = 4 * (.4 + p[i][2] * 1.2);
+    ctx.beginPath(); ctx.moveTo(m0[0], m0[1]); ctx.quadraticCurveTo(p[i][0], p[i][1], m1[0], m1[1]); ctx.stroke();
+  }
+  function drawStroke(p) { for (let i = 1; i < p.length; i++) drawSeg(p, i); }
+  const bbox = items => {
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    items.forEach(s => s.forEach(([x, y]) => { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }));
+    return [x0 - PAD, y0 - PAD, x1 + PAD, y1 + PAD];
+  };
+  // スライド全体の描き直し（元に戻す・消しゴム・スライド切り替え・投げ縄の操作など）
+  function render() {
+    if (sel && (sel.page !== cur || !sel.items.every(s => pages[cur].strokes.includes(s)))) setSel(null, false);
+    const k = canvas.width / W;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    // 選択中の線は青く縁取る
+    if (sel) {
+      ctx.strokeStyle = 'rgba(59,108,255,.35)'; ctx.lineWidth = 12;
+      sel.items.forEach(s => { ctx.beginPath(); s.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); if (s.length === 1) ctx.lineTo(s[0][0] + .1, s[0][1]); ctx.stroke(); });
+    }
+    ctx.strokeStyle = COLOR;
+    pages[cur].strokes.forEach(drawStroke);
+    if (active && active.pts) { drawStroke(active.pts); active.drawn = active.pts.length - 2; }
+    if (sel) {
+      const [x0, y0, x1, y1] = bbox(sel.items);
+      ctx.save(); ctx.strokeStyle = SEL; ctx.lineWidth = 2; ctx.setLineDash([7, 5]);
+      ctx.strokeRect(x0, y0, x1 - x0, y1 - y0); ctx.restore();
+      placeBar([x0, y0, x1, y1]);
+    }
+    if (lassoPts && lassoPts.length > 1) {
+      ctx.save(); ctx.strokeStyle = SEL; ctx.fillStyle = 'rgba(59,108,255,.08)'; ctx.lineWidth = 2.5; ctx.setLineDash([6, 6]);
+      ctx.beginPath(); lassoPts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+    }
+  }
+  function placeBar([x0, y0, x1, y1]) {
+    lbar.style.display = 'flex';
+    const w = lbar.offsetWidth || 230, h = lbar.offsetHeight || 36;
+    let left = Math.max(8, Math.min(W - w - 8, x1 - w)), top = y0 - h - 8;
+    if (top < 70) top = Math.min(H - h - 8, y1 + 8);
+    lbar.style.left = left + 'px'; lbar.style.top = top + 'px';
+  }
+  function setSel(items, draw = true) {
+    sel = items && items.length ? { page: cur, items } : null;
+    if (!sel) lbar.style.display = 'none';
+    if (draw) render();
+  }
+  // 書いている途中は、まだ描いていない区間だけを描き足す（毎回全部を描き直すと速く書いたときに固まるため）。
+  // 最後の区間は次の点が来ないと形が決まらないので、ペンを離したときに描く
+  function drawNew(final) {
+    const p = active.pts, upto = final ? p.length - 1 : p.length - 2;
+    for (let i = Math.max(1, active.drawn + 1); i <= upto; i++) drawSeg(p, i);
+    active.drawn = Math.max(active.drawn, upto);
+  }
+  // ペンの点はたくさん届くので、画面の書き換え 1 回につき 1 回だけまとめて描く
+  let queued = false;
+  function flush() {
+    queued = false;
+    if (!active) return;
+    if (active.mode === 'lasso' || active.mode === 'move') render();
+    else if (active.pts) drawNew(false);
+    else if (active.erase.length) { const qs = active.erase; active.erase = []; if (qs.map(eraseAt).some(Boolean)) render(); }
+  }
+  const schedule = () => { if (!queued) { queued = true; requestAnimationFrame(flush); } };
+  function toStage(e) {
+    const r = stage.getBoundingClientRect();
+    // マウスは筆圧が取れないので 0.5 として扱う
+    const pr = e.pointerType === 'pen' && e.pressure > 0 ? e.pressure : .5;
+    return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H, pr];
+  }
+  function snapshot() { const pg = pages[cur]; pg.undo.push(pg.strokes.slice()); if (pg.undo.length > 100) pg.undo.shift(); }
+  function segDist(q, a, b) {
+    const dx = b[0] - a[0], dy = b[1] - a[1], L = dx * dx + dy * dy;
+    const t = L ? Math.max(0, Math.min(1, ((q[0] - a[0]) * dx + (q[1] - a[1]) * dy) / L)) : 0;
+    return Math.hypot(q[0] - a[0] - t * dx, q[1] - a[1] - t * dy);
+  }
+  // q の近くを通る線を消す。消したら true（描き直しは呼び出し側でまとめて行う）
+  function eraseAt(q) {
+    const pg = pages[cur];
+    const keep = pg.strokes.filter(st => !st.some((pt, i) => segDist(q, st[Math.max(0, i - 1)], pt) < 14));
+    if (keep.length === pg.strokes.length) return false;
+    if (!active.erased) { snapshot(); active.erased = true; }
+    pg.strokes = keep;
+    return true;
+  }
+  // 点が多角形の内側か（投げ縄の判定）
+  function inPoly(p, poly) {
+    let c = false;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const [xi, yi] = poly[i], [xj, yj] = poly[j];
+      if ((yi > p[1]) !== (yj > p[1]) && p[0] < (xj - xi) * (p[1] - yi) / (yj - yi) + xi) c = !c;
+    }
+    return c;
+  }
+  const inBox = (q, [x0, y0, x1, y1]) => q[0] >= x0 && q[0] <= x1 && q[1] >= y0 && q[1] <= y1;
+  const clone = items => items.map(s => s.map(p => p.slice()));
+  const shift = (items, dx, dy) => items.forEach(s => s.forEach(p => { p[0] += dx; p[1] += dy; }));
+
+  // ---- 投げ縄の操作 ----
+  function duplicate() {
+    if (!sel) return;
+    snapshot();
+    const items = clone(sel.items); shift(items, 24, 24);
+    pages[cur].strokes.push(...items);
+    setSel(items); toast('複製しました');
+  }
+  function copy() {
+    if (!sel) return;
+    clip = { items: clone(sel.items), from: cur, n: 0 };
+    $('#inkPaste').disabled = false;
+    toast('コピーしました。別のスライドで「貼り付け」できます');
+  }
+  function paste() {
+    if (!clip) return;
+    snapshot();
+    const items = clone(clip.items);
+    // 同じスライドに貼るときは重ならないように少しずらす
+    if (clip.from === cur) { clip.n++; shift(items, 24 * clip.n, 24 * clip.n); }
+    pages[cur].strokes.push(...items);
+    setTool('lasso'); setSel(items); toast('貼り付けました（ドラッグで移動できます）');
+  }
+  function del() {
+    if (!sel) return;
+    snapshot();
+    pages[cur].strokes = pages[cur].strokes.filter(s => !sel.items.includes(s));
+    setSel(null);
+  }
+  lbar.addEventListener('pointerdown', e => e.stopPropagation());
+  lbar.querySelectorAll('button').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation(); b.blur();
+    ({ dup: duplicate, copy, del })[b.dataset.act]();
+  }));
+
+  stage.addEventListener('pointerdown', e => {
+    if (overview || active || tool === 'laser' || tool === 'none' || e.target.closest('input') || e.target.closest('#lassoBar')) return;
+    if (!(e.pointerType === 'pen' || (e.pointerType === 'mouse' && e.button === 0))) return;
+    e.preventDefault();
+    const q = toStage(e);
+    if (tool === 'lasso') {
+      // 選択枠の中をつかんだら移動、外なら新しく囲む
+      if (sel && inBox(q, bbox(sel.items))) active = { id: e.pointerId, mode: 'move', start: q, last: q, moved: 0 };
+      else { setSel(null, false); lassoPts = [q]; active = { id: e.pointerId, mode: 'lasso', start: q, moved: 0 }; render(); }
+      return;
+    }
+    // ペンの消しゴム側（対応ペンのみ）は消しゴムとして扱う
+    const erase = tool === 'eraser' || e.button === 5;
+    active = { id: e.pointerId, start: q, moved: 0, pts: erase ? null : [q], drawn: 0, erase: [] };
+    if (erase) { if (eraseAt(q)) render(); }
+  });
+  addEventListener('pointermove', e => {
+    if (!active || e.pointerId !== active.id) return;
+    e.preventDefault();
+    const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [];
+    for (const ev of evs.length ? evs : [e]) {
+      const q = toStage(ev);
+      active.moved = Math.max(active.moved, Math.hypot(q[0] - active.start[0], q[1] - active.start[1]));
+      if (active.mode === 'lasso') {
+        const last = lassoPts[lassoPts.length - 1];
+        if (Math.hypot(q[0] - last[0], q[1] - last[1]) >= 3) lassoPts.push(q);
+      } else if (active.mode === 'move') {
+        if (!active.began && active.moved >= 3) {
+          // 元に戻せるよう、動かす前の状態を残し、選択中の線は複製に差し替えてから動かす
+          active.began = true; snapshot();
+          const pg = pages[cur], copies = clone(sel.items);
+          pg.strokes = pg.strokes.map(s => { const i = sel.items.indexOf(s); return i < 0 ? s : copies[i]; });
+          sel.items = copies;
+        }
+        if (active.began) { shift(sel.items, q[0] - active.last[0], q[1] - active.last[1]); active.last = q; }
+      } else if (active.pts) {
+        // ほとんど動いていない点は間引く（見た目は変わらず、描く量が減る）
+        const last = active.pts[active.pts.length - 1];
+        if (Math.hypot(q[0] - last[0], q[1] - last[1]) >= 1.2) active.pts.push(q); else last[2] = Math.max(last[2], q[2]);
+      } else active.erase.push(q);
+    }
+    schedule();
+  }, { passive: false });
+  function end(e) {
+    if (!active || e.pointerId !== active.id) return;
+    if (active.mode === 'lasso') {
+      const poly = lassoPts; lassoPts = null;
+      // 点の半分以上が投げ縄の内側にある線を選ぶ
+      const items = active.moved >= 6 ? pages[cur].strokes.filter(s => s.filter(p => inPoly(p, poly)).length * 2 >= s.length) : [];
+      active = null; setSel(items);
+      return;
+    }
+    if (active.mode === 'move') { active = null; render(); return; }
+    flush();
+    // ほとんど動かさなかったペン先はタップ（クリック）として扱い、線は残さない
+    if (active.pts && active.moved >= 4) {
+      drawNew(true); snapshot(); pages[cur].strokes.push(active.pts); active = null;
+    } else { active = null; render(); }
+  }
+  addEventListener('pointerup', end);
+  addEventListener('pointercancel', end);
+
+  function setTool(t) {
+    tool = t;
+    document.body.classList.toggle('tool-none', t === 'none');
+    if (t !== 'none') { const s = getSelection(); if (s) s.removeAllRanges(); }
+    if (t !== 'lasso') setSel(null);
+    bar.querySelectorAll('[data-tool]').forEach(b => b.classList.toggle('on', b.dataset.tool === t));
+  }
+  function undo() { const pg = pages[cur]; if (pg.undo.length) { pg.strokes = pg.undo.pop(); setSel(null, false); render(); } }
+  bar.querySelectorAll('[data-tool]').forEach(b => b.onclick = () => { b.blur(); setTool(tool === b.dataset.tool ? 'none' : b.dataset.tool); });
+  $('#inkUndo').onclick = e => { e.currentTarget.blur(); undo(); };
+  $('#inkPaste').onclick = e => { e.currentTarget.blur(); paste(); };
+  $('#inkClear').onclick = e => {
+    e.currentTarget.blur();
+    if (pages[cur].strokes.length) { snapshot(); pages[cur].strokes = []; setSel(null, false); render(); }
+  };
+  // 投げ縄の選択中のキー操作（ページ送りより先に受け取る）
+  addEventListener('keydown', e => {
+    if (overview || e.target.tagName === 'INPUT') return;
+    const k = e.key.toLowerCase(), mod = e.ctrlKey || e.metaKey;
+    if (mod && String(getSelection())) return;
+    let f = null;
+    if (k === 'l' && !mod) f = () => setTool(tool === 'lasso' ? 'none' : 'lasso');
+    else if (sel && (k === 'delete' || k === 'backspace')) f = del;
+    else if (sel && k === 'escape') f = () => setSel(null);
+    else if (sel && k === 'd') f = duplicate;
+    else if (sel && k === 'c') f = copy;
+    else if (clip && k === 'v') f = paste;
+    if (!f) return;
+    e.preventDefault(); e.stopImmediatePropagation(); f();
+  }, true);
+  addEventListener('resize', resize);
+  resize();
+  return { render, undo, setTool, tool: () => tool, drawing: () => !!active };
+})();
+
+/* ---------- レーザーポインター ----------
+   Apple Pencil：ペン先を画面に当てている間だけ赤く光る点を表示し、なぞった軌跡を光らせる（書き込みは残らない）。
+   パソコン（マウス）：「レーザー」を選んでいる間、マウスの位置に赤い点が出る（3 秒止めると消える）。
+   ボタンを押したままドラッグすると軌跡が光る。ボタン・回路の入力など、クリックできる場所の上では軌跡を描かずクリックを優先する。
+   軌跡は離してから約1秒で消える。消えきる前にもう一度当てると、それまでの軌跡は消えずに残り続ける。 */
+const laser = (() => {
+  const W = 1280, H = 720, LIFE = 1000, IDLE = 3000;
+  const canvas = document.createElement('canvas');
+  canvas.id = 'laser';
+  stage.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  // trail は線ごとの点の配列。fadeFrom は離した時刻（当てている間は null）。hover はマウスの位置
+  let trail = [], down = null, raf = 0, fadeFrom = null, hover = null, idleT = 0;
+
+  function resize() {
+    const k = Math.min(4096 / W, stage.getBoundingClientRect().width / W * (devicePixelRatio || 1));
+    canvas.width = Math.round(W * k); canvas.height = Math.round(H * k);
+    kick();
+  }
+  function toStage(e) {
+    const r = stage.getBoundingClientRect();
+    return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H];
+  }
+  const level = () => fadeFrom === null ? 1 : Math.max(0, 1 - (performance.now() - fadeFrom) / LIFE);
+  const hoverLevel = () => {
+    if (!hover || down || ink.tool() !== 'laser' || overview) return 0;
+    const t = performance.now() - hover.t;
+    return t < IDLE ? 1 : Math.max(0, 1 - (t - IDLE) / 400);
+  };
+  function dot([x, y], a = 1) {
+    const g = ctx.createRadialGradient(x, y, 0, x, y, 13);
+    g.addColorStop(0, `rgba(255,255,255,${a})`); g.addColorStop(.35, `rgba(255,90,110,${a})`); g.addColorStop(1, 'rgba(255,30,60,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x, y, 13, 0, Math.PI * 2); ctx.fill();
+  }
+  function frame() {
+    raf = 0;
+    const k = canvas.width / W, f = level(), hl = hoverLevel();
+    if (!f) trail = [];
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    // 影のぼかし（shadowBlur）は重いので使わず、太い半透明の線の上に細い線を重ねて光って見せる
+    const path = new Path2D();
+    trail.forEach(line => { if (!line.length) return; path.moveTo(line[0][0], line[0][1]); line.forEach(q => path.lineTo(q[0], q[1])); });
+    ctx.strokeStyle = `rgba(255,40,70,${.18 * f})`; ctx.lineWidth = 6 + 14 * f; ctx.stroke(path);
+    ctx.strokeStyle = `rgba(255,40,70,${.8 * f})`; ctx.lineWidth = 2 + 5 * f; ctx.stroke(path);
+    if (down) dot(down.pos);
+    else if (hl > 0) dot(hover.pos, hl);
+    if ((fadeFrom !== null && trail.length) || (hl > 0 && hl < 1)) kick();
+    else if (hl === 1) { clearTimeout(idleT); idleT = setTimeout(kick, IDLE + 20 - (performance.now() - hover.t)); }
+  }
+  function kick() { if (!raf) raf = requestAnimationFrame(frame); }
+  function add(q) {
+    const line = trail[trail.length - 1], last = line[line.length - 1];
+    // ほとんど動いていない点は間引く
+    if (!last || Math.hypot(q[0] - last[0], q[1] - last[1]) >= 1.5) line.push(q);
+    down.pos = q;
+  }
+  // クリックできる場所（ボタン・入力の丸・カードなど）の上ではマウスの軌跡を描かない
+  const clickable = t => !!t.closest('button,input,select,textarea,a,label,summary,#lassoBar') || ['pointer', 'grab', 'grabbing'].includes(getComputedStyle(t).cursor);
+
+  stage.addEventListener('pointerdown', e => {
+    if (overview || down || e.target.closest('input')) return;
+    if (!(ink.tool() === 'laser' || (ink.tool() === 'none' && e.pointerType === 'pen'))) return;
+    const mouse = e.pointerType === 'mouse';
+    if (!(e.pointerType === 'pen' || (mouse && e.button === 0 && !clickable(e.target)))) return;
+    e.preventDefault();
+    // 前の軌跡が消えきっていなければ残したまま続ける
+    if (!level()) trail = [];
+    fadeFrom = null; down = { id: e.pointerId, pos: null };
+    trail.push([]); add(toStage(e)); kick();
+  });
+  addEventListener('pointermove', e => {
+    if (down && e.pointerId === down.id) {
+      e.preventDefault();
+      const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [];
+      (evs.length ? evs : [e]).forEach(ev => add(toStage(ev)));
+      kick();
+      return;
+    }
+    if (e.pointerType === 'mouse' && ink.tool() === 'laser' && !overview && stage.contains(e.target)) {
+      hover = { pos: toStage(e), t: performance.now() }; kick();
+    }
+    else if (e.pointerType === 'mouse' && hover && ink.tool() !== 'laser') { hover = null; kick(); }
+  }, { passive: false });
+  stage.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') { hover = null; kick(); } });
+  const up = e => { if (down && e.pointerId === down.id) { down = null; fadeFrom = performance.now(); if (e.pointerType === 'mouse') hover = { pos: toStage(e), t: performance.now() }; kick(); } };
+  addEventListener('pointerup', up);
+  addEventListener('pointercancel', up);
+  addEventListener('resize', resize);
+  resize();
+
+  // Apple Pencil のタッチはスワイプのページ送りに使わない
+  return { blocksSwipe: t => t.touchType === 'stylus' || !!down, refresh: kick };
+})();
+
+go(Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1)) || 1) - 1)));
+</script>
+</body>
+</html>

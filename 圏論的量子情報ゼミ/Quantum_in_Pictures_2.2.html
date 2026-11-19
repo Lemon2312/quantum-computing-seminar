@@ -463,34 +463,59 @@ ul.plain li .ico{border-radius:50%;border:2px solid var(--ink);box-shadow:none;b
 
 /* 「カーソル」モード（既定。道具を何も選んでいないとき）：普通のカーソルで文字を選択・コピーできる（6.1-7.9 v44 と同じ） */
 body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default;cursor:auto}
+.rlab{margin:18px 0 2px;font-size:17px;font-weight:900;color:var(--muted);letter-spacing:.1em;border-bottom:1.5px dashed #d8d4e6;padding-bottom:2px}
+
+/* ---------- 余白を減らす：図は本文の高さいっぱい、文字は大きく ---------- */
+h2{margin:4px 0 14px}
+.body.cols{align-items:stretch;gap:28px}
+.body.cols > .card{display:flex;flex-direction:column;justify-content:center;min-height:0}
+.body.cols > div:not(.card){display:flex;flex-direction:column;justify-content:center}
+.stp svg.dg{flex:1 1 0;height:auto;min-height:0}
+#msgDiag{flex:1;min-height:0;display:flex}
+#msgDiag svg.dg{height:100%}
+ul.plain li{font-size:25px;line-height:1.5;margin:10px 0;gap:12px}
+ul.plain li .ico{width:40px;height:40px;font-size:21px}
+.lead{font-size:25px;line-height:1.6}
+.bigmsg{font-size:34px}
+.point{font-size:24px;line-height:1.55;padding:14px 20px}
+.rlab{font-size:19px}
+.sumlist{gap:16px !important}
+.sumlist .sl{font-size:25px !important;padding:14px 22px !important}
+.sl-n{width:42px;height:42px;font-size:21px}
+.body.wide-fig{display:flex;flex-direction:column;gap:12px}
+.body.wide-fig > .card{flex:1;min-height:0;display:flex;flex-direction:column}
+.sumlist{gap:20px !important}
+.sumlist .sl{font-size:26px !important;padding:16px 24px !important}
+.slide[data-id="rocket"] ul.plain li,.slide[data-id="linked"] ul.plain li{font-size:23px}
+.slide[data-id="rocket"] .point,.slide[data-id="linked"] .point{font-size:22px}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) ul.plain li{font-size:29px;margin:16px 0}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) ul.plain li .ico{width:46px;height:46px;font-size:24px}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) .lead{font-size:29px}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) .point{font-size:27px}
+.stp-ctl{white-space:nowrap}
+.body.wide-fig{justify-content:center;align-items:center}
+/* 動かさない図（.frozen）：光る線・流れる点線も止める */
+.frozen .dg .glow.on{animation:none;opacity:.32}
+.frozen .dg .flowl.on{animation:none}
+
+/* 2 ページ：見出しの代わりに、この節の主張を図の横に大きく */
+.slide[data-id="msg"] .chap{margin-bottom:18px}
+.keymsg{font-family:var(--serif);font-size:56px;font-weight:900;line-height:1.45}
 
 /* =====================================================================
-   2.2 A spider bit me!：スパイダー（ZX 図）の部品
-   色は圏論的量子情報ゼミのテーマに合わせる（緑 = Z スパイダー、赤 = X スパイダー、藍 = 補助色）
+   2.2 A spider bit me!：スパイダー（ZX 図）の部品（緑 = Z スパイダー、赤 = X スパイダー）
    ===================================================================== */
 :root{--zr:#c43c4c;--zg:#17935f}
 .mono{font-family:Consolas,Menlo,monospace;letter-spacing:.04em}
-.math{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif}
-.mini-h{font-size:16px;font-weight:900;color:var(--muted);text-align:center;margin-bottom:2px}
-table.tt tbody.static tr{cursor:default}
-table.tt tbody.static tr:hover td{background:none}
-table.tt{border:2px solid var(--ink);box-shadow:0 2px 0 var(--ink);border-radius:12px;overflow:hidden;background:#fff;margin:0 auto;font-size:21px;text-align:center}
-table.tt th,table.tt td{padding:5px 14px}
-table.tt th{font-size:16px;white-space:nowrap}
-table.tt td.calc{font-family:Consolas,Menlo,monospace;color:var(--muted);font-size:17px}
+table.tt{border:2px solid var(--ink);box-shadow:0 2px 0 var(--ink);border-radius:12px;overflow:hidden;background:#fff;font-size:24px;text-align:center}
+table.tt th,table.tt td{padding:6px 18px}
+table.tt th{font-size:18px;white-space:nowrap}
 table.tt td.out.one{color:var(--accent-d);font-weight:800}
-table.tt tbody tr{cursor:pointer}
-table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(23,147,95,.16)}
-table.tt.small{font-size:18px}
-table.tt.small th,table.tt.small td{padding:3px 12px}
-
-/* タイトル */
-.slide[data-id="title"] .title-wrap{grid-template-columns:1.12fr .88fr}
-.pun{display:inline-block;font-size:15px;font-weight:700;background:#fff;border:1.5px dashed var(--ink);border-radius:10px;padding:3px 12px;margin-bottom:8px}
+table.tt.small{font-size:22px}
+table.tt tbody.static tr{cursor:default}
 
 /* スパイダー図（SVG） */
-svg.zx{width:100%;height:auto;display:block;user-select:none;-webkit-user-select:none;overflow:visible}
-.card svg.zx{max-height:318px}
+svg.zx{display:block;width:100%;height:auto;user-select:none;-webkit-user-select:none;overflow:visible}
 .zw{fill:none;stroke:var(--ink);stroke-width:4.5;stroke-linecap:round}
 .zn circle{stroke:var(--ink);stroke-width:3.5}
 .zn.r circle{fill:var(--zr)}
@@ -499,21 +524,16 @@ svg.zx{width:100%;height:auto;display:block;user-select:none;-webkit-user-select
 .zn.clk{cursor:pointer}
 .zn.clk:hover circle{stroke-width:5.5}
 .zn.hl circle{filter:drop-shadow(0 0 7px rgba(23,147,95,.55))}
-.zt{font:800 16px "Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;fill:var(--muted);text-anchor:middle;dominant-baseline:central;pointer-events:none}
-.zt.big{font:900 26px Consolas,Menlo,monospace;fill:var(--ink)}
+.zn.dim{opacity:.16}
+.zt{font:800 17px "Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;fill:var(--muted);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.zt.big{font:900 28px Consolas,Menlo,monospace;fill:var(--ink)}
 .zt.o{fill:var(--accent-d)}
 .zt.b{fill:var(--purple)}
 .zt.eqs{font:900 34px sans-serif;fill:var(--ink)}
-.zt.tag{font-size:17px;fill:var(--purple);font-weight:900}
+.zt.tag{font-size:18px;fill:var(--purple);font-weight:900}
 .zt.pk{fill:var(--zr);font-weight:900}
-.zt.sm{font-size:13px}
-.zcap{text-align:center;font-size:18px;font-weight:700;min-height:32px;line-height:1.45;margin-top:2px}
-.zcap b{color:var(--accent-d)}
+.zt.sm{font-size:14px}
 .zctl{display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:center;align-items:center;margin:4px 0 2px}
-.zctl button.b{margin:0}
-.zrow2{display:grid;grid-template-columns:1fr 200px;gap:10px;align-items:center}
-.zside{display:flex;flex-direction:column;gap:9px}
-.zside button.b{width:100%}
 .stp .stp-ctl{margin-top:4px}
 .picker{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .picker .pk-l{font-weight:800;font-size:15px;color:var(--muted);margin-right:2px}
@@ -521,107 +541,39 @@ svg.zx{width:100%;height:auto;display:block;user-select:none;-webkit-user-select
 .picker button:hover{background:var(--accent-l)}
 .picker button.on{background:var(--ink);color:#fff}
 
-/* 文中の小さなクモ */
-i.zs{display:inline-block;vertical-align:middle;line-height:0;margin:0 1px}
-i.zs svg{display:block}
-.an-ic{flex:none;display:flex;gap:2px;align-items:center;justify-content:center;min-width:76px}
-
-/* 準備：クモの部位 */
-.anat{display:flex;flex-direction:column;gap:6px}
-.an-row{display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid var(--ink);border-radius:12px;padding:4px 14px;font-size:19px;line-height:1.45}
-
-/* ねらい：対応表 */
-.dict{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.dict div{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--ink);border-radius:12px;padding:6px 12px;font-size:19px}
-.dict b{font-family:Consolas,Menlo,monospace;color:var(--accent-d);font-size:22px}
-.dict .an-ic{min-width:58px}
-
-/* ビット */
-.cmp2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0 4px}
-.cmp2-c{background:#fff;border:1.5px solid var(--ink);border-radius:12px;padding:8px 14px;text-align:center;font-size:21px}
-.cmp2-c.q{background:#f1f0fa}
-.cmp2-h{font-size:14px;font-weight:900;color:var(--muted)}
-.cmp2-c small{display:block;font-size:15px;color:var(--muted);font-weight:700}
-.txtin{display:flex;align-items:center;justify-content:center;gap:10px;font-size:18px;font-weight:800;margin:6px 0 8px}
-.txtin input{font:800 28px Consolas,Menlo,monospace;width:150px;text-align:center;border:2px solid var(--ink);border-radius:10px;padding:2px 8px;box-shadow:0 2px 0 var(--ink);background:var(--accent-l);outline:none;letter-spacing:.1em}
-.bin-list{display:flex;flex-direction:column;gap:6px;min-height:178px}
-.bin-row{display:grid;grid-template-columns:52px 70px 1fr;align-items:center;gap:8px;animation:qzIn .35s ease}
+/* ビット：文字 → 0 と 1 */
+.txtin{display:flex;align-items:center;justify-content:center;gap:10px;font-size:20px;font-weight:800;margin:0 0 10px}
+.txtin input{font:800 30px Consolas,Menlo,monospace;width:150px;text-align:center;border:2px solid var(--ink);border-radius:10px;padding:2px 8px;box-shadow:0 2px 0 var(--ink);background:var(--accent-l);outline:none;letter-spacing:.1em}
+.bin-list{display:flex;flex-direction:column;gap:8px}
+.bin-row{display:grid;grid-template-columns:52px 1fr;align-items:center;gap:10px;animation:qzIn .35s ease}
 .bin-ch{font:900 30px Consolas,Menlo,monospace;text-align:center;background:#fff;border:1.5px solid var(--ink);border-radius:10px}
-.bin-code{font:700 15px Consolas,Menlo,monospace;color:var(--muted);text-align:center}
 .bin-bits{display:flex;gap:3px}
-.bin-bits span{flex:1;height:36px;display:flex;align-items:center;justify-content:center;font:900 20px Consolas,Menlo,monospace;border:1.5px solid var(--ink);border-radius:7px;background:#fff}
-.bin-bits span.one{background:var(--accent);color:#fff}
-.bin-all{margin-top:8px;text-align:center;font:900 22px Consolas,Menlo,monospace;word-break:break-all;color:var(--accent-d);min-height:30px}
-
-/* なぜビット？ */
-.why3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.why3>div{background:#fff;border:1.5px solid var(--ink);border-radius:12px;padding:8px 12px;text-align:center}
-.why3 .ic{font-size:28px;display:block;line-height:1.2}
-.why3>div>b{display:block;font-size:21px;font-family:var(--serif)}
-.why3 small{font-size:16px;color:#3b3a52;font-weight:700;line-height:1.5}
-.slide[data-id="why"] svg.zx{max-height:250px}
-
-/* ビット状態 */
-.bs2{display:grid;grid-template-columns:1fr 1fr;gap:30px;padding:0 60px}
-.bs-card svg{max-height:180px}
-.bs-cap{text-align:center;font-size:21px;margin-top:4px}
-
-/* ビット列 */
-.str-out{text-align:center;font-size:22px;font-weight:800;margin:2px 0 4px}
-.str-out b{font:900 34px Consolas,Menlo,monospace;color:var(--accent-d);letter-spacing:.12em;background:var(--accent-l);border:1.5px solid var(--ink);border-radius:10px;padding:0 14px}
-.str-out span{font-size:17px;color:var(--muted);margin-left:12px}
-
-/* 等式カード */
-.eqcards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.eqc{position:relative;background:#fff;border:1.5px solid var(--ink);border-radius:12px;padding:16px 10px 6px;text-align:center;margin-top:8px}
-.eqc.new{background:#f4faf6}
-.eqc small{display:block;font:900 17px Consolas,Menlo,monospace;color:var(--accent-d)}
-.eqc-t{position:absolute;left:12px;top:-12px;background:var(--ink);color:#fff;font-size:13px;font-weight:800;border-radius:999px;padding:1px 12px}
-.eqc.new .eqc-t{background:var(--accent)}
-.an-wrap{display:grid;grid-template-columns:1fr 210px;gap:12px;align-items:center;margin-top:8px}
-.an-wrap svg.zx{max-height:150px}
+.bin-bits span{flex:1;height:40px;display:flex;align-items:center;justify-content:center;font:900 22px Consolas,Menlo,monospace;border:1.5px solid var(--ink);border-radius:7px;background:#fff}
+.bin-bits span.one{background:var(--ink);color:#fff}
+.bin-all{margin-top:12px;text-align:center;font:900 22px Consolas,Menlo,monospace;word-break:break-all;color:var(--accent-d);min-height:30px}
 
 /* ⊕ の表 */
-.xor4{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;margin:8px 0}
-.xor4 div{background:#fff;border:1.5px solid var(--ink);border-radius:10px;text-align:center;font:900 28px Consolas,Menlo,monospace;padding:4px 0;display:flex;align-items:center;justify-content:center;gap:10px}
+.xor4{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin:12px 0}
+.xor4 div{background:#fff;border:1.5px solid var(--ink);border-radius:10px;text-align:center;font:900 32px Consolas,Menlo,monospace;padding:6px 0;display:flex;align-items:center;justify-content:center;gap:10px}
 .xor4 span{color:var(--purple)}
 .xor4 b{color:var(--accent-d)}
 .xor4 .hot{background:var(--accent-l)}
-.xor4.two div{font-size:30px}
 
 /* 手順 */
-.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
-.steps li{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1.5px solid var(--ink);border-radius:12px;padding:8px 14px;font-size:19px;line-height:1.5;margin:0;opacity:.45;transition:opacity .3s,background .3s,transform .3s}
-.steps li.on{opacity:1;background:var(--accent-l);transform:translateX(6px)}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.steps li{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1.5px solid var(--ink);border-radius:12px;padding:10px 16px;font-size:25px;line-height:1.5;margin:0;opacity:.45;transition:opacity .3s,background .3s}
+.steps li.on{opacity:1;background:var(--accent-l)}
 .steps li.done{opacity:1}
-.steps .sn{font-size:24px;font-weight:900;color:var(--accent-d);line-height:1.3;font-family:var(--serif)}
-.steps .r0,.steps .r1{border-radius:6px;padding:0 3px;transition:background .3s}
-.steps.a0 li.on .r0,.steps.a1 li.on .r1{background:#fff;box-shadow:inset 0 -3px 0 var(--accent)}
-
-/* CNOT */
-.tagc{display:inline-block;font-size:15px;font-weight:900;border:1.5px solid var(--ink);border-radius:999px;padding:0 10px}
-.tagc.ctl{background:var(--ink);color:#fff}
-.tagc.tgt{background:var(--accent-l)}
-.defbox{position:relative;background:#fff;border:1.5px solid var(--ink);border-radius:12px;padding:16px 18px 12px;margin-top:18px;font-size:20px;line-height:1.7}
-.defbox::before{content:"名前の意味";position:absolute;left:14px;top:-14px;background:var(--purple);color:#fff;font-weight:800;font-size:14px;border-radius:999px;padding:2px 14px}
-.slide[data-id="cnot"] svg.zx{max-height:420px}
-.ca-list{display:flex;flex-direction:column;gap:10px}
-.ca-list div{display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid var(--ink);border-radius:12px;padding:8px 14px;font-size:21px}
-.ca-i{flex:none;width:30px;height:30px;border-radius:50%;border:2.5px solid var(--ink)}
-.ca-i.g{background:var(--zg)}
-.ca-i.r{background:var(--zr)}
-
-/* その先へ */
-.slide[data-id="more"] svg.zx{max-height:225px}
-.next2{display:flex;flex-direction:column;gap:10px}
-.next2 div{background:#fff;border:1.5px solid var(--ink);border-radius:12px;padding:8px 16px;font-size:20px}
-
-/* 練習問題・まとめ */
-.slide[data-id="quiz"] .quiz.q6{grid-auto-rows:1fr;gap:16px 18px}
-.slide[data-id="quiz"] .qz{padding:12px 16px}
-.slide[data-id="quiz"] .qz-q{font-size:20px}
-.slide[data-id="quiz"] .qz-a{font-size:18px}
-.sumlist .sl{font-size:20px;padding:8px 18px}
+.steps .sn{font-size:27px;font-weight:900;color:var(--accent-d);line-height:1.35;font-family:var(--serif)}
+.steps .r0,.steps .r1{border-radius:4px;padding:0 3px}
+.steps.a0 li.on .r0,.steps.a1 li.on .r1{box-shadow:inset 0 -4px 0 var(--accent)}
+.zt.dl{font:900 24px Consolas,Menlo,"Hiragino Kaku Gothic ProN",sans-serif;fill:var(--accent-d)}
+.slide[data-id="bits"] .body.cols > .card{align-self:center}
+.slide:is([data-id="bitstate"],[data-id="copy"],[data-id="add4"],[data-id="not"],[data-id="addnot"],[data-id="cnot"],[data-id="cnotca"]) ul.plain li{font-size:27px;margin:14px 0}
+.slide:is([data-id="bitstate"],[data-id="copy"],[data-id="add4"],[data-id="not"],[data-id="addnot"],[data-id="cnot"],[data-id="cnotca"]) .lead{font-size:27px}
+.slide:is([data-id="bitstate"],[data-id="copy"],[data-id="add4"],[data-id="addnot"],[data-id="cnotca"]) .point{font-size:26px}
+.sumlist{gap:14px !important}
+.sumlist .sl{padding:12px 24px !important}
 
 </style>
 </head>
@@ -636,98 +588,65 @@ i.zs svg{display:block}
       <div class="chap pop">『Quantum in Pictures』 ゼミ資料 ／ 圏論的量子情報ゼミ</div>
       <h1 class="pop" style="--d:.1s">2.2<br>クモにかまれた！</h1>
       <div class="sub pop" style="--d:.2s">― 2.2 A spider bit me! ―</div>
-      <div class="pun pop" style="--d:.22s">💡 題名の <b>bit</b> は「かんだ（bite の過去形）」と「<b>ビット</b>」をかけたダジャレ</div>
       <ul class="agenda ag-t">
         <li class="agroup pop" style="--d:.25s">目次</li>
-        <li class="pop" style="--d:.29s"><span class="num" style="background:var(--accent)">1</span>ビットと 2 つの「ビット状態」<em>0 と 1</em></li>
-        <li class="pop" style="--d:.31s"><span class="num" style="background:var(--accent)">2</span>緑のクモ ＝ COPY<em>コピー</em></li>
-        <li class="pop" style="--d:.33s"><span class="num" style="background:var(--blue)">3</span>赤のクモ ＝ ADD と NOT<em>1 + 1 = 0</em></li>
-        <li class="pop" style="--d:.35s"><span class="num" style="background:var(--purple)">4</span>CNOT ＝ COPY ＋ ADD<em>制御 NOT</em></li>
-        <li class="pop" style="--d:.37s"><span class="num" style="background:var(--ink)">✓</span>まとめ と 練習問題</li>
+        <li class="pop" style="--d:.27s"><span class="num" style="background:var(--ink)">1</span>ビットと 2 つの「ビット状態」<em>0 と 1</em></li>
+        <li class="pop" style="--d:.29s"><span class="num" style="background:var(--accent)">2</span>緑のクモ ＝ COPY<em>コピー</em></li>
+        <li class="pop" style="--d:.31s"><span class="num" style="background:var(--blue)">3</span>赤のクモ ＝ ADD と NOT<em>1 + 1 = 0</em></li>
+        <li class="pop" style="--d:.33s"><span class="num" style="background:var(--purple)">4</span>CNOT ＝ COPY ＋ ADD<em>制御 NOT</em></li>
+        <li class="pop" style="--d:.35s"><span class="num" style="background:#8f88b3">✓</span>まとめ</li>
       </ul>
     </div>
     <div class="card pop" style="--d:.4s;padding:14px 18px">
-      <svg class="zx" id="zTitle" viewBox="0 0 420 320"></svg>
-      <div class="hint" style="text-align:center;font-size:17px;font-weight:700">CNOT にビットを入れると… <b style="color:var(--accent-d)">緑 ＝ コピー</b>　<b style="color:var(--blue)">赤 ＝ 融合（角度を足す）</b></div>
+      <svg class="zx" id="zTitle" viewBox="0 0 420 330"></svg>
+      <div class="hint" style="text-align:center;font-size:17px;font-weight:700"><b style="color:var(--accent-d)">緑のクモ ＝ コピー</b>　<b style="color:var(--blue)">赤のクモ ＝ 足し算</b></div>
     </div>
   </div>
 </section>
 
-<!-- 2. この節のねらい -->
+<!-- 2. この節の主張 -->
 <section class="slide" data-id="msg">
-  <div class="chap">第2章 ／ 2.2 A spider bit me!</div>
-  <h2>スパイダーで、ふつうのビットの計算が描ける<small>2.2 のねらい</small></h2>
-  <div class="body cols" style="grid-template-columns:1.1fr 1fr">
-    <div class="card pop">
-      <div class="mini-h">この節で作る「ビットの辞書」</div>
-      <div class="dict">
-        <div><span class="an-ic"><i class="zs" data-c="r"></i></span>ビット <b>0</b></div>
-        <div><span class="an-ic"><i class="zs" data-c="r" data-p="180"></i></span>ビット <b>1</b></div>
-        <div><span class="an-ic"><i class="zs" data-c="g" data-l="y"></i></span><b>COPY</b></div>
-        <div><span class="an-ic"><i class="zs" data-c="r" data-l="3"></i></span><b>ADD ⊕</b></div>
-        <div><span class="an-ic"><i class="zs" data-c="r" data-p="180" data-l="2"></i></span><b>NOT</b></div>
-        <div><span class="an-ic"><i class="zs" data-l="cnot"></i></span><b>CNOT</b></div>
-      </div>
-    </div>
+  <div class="chap">第2章 ／ 2.2 A spider bit me! ／ 2.2 のねらい</div>
+  <div class="body cols" data-min-text="560">
+    <div class="card pop"><svg class="zx" id="zMsg" viewBox="0 0 480 430"></svg></div>
     <div>
-      <p class="lead pop">量子コンピュータは <b>量子ビット</b> で動きます。<br>でも、ふつうのコンピュータとつなぐには <b>ビット</b>（0 と 1）も使いたい。</p>
-      <div class="bigmsg pop" style="--d:.1s">そこで…<br>使う <b class="k">状態と箱をしぼる</b> と、<br>スパイダーが <b class="k">ビットの計算</b> になる！</div>
+      <div class="keymsg pop" style="--d:.15s">量子ビットも<br>状態と箱をしぼれば<br><b class="k">ビット</b> として<br>使える</div>
     </div>
   </div>
   <div class="pageno"></div>
 </section>
 
-<!-- 扉：SECTION 1 -->
-<section class="slide door" style="--c:var(--accent)">
-  <div class="door-bg">∘</div>
+<!-- 扉 1 -->
+<section class="slide door" style="--c:var(--ink)">
+  <div class="door-bg">π</div>
   <div class="door-wrap">
     <div class="door-num">1</div>
     <div>
       <div class="door-label pop"><span class="door-book">2.2 A spider bit me!</span>SECTION 1</div>
       <h1 class="pop" style="--d:.1s">ビットと<br>「ビット状態」</h1>
       <p class="door-lead pop" style="--d:.2s">量子ビットを、ふつうのビットのように使う</p>
-      <div class="door-topics pop" style="--d:.3s"><span>ビット ＝ 0 か 1</span><span>状態と箱をしぼる</span><span>赤 0° ↔ 0</span><span>赤 180° ↔ 1</span></div>
+      <div class="door-topics pop" style="--d:.3s"><span>ビット ＝ 0 か 1</span><span>赤 0° ＝ 0</span><span>赤 180° ＝ 1</span><span>0 と 1 の列</span></div>
     </div>
   </div>
   <div class="pageno"></div>
 </section>
 
-<!-- ビットとは -->
+<!-- ビット -->
 <section class="slide" data-id="bits">
   <div class="chap">SECTION 1 ／ ふつうのコンピュータとビット</div>
-  <h2>ふつうのコンピュータは「ビット」で動く<small>2.2（ビット）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1.05fr)">
-    <div>
-      <p class="lead pop">パソコン・スマホなどは <b class="k">ビット</b>（bit）で動いている。<br>ビットは <b class="k">0 か 1</b> のどちらか。</p>
-      <div class="cmp2 pop" style="--d:.1s">
-        <div class="cmp2-c"><div class="cmp2-h">ふつうのコンピュータ</div><b>ビット</b><small>0 か 1</small></div>
-        <div class="cmp2-c q"><div class="cmp2-h">量子コンピュータ</div><b>量子ビット</b>（qubit）<small>ビットよりずっと強力</small></div>
-      </div>
-      <div class="point frag">「hi」と打って送信すると、コンピュータには <b class="mono">0110100001101001</b> という <b>0 と 1 の列</b> に見えている</div>
-    </div>
-    <div class="card pop" style="--d:.15s">
-      <div class="mini-h">文字 → 0 と 1 の列（1 文字 = 8 ビット）</div>
-      <div class="txtin"><span>文字を入力：</span><input id="binIn" type="text" value="hi" maxlength="4" spellcheck="false" autocomplete="off"></div>
+  <h2>ふつうのコンピュータはビット（0 か 1）で動く<small>2.2（ビット）</small></h2>
+  <div class="body cols" style="grid-template-columns:500px 1fr">
+    <div class="card pop">
+      <div class="txtin"><span>文字：</span><input id="binIn" type="text" value="hi" maxlength="4" spellcheck="false" autocomplete="off"></div>
       <div class="bin-list" id="binList"></div>
       <div class="bin-all" id="binAll"></div>
-      <div class="hint" style="text-align:center">半角の英数字・記号を 4 文字まで（文字コード ASCII）</div>
     </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 量子ビットをビットのように使う -->
-<section class="slide" data-id="why">
-  <div class="chap">SECTION 1 ／ 量子コンピュータの中でビットを使う</div>
-  <h2>量子コンピュータでもビットを使いたい<small>2.2（ビット）</small></h2>
-  <div class="body" style="display:flex;flex-direction:column;justify-content:center;gap:12px">
-    <div class="why3 pop">
-      <div><span class="ic">🔌</span><b>なぜ？</b><small>ふつうのコンピュータと<br>つなぎたいから</small></div>
-      <div><span class="ic">✂️</span><b>どうやって？</b><small>使ってよい <b>状態</b> と <b>箱</b> を<br>ビットらしいものだけにしぼる</small></div>
-      <div><span class="ic">🎭</span><b>すると…</b><small>ふつうのコンピュータで<br>ビットを扱っているように見える</small></div>
-    </div>
-    <div class="card stp pop" id="cdWhy" style="--d:.15s;padding:8px 18px">
-      <svg class="zx" id="zWhy" viewBox="0 0 560 210"></svg>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">0</span><span>ビットは <b class="k">0 か 1</b> のどちらか</span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">⚛</span><span>量子コンピュータは、ビットよりずっと強力な <b>量子ビット</b> で動く</span></li>
+        <li class="pop" style="--d:.16s"><span class="ico">🔌</span><span>ふつうのコンピュータとつなぐため、量子コンピュータでも <b class="k">ビットを使いたい</b></span></li>
+      </ul>
     </div>
   </div>
   <div class="pageno"></div>
@@ -736,15 +655,17 @@ i.zs svg{display:block}
 <!-- 2 つのビット状態 -->
 <section class="slide" data-id="bitstate">
   <div class="chap">SECTION 1 ／ 1 量子ビットの「ビット状態」</div>
-  <h2>2 つの「ビット状態」<small>2.2（ビット）</small></h2>
-  <div class="body" style="display:flex;flex-direction:column;justify-content:center">
-    <p class="lead pop" style="text-align:center;margin:0 0 14px">1 つの量子ビットには、次の <b class="k">2 つの状態だけ</b> を許す</p>
-    <div class="bs2">
-      <div class="card bs-card pop" style="--d:.1s"><svg class="zx" id="zBs0" viewBox="0 0 300 170"></svg><div class="bs-cap"><b>0° の赤のクモ状態</b> ＝ ビットの <b class="k">0</b></div></div>
-      <div class="card bs-card pop" style="--d:.2s"><svg class="zx" id="zBs1" viewBox="0 0 300 170"></svg><div class="bs-cap"><b>180° の赤のクモ状態</b> ＝ ビットの <b class="k">1</b></div></div>
+  <h2>2 つの状態だけを許す：赤 0° ＝ 0、赤 180° ＝ 1<small>2.2（ビット）</small></h2>
+  <div class="body cols">
+    <div class="card pop"><svg class="zx" id="zBs" viewBox="0 0 330 300"></svg></div>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">✂</span><span>使ってよい <b>状態</b> と <b>箱</b> を、ビットらしいものだけにしぼる</span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">0</span><span><b>0° の赤のクモ状態</b> ＝ ビットの <b class="k">0</b></span></li>
+        <li class="pop" style="--d:.16s"><span class="ico">1</span><span><b>180° の赤のクモ状態</b> ＝ ビットの <b class="k">1</b></span></li>
+      </ul>
+      <div class="point frag">角度 0° は何も書かないので、<b style="white-space:nowrap">無地の赤丸 ＝ 0</b></div>
     </div>
-    <div class="point frag" style="margin-top:20px">角度 0° のときは何も書かないので、<b>無地の赤丸 = 0</b>、<b>「180°」と書いた赤丸 = 1</b> と覚えればよい</div>
-    <div class="point blue frag">補足：『量子コンピュータの頭の中』の書き方では、それぞれ <b class="math">|0⟩</b> と <b class="math">|1⟩</b> に当たる（定数倍を除く）</div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -752,34 +673,31 @@ i.zs svg{display:block}
 <!-- ビット列 -->
 <section class="slide" data-id="bitstr">
   <div class="chap">SECTION 1 ／ 量子ビットを並べる</div>
-  <h2>並べると「0 と 1 の列」になる<small>2.2（ビット）</small></h2>
-  <div class="body" style="display:flex;flex-direction:column;justify-content:center">
-    <p class="lead pop">量子ビットを何個か並べ、<b>1 つ 1 つ</b>を 2 つのビット状態のどちらかにすると、ふつうのコンピュータと同じ <b class="k">0 と 1 の列</b> が作れる</p>
-    <div class="card pop" style="--d:.1s;padding:8px 18px">
-      <svg class="zx" id="zStr" viewBox="0 0 600 220" style="max-height:260px"></svg>
-      <div class="str-out">ビット列：<b id="strOut"></b><span id="strNote"></span></div>
-      <div class="btns" style="justify-content:center">
-        <button class="b" data-bits="10010">10010（教科書の例）</button>
-        <button class="b" data-bits="01101000">「h」＝ 01101000</button>
-        <button class="b" data-bits="01101001">「i」＝ 01101001</button>
-        <button class="b" data-bits="?">🎲 ランダム</button>
+  <h2>並べると 0 と 1 の列になる<small>2.2（ビット）</small></h2>
+  <div class="body wide-fig">
+    <div class="card pop">
+      <svg class="zx" id="zStr" viewBox="0 0 600 220"></svg>
+      <div class="btns" style="justify-content:center;margin-top:4px">
+        <button class="b" data-bits="10010">10010</button>
+        <button class="b" data-bits="01101000">01101000（h）</button>
+        <button class="b" data-bits="01101001">01101001（i）</button>
       </div>
-      <div class="hint" style="text-align:center">クモをクリックすると 0 ⇄ 1（0° ⇄ 180°）が切り替わる</div>
     </div>
+    <p class="lead pop" style="--d:.1s;text-align:center;margin:0">1 つ 1 つの量子ビットを 0 か 1 にすると、ふつうのコンピュータと同じ <b class="k">0 と 1 の列</b></p>
   </div>
   <div class="pageno"></div>
 </section>
 
-<!-- 扉：SECTION 2 -->
+<!-- 扉 2 -->
 <section class="slide door" style="--c:var(--accent)">
-  <div class="door-bg">⋎</div>
+  <div class="door-bg">Δ</div>
   <div class="door-wrap">
     <div class="door-num">2</div>
     <div>
       <div class="door-label pop"><span class="door-book">2.2 A spider bit me!</span>SECTION 2</div>
       <h1 class="pop" style="--d:.1s">緑のクモ ＝ COPY</h1>
-      <p class="door-lead pop" style="--d:.2s">ビットにぴったりの最初の「箱」</p>
-      <div class="door-topics pop" style="--d:.3s"><span>0 をコピー</span><span>1 もコピー</span><span>コピーはふつうのコンピュータの得意技</span></div>
+      <p class="door-lead pop" style="--d:.2s">ビットにぴったりの箱</p>
+      <div class="door-topics pop" style="--d:.3s"><span>0 も 1 もコピー</span><span>ふつうのコンピュータの得意技</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -788,25 +706,24 @@ i.zs svg{display:block}
 <!-- コピー -->
 <section class="slide" data-id="copy">
   <div class="chap">SECTION 2 ／ 緑のクモはビットをコピーする</div>
-  <h2>緑のクモはビットを「コピー」する<small>2.2（COPY）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
-    <div>
-      <div class="eqcards pop">
-        <div class="eqc"><span class="eqc-t">すでに知っている</span><svg class="zx" id="zCpEq0" viewBox="0 0 290 150"></svg><small>0 → 0, 0</small></div>
-        <div class="eqc new"><span class="eqc-t">じつは 180° も</span><svg class="zx" id="zCpEq1" viewBox="0 0 290 150"></svg><small>1 → 1, 1</small></div>
-      </div>
-      <div class="point frag"><b>コピー</b>はふつうのコンピュータがとても得意なこと。<br>→ 緑のクモは <b class="k">ビットにぴったりの箱（COPY）</b></div>
-      <div class="point blue frag">補足：量子の世界では、<b>どんな状態でも</b>コピーできるわけではない（量子複製不可能定理）。緑のクモがコピーできるのは <b>ビット状態</b> だから</div>
-    </div>
-    <div class="card stp pop" id="cdCopy" style="--d:.15s;padding:10px 16px">
+  <h2>緑のクモは 0 も 1 もコピーする<small>2.2（COPY）</small></h2>
+  <div class="body cols" data-min-text="520">
+    <div class="card stp pop" id="cdCopy">
       <svg class="zx" id="zCopy" viewBox="0 0 360 290"></svg>
       <div class="zctl"><div class="picker" id="pkCopy" data-label="入力"></div></div>
+    </div>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">0</span><span>0° の赤（0）がコピーされるのは、前に見たとおり</span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">1</span><span>180° の赤（1）も、同じようにコピーされる</span></li>
+      </ul>
+      <div class="point frag">コピーはふつうのコンピュータの得意技<br>→ 緑のクモは <b class="k" style="white-space:nowrap">ビットにぴったりの箱（COPY）</b></div>
     </div>
   </div>
   <div class="pageno"></div>
 </section>
 
-<!-- 扉：SECTION 3 -->
+<!-- 扉 3 -->
 <section class="slide door" style="--c:var(--blue)">
   <div class="door-bg">⊕</div>
   <div class="door-wrap">
@@ -814,8 +731,8 @@ i.zs svg{display:block}
     <div>
       <div class="door-label pop"><span class="door-book">2.2 A spider bit me!</span>SECTION 3</div>
       <h1 class="pop" style="--d:.1s">赤のクモ ＝<br>ADD と NOT</h1>
-      <p class="door-lead pop" style="--d:.2s">赤どうしは「融合」して角度を足す</p>
-      <div class="door-topics pop" style="--d:.3s"><span>1 + 1 = 0</span><span>ADD 箱 ⊕</span><span>NOT 箱</span><span>ADD に 1 を入れると NOT</span></div>
+      <p class="door-lead pop" style="--d:.2s">赤どうしは融合して角度を足す</p>
+      <div class="door-topics pop" style="--d:.3s"><span>1 + 1 = 0</span><span>ADD 箱 ⊕</span><span>NOT 箱</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -824,19 +741,15 @@ i.zs svg{display:block}
 <!-- 赤のクモに 2 ビット -->
 <section class="slide" data-id="add4">
   <div class="chap">SECTION 3 ／ 赤のクモにビットを 2 つ入れる</div>
-  <h2>赤のクモにビットを 2 つ入れると？<small>2.2（ADD）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+  <h2>赤のクモにビットを 2 つ入れると、角度が足される<small>2.2（ADD）</small></h2>
+  <div class="body cols">
+    <div class="card pop"><svg class="zx" id="zAdd4" viewBox="0 0 520 330"></svg></div>
     <div>
-      <p class="lead pop">赤のビット状態は、赤のクモでは <b>コピーされず</b>、<b class="k">融合</b> する（同じ色なので）。<br>→ 角度が <b>足し算</b> される</p>
-      <table class="tt pop" id="addTbl" style="--d:.1s">
-        <thead><tr><th>左の入力</th><th>右の入力</th><th>角度の足し算</th><th class="out">結果</th></tr></thead>
-        <tbody></tbody>
-      </table>
-      <div class="point frag">180° + 180° = 360° ＝ <b>ぐるっと一周</b> して 0° にもどる<br>→ <b class="k">1 と 1 を入れると 0</b> が出てくる</div>
-    </div>
-    <div class="card stp pop" id="cdAdd" style="--d:.15s;padding:10px 16px">
-      <svg class="zx" id="zAdd" viewBox="0 0 360 290"></svg>
-      <div class="zctl"><div class="picker" id="pkAddA" data-label="左"></div><div class="picker" id="pkAddB" data-label="右"></div></div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">✗</span><span>赤のビット状態は、赤のクモでは <b>コピーされない</b></span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">∘</span><span>同じ色なので <b class="k">融合</b> し、角度が足される</span></li>
+      </ul>
+      <div class="point frag">180° + 180° = 360°：一周して <b class="k">0°</b> にもどる</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -845,27 +758,16 @@ i.zs svg{display:block}
 <!-- ADD 箱 -->
 <section class="slide" data-id="addbox">
   <div class="chap">SECTION 3 ／ ADD 箱</div>
-  <h2>ADD 箱：1 + 1 = 0 の足し算<small>2.2（ADD）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+  <h2>ADD 箱：ビットの足し算では 1 + 1 = 0<small>2.2（ADD）</small></h2>
+  <div class="body cols">
+    <div class="card pop"><svg class="zx" id="zAddBox" viewBox="0 0 260 300"></svg></div>
     <div>
-      <p class="lead pop">0 と 1 の足し算に似ているが、<b>ビットには 2 がない</b>ので <b class="k">1 + 1 = 0</b> とする。<br>この箱を <b class="k">ADD 箱</b> とよび、変わったプラス記号 <b class="k">⊕</b> で書く</p>
+      <p class="lead pop">ビットには 2 がないので <b class="k">1 + 1 = 0</b> とする。<br>この箱を <b>ADD 箱</b> とよび、<b class="k">⊕</b> で書く</p>
       <div class="xor4 pop" style="--d:.1s">
         <div><span>0</span>⊕<span>0</span>=<b>0</b></div>
         <div><span>0</span>⊕<span>1</span>=<b>1</b></div>
         <div><span>1</span>⊕<span>0</span>=<b>1</b></div>
         <div class="hot"><span>1</span>⊕<span>1</span>=<b>0</b></div>
-      </div>
-      <div class="point frag" style="display:flex;gap:14px;align-items:center"><span class="an-ic"><i class="zs" data-c="r" data-l="3" data-big="1"></i></span><span>2 本の入力・1 本の出力をもつ <b>赤のクモ</b> ＝ ADD 箱 ⊕</span></div>
-      <div class="point blue frag">補足：『量子コンピュータの頭の中』の <b>XOR</b> と同じ（2 進数の足し算の 1 桁目）</div>
-    </div>
-    <div class="card pop" style="--d:.15s;padding:10px 16px">
-      <div class="mini-h">なぜ 1 + 1 = 0？ ― 角度の「時計」で考える</div>
-      <svg class="zx" id="zDial" viewBox="0 0 360 250"></svg>
-      <div class="zcap" id="zDialCap"></div>
-      <div class="zctl">
-        <button class="b" id="dialAdd1">＋1（180° まわす）</button>
-        <button class="b" id="dialAdd0">＋0（まわさない）</button>
-        <button class="b" id="dialReset">↺ リセット</button>
       </div>
     </div>
   </div>
@@ -875,20 +777,17 @@ i.zs svg{display:block}
 <!-- NOT 箱 -->
 <section class="slide" data-id="not">
   <div class="chap">SECTION 3 ／ NOT 箱</div>
-  <h2>NOT 箱：0 と 1 を入れかえる<small>2.2（NOT）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+  <h2>180° の赤のクモは NOT 箱（0 と 1 を入れかえる）<small>2.2（NOT）</small></h2>
+  <div class="body cols">
+    <div class="card pop"><svg class="zx" id="zNot" viewBox="0 0 470 250"></svg></div>
     <div>
-      <p class="lead pop">ビットのもう 1 つの大事な箱が <b class="k">NOT 箱</b>。ビットの値を <b>0 → 1</b>、<b>1 → 0</b> にひっくり返す</p>
-      <div class="xor4 two pop" style="--d:.1s">
+      <div class="xor4 two pop">
         <div>NOT <span>0</span> = <b>1</b></div>
         <div>NOT <span>1</span> = <b>0</b></div>
       </div>
-      <div class="point frag" style="display:flex;gap:14px;align-items:center"><span class="an-ic"><i class="zs" data-c="r" data-p="180" data-l="2" data-big="1"></i></span><span>これは <b>180° の 2 本足の赤のクモ</b> がやっていることそのもの。融合すると<br>180° + 0° = 180°（0→1）、180° + 180° = 0°（1→0）</span></div>
-      <div class="point blue frag">補足：『量子コンピュータの頭の中』の <b>X ゲート</b>（ビット反転）に当たる</div>
-    </div>
-    <div class="card stp pop" id="cdNot" style="--d:.15s;padding:10px 16px">
-      <svg class="zx" id="zNot" viewBox="0 0 360 290"></svg>
-      <div class="zctl"><div class="picker" id="pkNot" data-label="入力"></div></div>
+      <ul class="plain">
+        <li class="pop" style="--d:.08s"><span class="ico">∘</span><span>融合すると 180° + 0° = <b>180°</b>、180° + 180° = <b>0°</b></span></li>
+      </ul>
     </div>
   </div>
   <div class="pageno"></div>
@@ -896,37 +795,34 @@ i.zs svg{display:block}
 
 <!-- ADD に 1 を入れると NOT -->
 <section class="slide" data-id="addnot">
-  <div class="chap">SECTION 3 ／ 箱どうしの関係が絵でわかる</div>
+  <div class="chap">SECTION 3 ／ 箱どうしの関係</div>
   <h2>ADD 箱に 1 を差しこむと NOT 箱になる<small>2.2（ADD と NOT）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+  <div class="body cols">
+    <div class="card pop"><svg class="zx" id="zAnEq" viewBox="0 0 330 220"></svg></div>
     <div>
-      <p class="lead pop">スパイダーを使うと、ADD や NOT といった <b>箱どうしの関係</b> もすぐにわかる</p>
-      <div class="an-wrap">
-        <div class="eqc pop" style="--d:.1s"><span class="eqc-t">ADD の片足に 1 ＝ NOT</span><svg class="zx" id="zAnEq" viewBox="0 0 300 160"></svg></div>
-        <table class="tt small pop" style="--d:.15s">
-          <thead><tr><th>x</th><th>x ⊕ 1</th><th class="out">NOT x</th></tr></thead>
-          <tbody class="static"><tr><td>0</td><td>1</td><td class="out one">1</td></tr><tr><td>1</td><td>0</td><td class="out">0</td></tr></tbody>
-        </table>
-      </div>
-      <div class="point frag">理由は <b>融合するだけ</b>：ADD の 0° と差しこんだ 180° が足されて <b class="k">180° の 2 本足の赤 ＝ NOT</b></div>
-    </div>
-    <div class="card stp pop" id="cdAn" style="--d:.15s;padding:10px 16px">
-      <svg class="zx" id="zAn" viewBox="0 0 360 290"></svg>
+      <p class="lead pop">スパイダーを使うと、<b>箱どうしの関係</b> もすぐにわかる</p>
+      <ul class="plain">
+        <li class="pop" style="--d:.08s"><span class="ico">∘</span><span>融合するだけ：0° + 180° = <b class="k">180°</b> の 2 本足の赤 ＝ NOT</span></li>
+      </ul>
+      <table class="tt small pop" style="--d:.15s;margin:6px 0 0">
+        <thead><tr><th>x</th><th>x ⊕ 1</th><th class="out">NOT x</th></tr></thead>
+        <tbody class="static"><tr><td>0</td><td>1</td><td class="out one">1</td></tr><tr><td>1</td><td>0</td><td class="out">0</td></tr></tbody>
+      </table>
     </div>
   </div>
   <div class="pageno"></div>
 </section>
 
-<!-- 扉：SECTION 4 -->
+<!-- 扉 4 -->
 <section class="slide door" style="--c:var(--purple)">
-  <div class="door-bg">⇄</div>
+  <div class="door-bg">∘</div>
   <div class="door-wrap">
     <div class="door-num">4</div>
     <div>
       <div class="door-label pop"><span class="door-book">2.2 A spider bit me!</span>SECTION 4</div>
       <h1 class="pop" style="--d:.1s">CNOT ＝<br>COPY ＋ ADD</h1>
-      <p class="door-lead pop" style="--d:.2s">緑と赤のクモの「握手」でできる大事な箱</p>
-      <div class="door-topics pop" style="--d:.3s"><span>2 入力・2 出力</span><span>左が右を「制御」</span><span>コピー → 融合</span><span>ゲート</span></div>
+      <p class="door-lead pop" style="--d:.2s">緑と赤のクモの握手でできる箱</p>
+      <div class="door-topics pop" style="--d:.3s"><span>2 入力・2 出力</span><span>左が右を制御</span><span>ゲート</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -935,20 +831,15 @@ i.zs svg{display:block}
 <!-- CNOT の形 -->
 <section class="slide" data-id="cnot">
   <div class="chap">SECTION 4 ／ CNOT</div>
-  <h2>CNOT：緑と赤のクモの握手<small>2.2（CNOT）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)">
+  <h2>CNOT は 3 本足の緑と赤のクモの握手<small>2.2（CNOT）</small></h2>
+  <div class="body cols">
+    <div class="card pop"><svg class="zx" id="zCn" viewBox="0 0 420 330"></svg></div>
     <div>
-      <ul class="plain pop">
-        <li><span class="ico">2</span><span><b>入力 2 本・出力 2 本</b> の箱</span></li>
-        <li><span class="ico">⊸</span><span><b>3 本足の緑のクモ</b> と <b>3 本足の赤のクモ</b> が <b class="k">握手</b>（横の線でつながる）</span></li>
+      <ul class="plain">
+        <li class="pop"><span class="ico">2</span><span><b>入力 2 本・出力 2 本</b> の箱</span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">―</span><span>3 本足の緑と 3 本足の赤が、横の線でつながる</span></li>
+        <li class="pop" style="--d:.16s"><span class="ico">C</span><span><b>Controlled NOT</b>：左のビットが、右に NOT をかけるかを <b class="k">制御</b> する</span></li>
       </ul>
-      <div class="defbox pop" style="--d:.1s">CNOT ＝ <b>Controlled NOT</b>（制御 NOT）<br>
-        <span class="tagc ctl">左</span> のビットが、<span class="tagc tgt">右</span> のビットを<br>
-        ・<b>そのままにする</b> か<br>・<b>NOT をかける</b> か を <b class="k">「制御」</b>する</div>
-      <div class="point frag">左に 0 が来たら右は「そのまま」、1 が来たら右に「NOT」― 次のスライドで、<b>クモのルールだけ</b>で確かめる</div>
-    </div>
-    <div class="card pop" style="--d:.15s;padding:10px 16px">
-      <svg class="zx" id="zCn" viewBox="0 0 420 330"></svg>
     </div>
   </div>
   <div class="pageno"></div>
@@ -957,41 +848,36 @@ i.zs svg{display:block}
 <!-- CNOT の中で起きること -->
 <section class="slide" data-id="cnotstep">
   <div class="chap">SECTION 4 ／ CNOT の中で何が起きている？</div>
-  <h2>左に 0 / 1 を入れると何が起きる？<small>2.2（CNOT）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
-    <div>
-      <ol class="steps pop" id="csSteps">
-        <li><span class="sn">①</span><div><b>コピー</b>：左の入力を緑のクモがコピー。<br>1 つは出力 1 へ、もう 1 つは握手の線を通って赤のクモへ</div></li>
-        <li><span class="sn">②</span><div><b>融合</b>：赤どうしなので、届いたコピーと赤のクモがくっつく（角度を足す）</div></li>
-        <li><span class="sn">③</span><div><b>結果</b>：<span class="r0">0 → 右は <b>何もしない線</b></span> ／ <span class="r1">1 → 右は <b>NOT</b></span></div></li>
-      </ol>
-      <div class="point frag">出力 1 には <b>入れたビットがそのまま</b> 出てくる。右の線は、左のビットしだいで <b class="k">そのまま</b> か <b class="k">NOT</b></div>
-    </div>
-    <div class="card stp pop" id="cdCs" style="--d:.15s;padding:10px 16px">
+  <h2>左が 0 なら右はそのまま、1 なら右に NOT<small>2.2（CNOT）</small></h2>
+  <div class="body cols" data-min-text="500">
+    <div class="card stp pop" id="cdCs">
       <svg class="zx" id="zCs" viewBox="0 0 420 320"></svg>
       <div class="zctl"><div class="picker" id="pkCs" data-label="左の入力"></div></div>
+    </div>
+    <div>
+      <ol class="steps pop" id="csSteps">
+        <li><span class="sn">①</span><div><b>コピー</b>：左の入力を緑のクモがコピー</div></li>
+        <li><span class="sn">②</span><div><b>融合</b>：届いたコピーと赤のクモがくっつく</div></li>
+        <li><span class="sn">③</span><div><span class="r0">0 → 右は <b>何もしない線</b></span><br><span class="r1">1 → 右は <b>NOT</b></span></div></li>
+      </ol>
     </div>
   </div>
   <div class="pageno"></div>
 </section>
 
-<!-- CNOT の真理値表 -->
+<!-- CNOT の入力と出力 -->
 <section class="slide" data-id="cnottt">
   <div class="chap">SECTION 4 ／ CNOT に 2 つのビットを入れる</div>
-  <h2>CNOT の入力と出力<small>2.2（CNOT）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+  <h2>CNOT の出力は（入力 1, 入力 1 ⊕ 入力 2）<small>2.2（CNOT）</small></h2>
+  <div class="body cols">
+    <div class="card pop"><svg class="zx" id="zCt" viewBox="0 0 470 280"></svg></div>
     <div>
-      <p class="lead pop">右の入力にもビットを入れてみる。例：<b>左に 1、右に 0</b> → 右のビットは <b class="k">1 に変わる</b></p>
-      <table class="tt pop" id="ctTbl" style="--d:.1s">
-        <thead><tr><th>入力 1</th><th>入力 2</th><th class="out">出力 1</th><th class="out">出力 2</th><th>右の線</th></tr></thead>
-        <tbody></tbody>
+      <p class="lead pop">左図は、左に 1、右に 0 を入れた例。右のビットは <b class="k">1 に変わる</b></p>
+      <table class="tt pop" id="ctTbl" style="--d:.1s;margin:0">
+        <thead><tr><th>入力 1</th><th>入力 2</th><th class="out">出力 1</th><th class="out">出力 2</th></tr></thead>
+        <tbody class="static"></tbody>
       </table>
-      <div class="point frag">出力 1 ＝ <b>入力 1</b>、出力 2 ＝ <b class="k">入力 1 ⊕ 入力 2</b></div>
-      <div class="point blue frag">量子コンピュータで使う、このような箱を <b>ゲート</b>（gate）とよぶ</div>
-    </div>
-    <div class="card stp pop" id="cdCt" style="--d:.15s;padding:10px 16px">
-      <svg class="zx" id="zCt" viewBox="0 0 420 320"></svg>
-      <div class="hint" style="text-align:center;margin-top:0">表の行をクリックすると、その入力で動く</div>
+      <div class="point frag">量子コンピュータで使う、このような箱を <b class="k">ゲート</b> とよぶ</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1001,36 +887,29 @@ i.zs svg{display:block}
 <section class="slide" data-id="cnotca">
   <div class="chap">SECTION 4 ／ 絵を見るだけでわかること</div>
   <h2>CNOT ＝ COPY ＋ ADD<small>2.2（CNOT）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+  <div class="body cols" data-min-text="500">
+    <div class="card stp pop" id="cdCa"><svg class="zx" id="zCa" viewBox="0 0 400 320"></svg></div>
     <div>
-      <p class="lead pop">CNOT の 2 匹のクモを <b>ずらして</b> みると…</p>
-      <div class="ca-list pop" style="--d:.1s">
-        <div><span class="ca-i g"></span><b>緑のクモ</b> ＝ <b class="k">COPY</b>：入力 1 をコピー</div>
-        <div><span class="ca-i r"></span><b>赤のクモ</b> ＝ <b class="k">ADD</b>：コピーと入力 2 を ⊕</div>
-      </div>
-      <div class="formula frag" style="margin-top:16px;font-size:28px">(a, b) ↦ (a, <b style="color:var(--accent-d)">a ⊕ b</b>)</div>
-      <div class="point frag">クモは足を曲げたり伸ばしたりしても <b>つながり方が同じなら同じもの</b>。<br>→ 計算しなくても、<b class="k">絵を見るだけ</b>で CNOT がコピーと ADD でできているとわかる</div>
-    </div>
-    <div class="card stp pop" id="cdCa" style="--d:.15s;padding:10px 16px">
-      <svg class="zx" id="zCa" viewBox="0 0 400 320"></svg>
+      <ul class="plain">
+        <li class="pop"><span class="ico" style="background:var(--zg);color:#fff">緑</span><span><b>緑のクモ</b> ＝ <b class="k">COPY</b>：入力 1 をコピー</span></li>
+        <li class="pop" style="--d:.08s"><span class="ico" style="background:var(--zr);color:#fff">赤</span><span><b>赤のクモ</b> ＝ <b class="k">ADD</b>：コピーと入力 2 を足す</span></li>
+      </ul>
+      <div class="point frag">クモをずらしても、<b>つながり方が同じなら同じ図</b><br>→ <b class="k">絵を見るだけ</b> でわかる</div>
     </div>
   </div>
   <div class="pageno"></div>
 </section>
 
-<!-- さらに多くの量子ゲート -->
+<!-- その先へ -->
 <section class="slide" data-id="more">
   <div class="chap">SECTION 4 ／ その先へ</div>
-  <h2>量子ビットの箱・状態は、もっとたくさんある<small>2.2（その先へ）</small></h2>
-  <div class="body" style="display:flex;flex-direction:column;justify-content:center;gap:12px">
-    <p class="lead pop" style="margin:0">ビットのために使ったのは、ほんの一部。量子ビットには <b class="k">量子ゲート</b>（quantum gate）とよばれる箱がもっとたくさんあり、それらを組み合わせて量子コンピュータを作る</p>
-    <div class="card pop" style="--d:.1s;padding:6px 18px">
-      <svg class="zx" id="zMore" viewBox="0 0 640 200"></svg>
-    </div>
-    <div class="next2 pop" style="--d:.2s">
-      <div>🛒 量子コンピュータはまだお店では売っていない ― <b>今まさに発明されているところ！</b></div>
-      <div>🔬 次は、実験室の研究者たちが <b>クモから量子コンピュータを組み立てる方法</b> を見ていく</div>
-    </div>
+  <h2>量子ゲートは、もっとたくさんある<small>2.2（量子ゲート）</small></h2>
+  <div class="body wide-fig">
+    <div class="card pop"><svg class="zx" id="zMore" viewBox="0 0 640 200"></svg></div>
+    <ul class="plain pop" style="--d:.1s">
+      <li><span class="ico">🛒</span><span>量子コンピュータはまだお店では売っていない ― <b>今まさに発明されているところ</b></span></li>
+      <li><span class="ico">🔬</span><span>次は、実験室で <b>クモから量子コンピュータを組み立てる方法</b> を見ていく</span></li>
+    </ul>
   </div>
   <div class="pageno"></div>
 </section>
@@ -1040,27 +919,12 @@ i.zs svg{display:block}
   <div class="chap">Summary ／ 2.2</div>
   <h2>2.2 のまとめ<small>A spider bit me!</small></h2>
   <div class="body sumlist">
-    <div class="sl pop" style="--d:0.00s;--c:var(--accent)"><span class="sl-n">1</span><div>量子ビットをビットとして使うには、<b class="k">状態と箱をビットらしいものだけにしぼる</b></div></div>
-    <div class="sl pop" style="--d:0.07s;--c:var(--accent)"><span class="sl-n">2</span><div>ビット状態は 2 つ：<i class="zs" data-c="r"></i> <b>赤 0° ＝ 0</b>、<i class="zs" data-c="r" data-p="180"></i> <b>赤 180° ＝ 1</b>。並べると 0 と 1 の列になる</div></div>
-    <div class="sl pop" style="--d:0.14s;--c:var(--accent)"><span class="sl-n">3</span><div><b>緑のクモ</b> は 0 も 1 も <b class="k">コピー</b> する（COPY）</div></div>
-    <div class="sl pop" style="--d:0.21s;--c:var(--blue)"><span class="sl-n">4</span><div><b>赤のクモ</b> はビットと <b class="k">融合</b> して角度を足す → <b class="k">ADD 箱 ⊕</b>（1 ⊕ 1 = 0）。<b>180° の赤</b> は <b class="k">NOT 箱</b></div></div>
-    <div class="sl pop" style="--d:0.28s;--c:var(--blue)"><span class="sl-n">5</span><div>ADD の片足に 1 を差しこむと NOT になる ― <b>融合するだけ</b>でわかる</div></div>
-    <div class="sl pop" style="--d:0.35s;--c:var(--purple)"><span class="sl-n">6</span><div><b class="k">CNOT</b> ＝ 緑と赤の握手 ＝ <b>COPY ＋ ADD</b>：(a, b) ↦ (a, a ⊕ b)。左のビットが右に NOT をかけるかを制御する</div></div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 練習問題 -->
-<section class="slide" data-id="quiz">
-  <div class="chap">Practice ／ 2.2</div>
-  <h2>練習問題<small>クリックで答え</small><button class="b qz-all" data-quiz-all>答えをぜんぶ表示</button></h2>
-  <div class="body quiz q6">
-    <div class="qz pop" style="--d:0.00s"><div class="qz-q"><span class="qz-no">Q1</span><span>ビット列 <b class="mono">0110</b> を表すクモの並びは？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><i class="zs" data-c="r"></i><i class="zs" data-c="r" data-p="180"></i><i class="zs" data-c="r" data-p="180"></i><i class="zs" data-c="r"></i>（赤 0°・180°・180°・0°）</span></div></div>
-    <div class="qz pop" style="--d:0.05s"><div class="qz-q"><span class="qz-no">Q2</span><span>緑のクモに 1（<i class="zs" data-c="r" data-p="180"></i>）を入れると？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><i class="zs" data-c="r" data-p="180"></i><i class="zs" data-c="r" data-p="180"></i> 1 が 2 つにコピーされる</span></div></div>
-    <div class="qz pop" style="--d:0.10s"><div class="qz-q"><span class="qz-no">Q3</span><span><b class="mono">1 ⊕ 1 ⊕ 1</b> はいくつ？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>1</b>（180° × 3 = 540° = 360° + 180° → 180°）</span></div></div>
-    <div class="qz pop" style="--d:0.15s"><div class="qz-q"><span class="qz-no">Q4</span><span>ADD 箱の片方の足に <b>0</b>（<i class="zs" data-c="r"></i>）を差しこむと？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">0° + 0° = 0° の 2 本足の赤 ＝ <b>何もしない線</b>（x ⊕ 0 = x）</span></div></div>
-    <div class="qz pop" style="--d:0.20s"><div class="qz-q"><span class="qz-no">Q5</span><span>CNOT に（入力 1, 入力 2）＝（1, 1）を入れると？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>（1, 0）</b>：左の 1 が右に NOT をかけ、1 → 0</span></div></div>
-    <div class="qz pop" style="--d:0.25s"><div class="qz-q"><span class="qz-no">Q6</span><span>赤のビット状態を、緑のクモはコピーするのに、赤のクモがコピーしないのはなぜ？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>同じ色どうしは融合する</b>から（くっついて角度が足される）</span></div></div>
+    <div class="sl pop" style="--d:0.00s;--c:var(--ink)"><span class="sl-n">1</span><div>量子ビットも状態と箱をしぼれば <b class="k">ビット</b> として使える</div></div>
+    <div class="sl pop" style="--d:0.07s;--c:var(--ink)"><span class="sl-n">2</span><div>2 つの状態だけを許す：<b>赤 0° ＝ 0、赤 180° ＝ 1</b></div></div>
+    <div class="sl pop" style="--d:0.14s;--c:var(--accent)"><span class="sl-n">3</span><div><b>緑のクモ</b> は 0 も 1 も <b class="k">コピー</b> する</div></div>
+    <div class="sl pop" style="--d:0.21s;--c:var(--blue)"><span class="sl-n">4</span><div><b>ADD 箱</b>：ビットの足し算では <b class="k">1 + 1 = 0</b></div></div>
+    <div class="sl pop" style="--d:0.28s;--c:var(--blue)"><span class="sl-n">5</span><div><b>180° の赤のクモ</b> は <b class="k">NOT 箱</b>（0 と 1 を入れかえる）</div></div>
+    <div class="sl pop" style="--d:0.35s;--c:var(--purple)"><span class="sl-n">6</span><div><b class="k">CNOT ＝ COPY ＋ ADD</b></div></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -1232,35 +1096,6 @@ function zxScene(svg, { onClick } = {}) {
   }
   return { set, to, state: () => S };
 }
-/* 文中の小さなクモ：<i class="zs" data-c="r|g" data-p="180" data-l="1|2|3|y|cnot"></i>
-   1：状態（上に 1 本）、2：箱（上下に 1 本ずつ）、3：下に 2 本・上に 1 本（ADD）、y：下に 1 本・上に 2 本（COPY）、cnot：CNOT */
-const ZR = '#c43c4c', ZG = '#17935f', INK = '#1c1b2e';
-function glyphs() {
-  document.querySelectorAll('i.zs').forEach(g => {
-    const c = g.dataset.c || 'r', p = +g.dataset.p || 0, l = g.dataset.l || '1', big = !!g.dataset.big;
-    const W = l === 'cnot' ? 54 : (l === '3' || l === 'y') ? 40 : 30, H = l === '1' ? 36 : 44, k = big ? 1.35 : 1;
-    const s = el('svg', { width: W * k, height: H * k, viewBox: `0 0 ${W} ${H}` });
-    const ln = d => el('path', { d, fill: 'none', stroke: INK, 'stroke-width': 2.6, 'stroke-linecap': 'round' }, s);
-    const dot = (cx, cy, col, r = 11) => el('circle', { cx, cy, r, fill: col === 'g' ? ZG : ZR, stroke: INK, 'stroke-width': 2.4 }, s);
-    if (l === 'cnot') {
-      ln(`M15,2 V${H - 2}`); ln(`M39,2 V${H - 2}`); ln(`M15,${H / 2} H39`);
-      dot(15, H / 2, 'g', 9); dot(39, H / 2, 'r', 9);
-    } else {
-      const cx = W / 2, cy = l === '1' ? 22 : H / 2;
-      if (l === 'y') { ln(`M${cx},${cy} C${cx},8 6,10 5,2`); ln(`M${cx},${cy} C${cx},8 ${W - 6},10 ${W - 5},2`); }
-      else ln(`M${cx},2 L${cx},${cy}`);
-      if (l === '2' || l === 'y') ln(`M${cx},${cy} L${cx},${H - 2}`);
-      if (l === '3') { ln(`M${cx},${cy} C${cx},${H - 8} 6,${H - 10} 5,${H - 2}`); ln(`M${cx},${cy} C${cx},${H - 8} ${W - 6},${H - 10} ${W - 5},${H - 2}`); }
-      dot(cx, cy, c);
-      if (p) el('text', { x: cx, y: cy + .5, 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': 8.4, 'font-weight': 900, 'font-family': 'Arial,sans-serif', fill: '#fff' }, s).textContent = p + '°';
-    }
-    g.replaceChildren(s);
-  });
-}
-glyphs();
-
-const deg = b => b * 180;
-
 /* =====================================================================
    ステップ再生（1.2 の stepper と同じ操作）：カードの下に ▶ 自動再生・◀・●●●・▶
    build() が返す状態の列を、ボタンで 1 つずつ進める（進む・戻るときはなめらかに動かす）。
@@ -1312,16 +1147,53 @@ function zstep(card, sc, build, { interval = 1600, hold = 2400, dur = 800, next 
   reset();
   return { reset, stop, start, playOnce: () => start(true), step: () => k };
 }
-/* =====================================================================
-   ビット：文字 → 0 と 1 の列
-   ===================================================================== */
+
+const deg = b => b * 180;
+const zfig = (id, st) => { const sc = zxScene(id); sc.set(st); return sc; };
+/* 動く図：すべての状態を描いたときに収まる範囲で viewBox を決める（fitFigures で切り落としすぎないように） */
+function cropAll(svg, sc, lists, m = 14) {
+  svg = typeof svg === 'string' ? document.getElementById(svg) : svg;
+  let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+  lists.flat().forEach(st => {
+    sc.set(st);
+    const b = svg.getBBox();
+    x0 = Math.min(x0, b.x); y0 = Math.min(y0, b.y); x1 = Math.max(x1, b.x + b.width); y1 = Math.max(y1, b.y + b.height);
+  });
+  svg.setAttribute('viewBox', `${x0 - m} ${y0 - m} ${x1 - x0 + 2 * m} ${y1 - y0 + 2 * m}`);
+  svg.dataset.cropped = 1;
+}
+
+/* ---------- タイトル：CNOT（緑 ＝ コピー、赤 ＝ 足し算） ---------- */
+zfig('zTitle', {
+  n: { G: { x: 150, y: 165, c: 'g', r: 26 }, X: { x: 270, y: 165, c: 'r', r: 26 },
+    i1: { x: 150, y: 312, t: 'a', cls: 'big b' }, i2: { x: 270, y: 312, t: 'b', cls: 'big b' },
+    o1: { x: 150, y: 18, t: 'a', cls: 'big o' }, o2: { x: 270, y: 18, t: 'a ⊕ b', cls: 'big o' } },
+  w: { a: { a: 'G', b: [150, 42] }, b: { a: 'G', b: [150, 290] }, c: { a: 'X', b: [270, 42] }, d: { a: 'X', b: [270, 290] }, h: { a: 'G', b: 'X', h: 1 } },
+});
+
+/* ---------- 2.2 のねらい：ビットの辞書（0・1・COPY・ADD・NOT・CNOT） ---------- */
+{
+  const n = {}, w = {};
+  const lab = (id, x, y, t) => { n[id] = { x, y, t, cls: 'dl' }; };
+  n.s0 = { x: 120, y: 90, c: 'r', r: 22 }; w.s0 = { a: 's0', b: [120, 25] }; lab('l0', 120, 135, '0');
+  n.s1 = { x: 360, y: 90, c: 'r', p: 180, r: 22 }; w.s1 = { a: 's1', b: [360, 25] }; lab('l1', 360, 135, '1');
+  n.cp = { x: 120, y: 215, c: 'g', r: 22 }; w.cp1 = { a: 'cp', b: [86, 162] }; w.cp2 = { a: 'cp', b: [154, 162] }; w.cp3 = { a: 'cp', b: [120, 262] }; lab('l2', 120, 290, 'COPY');
+  n.ad = { x: 360, y: 208, c: 'r', r: 22 }; w.ad1 = { a: 'ad', b: [360, 162] }; w.ad2 = { a: 'ad', b: [326, 262] }; w.ad3 = { a: 'ad', b: [394, 262] }; lab('l3', 360, 290, 'ADD ⊕');
+  n.nt = { x: 120, y: 365, c: 'r', p: 180, r: 22 }; w.nt1 = { a: 'nt', b: [120, 318] }; w.nt2 = { a: 'nt', b: [120, 412] }; lab('l4', 120, 440, 'NOT');
+  n.cg = { x: 326, y: 365, c: 'g', r: 19 }; n.cx = { x: 394, y: 365, c: 'r', r: 19 };
+  w.c1 = { a: 'cg', b: [326, 318] }; w.c2 = { a: 'cg', b: [326, 412] }; w.c3 = { a: 'cx', b: [394, 318] }; w.c4 = { a: 'cx', b: [394, 412] }; w.c5 = { a: 'cg', b: 'cx', h: 1 };
+  lab('l5', 360, 440, 'CNOT');
+  zfig('zMsg', { n, w });
+}
+
+/* ---------- ビット：文字 → 0 と 1 の列 ---------- */
 {
   const inp = $('#binIn');
   const upd = () => {
     const chars = [...inp.value].filter(ch => ch.charCodeAt(0) < 128).slice(0, 4);
     $('#binList').innerHTML = chars.map(ch => {
-      const code = ch.charCodeAt(0), bits = code.toString(2).padStart(8, '0');
-      return `<div class="bin-row"><div class="bin-ch">${ch === ' ' ? '␣' : ch.replace(/[<>&]/g, m => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[m]))}</div><div class="bin-code">${code}</div><div class="bin-bits">${[...bits].map(x => `<span class="${x === '1' ? 'one' : ''}">${x}</span>`).join('')}</div></div>`;
+      const bits = ch.charCodeAt(0).toString(2).padStart(8, '0');
+      return `<div class="bin-row"><div class="bin-ch">${ch === ' ' ? '␣' : ch.replace(/[<>&]/g, m => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[m]))}</div><div class="bin-bits">${[...bits].map(x => `<span class="${x === '1' ? 'one' : ''}">${x}</span>`).join('')}</div></div>`;
     }).join('');
     $('#binAll').textContent = chars.map(ch => ch.charCodeAt(0).toString(2).padStart(8, '0')).join('');
   };
@@ -1329,50 +1201,24 @@ function zstep(card, sc, build, { interval = 1600, hold = 2400, dur = 800, next 
   inp.addEventListener('keydown', e => e.stopPropagation());
   upd();
 }
-/* =====================================================================
-   量子ビットの状態をビット状態だけにしぼる
-   ===================================================================== */
+
+/* ---------- 2 つのビット状態：赤 0° と赤 180° だけを使う ---------- */
 {
-  const sc = zxScene('zWhy');
-  const LIST = [['g', 0], ['g', 90], ['g', 180], ['g', 270], ['r', 0], ['r', 90], ['r', 180], ['r', 270]];
-  const all = () => {
-    const n = {}, w = {};
-    LIST.forEach(([c, p], i) => { const id = c + p; n[id] = { x: 50 + i * 65, y: 125, c, p, r: 21 }; w['w' + id] = { a: id, b: [50 + i * 65, 50] }; });
-    n.lab = { x: 280, y: 190, t: '量子ビットの状態は、緑・赤 × いろいろな角度…', cls: '' };
-    return { n, w };
-  };
-  const bits = () => {
-    const s = all();
-    for (const id in s.n) s.n[id] = { ...s.n[id], o: .12 };
-    for (const id in s.w) s.w[id] = { ...s.w[id], o: .12 };
-    s.n.r0 = { x: 200, y: 115, c: 'r', p: 0, r: 28, hl: true };
-    s.n.r180 = { x: 360, y: 115, c: 'r', p: 180, r: 28, hl: true };
-    s.w.wr0 = { a: 'r0', b: [200, 35] }; s.w.wr180 = { a: 'r180', b: [360, 35] };
-    s.n.lab = { x: 280, y: 190, t: '量子ビットの状態は、緑・赤 × いろいろな角度…', cls: '', o: 0 };
-    s.n.d0 = { x: 200, y: 178, t: '0', cls: 'big o' };
-    s.n.d1 = { x: 360, y: 178, t: '1', cls: 'big o' };
-    s.n.ar = { x: 280, y: 115, t: '…だけ使う', cls: 'tag' };
-    s.dur = 1000;
-    return s;
-  };
-  zstep('#cdWhy', sc, () => [all(), bits()], { interval: 1800, hold: 2800 });
-}
-/* =====================================================================
-   2 つのビット状態（静止図）
-   ===================================================================== */
-for (const [id, p, d] of [['zBs0', 0, '0'], ['zBs1', 180, '1']]) {
-  zxScene(id).set({
-    n: { s: { x: 90, y: 110, c: 'r', p, r: 34 }, eq: { x: 165, y: 108, t: '⟷', cls: 'eqs' }, d: { x: 235, y: 106, t: d, cls: 'big o' } },
-    w: { w: { a: 's', b: [90, 18] } },
+  const n = {}, w = {};
+  [['g', 0], ['g', 90], ['g', 180], ['g', 270], ['r', 0], ['r', 90], ['r', 180], ['r', 270]].forEach(([c, p], i) => {
+    const x = 50 + (i % 4) * 78, y = i < 4 ? 85 : 205, id = c + p, use = c === 'r' && (p === 0 || p === 180);
+    n[id] = { x, y, c, p, r: 23, o: use ? 1 : .16, hl: use };
+    w['w' + id] = { a: id, b: [x, y - 60], o: use ? 1 : .16 };
   });
-  document.querySelector(`#${id} text.zt.big`).style.fontSize = '64px';
+  n.d0 = { x: 50, y: 262, t: '0', cls: 'big o' };
+  n.d1 = { x: 206, y: 262, t: '1', cls: 'big o' };
+  zfig('zBs', { n, w });
 }
-/* =====================================================================
-   ビット列：クリックで 0 ⇄ 1
-   ===================================================================== */
+
+/* ---------- ビット列：クリックで 0 ⇄ 1 ---------- */
 {
   let bits = '10010';
-  const sc = zxScene('zStr', { onClick: id => { const i = +id.slice(1); if (id[0] !== 's') return; toggle(i); } });
+  const sc = zxScene('zStr', { onClick: id => { if (id[0] === 's') toggle(+id.slice(1)); } });
   const st = () => {
     const n = {}, w = {}, k = bits.length, gap = 68, x0 = 300 - (k - 1) * gap / 2;
     [...bits].forEach((b, i) => {
@@ -1383,32 +1229,13 @@ for (const [id, p, d] of [['zBs0', 0, '0'], ['zBs1', 180, '1']]) {
     });
     return { n, w };
   };
-  const out = () => {
-    $('#strOut').textContent = bits;
-    const ch = bits.length === 8 ? String.fromCharCode(parseInt(bits, 2)) : '';
-    $('#strNote').textContent = ch && /[!-~]/.test(ch) ? `＝ 文字「${ch}」` : '';
-  };
-  const toggle = i => { bits = bits.slice(0, i) + (bits[i] === '1' ? '0' : '1') + bits.slice(i + 1); sc.to(st(), 380); out(); };
-  document.querySelectorAll('[data-bits]').forEach(b => b.addEventListener('click', e => {
-    e.currentTarget.blur();
-    const v = b.dataset.bits;
-    bits = v === '?' ? Array.from({ length: 5 + Math.floor(Math.random() * 4) }, () => (Math.random() < .5 ? '0' : '1')).join('') : v;
-    sc.to(st(), 600); out();
-  }));
-  sc.set(st()); out();
-  onEnter.bitstr = () => { bits = '10010'; sc.set(st()); out(); };
+  const toggle = i => { bits = bits.slice(0, i) + (bits[i] === '1' ? '0' : '1') + bits.slice(i + 1); sc.to(st(), 380); };
+  document.querySelectorAll('[data-bits]').forEach(b => b.addEventListener('click', e => { e.currentTarget.blur(); bits = b.dataset.bits; sc.to(st(), 600); }));
+  sc.set(st());
+  onEnter.bitstr = () => { bits = '10010'; sc.set(st()); };
 }
-/* =====================================================================
-   緑のクモ = COPY
-   ===================================================================== */
-// 左の等式カード（静止図）
-for (const [id, p] of [['zCpEq0', 0], ['zCpEq1', 180]]) {
-  zxScene(id).set({
-    n: { G: { x: 62, y: 70, c: 'g', r: 19 }, A: { x: 62, y: 122, c: 'r', p, r: 16 }, eq: { x: 135, y: 82, t: '=', cls: 'eqs' },
-      B: { x: 192, y: 92, c: 'r', p, r: 16 }, C: { x: 245, y: 92, c: 'r', p, r: 16 } },
-    w: { u1: { a: 'G', b: [36, 14] }, u2: { a: 'G', b: [88, 14] }, i: { a: 'G', b: 'A' }, b1: { a: 'B', b: [192, 26] }, c1: { a: 'C', b: [245, 26] } },
-  });
-}
+
+/* ---------- 緑のクモ = COPY（動く図） ---------- */
 {
   const sc = zxScene('zCopy');
   let a = 1;
@@ -1416,119 +1243,71 @@ for (const [id, p] of [['zCpEq0', 0], ['zCpEq1', 180]]) {
     w: { l: { a: 'G', b: [110, 22] }, r: { a: 'G', b: [250, 22] }, i: { a: 'G', b: 'A' } } });
   const st1 = () => { const s = st0(); s.n.A = { ...s.n.A, x: 180, y: 140 }; s.n.da = { ...s.n.da, x: 128, y: 144, o: 0 }; s.dur = 650; return s; };
   const st2 = () => ({ n: { G: { x: 180, y: 140, c: 'g', r: 26, o: 0 }, A: { x: 110, y: 104, c: 'r', p: deg(a), r: 21, hl: true }, B: { from: 'A', x: 250, y: 104, c: 'r', p: deg(a), r: 21, hl: true },
-    d1: { x: 110, y: 160, t: String(a), cls: 'big o' }, d2: { x: 250, y: 160, t: String(a), cls: 'big o' }, cp: { x: 180, y: 104, t: 'コピー！', cls: 'tag' } },
+    d1: { x: 110, y: 160, t: String(a), cls: 'big o' }, d2: { x: 250, y: 160, t: String(a), cls: 'big o' } },
     w: { l: { a: 'A', b: [110, 22] }, r: { a: 'B', b: [250, 22] } } });
+  const all = () => [st0(), st1(), st2()];
   let setA;
-  const z = zstep('#cdCopy', sc, () => [st0(), st1(), st2()], { interval: 1300, hold: 2200, next: () => setA(a ^ 1) });
+  const z = zstep('#cdCopy', sc, all, { interval: 1300, hold: 2200, next: () => setA(a ^ 1) });
   setA = picker('#pkCopy', BITS, (it, i, u) => { a = it.v; if (u) { z.stop(); z.reset(); } });
+  cropAll('zCopy', sc, [all()]);
   setA(1); z.reset();
   onEnter.copy = () => { setA(1); z.reset(); };
 }
-/* =====================================================================
-   赤のクモに 2 ビット：融合して角度を足す（ADD）
-   ===================================================================== */
+
+/* ---------- 赤のクモにビットを 2 つ：4 通りの融合（静止図） ---------- */
 {
-  const sc = zxScene('zAdd');
-  let a = 0, b = 0;
-  const CASES = [[0, 0], [0, 1], [1, 0], [1, 1]];
-  const tb = $('#addTbl tbody');
-  tb.innerHTML = CASES.map(([x, y]) => `<tr><td>${x} <small>${deg(x)}°</small></td><td>${y} <small>${deg(y)}°</small></td><td class="calc">${deg(x)}° + ${deg(y)}° = ${deg(x) + deg(y)}°${deg(x) + deg(y) === 360 ? ' = 0°' : ''}</td><td class="out ${x ^ y ? 'one' : ''}">${x ^ y}</td></tr>`).join('');
-  const rows = [...tb.rows];
-  const st0 = () => ({ n: { S: { x: 180, y: 118, c: 'r', r: 27 }, A: { x: 105, y: 228, c: 'r', p: deg(a), r: 21 }, B: { x: 255, y: 228, c: 'r', p: deg(b), r: 21 },
-    da: { x: 60, y: 232, t: String(a), cls: 'big b' }, db: { x: 300, y: 232, t: String(b), cls: 'big b' } },
-    w: { o: { a: 'S', b: [180, 22] }, ia: { a: 'S', b: 'A' }, ib: { a: 'S', b: 'B' } } });
-  const st1 = () => ({ n: { S: { x: 180, y: 150, c: 'r', r: 27, p: deg(a) + deg(b), hl: true }, A: { x: 180, y: 150, c: 'r', p: deg(a), r: 21, o: 0 }, B: { x: 180, y: 150, c: 'r', p: deg(b), r: 21, o: 0 },
-    da: { x: 180, y: 150, t: String(a), cls: 'big b', o: 0 }, db: { x: 180, y: 150, t: String(b), cls: 'big b', o: 0 },
-    dr: { x: 240, y: 154, t: '= ' + (a ^ b), cls: 'big o' }, fs: { x: 180, y: 210, t: `${deg(a)}° + ${deg(b)}° = ${norm(deg(a) + deg(b))}°${a & b ? '（一周）' : ''}`, cls: 'tag' } },
-    w: { o: { a: 'S', b: [180, 22] } }, dur: 950 });
-  const mark = () => rows.forEach((r, i) => r.classList.toggle('cur', CASES[i][0] === a && CASES[i][1] === b));
-  let setA, setB, kc = 0;
-  const z = zstep('#cdAdd', sc, () => { mark(); return [st0(), st1()]; }, { interval: 1300, hold: 2200, next: () => { kc = (kc + 1) % 4; setA(CASES[kc][0]); setB(CASES[kc][1]); } });
-  setA = picker('#pkAddA', BITS, (it, i, u) => { a = it.v; if (u) { z.stop(); z.reset(); } });
-  setB = picker('#pkAddB', BITS, (it, i, u) => { b = it.v; if (u) { z.stop(); z.reset(); } });
-  rows.forEach((r, i) => r.addEventListener('click', () => { kc = i; setA(CASES[i][0]); setB(CASES[i][1]); z.playOnce(); }));
-  setA(0); setB(0); z.reset();
-  onEnter.add4 = () => { kc = 0; setA(0); setB(0); z.reset(); };
+  const n = {}, w = {};
+  [[0, 0], [0, 1], [1, 0], [1, 1]].forEach(([a, b], i) => {
+    const ox = (i % 2) * 265, oy = i < 2 ? 0 : 170, k = 'c' + i;
+    n[k + 'S'] = { x: ox + 60, y: oy + 70, c: 'r', r: 19 };
+    n[k + 'A'] = { x: ox + 28, y: oy + 128, c: 'r', p: deg(a), r: 16 };
+    n[k + 'B'] = { x: ox + 92, y: oy + 128, c: 'r', p: deg(b), r: 16 };
+    n[k + 'e'] = { x: ox + 140, y: oy + 88, t: '=', cls: 'eqs' };
+    n[k + 'f'] = { x: ox + 140, y: oy + 58, t: '融合', cls: 'sm' };
+    n[k + 'R'] = { x: ox + 205, y: oy + 100, c: 'r', p: deg(a) + deg(b), r: 17 };
+    w[k + 'o'] = { a: k + 'S', b: [ox + 60, oy + 18] }; w[k + 'a'] = { a: k + 'S', b: k + 'A' }; w[k + 'b'] = { a: k + 'S', b: k + 'B' };
+    w[k + 'r'] = { a: k + 'R', b: [ox + 205, oy + 38] };
+  });
+  zfig('zAdd4', { n, w });
 }
-/* =====================================================================
-   ADD 箱：角度の時計（1 を足すたびに 180° まわる）
-   ===================================================================== */
-{
-  const svg = $('#zDial');
-  const CX = 180, CY = 118, RR = 88;
-  el('circle', { cx: CX, cy: CY, r: RR, fill: '#fff', stroke: '#1f1a3d', 'stroke-width': 4 }, svg);
-  for (let i = 0; i < 12; i++) {
-    const t = i * Math.PI / 6, r1 = i % 3 ? RR - 9 : RR - 16;
-    el('line', { x1: CX + Math.sin(t) * r1, y1: CY - Math.cos(t) * r1, x2: CX + Math.sin(t) * RR, y2: CY - Math.cos(t) * RR, stroke: '#1f1a3d', 'stroke-width': i % 3 ? 2 : 4 }, svg);
-  }
-  const mk = (x, y, s, cls) => { const t = el('text', { x, y, class: 'zt ' + cls }, svg); t.textContent = s; return t; };
-  mk(CX, CY - RR - 16, '0°（= 0）', 'sm o');
-  mk(CX, CY + RR + 16, '180°（= 1）', 'sm o');
-  mk(CX + RR + 30, CY, '90°', 'sm');
-  mk(CX - RR - 30, CY, '270°', 'sm');
-  const needle = el('g', {}, svg);
-  el('line', { x1: CX, y1: CY + 14, x2: CX, y2: CY - RR + 22, stroke: '#c43c4c', 'stroke-width': 8, 'stroke-linecap': 'round' }, needle);
-  el('circle', { cx: CX, cy: CY - RR + 26, r: 11, fill: '#c43c4c', stroke: '#1f1a3d', 'stroke-width': 3 }, needle);
-  el('circle', { cx: CX, cy: CY, r: 9, fill: '#1f1a3d' }, svg);
-  const valT = mk(CX + 2, CY + 40, '0', 'big o');
-  let hist = [], ang = 0, raf = 0;
-  const draw = a => needle.setAttribute('transform', `rotate(${a},${CX},${CY})`);
-  const animTo = target => {
-    cancelAnimationFrame(raf);
-    const from = ang, t0 = performance.now();
-    const tick = now => { const k = Math.min(1, (now - t0) / 650); ang = from + (target - from) * ease(k); draw(ang); if (k < 1) raf = requestAnimationFrame(tick); else ang = target; };
-    raf = requestAnimationFrame(tick);
-  };
-  const cap = () => {
-    const ones = hist.filter(x => x).length, v = ones % 2;
-    valT.textContent = String(v);
-    if (!hist.length) return 'ボタンで 0 や 1 を足していく（はじめは 0）';
-    const sum = hist.length ? hist.join(' ⊕ ') : '';
-    return `<span class="mono">${sum} = <b>${v}</b></span><br><span style="font-size:16px;color:var(--muted)">針は 180° × ${ones} = ${ones * 180}°${ones >= 2 ? `（${Math.floor(ones / 2)} 周して ${v ? '180°' : '0°'}）` : ''} まわった</span>`;
-  };
-  const add = x => { if (hist.length >= 8) hist = []; hist.push(x); animTo(hist.filter(y => y).length * 180); $('#zDialCap').innerHTML = cap(); };
-  $('#dialAdd1').onclick = e => { e.currentTarget.blur(); add(1); };
-  $('#dialAdd0').onclick = e => { e.currentTarget.blur(); add(0); };
-  const reset = () => { cancelAnimationFrame(raf); hist = []; ang = 0; draw(0); $('#zDialCap').innerHTML = cap(); };
-  $('#dialReset').onclick = e => { e.currentTarget.blur(); reset(); };
-  reset();
-  onEnter.addbox = reset;
-}
-/* =====================================================================
-   NOT 箱：180° の 2 本足の赤のクモ
-   ===================================================================== */
-{
-  const sc = zxScene('zNot');
-  let a = 1;
-  const st0 = () => ({ n: { N: { x: 180, y: 112, c: 'r', p: 180, r: 27 }, A: { x: 180, y: 232, c: 'r', p: deg(a), r: 21 }, da: { x: 128, y: 236, t: String(a), cls: 'big b' }, nl: { x: 262, y: 112, t: '← NOT 箱', cls: 'tag' } },
-    w: { o: { a: 'N', b: [180, 22] }, i: { a: 'N', b: 'A' } } });
-  const st1 = () => ({ n: { N: { x: 180, y: 150, c: 'r', p: 180 + deg(a), r: 27, hl: true }, A: { x: 180, y: 150, c: 'r', p: deg(a), r: 21, o: 0 }, da: { x: 180, y: 150, t: String(a), cls: 'big b', o: 0 },
-    dr: { x: 240, y: 154, t: '= ' + (a ^ 1), cls: 'big o' }, fs: { x: 180, y: 210, t: `180° + ${deg(a)}° = ${norm(180 + deg(a))}°${a ? '（一周）' : ''}`, cls: 'tag' } },
-    w: { o: { a: 'N', b: [180, 22] } }, dur: 900 });
-  let setA;
-  const z = zstep('#cdNot', sc, () => [st0(), st1()], { interval: 1300, hold: 2200, next: () => setA(a ^ 1) });
-  setA = picker('#pkNot', BITS, (it, i, u) => { a = it.v; if (u) { z.stop(); z.reset(); } });
-  setA(1); z.reset();
-  onEnter.not = () => { setA(1); z.reset(); };
-}
-/* =====================================================================
-   ADD に 1 を差しこむと NOT
-   ===================================================================== */
-zxScene('zAnEq').set({
-  n: { S: { x: 70, y: 70, c: 'r', r: 20 }, P: { x: 108, y: 112, c: 'r', p: 180, r: 16 }, eq: { x: 160, y: 80, t: '=', cls: 'eqs' }, N: { x: 230, y: 80, c: 'r', p: 180, r: 22 }, nl: { x: 270, y: 80, t: 'NOT', cls: 'tag sm' } },
-  w: { o: { a: 'S', b: [70, 14] }, i: { a: 'S', b: [40, 148] }, p: { a: 'S', b: 'P' }, no: { a: 'N', b: [230, 14] }, ni: { a: 'N', b: [230, 148] } },
+
+/* ---------- ADD 箱（静止図） ---------- */
+zfig('zAddBox', {
+  n: { S: { x: 130, y: 140, c: 'r', r: 26 }, a: { x: 62, y: 284, t: 'a', cls: 'big b' }, b: { x: 198, y: 284, t: 'b', cls: 'big b' }, o: { x: 130, y: 22, t: 'a ⊕ b', cls: 'big o' } },
+  w: { o: { a: 'S', b: [130, 44] }, a: { a: 'S', b: [72, 258] }, b: { a: 'S', b: [188, 258] } },
 });
+
+/* ---------- NOT 箱：0 と 1 に作用させる（静止図） ---------- */
 {
-  const sc = zxScene('zAn');
-  const st0 = () => ({ n: { S: { x: 180, y: 120, c: 'r', r: 27 }, P: { x: 248, y: 205, c: 'r', p: 180, r: 21 }, al: { x: 180, y: 70, t: 'ADD 箱', cls: 'tag' }, pl: { x: 292, y: 210, t: '1', cls: 'big b' }, xl: { x: 100, y: 268, t: 'x', cls: 'big' } },
-    w: { o: { a: 'S', b: [180, 22] }, i: { a: 'S', b: [120, 272] }, p: { a: 'S', b: 'P' } } });
-  const st1 = () => ({ n: { S: { x: 180, y: 130, c: 'r', r: 27, p: 180, hl: true }, P: { x: 180, y: 130, c: 'r', p: 180, r: 21, o: 0 }, al: { x: 180, y: 70, t: 'ADD 箱', cls: 'tag', o: 0 }, pl: { x: 180, y: 130, t: '1', cls: 'big b', o: 0 }, xl: { x: 100, y: 268, t: 'x', cls: 'big' },
-    fs: { x: 290, y: 215, t: '0° + 180° = 180°', cls: 'tag' } },
-    w: { o: { a: 'S', b: [180, 22] }, i: { a: 'S', b: [120, 272] } }, dur: 900 });
-  const st2 = () => ({ n: { S: { x: 180, y: 140, c: 'r', r: 27, p: 180, hl: true }, xl: { x: 150, y: 268, t: 'x', cls: 'big' }, nl: { x: 262, y: 140, t: '← NOT 箱', cls: 'tag' } },
-    w: { o: { a: 'S', b: [180, 22] }, i: { a: 'S', b: [180, 272] } } });
-  zstep('#cdAn', sc, () => [st0(), st1(), st2()], { interval: 1700, hold: 2600 });
+  const n = {}, w = {};
+  [[0, 0], [1, 245]].forEach(([a, ox]) => {
+    const k = 'n' + a;
+    n[k + 'N'] = { x: ox + 60, y: 90, c: 'r', p: 180, r: 21 };
+    n[k + 'A'] = { x: ox + 60, y: 172, c: 'r', p: deg(a), r: 16 };
+    n[k + 'e'] = { x: ox + 125, y: 112, t: '=', cls: 'eqs' };
+    n[k + 'f'] = { x: ox + 125, y: 82, t: '融合', cls: 'sm' };
+    n[k + 'R'] = { x: ox + 188, y: 125, c: 'r', p: 180 + deg(a), r: 17 };
+    n[k + 'l'] = { x: ox + 60, y: 222, t: `NOT ${a}`, cls: 'big b' };
+    n[k + 'm'] = { x: ox + 188, y: 222, t: String(a ^ 1), cls: 'big o' };
+    w[k + 'u'] = { a: k + 'N', b: [ox + 60, 25] }; w[k + 'd'] = { a: k + 'N', b: k + 'A' }; w[k + 'r'] = { a: k + 'R', b: [ox + 188, 60] };
+  });
+  zfig('zNot', { n, w });
 }
+
+/* ---------- ADD に 1 を差しこむと NOT（静止図） ---------- */
+zfig('zAnEq', {
+  n: { S: { x: 80, y: 95, c: 'r', r: 22 }, P: { x: 128, y: 148, c: 'r', p: 180, r: 17 }, pl: { x: 160, y: 158, t: '1', cls: 'big b' },
+    eq: { x: 195, y: 110, t: '=', cls: 'eqs' }, N: { x: 262, y: 110, c: 'r', p: 180, r: 24 }, nl: { x: 262, y: 200, t: 'NOT', cls: 'tag' } },
+  w: { o: { a: 'S', b: [80, 25] }, i: { a: 'S', b: [42, 205] }, p: { a: 'S', b: 'P' }, no: { a: 'N', b: [262, 25] }, ni: { a: 'N', b: [262, 180] } },
+});
+
+/* ---------- CNOT の形（静止図） ---------- */
+zfig('zCn', {
+  n: { G: { x: 150, y: 165, c: 'g', r: 28 }, X: { x: 270, y: 165, c: 'r', r: 28 },
+    i1: { x: 150, y: 318, t: '入力 1', cls: '' }, i2: { x: 270, y: 318, t: '入力 2', cls: '' }, o1: { x: 150, y: 12, t: '出力 1', cls: '' }, o2: { x: 270, y: 12, t: '出力 2', cls: '' },
+    hd: { x: 210, y: 140, t: '握手', cls: 'tag' } },
+  w: { a: { a: 'G', b: [150, 32] }, b: { a: 'G', b: [150, 298] }, c: { a: 'X', b: [270, 32] }, d: { a: 'X', b: [270, 298] }, h: { a: 'G', b: 'X', h: 1 } },
+});
 /* =====================================================================
    CNOT：緑（コピー）と赤（ADD）の握手
    a = 左の入力、b = 右の入力（null なら右は入力なしの線）
@@ -1558,7 +1337,7 @@ function cnotStates(a, b) {
   delete s3.n.C; delete s3.w.hs; delete s3.n.t1;
   s3.n.C = { x: R, y: Y, c: 'r', p: deg(a), r: 18, o: 0 };
   s3.n.X = { ...s3.n.X, p: deg(a), hl: true, o: !hasB && !a ? 0 : 1 };
-  s3.n.t2 = { x: R, y: Y + 50, t: '② 融合', cls: 'tag' };
+  s3.n.t2 = { x: R - 60, y: Y + 48, t: '② 融合', cls: 'tag' };
   if (!hasB) s3.n.nl = { x: R + 76, y: Y, t: a ? '← NOT' : '← 何もしない線', cls: 'tag pk' };
   else s3.n.nl = { x: R + 62, y: Y, t: a ? '← NOT' : '← ただの線', cls: 'tag pk' };
   if (!a) s3.n.X.o = 0;
@@ -1576,16 +1355,7 @@ function cnotStates(a, b) {
   }
   return steps;
 }
-// タイトル：入力 4 通りを順に流す（ボタンなし。スライドを開くと動き続ける）
-{
-  const sc = zxScene('zTitle');
-  const CASES = [[1, 0], [0, 1], [1, 1], [0, 0]];
-  let k = 0;
-  const z = zstep(null, sc, () => cnotStates(...CASES[k]), { controls: false, interval: 1150, hold: 2000, dur: 750, next: () => { k = (k + 1) % 4; } });
-  onEnter.title = () => { k = 0; z.start(); };
-}
-
-// CNOT の中で起きること（右は入力なし）
+/* ---------- CNOT の中で起きること（動く図・右は入力なし） ---------- */
 {
   const sc = zxScene('zCs');
   let a = 0;
@@ -1598,25 +1368,24 @@ function cnotStates(a, b) {
   let setA;
   const z = zstep('#cdCs', sc, () => cnotStates(a, null), { interval: 1500, hold: 2600, onStep: mark, next: () => setA(a ^ 1) });
   setA = picker('#pkCs', BITS, (it, j, u) => { a = it.v; if (u) z.stop(); z.reset(); });
+  cropAll('zCs', sc, [cnotStates(0, null), cnotStates(1, null)]);
   setA(0);
   onEnter.cnotstep = () => setA(0);
 }
 
-// CNOT の真理値表
+/* ---------- CNOT の入力と出力：左に 1、右に 0（静止図）と表 ---------- */
 {
-  const sc = zxScene('zCt');
-  const CASES = [[0, 0], [0, 1], [1, 0], [1, 1]];
-  const tb = $('#ctTbl tbody');
-  tb.innerHTML = CASES.map(([a, b]) => `<tr><td>${a}</td><td>${b}</td><td class="out ${a ? 'one' : ''}">${a}</td><td class="out ${a ^ b ? 'one' : ''}">${a ^ b}</td><td class="calc">${a ? 'NOT' : 'そのまま'}</td></tr>`).join('');
-  const rows = [...tb.rows];
-  let k = 2;
-  const z = zstep('#cdCt', sc, () => { rows.forEach((r, j) => r.classList.toggle('cur', j === k)); return cnotStates(...CASES[k]); },
-    { interval: 1300, hold: 2400, next: () => { k = (k + 1) % 4; } });
-  rows.forEach((r, i) => r.addEventListener('click', () => { k = i; z.playOnce(); }));
-  onEnter.cnottt = () => { k = 2; z.reset(); };
+  zfig('zCt', {
+    n: { G: { x: 70, y: 120, c: 'g', r: 23 }, X: { x: 160, y: 120, c: 'r', r: 23 }, A: { x: 70, y: 210, c: 'r', p: 180, r: 17 }, B: { x: 160, y: 210, c: 'r', r: 17 },
+      la: { x: 36, y: 214, t: '1', cls: 'big b' }, lb: { x: 194, y: 214, t: '0', cls: 'big b' }, eq: { x: 240, y: 135, t: '=', cls: 'eqs' },
+      R1: { x: 315, y: 160, c: 'r', p: 180, r: 18 }, R2: { x: 400, y: 160, c: 'r', p: 180, r: 18 }, l1: { x: 315, y: 210, t: '1', cls: 'big o' }, l2: { x: 400, y: 210, t: '1', cls: 'big o' } },
+    w: { a: { a: 'G', b: [70, 30] }, c: { a: 'X', b: [160, 30] }, h: { a: 'G', b: 'X', h: 1 }, ia: { a: 'G', b: 'A' }, ib: { a: 'X', b: 'B' }, r1: { a: 'R1', b: [315, 70] }, r2: { a: 'R2', b: [400, 70] } },
+  });
+  $('#ctTbl tbody').innerHTML = [[0, 0], [0, 1], [1, 0], [1, 1]].map(([a, b]) =>
+    `<tr${a === 1 && b === 0 ? ' class="cur"' : ''}><td>${a}</td><td>${b}</td><td class="out ${a ? 'one' : ''}">${a}</td><td class="out ${a ^ b ? 'one' : ''}">${a ^ b}</td></tr>`).join('');
 }
 
-// CNOT = COPY + ADD（形を変える）
+/* ---------- CNOT = COPY + ADD（形を変える動く図） ---------- */
 {
   const sc = zxScene('zCa');
   const cn = () => ({ n: { G: { x: 140, y: 160, c: 'g', r: 26 }, X: { x: 260, y: 160, c: 'r', r: 26 }, i1: { x: 140, y: 312, t: 'a', cls: 'big b' }, i2: { x: 300, y: 312, t: 'b', cls: 'big b' } },
@@ -1626,18 +1395,11 @@ function cnotStates(a, b) {
     gl: { x: 72, y: 235, t: 'COPY', cls: 'tag' }, rl: { x: 330, y: 105, t: 'ADD', cls: 'tag' } },
     w: { a: { a: 'G', b: [140, 22] }, b: { a: 'G', b: [140, 292] }, c: { a: 'X', b: [260, 22] }, d: { a: 'X', b: [300, 292] }, h: { a: 'G', b: 'X', s: 1 } }, dur: 1000 });
   zstep('#cdCa', sc, () => [cn(), ca()], { interval: 1700, hold: 2600 });
+  cropAll('zCa', sc, [[cn(), ca()]]);
+  sc.set(cn());
 }
 
-// CNOT の形（静止図）
-zxScene('zCn').set({
-  n: { G: { x: 150, y: 165, c: 'g', r: 28 }, X: { x: 270, y: 165, c: 'r', r: 28 },
-    i1: { x: 150, y: 318, t: '入力 1', cls: '' }, i2: { x: 270, y: 318, t: '入力 2', cls: '' }, o1: { x: 150, y: 12, t: '出力 1', cls: '' }, o2: { x: 270, y: 12, t: '出力 2', cls: '' },
-    hd: { x: 210, y: 140, t: '握手', cls: 'tag sm' }, gl: { x: 72, y: 165, t: '緑・3 本足', cls: 'sm' }, rl: { x: 350, y: 165, t: '赤・3 本足', cls: 'sm' },
-    cl: { x: 92, y: 245, t: '制御（左）', cls: 'tag sm' }, tl: { x: 330, y: 245, t: '標的（右）', cls: 'tag sm' } },
-  w: { a: { a: 'G', b: [150, 32] }, b: { a: 'G', b: [150, 298] }, c: { a: 'X', b: [270, 32] }, d: { a: 'X', b: [270, 298] }, h: { a: 'G', b: 'X', h: 1 } },
-});
-
-// さらに多くの箱（静止図）
+/* ---------- いろいろな箱（静止図） ---------- */
 {
   const n = {}, w = {};
   [['g', 0], ['g', 90], ['g', 180], ['g', 270], ['r', 0], ['r', 90], ['r', 180], ['r', 270]].forEach(([c, p], i) => {
@@ -1645,29 +1407,39 @@ zxScene('zCn').set({
     n[id] = { x, y: 90, c, p, r: 23 };
     w['u' + id] = { a: id, b: [x, 22] }; w['d' + id] = { a: id, b: [x, 158] };
   });
-  n.l1 = { x: 522, y: 186, t: 'NOT（ここで使った）', cls: 'tag sm' };
-  n.l2 = { x: 204, y: 186, t: '補足：Z ゲート', cls: 'sm' };
-  n.l3 = { x: 50, y: 186, t: '何もしない線', cls: 'sm' };
-  n.l4 = { x: 368, y: 186, t: '何もしない線', cls: 'sm' };
-  zxScene('zMore').set({ n, w });
+  n.l1 = { x: 522, y: 186, t: 'NOT', cls: 'tag' };
+  zfig('zMore', { n, w });
 }
 
-/* ---------- 練習問題：カードをクリックすると答えが出る（もう一度押すと隠れる） ---------- */
-{
-  document.querySelectorAll('.qz').forEach(q => q.addEventListener('click', () => q.classList.toggle('open')));
-  document.querySelectorAll('[data-quiz-all]').forEach(b => b.addEventListener('click', e => {
-    e.stopPropagation(); b.blur();
-    const qs = [...b.closest('.slide').querySelectorAll('.qz')], open = !qs.every(q => q.classList.contains('open'));
-    qs.forEach(q => q.classList.toggle('open', open));
-    b.textContent = open ? '答えをぜんぶ隠す' : '答えをぜんぶ表示';
-  }));
-  onEnter.quiz = () => {
-    const sl = document.querySelector('.slide[data-id="quiz"]');
-    sl.querySelectorAll('.qz').forEach(q => q.classList.remove('open'));
-    sl.querySelector('[data-quiz-all]').textContent = '答えをぜんぶ表示';
-  };
-  addEventListener('beforeprint', () => document.querySelectorAll('.qz').forEach(q => q.classList.add('open')));
+/* ---------- 図と枠のすき間をなくす（1.2 の fitFigures と同じ考え方。スパイダー図・操作の列にも対応） ---------- */
+function fitFigures() {
+  document.querySelectorAll('.body.cols, .body.wide-fig').forEach(body => {
+    const card = body.querySelector(':scope > .card'), svg = card && card.querySelector('svg.zx');
+    if (!svg) return;
+    if (!svg.dataset.cropped) {
+      const bb = svg.getBBox(), m = 14;
+      svg.setAttribute('viewBox', `${bb.x - m} ${bb.y - m} ${bb.width + 2 * m} ${bb.height + 2 * m}`);
+      svg.dataset.cropped = 1;
+    }
+    const vb = svg.viewBox.baseVal, r = vb.width / vb.height;
+    const cs = getComputedStyle(card), px = v => parseFloat(cs[v]) || 0;
+    const padX = px('paddingLeft') + px('paddingRight') + px('borderLeftWidth') + px('borderRightWidth');
+    const padY = px('paddingTop') + px('paddingBottom') + px('borderTopWidth') + px('borderBottomWidth');
+    const rows = [...card.children].filter(c => c !== svg);
+    const ctlH = rows.reduce((s, c) => s + c.offsetHeight + 14, 0) + 6;
+    const minW = rows.reduce((m, c) => Math.max(m, [...c.children].reduce((s, x) => s + x.offsetWidth, 0) + 12 * Math.max(0, c.children.length - 1)), 0);
+    const cols = body.classList.contains('cols');
+    let otherH = 0;
+    if (!cols) [...body.children].forEach(c => { if (c !== card) otherH += c.offsetHeight + 12; });
+    const minText = cols ? +(body.dataset.minText || 460) + 28 : 0;
+    const h = Math.min(body.clientHeight - padY - ctlH - otherH, (body.clientWidth - padX - minText) / r), w = h * r;
+    Object.assign(svg.style, { width: w + 'px', height: h + 'px', flex: 'none' });
+    Object.assign(card.style, { alignSelf: 'center', flex: 'none', width: Math.ceil(Math.max(w, minW) + padX) + 'px', height: 'auto' });
+    if (cols) body.style.gridTemplateColumns = `${Math.ceil(Math.max(w, minW) + padX)}px 1fr`;
+  });
 }
+fitFigures();
+if (document.fonts) document.fonts.ready.then(fitFigures);
 
 /* ---------- スライド制御 ---------- */
 const stage = $('#stage');
