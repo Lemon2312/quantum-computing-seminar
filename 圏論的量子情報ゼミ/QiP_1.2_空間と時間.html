@@ -463,6 +463,7 @@ ul.plain li .ico{border-radius:50%;border:2px solid var(--ink);box-shadow:none;b
 
 /* 「カーソル」モード（既定。道具を何も選んでいないとき）：普通のカーソルで文字を選択・コピーできる（6.1-7.9 v44 と同じ） */
 body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default;cursor:auto}
+.rlab{margin:18px 0 2px;font-size:17px;font-weight:900;color:var(--muted);letter-spacing:.1em;border-bottom:1.5px dashed #d8d4e6;padding-bottom:2px}
 </style>
 </head>
 <body>
@@ -564,11 +565,12 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <div class="body cols" style="grid-template-columns:1.45fr 1fr">
     <div class="card stp pop" id="dgOrder" style="--h:470px;padding:12px 16px"></div>
     <div>
+      <div class="point pop" style="--d:.1s;margin-top:0"><b>操作</b>：「混ぜる」と「焼く」の<br><b style="white-space:nowrap">上下を入れ替える</b><br>＝ <b class="k" style="white-space:nowrap">時間の順番を入れ替える</b></div>
+      <div class="rlab frag">結果</div>
       <ul class="plain">
-        <li class="pop" style="--d:.1s"><span class="ico" style="color:var(--accent)">✓</span><span>砕く → <b>混ぜる</b> → <b>焼く</b><br>→ いい香りの <b>パン</b> 🍞</span></li>
-        <li class="pop" style="--d:.16s"><span class="ico" style="color:var(--blue)">✗</span><span>砕く → <b>焼く</b> → <b>混ぜる</b><br>→ <b>べちゃべちゃの泥</b> 🟫</span></li>
+        <li class="frag"><span class="ico" style="color:var(--accent)">✓</span><span>砕く → <b>混ぜる</b> → <b>焼く</b><br>→ いい香りの <b>パン</b> 🍞</span></li>
+        <li class="frag"><span class="ico" style="color:var(--blue)">✗</span><span>砕く → <b>焼く</b> → <b>混ぜる</b><br>→ <b>べちゃべちゃの泥</b> 🟫</span></li>
       </ul>
-      <div class="point frag">図の <b>上下を入れ替える</b> ＝ <b class="k">時間の順番を入れ替える</b><br>同じ箱でも、結果がまったく変わる</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -583,7 +585,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
       <div class="door-label pop"><span class="door-book">1.2 Introducing space and time</span>SECTION 2</div>
       <h1 class="pop" style="--d:.1s">空間</h1>
       <p class="door-lead pop" style="--d:.2s">箱を <b>横に並べる</b> と…</p>
-      <div class="door-topics pop" style="--d:.3s"><span>同じ時刻</span><span>別々の場所</span><span>メキシコ・ブルキナファソ・ベトナム</span></div>
+      <div class="door-topics pop" style="--d:.3s"><span>別々の場所</span><span>メキシコ・ブルキナファソ・ベトナム</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -592,15 +594,14 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 <!-- 横に並べる -->
 <section class="slide" data-id="side">
   <div class="chap">SECTION 2 ／ 空間はどこに隠れている？</div>
-  <h2>横に並べた箱 ＝ 同時・別の場所<small>1.2（空間）</small></h2>
+  <h2>横に並べた箱 ＝ 別々の場所<small>1.2（空間）</small></h2>
   <div class="body cols" style="grid-template-columns:1fr 1fr">
     <div class="card stp pop" id="dgSide" style="--h:350px"></div>
     <div>
       <ul class="plain">
         <li class="pop"><span class="ico">⊗</span><span>2 つの箱 <b class="suit">♠</b> と <b class="suit">♣</b> を <b>横に並べる</b></span></li>
-        <li class="pop" style="--d:.08s"><span class="ico">📍</span><span><b class="kb">別々の場所</b> で <b class="k">同じ時刻</b> に</span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">📍</span><span><b class="kb">別々の場所</b> で作用する</span></li>
       </ul>
-      <div class="point blue frag">横方向 ＝ <b class="kb">空間（場所）</b><br>点線の「いま」は、<b>同じ瞬間</b> を表す横線</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -634,14 +635,14 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
 <!-- 家族の 1 日 -->
 <section class="slide" data-id="family">
   <div class="chap">SECTION 3 ／ 時間と空間を 1 つの図に</div>
-  <h2>1 つの図で、時間と空間を同時に表せる<small>1.2（時空）</small></h2>
+  <h2>1 つの図で、時間と空間をいっしょに表せる<small>1.2（時空）</small></h2>
   <div class="body cols" style="grid-template-columns:1.1fr 1fr">
     <div class="card stp pop" id="dgFamily" style="--h:360px"></div>
     <div>
       <ul class="plain">
         <li class="pop"><span class="ico">🏫</span><span>昼間、<b>子ども</b> は学校で勉強し</span></li>
         <li class="pop" style="--d:.06s"><span class="ico">🏢</span><span><b>親</b> は会社で働く（<b class="kb">同時・別の場所</b>）</span></li>
-        <li class="pop" style="--d:.12s"><span class="ico">🏠</span><span>そのあと、みんな家に帰って <b>いっしょに夕食</b>（<b class="k">後</b>）</span></li>
+        <li class="pop" style="--d:.12s"><span class="ico">🏠</span><span>そのあと、みんな家に帰って <b>いっしょに夕食</b>（<b class="k">後</b>・<b class="k">相互作用</b>）</span></li>
       </ul>
     </div>
   </div>
@@ -710,7 +711,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
     <div class="sl pop" style="--d:0.00s;--c:var(--accent)"><span class="sl-n">1</span><div>箱と線の図は、いつでも <b class="k">空間と時間の中で起きていること</b> として読める</div></div>
     <div class="sl pop" style="--d:0.07s;--c:var(--accent)"><span class="sl-n">2</span><div><b>縦に積む ＝ 時間</b>：下の箱が先、上の箱はその出力に作用する（図は <b>下から上へ</b>）</div></div>
     <div class="sl pop" style="--d:0.14s;--c:var(--accent)"><span class="sl-n">3</span><div><b>順番は大事</b>：パンのレシピで「混ぜる」と「焼く」を入れ替えると泥になる</div></div>
-    <div class="sl pop" style="--d:0.21s;--c:var(--blue)"><span class="sl-n">4</span><div><b>横に並べる ＝ 空間</b>：同じ時刻に、別々の場所で作用する（Andrea・Blaise・Chi）</div></div>
+    <div class="sl pop" style="--d:0.21s;--c:var(--blue)"><span class="sl-n">4</span><div><b>横に並べる ＝ 空間</b>：別々の場所で作用する（Andrea・Blaise・Chi）</div></div>
     <div class="sl pop" style="--d:0.28s;--c:var(--pink)"><span class="sl-n">5</span><div><b class="k">カップ ⋃</b> ＝ 昔 Chi が 2 人に送った 2 つの粒子。どれだけ離れても <b>線でつながったまま</b> → 量子の不思議へ</div></div>
   </div>
   <div class="pageno"></div>
@@ -964,7 +965,7 @@ function recipe(s, { ox = 0, oy = 0, id, bad = false, finalOn = 4 }) {
   staticFig(card, 3);
 }
 
-/* ---------- 横に並べた箱：同時・別の場所 ---------- */
+/* ---------- 横に並べた箱：別々の場所 ---------- */
 {
   const card = $('#dgSide'), s = svgIn(card, 470, 380);
   timeAxis(s, 30, 330, 25);
