@@ -582,6 +582,17 @@ svg.zx{display:block;width:100%;height:auto;user-select:none;-webkit-user-select
 .sumfig .sumlist .sl{font-size:22px !important;padding:10px 18px !important}
 .sumfig .card{padding:12px 18px}
 .sumfig svg.zx{height:470px;width:auto}
+/* 補足・教科書外 */
+.door.sup .door-num{font-size:58px;letter-spacing:.06em}
+.slide[data-id^="sup"] h2 small{background:#efedf6}
+.zt.mk{font:400 24px "Cambria Math","STIX Two Math","Times New Roman",serif;fill:var(--ink)}
+.zt.mk.g{fill:var(--accent-d)}
+.zt.mk.k{fill:var(--zr);font-weight:700}
+.zt.mk.s{font-size:19px}
+.zm{font:400 20px "Cambria Math","STIX Two Math","Times New Roman",serif;fill:var(--ink);text-anchor:middle;dominant-baseline:central}
+.zmb{fill:none;stroke:var(--ink);stroke-width:2.2}
+.slide[data-id^="sup"] ul.plain li{font-size:27px;margin:14px 0}
+.slide[data-id^="sup"] .point{font-size:25px}
 
 </style>
 </head>
@@ -602,6 +613,7 @@ svg.zx{display:block;width:100%;height:auto;user-select:none;-webkit-user-select
         <li class="pop" style="--d:.29s"><span class="num" style="background:var(--accent)">2</span>緑のクモ ＝ COPY<em>コピー</em></li>
         <li class="pop" style="--d:.31s"><span class="num" style="background:var(--blue)">3</span>赤のクモ ＝ ADD と NOT<em>1 + 1 = 0</em></li>
         <li class="pop" style="--d:.33s"><span class="num" style="background:var(--purple)">4</span>CNOT ＝ COPY ＋ ADD<em>制御 NOT</em></li>
+        <li class="pop" style="--d:.34s"><span class="num" style="background:#8f88b3">＋</span>補足：量子状態・量子ゲートとの対応<em>教科書外</em></li>
         <li class="pop" style="--d:.35s"><span class="num" style="background:#8f88b3">✓</span>まとめ</li>
       </ul>
     </div>
@@ -909,6 +921,85 @@ svg.zx{display:block;width:100%;height:auto;user-select:none;-webkit-user-select
   </div>
   <div class="pageno"></div>
 </section>
+
+<!-- ===== 補足・教科書外：量子状態・量子ゲートとの対応（消すときはここから「補足ここまで」までを削除） ===== -->
+<section class="slide door sup" style="--c:#8f88b3">
+  <div class="door-wrap">
+    <div class="door-num">補足</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">【補足・教科書外】『量子コンピュータの頭の中』の書き方と結ぶ</span>SUPPLEMENT</div>
+      <h1 class="pop" style="--d:.1s">量子状態・<br>量子ゲートとの対応</h1>
+      <p class="door-lead pop" style="--d:.2s">クモの図を、ベクトルと行列で書くと…</p>
+      <div class="door-topics pop" style="--d:.3s"><span>|0⟩・|1⟩</span><span>X・Z ゲート</span><span>COPY・ADD の行列</span><span>CNOT の行列</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<section class="slide" data-id="supState">
+  <div class="chap">補足・教科書外 ／ 量子状態との対応</div>
+  <h2>赤のビット状態は |0⟩ と |1⟩<small>補足・教科書外</small></h2>
+  <div class="body cols" data-min-text="430">
+    <div class="card pop"><svg class="zx" id="zSupState" viewBox="0 0 560 300"></svg></div>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">0</span><span>赤 0° ∝ <b class="k">|0⟩</b>、赤 180° ∝ <b class="k">|1⟩</b></span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">±</span><span>緑 0° ∝ <b class="kb">|+⟩</b>、緑 180° ∝ <b class="kb">|−⟩</b></span></li>
+      </ul>
+      <div class="point frag"><b class="k">∝</b> は「<b>定数倍を除いて等しい</b>」という意味（クモの図では、全体にかかる数を省く）</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<section class="slide" data-id="supGate">
+  <div class="chap">補足・教科書外 ／ 量子ゲートとの対応</div>
+  <h2>180° の赤は X ゲート、180° の緑は Z ゲート<small>補足・教科書外</small></h2>
+  <div class="body cols" data-min-text="430">
+    <div class="card pop"><svg class="zx" id="zSupGate" viewBox="0 0 520 330"></svg></div>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">X</span><span><b>X ゲート</b> ＝ <b class="k">NOT 箱</b><span style="white-space:nowrap">（|0⟩ ⇄ |1⟩）</span></span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">Z</span><span><b>Z ゲート</b>：Z|1⟩ = −|1⟩</span></li>
+        <li class="pop" style="--d:.16s"><span class="ico">I</span><span>0° の 2 本足は <b>I</b><span style="white-space:nowrap">（何もしない線）</span></span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<section class="slide" data-id="supCopyAdd">
+  <div class="chap">補足・教科書外 ／ COPY と ADD の行列</div>
+  <h2>COPY と ADD も行列で書ける<small>補足・教科書外</small></h2>
+  <div class="body cols" data-min-text="430">
+    <div class="card pop"><svg class="zx" id="zSupCA" viewBox="0 0 520 360"></svg></div>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">緑</span><span><b>COPY</b>：|0⟩ → |00⟩、|1⟩ → |11⟩</span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">赤</span><span><b>ADD</b>：|a⟩|b⟩ → |a ⊕ b⟩</span></li>
+      </ul>
+      <div class="point frag">入力と出力の本数が違うので、<br>どちらも <b class="k">量子ゲート（ユニタリ行列）ではない</b></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<section class="slide" data-id="supCnot">
+  <div class="chap">補足・教科書外 ／ CNOT の行列</div>
+  <h2>クモの CNOT は、4 × 4 の CNOT ゲートと同じ<small>補足・教科書外</small></h2>
+  <div class="body cols" data-min-text="460">
+    <div class="card pop"><svg class="zx" id="zSupCnot" viewBox="0 0 520 260"></svg></div>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">→</span><span>CNOT|a b⟩ = |a, <b class="k">a ⊕ b</b>⟩</span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">例</span><span>CNOT|10⟩ = <b class="k">|11⟩</b><span style="white-space:nowrap">（17 ページの図）</span></span></li>
+      </ul>
+      <div class="point frag">『量子コンピュータの頭の中』の<br>CNOT ゲートと同じ行列</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+<!-- ===== 補足ここまで ===== -->
 
 <!-- まとめ -->
 <section class="slide">
@@ -1417,6 +1508,55 @@ function cnotStates(a, b) {
   });
   n.l1 = { x: 522, y: 186, t: 'NOT', cls: 'tag' };
   zfig('zMore', { n, w });
+}
+
+/* ---------- 補足・教科書外：量子状態・量子ゲートとの対応（ベクトル・行列を図の中に） ---------- */
+function drawMat(svg, x, y, M, cell = 28) {
+  const r = M.length, c = M[0].length, w = c * cell + 12, h = r * cell + 6, t = y - h / 2;
+  el('path', { d: `M${x + 7},${t} H${x} V${t + h} H${x + 7}`, class: 'zmb' }, svg);
+  el('path', { d: `M${x + w - 7},${t} H${x + w} V${t + h} H${x + w - 7}`, class: 'zmb' }, svg);
+  M.forEach((row, i) => row.forEach((v, k) => { el('text', { x: x + 6 + cell * (k + .5), y: t + 3 + cell * (i + .5), class: 'zm' }, svg).textContent = v; }));
+  return x + w;
+}
+function mtext(svg, x, y, s, cls = '') { const e = el('text', { x, y, class: 'zt mk ' + cls }, svg); e.style.textAnchor = 'start'; e.textContent = s; return e; }
+{
+  // 状態：赤 0°・180° ∝ |0⟩・|1⟩、緑 0°・180° ∝ |+⟩・|−⟩
+  const svg = document.getElementById('zSupState'), n = {}, w = {};
+  const L = [['r', 0, '|0⟩', [[1], [0]]], ['r', 180, '|1⟩', [[0], [1]]], ['g', 0, '|+⟩', '= (|0⟩ + |1⟩) / √2'], ['g', 180, '|−⟩', '= (|0⟩ − |1⟩) / √2']];
+  L.forEach(([c, p], i) => { const ox = (i % 2) * 300, y = i < 2 ? 95 : 235, id = 's' + i; n[id] = { x: ox + 40, y, c, p, r: 22 }; w[id] = { a: id, b: [ox + 40, y - 58] }; });
+  zxScene(el('g', {}, svg)).set({ n, w });
+  L.forEach(([c, p, ket, v], i) => {
+    const ox = (i % 2) * 300, y = i < 2 ? 95 : 235;
+    mtext(svg, ox + 74, y, '∝'); mtext(svg, ox + 104, y, ket, c === 'r' ? 'k' : 'g');
+    if (Array.isArray(v)) { mtext(svg, ox + 150, y, '='); drawMat(svg, ox + 176, y, v); } else mtext(svg, ox + 148, y, v, 's');
+  });
+}
+{
+  // 1 量子ビットのゲート：180° の赤 ＝ X、180° の緑 ＝ Z、0° ＝ I
+  const svg = document.getElementById('zSupGate'), n = {}, w = {};
+  const L = [[0, 70, 'r', 180, 'X', [[0, 1], [1, 0]]], [0, 215, 'g', 180, 'Z', [[1, 0], [0, '−1']]], [275, 70, 'r', 0, 'I', [[1, 0], [0, 1]]], [275, 215, 'g', 0, 'I', [[1, 0], [0, 1]]]];
+  L.forEach(([ox, y, c, p], i) => { const id = 'g' + i; n[id] = { x: ox + 30, y, c, p, r: 21 }; w[id + 'u'] = { a: id, b: [ox + 30, y - 55] }; w[id + 'd'] = { a: id, b: [ox + 30, y + 55] }; });
+  zxScene(el('g', {}, svg)).set({ n, w });
+  L.forEach(([ox, y, c, p, g, M]) => { mtext(svg, ox + 62, y, '='); mtext(svg, ox + 88, y, g, 'k'); mtext(svg, ox + 116, y, '='); drawMat(svg, ox + 142, y, M); });
+}
+{
+  // COPY と ADD の行列
+  const svg = document.getElementById('zSupCA');
+  zxScene(el('g', {}, svg)).set({
+    n: { C: { x: 45, y: 120, c: 'g', r: 21 }, A: { x: 300, y: 120, c: 'r', r: 21 }, lc: { x: 110, y: 222, t: 'COPY', cls: 'dl' }, la: { x: 395, y: 222, t: 'ADD', cls: 'dl' } },
+    w: { c1: { a: 'C', b: [20, 60] }, c2: { a: 'C', b: [70, 60] }, c3: { a: 'C', b: [45, 180] }, a1: { a: 'A', b: [300, 60] }, a2: { a: 'A', b: [275, 180] }, a3: { a: 'A', b: [325, 180] } },
+  });
+  mtext(svg, 84, 120, '='); drawMat(svg, 110, 120, [[1, 0], [0, 0], [0, 0], [0, 1]]);
+  mtext(svg, 336, 120, '∝'); drawMat(svg, 364, 120, [[1, 0, 0, 1], [0, 1, 1, 0]]);
+}
+{
+  // CNOT の行列
+  const svg = document.getElementById('zSupCnot');
+  zxScene(el('g', {}, svg)).set({
+    n: { G: { x: 40, y: 130, c: 'g', r: 21 }, X: { x: 108, y: 130, c: 'r', r: 21 } },
+    w: { a: { a: 'G', b: [40, 62] }, b: { a: 'G', b: [40, 198] }, c: { a: 'X', b: [108, 62] }, d: { a: 'X', b: [108, 198] }, h: { a: 'G', b: 'X', h: 1 } },
+  });
+  mtext(svg, 150, 130, '∝'); drawMat(svg, 178, 130, [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]], 30);
 }
 
 /* ---------- まとめ：1・2 ページと同じビットの辞書の図（静止図。描いた範囲に合わせて切り落とす） ---------- */
