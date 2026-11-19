@@ -1,0 +1,2126 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2.2 クモにかまれた！ ― Quantum in Pictures</title>
+<style>
+:root{
+  --ink:#1f1a3d; --muted:#6b6790; --line:#1f1a3d; --bg:#fffaf0;
+  --accent:#ff6b1a; --accent-d:#e04e00; --accent-l:#fff1c2;
+  --blue:#3b6cff; --blue-l:#dfe8ff; --green:#14a35a;
+  --off:#b9b5d0; --pink:#ff4f9a; --yellow:#ffd53d; --purple:#8a5cff;
+  --hard:4px 4px 0 var(--ink);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{margin:0;height:100%;background:#1e293b;overflow:hidden;
+  font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;color:var(--ink)}
+#viewport{position:fixed;inset:0}
+#stage{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform-origin:center center;
+  background:var(--bg);box-shadow:0 20px 60px rgba(0,0,0,.4);overflow:hidden}
+
+/* ---------- slides ---------- */
+.slide{position:absolute;inset:0;padding:44px 64px 50px;opacity:0;pointer-events:none;
+  transform:translateX(60px);transition:opacity .55s ease,transform .55s ease;display:flex;flex-direction:column}
+.slide.past{transform:translateX(-60px)}
+.slide.active{opacity:1;transform:none;pointer-events:auto}
+.slide::before{content:"";position:absolute;left:0;top:0;right:0;height:6px;
+  background:linear-gradient(90deg,var(--accent),#facc15 50%,var(--blue))}
+.chap{font-size:15px;color:var(--muted);letter-spacing:.05em}
+h2{font-size:38px;margin:6px 0 22px;padding-left:16px;border-left:10px solid var(--accent);line-height:1.25}
+h2 small{font-size:22px;color:var(--muted);font-weight:500;margin-left:12px}
+.pageno{position:absolute;right:30px;bottom:16px;font-size:14px;color:var(--muted)}
+.body{flex:1;min-height:0}
+p,li{font-size:23px;line-height:1.6}
+ul{margin:0;padding-left:1.2em}
+li{margin:6px 0}
+b.k{color:var(--accent-d)}
+b.kb{color:var(--blue)}
+.muted{color:var(--muted)}
+.cols{display:grid;grid-template-columns:1.25fr 1fr;gap:30px;align-items:center;height:100%}
+.cols.even{grid-template-columns:1fr 1fr}
+.cols.wide{grid-template-columns:1.7fr 1fr}
+.card{background:#fff;border-radius:18px;box-shadow:0 6px 24px rgba(15,23,42,.08);padding:18px 22px}
+.point{background:var(--accent-l);border-left:7px solid var(--accent);padding:12px 18px;border-radius:10px;font-size:22px;line-height:1.55;margin-top:14px}
+.point.blue{background:var(--blue-l);border-left-color:var(--blue)}
+.hint{font-size:16px;color:var(--muted);margin-top:6px}
+.formula{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:30px;background:#fff;border-radius:12px;
+  padding:10px 20px;display:inline-block;box-shadow:0 3px 12px rgba(15,23,42,.08)}
+sub{font-size:.65em}
+.center{display:flex;justify-content:center;align-items:center}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+button.b{font:inherit;font-size:16px;padding:7px 16px;border-radius:999px;border:2px solid var(--blue);background:#fff;color:var(--blue);cursor:pointer;font-weight:700}
+button.b:hover{background:var(--blue-l)}
+button.b.playing{background:var(--blue);color:#fff}
+
+/* fragments & entrance animations */
+.frag{opacity:0;transform:translateY(18px);transition:opacity .45s ease,transform .45s ease}
+.frag.vis{opacity:1;transform:none}
+.slide.active .pop{animation:pop .6s cubic-bezier(.2,.8,.3,1.2) both;animation-delay:var(--d,0s)}
+@keyframes pop{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+
+/* title */
+.title-wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:30px;align-items:center;height:100%}
+.title-wrap h1{font-size:54px;line-height:1.25;margin:0 0 14px}
+.title-wrap .sub{font-size:30px;color:var(--accent-d);font-weight:700;margin-bottom:34px}
+.title-wrap .meta{font-size:20px;color:var(--muted);line-height:1.8}
+.agenda li{font-size:27px;margin:16px 0;list-style:none;display:flex;align-items:center;gap:16px}
+.agenda .num{width:46px;height:46px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;flex:none}
+.agenda .new{background:var(--accent)}
+.tag{font-size:15px;background:var(--accent);color:#fff;border-radius:999px;padding:2px 12px;font-weight:700}
+details{background:#fff;border-radius:12px;padding:10px 18px;margin:10px 0;box-shadow:0 3px 12px rgba(15,23,42,.06);font-size:22px}
+details summary{cursor:pointer;font-weight:700}
+details[open] summary{color:var(--accent-d)}
+details div{margin-top:8px;line-height:1.6;color:#334155}
+
+/* ---------- UI ---------- */
+#ui{position:fixed;left:0;right:0;bottom:0;height:40px;display:flex;align-items:center;gap:10px;padding:0 14px;
+  color:#cbd5e1;font-size:14px;opacity:.25;transition:opacity .3s;z-index:10}
+#ui:hover{opacity:1}
+#ui button{background:#334155;color:#fff;border:0;border-radius:6px;padding:5px 12px;cursor:pointer;font:inherit}
+#progress{position:fixed;left:0;bottom:0;height:4px;background:var(--accent);transition:width .4s;z-index:11}
+
+/* ---------- 一覧モード ---------- */
+#ovHead{display:none}
+body.overview{overflow:auto}
+body.overview #viewport{position:static;padding:64px 24px 60px}
+body.overview #ovHead{display:flex;position:fixed;left:0;right:0;top:0;height:52px;align-items:center;gap:16px;padding:0 24px;
+  background:#0f172a;color:#e2e8f0;font-size:16px;z-index:12}
+body.overview #ovHead b{font-size:18px}
+body.overview #ovHead b,body.overview #ovHead button{white-space:nowrap}
+@media (max-width:900px){body.overview #ovHead span{display:none}}
+body.overview #ovHead button{background:var(--accent);color:#fff;border:0;border-radius:6px;padding:6px 14px;cursor:pointer;font:inherit;font-weight:700;margin-left:auto}
+body.overview #stage{position:static;transform:none!important;width:auto;height:auto;overflow:visible;background:none;box-shadow:none;
+  display:grid;grid-template-columns:repeat(var(--cols,4),var(--ow,256px));gap:22px}
+/* 縮小は zoom ではなく transform で行う（iPad の Safari は zoom の扱いが異なり、中身の位置がずれるため）。
+   transform は並べるときの大きさに影響しないので、負の余白で縮小後の大きさ（--ow × --oh）に合わせる */
+body.overview .slide{position:relative;inset:auto;width:1280px;height:720px;opacity:1;pointer-events:auto;
+  transform:scale(var(--z,.2));transform-origin:0 0;margin:0 calc(var(--ow,256px) - 1280px) calc(var(--oh,144px) - 720px) 0;
+  cursor:pointer;background:var(--bg);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);outline:0 solid var(--accent);transition:outline-width .15s}
+body.overview .slide *{pointer-events:none}
+body.overview .slide:hover{outline-width:14px}
+body.overview .slide.current{outline-width:22px}
+body.overview .frag{opacity:1;transform:none}
+body.overview .bar-fill{width:var(--w);transition:none}
+body.overview .slide{overflow:hidden}
+/* 一覧ではページ番号を右下の札にして、中身と重なっても読めるようにする */
+body.overview .slide .pageno{font-size:40px;font-weight:900;color:#fff;background:var(--ink);border-radius:16px;padding:2px 20px;bottom:14px;right:14px;z-index:6}
+body.overview #ui,body.overview #progress{display:none}
+
+/* ---------- ポップ調デザイン（太枠・ずらし影・弾むアニメ） ---------- */
+html,body{background:#2a2350}
+#stage{background:
+  radial-gradient(circle at 92% 8%,#ffd6e8 0 120px,transparent 121px),
+  radial-gradient(circle at 4% 96%,#d4f4ff 0 150px,transparent 151px),
+  radial-gradient(circle at 98% 92%,#fff0b3 0 70px,transparent 71px),
+  radial-gradient(#e9e2cf 1.4px,transparent 1.6px) 0 0/22px 22px,
+  var(--bg)}
+.slide{transition:opacity .45s ease,transform .6s cubic-bezier(.3,1.5,.5,1)}
+.slide::before{height:10px;background:repeating-linear-gradient(90deg,var(--accent) 0 80px,var(--yellow) 80px 160px,var(--pink) 160px 240px,var(--blue) 240px 320px)}
+.chap{font-weight:700;color:var(--pink);letter-spacing:.08em}
+h2{border-left:none;padding-left:54px;position:relative}
+h2::before{content:"";position:absolute;left:0;top:50%;width:34px;height:34px;margin-top:-17px;border-radius:10px;
+  background:linear-gradient(135deg,var(--yellow),var(--accent) 55%,var(--pink));border:3px solid var(--ink);transform:rotate(-12deg);box-shadow:3px 3px 0 var(--ink)}
+.slide.active h2::before{animation:wiggle 1s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes wiggle{from{transform:rotate(-120deg) scale(.3)}to{transform:rotate(-12deg)}}
+h2 small{white-space:nowrap;background:var(--accent-l);color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:2px 14px;font-size:18px;font-weight:700;vertical-align:middle}
+b.k{color:var(--accent-d);background:linear-gradient(transparent 62%,#ffe58a 62%)}
+b.kb{color:var(--blue);background:linear-gradient(transparent 62%,#cfe0ff 62%)}
+.card{border:3px solid var(--ink);border-radius:22px;box-shadow:6px 6px 0 var(--ink)}
+.point{border:2.5px solid var(--ink);border-left:10px solid var(--accent);border-radius:16px;box-shadow:var(--hard)}
+.point.blue{border-left-color:var(--blue)}
+.formula{border:2.5px solid var(--ink);box-shadow:var(--hard)}
+button.b{border:2.5px solid var(--ink);background:var(--yellow);color:var(--ink);box-shadow:3px 3px 0 var(--ink);transition:transform .1s,box-shadow .1s}
+button.b:hover{background:#ffe06b;transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+button.b:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+button.b.playing{background:var(--pink);color:#fff}
+.slide.active .pop{animation:pop .7s cubic-bezier(.3,1.6,.5,1) both;animation-delay:var(--d,0s)}
+@keyframes pop{from{opacity:0;transform:translateY(30px) scale(.85) rotate(-2deg)}to{opacity:1;transform:none}}
+.frag{transform:translateY(18px) scale(.95);transition:opacity .4s ease,transform .5s cubic-bezier(.3,1.6,.5,1)}
+
+.bitex span,.quote,.tile,details{border:2.5px solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
+table.tt{border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);border-collapse:separate;border-spacing:0}
+table.tt th,table.tt td{border:0;border-right:1.5px solid #d9d4ea;border-bottom:1.5px solid #d9d4ea}
+table.tt th{background:#ece6ff;border-bottom:2.5px solid var(--ink)}
+table.tt th.out{background:#ffe1c7}
+table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
+
+.wire{stroke-width:5}
+.gate path,.gate circle{stroke:var(--ink);stroke-width:3.5}
+.gate.on path:not(.xorback),.gate.on circle{fill:#ffe1c7;stroke:var(--ink)}
+.gate.on path.xorback{stroke:var(--ink)}
+.gate.on{filter:drop-shadow(3px 3px 0 var(--accent))}
+.inp circle{stroke-width:3.5}
+.inp.on circle{stroke:var(--ink)}
+.lamp circle{stroke:var(--ink)}
+.lamp.on circle{fill:var(--yellow);stroke:var(--ink);filter:drop-shadow(0 0 12px rgba(255,213,61,.95))}
+.fa rect{stroke:var(--ink);rx:16}
+.fa.active rect{fill:#fff1c2;stroke:var(--ink);filter:drop-shadow(4px 4px 0 var(--accent))}
+.ca-grid .hl{background:#fff1c2;border:2px dashed var(--accent)}
+.bar-bg{background:#ece6ff;border:2px solid var(--ink)}
+.bar-fill.a{background:linear-gradient(90deg,var(--accent),var(--pink))}
+
+.title-wrap h1{font-size:64px;background:linear-gradient(transparent 70%,#ffe58a 70%) no-repeat;display:inline;line-height:1.3;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.title-wrap .sub{color:var(--pink);margin-top:18px;margin-bottom:22px;font-size:23px;white-space:nowrap}
+.tchaps{display:flex;flex-direction:column;gap:12px}
+.tchap{display:flex;align-items:center;gap:12px;background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:3px 3px 0 var(--ink);padding:6px 14px 6px 6px}
+.tchap .tno{background:var(--c);color:#fff;font-weight:900;border:2px solid var(--ink);border-radius:10px;padding:2px 10px;font-size:18px;flex:none}
+.tchap .tname{font-weight:900;font-size:21px}
+.tchap .tsec{margin-left:auto;font-size:14px;color:var(--muted);font-weight:700;white-space:nowrap}
+.agenda .num{border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);background:var(--blue)}
+.agenda li:nth-child(3) .num{background:var(--pink)}
+.agenda li:nth-child(4) .num{background:var(--green)}
+.agenda li:nth-child(6) .num{background:var(--purple)}
+.agenda li:nth-child(7) .num{background:var(--accent)}
+.agenda .new{background:var(--accent)}
+.tag{background:var(--pink);border:2px solid var(--ink);white-space:nowrap;flex:none}
+
+/* 目次の教科書の章見出し */
+.agenda li.agroup{font-size:17px;font-weight:900;color:var(--pink);letter-spacing:.06em;margin:14px 0 -4px;border-bottom:2.5px dashed #e3dcf2;padding-bottom:4px}
+.agenda li.agroup:first-child{margin-top:0}
+
+/* 教科書の章の扉（本の章扉風） */
+.partdoor .pd-wrap{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-bottom:40px}
+.pd-src{font-size:18px;font-weight:700;color:var(--muted);letter-spacing:.08em}
+.pd-no{margin-top:14px;font-size:30px;font-weight:900;color:#fff;background:var(--c);border:3px solid var(--ink);border-radius:999px;padding:4px 26px;box-shadow:4px 4px 0 var(--ink);letter-spacing:.12em}
+.pd-title{font-size:68px;line-height:1.25;margin:22px 0 26px;background:linear-gradient(transparent 70%,#ffe58a 70%);display:inline;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.pd-secs{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:22px}
+.pd-secs span{background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:4px 18px;font-size:19px;font-weight:700;box-shadow:3px 3px 0 var(--ink)}
+.pd-secs span.add{background:var(--accent-l)}
+.pd-bg{position:absolute;left:0;right:0;bottom:4px;display:flex;justify-content:center;color:var(--c);opacity:.13;font-size:84px;pointer-events:none}
+.pd-bg .eq{font-size:50px;gap:14px}
+.pd-bg .vec{border-width:5px;border-radius:40px;padding:4px 26px;line-height:1.15}
+
+/* 復習問題：カードをクリックすると答えが出る */
+.quiz{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;gap:12px 16px;align-content:center}
+.qz{display:flex;flex-direction:column;background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:10px 14px;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.qz:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.qz-q{display:flex;gap:10px;align-items:flex-start;font-size:17px;line-height:1.5;font-weight:600}
+.qz-no{flex:none;background:var(--blue);color:#fff;font-weight:900;font-size:14px;border:2px solid var(--ink);border-radius:999px;padding:1px 9px;margin-top:2px}
+.qz-a{margin-top:auto;padding-top:8px;min-height:40px;display:flex;align-items:center;border-top:2px dashed #e3dcf2;font-size:17px;line-height:1.5}
+.qz-hide{color:var(--muted);font-weight:800;font-size:15px}
+.qz-ans{display:none;color:#1f1a3d}
+.qz.open{background:#fffaf0}
+.qz.open .qz-no{background:var(--green)}
+.qz.open .qz-hide{display:none}
+.qz.open .qz-ans{display:inline;animation:qzIn .4s cubic-bezier(.3,1.6,.5,1)}
+@keyframes qzIn{from{opacity:0;transform:translateY(6px) scale(.96)}to{opacity:1;transform:none}}
+.quiz.q2{grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:auto}
+.quiz.q2 .qz{grid-column:span 2}
+.quiz.q2 .qz.dia{grid-column:span 3}
+.quiz.q2 .qz.wide .qzc{max-height:200px}
+.quiz.q2 .qz-q{font-size:16px}
+.quiz.q2 .qz-a{font-size:15.5px;min-height:34px}
+.qz-q > span:last-child{min-width:0;flex:1}
+.qzc{display:block;width:100%;max-height:170px;margin:6px auto 0;font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif}
+.qzc .qg{fill:#f1ecff;stroke:#1f1a3d;stroke-width:2.5;stroke-dasharray:6 4}
+.qzc .g-q{font-size:26px;font-weight:900;fill:#8a5cff}
+.qzc .g-ans{display:none;font-weight:900;fill:#1f1a3d}
+.qz.open .qzc .qg{fill:#fff1c2;stroke-dasharray:none}
+.qz.open .qzc .g-q{display:none}
+.qz.open .qzc .g-ans{display:inline}
+.quiz.q3{grid-auto-rows:auto}
+.quiz.q3 .qz{min-height:118px}
+.quiz.q3 .qz:last-child{grid-column:span 2}
+.qzc.qzbloch{max-height:145px}
+.qgb{cursor:pointer}
+.qgb:hover .qg{fill:#e6dcff}
+.qgb.shown .qg{fill:#fff1c2;stroke-dasharray:none}
+.qgb.shown .g-q{display:none}
+.qgb.shown .g-ans{display:inline;animation:qzIn .35s cubic-bezier(.3,1.6,.5,1)}
+h2 .qz-all{font-size:14px;padding:4px 14px;margin-left:16px;vertical-align:middle}
+
+/* 章の扉スライド */
+.door-wrap{position:relative;display:grid;grid-template-columns:auto 1fr;gap:64px;align-items:center;height:100%;padding:0 40px}
+.door-num{width:210px;height:210px;border-radius:46px;background:var(--c);color:#fff;border:5px solid var(--ink);box-shadow:10px 10px 0 var(--ink);
+  display:flex;align-items:center;justify-content:center;font-size:140px;font-weight:900;font-family:Consolas,Menlo,monospace;transform:rotate(-6deg)}
+.slide.active .door-num{animation:doorIn .9s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes doorIn{from{opacity:0;transform:rotate(-120deg) scale(.3)}to{opacity:1;transform:rotate(-6deg)}}
+.door-label{font-size:22px;font-weight:900;letter-spacing:.14em;color:var(--c)}
+.door-label .door-book{display:block;font-size:16px;letter-spacing:.04em;color:var(--muted);margin-bottom:2px}
+.door-label .tag{font-size:15px;letter-spacing:0;vertical-align:middle;margin-left:8px}
+.door h1{font-size:80px;line-height:1.15;margin:6px 0 4px}
+.door-lead{font-size:32px;font-weight:700;color:var(--muted);margin:0 0 30px}
+.door-topics{display:flex;flex-wrap:wrap;gap:12px}
+.door-topics span{background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:4px 18px;font-size:19px;font-weight:700;box-shadow:3px 3px 0 var(--ink)}
+.door-bg{position:absolute;right:-20px;bottom:-150px;font-size:600px;font-weight:900;line-height:1;color:var(--c);opacity:.09;
+  font-family:Consolas,Menlo,monospace;pointer-events:none}
+#progress{height:6px;background:linear-gradient(90deg,var(--accent),var(--pink),var(--blue))}
+
+/* ---------- レーザーポインター（Apple Pencil） ---------- */
+#stage{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body:not(.overview) #stage{touch-action:none}
+#laser{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none;z-index:5}
+body.overview #laser{display:none}
+/* 黒ペン（Apple Pencil で書き込み） */
+#ink{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none;z-index:4}
+#penbar{position:fixed;right:12px;top:14px;z-index:20;display:flex;align-items:center;gap:4px;background:#fff;border:2.5px solid var(--ink);
+  border-radius:999px;box-shadow:3px 3px 0 var(--ink);padding:4px;touch-action:manipulation;opacity:.85}
+#penbar:hover{opacity:1}
+#penbar button{height:38px;min-width:38px;border-radius:999px;border:2px solid transparent;background:none;font:inherit;font-size:14px;font-weight:800;
+  color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;padding:0 10px}
+#penbar button.on{background:var(--accent-l);border-color:var(--ink)}
+#penbar .sep{width:2px;height:24px;background:#e3dcf2;border-radius:1px}
+body.overview #ink,body.overview #penbar{display:none}
+
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{overflow:visible;background:#fff}
+  #viewport{position:static}
+  #stage{position:static;transform:none!important;box-shadow:none;width:auto;height:auto;overflow:visible;background:none}
+  .slide{position:relative;width:1280px;height:720px;opacity:1;transform:none;page-break-after:always;background:var(--bg)}
+  .frag{opacity:1;transform:none}
+  #ui,#progress,.btns,.hint,#laser,#penbar{display:none}
+}
+.sumlist{display:flex;flex-direction:column;gap:12px;justify-content:center}
+.sl{display:flex;gap:14px;align-items:center;background:#fff;border:2.5px solid var(--ink);border-left:12px solid var(--c);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:10px 18px;font-size:21px;line-height:1.5}
+.sl-n{flex:none;width:36px;height:36px;border-radius:50%;background:var(--c);color:#fff;font-weight:900;font-size:18px;display:flex;align-items:center;justify-content:center;border:2px solid var(--ink)}
+.sl-s{font-size:16px;color:var(--muted);margin-left:4px}
+.ag-t{margin:4px 0 0;padding:0}
+.ag-t li{font-size:18px !important;margin:2px 0 !important;gap:10px !important}
+.ag-t li em{font-style:normal;font-size:13px;font-weight:800;color:var(--muted);margin-left:auto;padding-left:10px;white-space:nowrap}
+.ag-t .num{width:28px !important;height:28px !important;font-size:14px;border-width:2px !important;box-shadow:2px 2px 0 var(--ink) !important}
+.ag-t li.agroup{font-size:13px !important;margin:6px 0 0 !important;padding-bottom:1px}
+
+/* ---------- 1.2 空間と時間：図（箱と線）の部品 ---------- */
+@keyframes flow{from{stroke-dashoffset:16}to{stroke-dashoffset:0}}
+.book-en{font-size:15px;color:var(--muted);font-weight:700;font-style:italic}
+svg.dg{display:block;width:100%;height:var(--h,380px);user-select:none;overflow:visible;
+  font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic UI",Meiryo,sans-serif}
+.dg .wr{fill:none;stroke:var(--ink);stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round;transition:stroke .45s}
+.dg .wr.on{stroke:var(--accent)}
+.dg .bx rect{fill:#fff;stroke:var(--ink);stroke-width:3.5;transition:fill .35s}
+.dg .bx{transition:filter .35s}
+.dg .bx.on rect{fill:var(--accent-l)}
+.dg .bx.now rect{fill:var(--yellow)}
+.dg .bx.now{filter:drop-shadow(4px 4px 0 var(--accent))}
+.dg .sym{font-size:30px;font-weight:900;text-anchor:middle;dominant-baseline:central;fill:var(--ink);
+  font-family:"Segoe UI Symbol","Apple Symbols","DejaVu Sans","Noto Sans Symbols2",sans-serif}
+.dg .sym .sub{font-size:16px;font-family:Consolas,Menlo,monospace}
+.dg .nm{font-size:18px;font-weight:900;text-anchor:middle;dominant-baseline:central;fill:var(--ink)}
+.dg .nm .en{font-size:12px;font-weight:700;fill:var(--muted)}
+.dg .ic{font-size:34px;text-anchor:middle;dominant-baseline:central}
+.dg .wl{font-size:16px;font-weight:800;fill:var(--muted)}
+.dg .wl.big{font-size:20px;fill:var(--ink)}
+.dg .res{font-size:22px;font-weight:900;fill:var(--accent-d)}
+.dg .appear{opacity:0;transition:opacity .45s}
+.dg .appear.on{opacity:1}
+.dg [data-only]{transition:opacity .45s}
+.dg .hide{opacity:0 !important}
+.dg .ax{stroke:#a9a3c4;stroke-width:3;fill:none;stroke-linecap:round}
+.dg .axh{fill:#a9a3c4}
+.dg .axl{font-size:15px;font-weight:900;fill:#8f88b3}
+.dg .now-line{transition:transform .9s cubic-bezier(.3,1.25,.5,1)}
+.dg .now-line line{stroke:var(--pink);stroke-width:3;stroke-dasharray:10 7}
+.dg .now-line text{fill:var(--pink);font-weight:900;font-size:16px}
+.dg .sep{stroke:#a9a3c4;stroke-width:3;stroke-dasharray:12 9}
+.dg .who{font-size:20px;font-weight:900;fill:#8f88b3;text-anchor:middle}
+.dg .tok{transition:opacity .3s}
+.dg .tok circle{stroke:var(--ink);stroke-width:3}
+.dg .tok text{fill:#fff;font-weight:900;font-size:16px;text-anchor:middle;dominant-baseline:central}
+.dg .flowl{fill:none;stroke:#fff;stroke-width:2.4;stroke-dasharray:4 12;stroke-linecap:round;opacity:0;transition:opacity .3s}
+.dg .flowl.on{opacity:.95;animation:flow .55s linear infinite}
+.dg .glow{fill:none;stroke:var(--pink);stroke-width:16;stroke-linecap:round;opacity:0;transition:opacity .4s}
+.dg .glow.on{animation:glowp 1.3s ease-in-out infinite}
+@keyframes glowp{0%,100%{opacity:.18}50%{opacity:.5}}
+.dg .orbit{fill:none;stroke:#cfc8e3;stroke-width:2.5}
+.dg .panel{fill:#d4f4ff;stroke:var(--ink);stroke-width:3}
+.dg .mer{fill:none;stroke:#fff;stroke-width:2}
+.dg .head{font-size:20px;font-weight:900;text-anchor:middle}
+
+/* ステップ再生のカード */
+.stp{display:flex;flex-direction:column;gap:6px}
+.stp .cap{min-height:62px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:19px;font-weight:700;line-height:1.45;
+  background:#fffaf0;border:2px dashed #d9d4ea;border-radius:12px;padding:4px 12px}
+.stp .cap.go{animation:capIn .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes capIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.stp-ctl{display:flex;align-items:center;justify-content:center;gap:10px}
+.stp-ctl button.b{margin:0}
+.stp-ctl button.sm{padding:5px 12px}
+.dots{display:flex;gap:6px}
+.dots span{width:14px;height:14px;border-radius:50%;border:2px solid var(--ink);background:#fff;cursor:pointer;transition:background .3s}
+.dots span.on{background:var(--accent)}
+
+/* 本文まわり */
+.lead{font-size:22px;line-height:1.6;margin:0 0 10px}
+ul.plain{list-style:none;padding:0;margin:0}
+ul.plain li{font-size:21px;line-height:1.55;margin:8px 0;display:flex;gap:10px;align-items:flex-start}
+ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5px solid var(--ink);background:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:2px 2px 0 var(--ink)}
+.quote{font-size:16px;line-height:1.5;margin-top:12px;font-style:italic}
+.quote small{font-style:normal}
+.suit{font-family:"Segoe UI Symbol","Apple Symbols","DejaVu Sans",sans-serif;font-weight:900;font-style:normal}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;align-items:center;font-size:20px;margin-top:6px}
+.kv .kk{background:var(--ink);color:#fff;font-weight:900;border-radius:10px;padding:2px 12px;font-size:17px;text-align:center}
+.kv .kk.t{background:var(--accent)}
+.kv .kk.s{background:var(--blue)}
+.kv .kk.ts{background:var(--purple)}
+.bigmsg{font-size:30px;font-weight:900;line-height:1.45;margin:6px 0 14px}
+.tagx{display:inline-block;font-size:14px;font-weight:900;color:#fff;background:var(--purple);border:2px solid var(--ink);border-radius:999px;padding:1px 12px;vertical-align:middle;margin-left:10px}
+.notation{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.notation .card{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 18px}
+.notation h3{margin:0;font-size:22px}
+.notation h3 small{display:block;text-align:center;font-size:14px;color:var(--muted);font-weight:700}
+.notation .formula{font-size:38px;margin-top:4px}
+.notation .nt{font-size:18px;line-height:1.5;text-align:center}
+.slide[data-id="quiz"] .qz{min-height:150px}
+.slide[data-id="quiz"] .qz-q{font-size:21px}
+.slide[data-id="quiz"] .qz-a{font-size:19px}
+.quiz.q6{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tdg{--h:330px}
+.tdg .now-line{transition:none;animation:sweep 5s cubic-bezier(.45,0,.55,1) infinite}
+@keyframes sweep{0%{transform:translateY(300px)}80%,100%{transform:translateY(25px)}}
+.suit{background:none !important;font-size:1.12em}
+.stp .cap>span{display:block}
+.quote{padding:8px 14px}
+
+/* =====================================================================
+   圏論的量子情報ゼミのテーマ：ストリング図（箱と線）と ZX 図の雰囲気
+   墨色の線、緑 = Z スパイダー、赤 = X スパイダー、藍 = 補助色、方眼紙の背景、明朝の見出し
+   ===================================================================== */
+:root{
+  --ink:#1c1b2e; --muted:#6d6a80; --line:#1c1b2e; --bg:#fbfaf5;
+  --accent:#17935f; --accent-d:#0f7048; --accent-l:#e1f3ea;
+  --blue:#c43c4c; --blue-l:#fbe4e6; --green:#17935f;
+  --pink:#4a47a3; --purple:#4a47a3; --yellow:#e6f0c8;
+  --hard:0 2px 0 var(--ink);
+  --serif:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP","Noto Serif CJK JP","Times New Roman",serif;
+}
+html,body{background:#191827}
+#stage{background:
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220' fill='none' stroke='%231c1b2e' stroke-width='3' opacity='.06'%3E%3Cpath d='M60 0V70L30 130V220M60 70L100 125M140 0V60L100 125M140 60L175 220M100 125V220'/%3E%3Ccircle cx='60' cy='70' r='14' fill='%2317935f'/%3E%3Ccircle cx='140' cy='60' r='14' fill='%23c43c4c'/%3E%3Ccircle cx='100' cy='125' r='14' fill='%2317935f'/%3E%3C/svg%3E") right -30px bottom -40px/330px no-repeat,
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' fill='none' stroke='%231c1b2e' stroke-width='3' opacity='.05'%3E%3Cpath d='M30 0V70C30 125 120 125 120 70V0M170 200V120M80 200V150C80 110 170 110 170 150'/%3E%3Crect x='145' y='40' width='50' height='36' rx='4' fill='%23fbfaf5'/%3E%3Cpath d='M170 0V40M170 76V120'/%3E%3C/svg%3E") left -90px top 250px/230px no-repeat,
+  linear-gradient(#efece2 1px,transparent 1px) 0 0/24px 24px,
+  linear-gradient(90deg,#efece2 1px,transparent 1px) 0 0/24px 24px,
+  var(--bg)}
+.slide{transition:opacity .5s ease,transform .6s ease}
+.slide::before{height:4px;background:linear-gradient(90deg,var(--accent),var(--purple) 50%,var(--blue))}
+#progress{height:4px;background:linear-gradient(90deg,var(--accent),var(--purple),var(--blue))}
+@keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.slide.active .pop{animation:pop .6s ease both;animation-delay:var(--d,0s)}
+.frag{transform:translateY(12px);transition:opacity .4s ease,transform .45s ease}
+
+/* 見出し：明朝＋スパイダー（ノードと足）の印 */
+.chap{color:var(--purple);font-weight:700;letter-spacing:.14em}
+h2{font-family:var(--serif);font-weight:700;padding-left:56px}
+h2::before{width:40px;height:40px;margin-top:-20px;border:0;border-radius:0;box-shadow:none;transform:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cg stroke='%231c1b2e' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M20 20L20 2M20 20L5 36M20 20L35 36'/%3E%3C/g%3E%3Ccircle cx='20' cy='20' r='10' fill='%2317935f' stroke='%231c1b2e' stroke-width='3'/%3E%3C/svg%3E") center/contain no-repeat}
+@keyframes nodeIn{from{opacity:0;transform:scale(.3) rotate(-90deg)}to{opacity:1;transform:none}}
+.slide.active h2::before{animation:nodeIn .8s cubic-bezier(.3,1.4,.5,1) both}
+h2 small{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;background:#fff;border:1.5px solid var(--ink);color:var(--muted)}
+b.k{color:var(--accent-d);background:linear-gradient(transparent 64%,var(--accent-l) 64%)}
+b.kb{color:var(--blue);background:linear-gradient(transparent 64%,var(--blue-l) 64%)}
+
+/* カード・枠：細い墨の線、ずらし影はやめて控えめに */
+.card{border:2px solid var(--ink);border-radius:14px;box-shadow:0 2px 0 var(--ink),0 12px 28px rgba(28,27,46,.07)}
+.point{background:var(--accent-l);border:1.5px solid var(--ink);border-left:7px solid var(--accent);border-radius:10px;box-shadow:none}
+.point.blue{background:var(--blue-l);border-left-color:var(--blue)}
+.formula{border:1.5px solid var(--ink);box-shadow:none;font-family:"Cambria Math","STIX Two Math","Times New Roman",serif}
+.quote{font-family:var(--serif);border:1.5px solid var(--ink);border-left:5px solid var(--purple);box-shadow:none;background:#fff}
+button.b{background:#fff;color:var(--ink);border:2px solid var(--ink);box-shadow:0 2px 0 var(--ink)}
+button.b:hover{background:var(--accent-l);transform:none;box-shadow:0 2px 0 var(--ink)}
+button.b:active{transform:translateY(2px);box-shadow:none}
+button.b.playing{background:var(--ink);color:#fff}
+ul.plain li .ico{border-radius:50%;border:2px solid var(--ink);box-shadow:none;background:#fff;font-family:var(--serif);font-weight:900;font-size:19px}
+.stp .cap{background:#fff;border:1.5px dashed #c9c5da}
+.dots span{border-width:1.5px}
+.dots span.on{background:var(--accent)}
+.kv .kk{border-radius:999px}
+.kv .kk.ts{background:var(--purple)}
+
+/* タイトル */
+.title-wrap h1{font-family:var(--serif);background:linear-gradient(transparent 80%,rgba(23,147,95,.2) 80%) no-repeat}
+.title-wrap .sub{font-family:var(--serif);font-style:italic;color:var(--purple)}
+.agenda .num{border-radius:50%;border:2px solid var(--ink) !important;box-shadow:none !important}
+.agenda li.agroup{color:var(--purple);border-bottom:1.5px dashed #d8d4e6}
+
+/* 扉：大きな番号を「線の上のノード（スパイダー）」に */
+.door h1{font-family:var(--serif)}
+.door-label{letter-spacing:.18em}
+.door-num{position:relative;width:180px;height:180px;border-radius:50%;border:4px solid var(--ink);box-shadow:0 0 0 10px rgba(255,255,255,.7);
+  transform:none;font-family:var(--serif);font-size:110px}
+.door-num::before,.door-num::after{content:"";position:absolute;left:50%;width:5px;margin-left:-2.5px;height:320px;background:var(--ink)}
+.door-num::before{bottom:100%}
+.door-num::after{top:100%}
+@keyframes doorNode{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
+.slide.active .door-num{animation:doorNode .8s cubic-bezier(.3,1.4,.5,1) both}
+.door-bg{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:560px;right:30px;bottom:-170px;opacity:.07}
+.door-topics span{border:1.5px solid var(--ink);box-shadow:none}
+
+/* まとめ・復習問題 */
+.sl{border:1.5px solid var(--ink);border-left:8px solid var(--c);border-radius:12px;box-shadow:none;background:#fff}
+.qz{border:2px solid var(--ink);border-radius:14px;box-shadow:0 2px 0 var(--ink)}
+.qz:hover{transform:none;box-shadow:0 2px 0 var(--ink),0 8px 18px rgba(28,27,46,.1)}
+.qz-no{background:var(--purple)}
+.qz.open{background:#f4faf6}
+
+/* 図：今の箱は緑の縁と淡い光、済んだ箱は淡い緑 */
+.dg .bx.on rect{fill:#f1f9f4}
+.dg .bx.now rect{fill:#fff;stroke:var(--accent);stroke-width:4.5}
+.dg .bx.now{filter:drop-shadow(0 0 7px rgba(23,147,95,.5))}
+.dg .panel{fill:#eef3fb}
+#penbar{border:2px solid var(--ink);box-shadow:0 2px 0 var(--ink)}
+
+/* 「カーソル」モード（既定。道具を何も選んでいないとき）：普通のカーソルで文字を選択・コピーできる（6.1-7.9 v44 と同じ） */
+body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default;cursor:auto}
+.rlab{margin:18px 0 2px;font-size:17px;font-weight:900;color:var(--muted);letter-spacing:.1em;border-bottom:1.5px dashed #d8d4e6;padding-bottom:2px}
+
+/* ---------- 余白を減らす：図は本文の高さいっぱい、文字は大きく ---------- */
+h2{margin:4px 0 14px}
+.body.cols{align-items:stretch;gap:28px}
+.body.cols > .card{display:flex;flex-direction:column;justify-content:center;min-height:0}
+.body.cols > div:not(.card){display:flex;flex-direction:column;justify-content:center}
+.stp svg.dg{flex:1 1 0;height:auto;min-height:0}
+#msgDiag{flex:1;min-height:0;display:flex}
+#msgDiag svg.dg{height:100%}
+ul.plain li{font-size:25px;line-height:1.5;margin:10px 0;gap:12px}
+ul.plain li .ico{width:40px;height:40px;font-size:21px}
+.lead{font-size:25px;line-height:1.6}
+.bigmsg{font-size:34px}
+.point{font-size:24px;line-height:1.55;padding:14px 20px}
+.rlab{font-size:19px}
+.sumlist{gap:16px !important}
+.sumlist .sl{font-size:25px !important;padding:14px 22px !important}
+.sl-n{width:42px;height:42px;font-size:21px}
+.body.wide-fig{display:flex;flex-direction:column;gap:12px}
+.body.wide-fig > .card{flex:1;min-height:0;display:flex;flex-direction:column}
+.sumlist{gap:20px !important}
+.sumlist .sl{font-size:26px !important;padding:16px 24px !important}
+.slide[data-id="rocket"] ul.plain li,.slide[data-id="linked"] ul.plain li{font-size:23px}
+.slide[data-id="rocket"] .point,.slide[data-id="linked"] .point{font-size:22px}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) ul.plain li{font-size:29px;margin:16px 0}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) ul.plain li .ico{width:46px;height:46px;font-size:24px}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) .lead{font-size:29px}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) .point{font-size:27px}
+.stp-ctl{white-space:nowrap}
+.body.wide-fig{justify-content:center;align-items:center}
+/* 動かさない図（.frozen）：光る線・流れる点線も止める */
+.frozen .dg .glow.on{animation:none;opacity:.32}
+.frozen .dg .flowl.on{animation:none}
+
+/* 2 ページ：見出しの代わりに、この節の主張を図の横に大きく */
+.slide[data-id="msg"] .chap{margin-bottom:18px}
+.keymsg{font-family:var(--serif);font-size:56px;font-weight:900;line-height:1.45}
+
+/* =====================================================================
+   2.2 A spider bit me!：スパイダー（ZX 図）の部品（緑 = Z スパイダー、赤 = X スパイダー）
+   ===================================================================== */
+:root{--zr:#c43c4c;--zg:#17935f}
+.mono{font-family:Consolas,Menlo,monospace;letter-spacing:.04em}
+table.tt{border:2px solid var(--ink);box-shadow:0 2px 0 var(--ink);border-radius:12px;overflow:hidden;background:#fff;font-size:24px;text-align:center}
+table.tt th,table.tt td{padding:6px 18px}
+table.tt th{font-size:18px;white-space:nowrap}
+table.tt td.out.one{color:var(--accent-d);font-weight:800}
+table.tt.small{font-size:22px}
+table.tt tbody.static tr{cursor:default}
+
+/* スパイダー図（SVG） */
+svg.zx{display:block;width:100%;height:auto;user-select:none;-webkit-user-select:none;overflow:visible}
+.zw{fill:none;stroke:var(--ink);stroke-width:4.5;stroke-linecap:round}
+.zn circle{stroke:var(--ink);stroke-width:3.5}
+.zn.r circle{fill:var(--zr)}
+.zn.g circle{fill:var(--zg)}
+.zn text{font:900 13px "Segoe UI","Helvetica Neue",Arial,sans-serif;text-anchor:middle;dominant-baseline:central;fill:#fff;pointer-events:none}
+.zn.clk{cursor:pointer}
+.zn.clk:hover circle{stroke-width:5.5}
+.zn.hl circle{filter:drop-shadow(0 0 7px rgba(23,147,95,.55))}
+.zn.dim{opacity:.16}
+.zt{font:800 17px "Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;fill:var(--muted);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.zt.big{font:900 28px Consolas,Menlo,monospace;fill:var(--ink)}
+.zt.o{fill:var(--accent-d)}
+.zt.b{fill:var(--purple)}
+.zt.eqs{font:900 34px sans-serif;fill:var(--ink)}
+.zt.tag{font-size:18px;fill:var(--purple);font-weight:900}
+.zt.pk{fill:var(--zr);font-weight:900}
+.zt.sm{font-size:14px}
+.zctl{display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:center;align-items:center;margin:4px 0 2px}
+.stp .stp-ctl{margin-top:4px}
+.picker{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.picker .pk-l{font-weight:800;font-size:15px;color:var(--muted);margin-right:2px}
+.picker button{font:800 17px Consolas,Menlo,monospace;color:var(--ink);background:#fff;border:1.5px solid var(--ink);border-radius:999px;padding:2px 13px;cursor:pointer;box-shadow:0 2px 0 var(--ink)}
+.picker button:hover{background:var(--accent-l)}
+.picker button.on{background:var(--ink);color:#fff}
+
+/* ビット：文字 → 0 と 1 */
+.txtin{display:flex;align-items:center;justify-content:center;gap:10px;font-size:20px;font-weight:800;margin:0 0 10px}
+.txtin input{font:800 30px Consolas,Menlo,monospace;width:150px;text-align:center;border:2px solid var(--ink);border-radius:10px;padding:2px 8px;box-shadow:0 2px 0 var(--ink);background:var(--accent-l);outline:none;letter-spacing:.1em}
+.bin-list{display:flex;flex-direction:column;gap:8px}
+.bin-row{display:grid;grid-template-columns:52px 1fr;align-items:center;gap:10px;animation:qzIn .35s ease}
+.bin-ch{font:900 30px Consolas,Menlo,monospace;text-align:center;background:#fff;border:1.5px solid var(--ink);border-radius:10px}
+.bin-bits{display:flex;gap:3px}
+.bin-bits span{flex:1;height:40px;display:flex;align-items:center;justify-content:center;font:900 22px Consolas,Menlo,monospace;border:1.5px solid var(--ink);border-radius:7px;background:#fff}
+.bin-bits span.one{background:var(--ink);color:#fff}
+.bin-all{margin-top:12px;text-align:center;font:900 22px Consolas,Menlo,monospace;word-break:break-all;color:var(--accent-d);min-height:30px}
+
+/* ⊕ の表 */
+.xor4{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin:12px 0}
+.xor4 div{background:#fff;border:1.5px solid var(--ink);border-radius:10px;text-align:center;font:900 32px Consolas,Menlo,monospace;padding:6px 0;display:flex;align-items:center;justify-content:center;gap:10px}
+.xor4 span{color:var(--purple)}
+.xor4 b{color:var(--accent-d)}
+.xor4 .hot{background:var(--accent-l)}
+
+/* 手順 */
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.steps li{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1.5px solid var(--ink);border-radius:12px;padding:10px 16px;font-size:25px;line-height:1.5;margin:0;opacity:.45;transition:opacity .3s,background .3s}
+.steps li.on{opacity:1;background:var(--accent-l)}
+.steps li.done{opacity:1}
+.steps .sn{font-size:27px;font-weight:900;color:var(--accent-d);line-height:1.35;font-family:var(--serif)}
+.steps .r0,.steps .r1{border-radius:4px;padding:0 3px}
+.steps.a0 li.on .r0,.steps.a1 li.on .r1{box-shadow:inset 0 -4px 0 var(--accent)}
+.zt.dl{font:900 24px Consolas,Menlo,"Hiragino Kaku Gothic ProN",sans-serif;fill:var(--accent-d)}
+.slide[data-id="bits"] .body.cols > .card{align-self:center}
+.slide:is([data-id="bitstate"],[data-id="copy"],[data-id="add4"],[data-id="not"],[data-id="addnot"],[data-id="cnot"],[data-id="cnotca"]) ul.plain li{font-size:27px;margin:14px 0}
+.slide:is([data-id="bitstate"],[data-id="copy"],[data-id="add4"],[data-id="not"],[data-id="addnot"],[data-id="cnot"],[data-id="cnotca"]) .lead{font-size:27px}
+.slide:is([data-id="bitstate"],[data-id="copy"],[data-id="add4"],[data-id="addnot"],[data-id="cnotca"]) .point{font-size:26px}
+.sumlist{gap:14px !important}
+.sumlist .sl{padding:12px 24px !important}
+.zt.hd{font:900 24px var(--serif);fill:var(--ink)}
+.zsep{stroke:#c9c5da;stroke-width:2.5;stroke-dasharray:10 8}
+/* まとめ：項目と文章は左、1・2 ページと同じビットの辞書の図を右 */
+.body.sumfig{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:26px;align-items:center}
+.sumfig .sumlist{gap:12px !important}
+.sumfig .sumlist .sl{font-size:22px !important;padding:10px 18px !important}
+.sumfig .card{padding:12px 18px}
+.sumfig svg.zx{height:470px;width:auto}
+/* 補足・教科書外 */
+.door.sup .door-num{font-size:58px;letter-spacing:.06em}
+.slide[data-id^="sup"] h2 small{background:#efedf6}
+.zt.mk{font:400 24px "Cambria Math","STIX Two Math","Times New Roman",serif;fill:var(--ink)}
+.zt.mk.g{fill:var(--accent-d)}
+.zt.mk.k{fill:var(--zr);font-weight:700}
+.zt.mk.s{font-size:19px}
+.zm{font:400 20px "Cambria Math","STIX Two Math","Times New Roman",serif;fill:var(--ink);text-anchor:middle;dominant-baseline:central}
+.zmb{fill:none;stroke:var(--ink);stroke-width:2.2}
+.slide[data-id^="sup"] ul.plain li{font-size:27px;margin:14px 0}
+.slide[data-id^="sup"] .point{font-size:25px}
+
+</style>
+</head>
+<body>
+<div id="ovHead"><b>スライド一覧</b><span>クリックでそのスライドへ ／ ← → で選択、Enter で開く、O / Esc で戻る</span><button id="btnOvClose">一覧を閉じる</button></div>
+<div id="viewport"><div id="stage">
+
+<!-- 1. タイトル -->
+<section class="slide" data-id="title">
+  <div class="title-wrap">
+    <div>
+      <div class="chap pop">『Quantum in Pictures』 ゼミ資料 ／ 圏論的量子情報ゼミ</div>
+      <h1 class="pop" style="--d:.1s">2.2<br>クモにかまれた！</h1>
+      <div class="sub pop" style="--d:.2s">― 2.2 A spider bit me! ―</div>
+      <ul class="agenda ag-t">
+        <li class="agroup pop" style="--d:.25s">目次</li>
+        <li class="pop" style="--d:.27s"><span class="num" style="background:var(--ink)">1</span>ビットと 2 つの「ビット状態」<em>0 と 1</em></li>
+        <li class="pop" style="--d:.29s"><span class="num" style="background:var(--accent)">2</span>緑のクモ ＝ COPY<em>コピー</em></li>
+        <li class="pop" style="--d:.31s"><span class="num" style="background:var(--blue)">3</span>赤のクモ ＝ ADD と NOT<em>1 + 1 = 0</em></li>
+        <li class="pop" style="--d:.33s"><span class="num" style="background:var(--purple)">4</span>CNOT ＝ COPY ＋ ADD<em>制御 NOT</em></li>
+        <li class="pop" style="--d:.34s"><span class="num" style="background:#8f88b3">＋</span>補足：量子状態・量子ゲートとの対応<em>教科書外</em></li>
+        <li class="pop" style="--d:.35s"><span class="num" style="background:#8f88b3">✓</span>まとめ</li>
+      </ul>
+    </div>
+    <div class="card pop" style="--d:.4s;padding:14px 18px">
+      <svg class="zx" id="zTitle" viewBox="0 0 480 450"></svg>
+    </div>
+  </div>
+</section>
+
+<!-- 2. この節の主張 -->
+<section class="slide" data-id="msg">
+  <div class="chap">第2章 ／ 2.2 A spider bit me! ／ 2.2 のねらい</div>
+  <div class="body cols" data-min-text="560">
+    <div class="card pop"><svg class="zx" id="zMsg" viewBox="0 0 480 430"></svg></div>
+    <div>
+      <div class="keymsg pop" style="--d:.15s">量子ビットも<br>状態と箱をしぼれば<br><b class="k">ビット</b> として<br>使える</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉 1 -->
+<section class="slide door" style="--c:var(--ink)">
+  <div class="door-wrap">
+    <div class="door-num">1</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">2.2 A spider bit me!</span>SECTION 1</div>
+      <h1 class="pop" style="--d:.1s">ビットと<br>「ビット状態」</h1>
+      <p class="door-lead pop" style="--d:.2s">量子ビットを、ふつうのビットのように使う</p>
+      <div class="door-topics pop" style="--d:.3s"><span>ビット ＝ 0 か 1</span><span>赤 0° ＝ 0</span><span>赤 180° ＝ 1</span><span>0 と 1 の列</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- ビット -->
+<section class="slide" data-id="bits">
+  <div class="chap">SECTION 1 ／ ふつうのコンピュータとビット</div>
+  <h2>ふつうのコンピュータはビット（0 か 1）で動く<small>2.2（ビット）</small></h2>
+  <div class="body cols" style="grid-template-columns:500px 1fr">
+    <div class="card pop">
+      <div class="txtin"><span>文字：</span><input id="binIn" type="text" value="hi" maxlength="4" spellcheck="false" autocomplete="off"></div>
+      <div class="bin-list" id="binList"></div>
+      <div class="bin-all" id="binAll"></div>
+    </div>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">0</span><span>ビットは <b class="k">0 か 1</b> のどちらか</span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">⚛</span><span>量子コンピュータは、ビットよりずっと強力な <b>量子ビット</b> で動く</span></li>
+        <li class="pop" style="--d:.16s"><span class="ico">🔌</span><span>ふつうのコンピュータとつなぐため、量子コンピュータでも <b class="k">ビットを使いたい</b></span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 2 つのビット状態 -->
+<section class="slide" data-id="bitstate">
+  <div class="chap">SECTION 1 ／ 1 量子ビットの「ビット状態」</div>
+  <h2>2 つの状態だけを許す：赤 0° ＝ 0、赤 180° ＝ 1<small>2.2（ビット）</small></h2>
+  <div class="body cols">
+    <div class="card pop"><svg class="zx" id="zBs" viewBox="0 0 330 300"></svg></div>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">✂</span><span>使ってよい <b>状態</b> と <b>箱</b> を、ビットらしいものだけにしぼる</span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">0</span><span><b>0° の赤のクモ状態</b> ＝ ビットの <b class="k">0</b></span></li>
+        <li class="pop" style="--d:.16s"><span class="ico">1</span><span><b>180° の赤のクモ状態</b> ＝ ビットの <b class="k">1</b></span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- ビット列 -->
+<section class="slide" data-id="bitstr">
+  <div class="chap">SECTION 1 ／ 量子ビットを並べる</div>
+  <h2>並べると 0 と 1 の列になる<small>2.2（ビット）</small></h2>
+  <div class="body wide-fig">
+    <div class="card pop">
+      <svg class="zx" id="zStr" viewBox="0 0 600 220"></svg>
+    </div>
+    <p class="lead pop" style="--d:.1s;text-align:center;margin:0">1 つ 1 つの量子ビットを 0 か 1 にすると、ふつうのコンピュータと同じ <b class="k">0 と 1 の列</b></p>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉 2 -->
+<section class="slide door" style="--c:var(--accent)">
+  <div class="door-wrap">
+    <div class="door-num">2</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">2.2 A spider bit me!</span>SECTION 2</div>
+      <h1 class="pop" style="--d:.1s">緑のクモ ＝ COPY</h1>
+      <p class="door-lead pop" style="--d:.2s">ビットにぴったりの箱</p>
+      <div class="door-topics pop" style="--d:.3s"><span>0 も 1 もコピー</span><span>ふつうのコンピュータの得意技</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- コピー -->
+<section class="slide" data-id="copy">
+  <div class="chap">SECTION 2 ／ 緑のクモはビットをコピーする</div>
+  <h2>緑のクモは 0 も 1 もコピーする<small>2.2（COPY）</small></h2>
+  <div class="body cols" data-min-text="460">
+    <div class="card stp pop" id="cdCopy">
+      <svg class="zx" id="zCopy" viewBox="0 -40 660 330"></svg>
+    </div>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">0</span><span>0° の赤（0）がコピーされるのは、前に見たとおり</span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">1</span><span>180° の赤（1）も、同じようにコピーされる</span></li>
+      </ul>
+      <div class="point frag">コピーはふつうのコンピュータの得意技<br>→ 緑のクモは <b class="k" style="white-space:nowrap">ビットにぴったりの箱（COPY）</b></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉 3 -->
+<section class="slide door" style="--c:var(--blue)">
+  <div class="door-wrap">
+    <div class="door-num">3</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">2.2 A spider bit me!</span>SECTION 3</div>
+      <h1 class="pop" style="--d:.1s">赤のクモ ＝<br>ADD と NOT</h1>
+      <p class="door-lead pop" style="--d:.2s">赤どうしは融合して角度を足す</p>
+      <div class="door-topics pop" style="--d:.3s"><span>1 + 1 = 0</span><span>ADD 箱 ⊕</span><span>NOT 箱</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 赤のクモに 2 ビット -->
+<section class="slide" data-id="add4">
+  <div class="chap">SECTION 3 ／ 赤のクモにビットを 2 つ入れる</div>
+  <h2>赤のクモにビットを 2 つ入れると、角度が足される<small>2.2（ADD）</small></h2>
+  <div class="body cols">
+    <div class="card pop"><svg class="zx" id="zAdd4" viewBox="0 0 520 330"></svg></div>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">✗</span><span>赤のビット状態は、赤のクモでは <b>コピーされない</b></span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">∘</span><span>同じ色なので <b class="k">融合</b> し、角度が足される</span></li>
+      </ul>
+      <div class="point frag">180° + 180° = 360°：一周して <b class="k">0°</b> にもどる</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- ADD 箱 -->
+<section class="slide" data-id="addbox">
+  <div class="chap">SECTION 3 ／ ADD 箱</div>
+  <h2>ADD 箱：ビットの足し算では 1 + 1 = 0<small>2.2（ADD）</small></h2>
+  <div class="body cols">
+    <div class="card pop"><svg class="zx" id="zAddBox" viewBox="0 0 260 300"></svg></div>
+    <div>
+      <p class="lead pop">ビットには 2 がないので <b class="k">1 + 1 = 0</b> とする。<br>この箱を <b>ADD 箱</b> とよび、<b class="k">⊕</b> で書く</p>
+      <div class="xor4 pop" style="--d:.1s">
+        <div><span>0</span>⊕<span>0</span>=<b>0</b></div>
+        <div><span>0</span>⊕<span>1</span>=<b>1</b></div>
+        <div><span>1</span>⊕<span>0</span>=<b>1</b></div>
+        <div class="hot"><span>1</span>⊕<span>1</span>=<b>0</b></div>
+      </div>
+      <div class="point frag">ADD 箱は <b class="k" style="white-space:nowrap">排他的論理和（XOR）</b> と同じ<br>2 つのうち <b style="white-space:nowrap">一方だけ</b> が 1 のとき 1 になる<br><span style="font-size:.9em">（2 進数の足し算 1 + 1 = 10 の 1 桁目が 0）</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- NOT 箱 -->
+<section class="slide" data-id="not">
+  <div class="chap">SECTION 3 ／ NOT 箱</div>
+  <h2>180° の赤のクモは NOT 箱（0 と 1 を入れかえる）<small>2.2（NOT）</small></h2>
+  <div class="body cols">
+    <div class="card pop"><svg class="zx" id="zNot" viewBox="0 0 470 250"></svg></div>
+    <div>
+      <div class="xor4 two pop">
+        <div>NOT <span>0</span> = <b>1</b></div>
+        <div>NOT <span>1</span> = <b>0</b></div>
+      </div>
+      <ul class="plain">
+        <li class="pop" style="--d:.08s"><span class="ico">∘</span><span>融合すると 180° + 0° = <b>180°</b>、180° + 180° = <b>0°</b></span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- ADD に 1 を入れると NOT -->
+<section class="slide" data-id="addnot">
+  <div class="chap">SECTION 3 ／ 箱どうしの関係</div>
+  <h2>ADD 箱に 1 を差しこむと NOT 箱になる<small>2.2（ADD と NOT）</small></h2>
+  <div class="body cols">
+    <div class="card pop"><svg class="zx" id="zAnEq" viewBox="0 0 330 220"></svg></div>
+    <div>
+      <p class="lead pop">スパイダーを使うと、<b>箱どうしの関係</b> もすぐにわかる</p>
+      <ul class="plain">
+        <li class="pop" style="--d:.08s"><span class="ico">∘</span><span>融合するだけ：0° + 180° = <b class="k">180°</b> の 2 本足の赤 ＝ NOT</span></li>
+      </ul>
+      <table class="tt small pop" style="--d:.15s;margin:6px 0 0">
+        <thead><tr><th>x</th><th>x ⊕ 1</th><th class="out">NOT x</th></tr></thead>
+        <tbody class="static"><tr><td>0</td><td>1</td><td class="out one">1</td></tr><tr><td>1</td><td>0</td><td class="out">0</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉 4 -->
+<section class="slide door" style="--c:var(--purple)">
+  <div class="door-wrap">
+    <div class="door-num">4</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">2.2 A spider bit me!</span>SECTION 4</div>
+      <h1 class="pop" style="--d:.1s">CNOT ＝<br>COPY ＋ ADD</h1>
+      <p class="door-lead pop" style="--d:.2s">緑と赤のクモの握手でできる箱</p>
+      <div class="door-topics pop" style="--d:.3s"><span>2 入力・2 出力</span><span>左が右を制御</span><span>ゲート</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- CNOT の形 -->
+<section class="slide" data-id="cnot">
+  <div class="chap">SECTION 4 ／ CNOT</div>
+  <h2>CNOT は 3 本足の緑と赤のクモの握手<small>2.2（CNOT）</small></h2>
+  <div class="body cols">
+    <div class="card pop"><svg class="zx" id="zCn" viewBox="0 0 420 330"></svg></div>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">2</span><span><b>入力 2 本・出力 2 本</b> の箱</span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">―</span><span>3 本足の緑と 3 本足の赤が、横の線でつながる</span></li>
+        <li class="pop" style="--d:.16s"><span class="ico">C</span><span><b>Controlled NOT</b>：左のビットが、右に NOT をかけるかを <b class="k">制御</b> する</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- CNOT の中で起きること -->
+<section class="slide" data-id="cnotstep">
+  <div class="chap">SECTION 4 ／ CNOT の中で何が起きている？</div>
+  <h2>左が 0 なら右はそのまま、1 なら右に NOT<small>2.2（CNOT）</small></h2>
+  <div class="body cols" data-min-text="380">
+    <div class="card stp pop" id="cdCs">
+      <svg class="zx" id="zCs" viewBox="0 -40 770 360"></svg>
+    </div>
+    <div>
+      <ol class="steps pop a0 a1" id="csSteps">
+        <li><span class="sn">①</span><div><b>コピー</b>：左の入力を緑のクモがコピー</div></li>
+        <li><span class="sn">②</span><div><b>融合</b>：届いたコピーと赤のクモがくっつく</div></li>
+        <li><span class="sn">③</span><div><span class="r0">0 → 右は <b>何もしない線</b></span><br><span class="r1">1 → 右は <b>NOT</b></span></div></li>
+      </ol>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- CNOT の入力と出力 -->
+<section class="slide" data-id="cnottt">
+  <div class="chap">SECTION 4 ／ CNOT に 2 つのビットを入れる</div>
+  <h2>CNOT の出力は（入力 1, 入力 1 ⊕ 入力 2）<small>2.2（CNOT）</small></h2>
+  <div class="body cols">
+    <div class="card pop"><svg class="zx" id="zCt" viewBox="0 0 470 280"></svg></div>
+    <div>
+      <p class="lead pop">左図は、左に 1、右に 0 を入れた例。右のビットは <b class="k">1 に変わる</b></p>
+      <table class="tt pop" id="ctTbl" style="--d:.1s;margin:0">
+        <thead><tr><th>入力 1</th><th>入力 2</th><th class="out">出力 1</th><th class="out">出力 2</th></tr></thead>
+        <tbody class="static"></tbody>
+      </table>
+      <div class="point frag">量子コンピュータで使う、このような箱を <b class="k">ゲート</b> とよぶ</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- CNOT = COPY + ADD -->
+<section class="slide" data-id="cnotca">
+  <div class="chap">SECTION 4 ／ 絵を見るだけでわかること</div>
+  <h2>CNOT ＝ COPY ＋ ADD<small>2.2（CNOT）</small></h2>
+  <div class="body cols" data-min-text="500">
+    <div class="card stp pop" id="cdCa"><svg class="zx" id="zCa" viewBox="0 0 400 320"></svg></div>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico" style="background:var(--zg);color:#fff">緑</span><span><b>緑のクモ</b> ＝ <b class="k">COPY</b>：入力 1 をコピー</span></li>
+        <li class="pop" style="--d:.08s"><span class="ico" style="background:var(--zr);color:#fff">赤</span><span><b>赤のクモ</b> ＝ <b class="k">ADD</b>：コピーと入力 2 を足す</span></li>
+      </ul>
+      <div class="point frag">クモをずらしても、<b>つながり方が同じなら同じ図</b><br>→ <b class="k">絵を見るだけ</b> でわかる</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- その先へ -->
+<section class="slide" data-id="more">
+  <div class="chap">SECTION 4 ／ その先へ</div>
+  <h2>量子ゲートは、もっとたくさんある<small>2.2（量子ゲート）</small></h2>
+  <div class="body wide-fig">
+    <div class="card pop"><svg class="zx" id="zMore" viewBox="0 0 640 200"></svg></div>
+    <ul class="plain pop" style="--d:.1s">
+      <li><span class="ico">🛒</span><span>量子コンピュータはまだお店では売っていない ― <b>今まさに発明されているところ</b></span></li>
+      <li><span class="ico">🔬</span><span>次は、実験室で <b>クモから量子コンピュータを組み立てる方法</b> を見ていく</span></li>
+    </ul>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- ===== 補足・教科書外：量子状態・量子ゲートとの対応（消すときはここから「補足ここまで」までを削除） ===== -->
+<section class="slide door sup" style="--c:#8f88b3">
+  <div class="door-wrap">
+    <div class="door-num">補足</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">【補足・教科書外】『量子コンピュータの頭の中』の書き方と結ぶ</span>SUPPLEMENT</div>
+      <h1 class="pop" style="--d:.1s">量子状態・<br>量子ゲートとの対応</h1>
+      <p class="door-lead pop" style="--d:.2s">クモの図を、ベクトルと行列で書くと…</p>
+      <div class="door-topics pop" style="--d:.3s"><span>|0⟩・|1⟩</span><span>X・Z ゲート</span><span>COPY・ADD の行列</span><span>CNOT の行列</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<section class="slide" data-id="supState">
+  <div class="chap">補足・教科書外 ／ 量子状態との対応</div>
+  <h2>赤のビット状態は |0⟩ と |1⟩<small>補足・教科書外</small></h2>
+  <div class="body cols" data-min-text="430">
+    <div class="card pop"><svg class="zx" id="zSupState" viewBox="0 0 560 300"></svg></div>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">0</span><span>赤 0° ∝ <b class="k">|0⟩</b>、赤 180° ∝ <b class="k">|1⟩</b></span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">±</span><span>緑 0° ∝ <b class="kb">|+⟩</b>、緑 180° ∝ <b class="kb">|−⟩</b></span></li>
+      </ul>
+      <div class="point frag"><b class="k">∝</b> は「<b>定数倍を除いて等しい</b>」という意味（クモの図では、全体にかかる数を省く）</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<section class="slide" data-id="supGate">
+  <div class="chap">補足・教科書外 ／ 量子ゲートとの対応</div>
+  <h2>180° の赤は X ゲート、180° の緑は Z ゲート<small>補足・教科書外</small></h2>
+  <div class="body cols" data-min-text="430">
+    <div class="card pop"><svg class="zx" id="zSupGate" viewBox="0 0 520 330"></svg></div>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">X</span><span><b>X ゲート</b> ＝ <b class="k">NOT 箱</b><span style="white-space:nowrap">（|0⟩ ⇄ |1⟩）</span></span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">Z</span><span><b>Z ゲート</b>：Z|1⟩ = −|1⟩</span></li>
+        <li class="pop" style="--d:.16s"><span class="ico">I</span><span>0° の 2 本足は <b>I</b><span style="white-space:nowrap">（何もしない線）</span></span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<section class="slide" data-id="supCopyAdd">
+  <div class="chap">補足・教科書外 ／ COPY と ADD の行列</div>
+  <h2>COPY と ADD も行列で書ける<small>補足・教科書外</small></h2>
+  <div class="body cols" data-min-text="430">
+    <div class="card pop"><svg class="zx" id="zSupCA" viewBox="0 0 520 360"></svg></div>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">緑</span><span><b>COPY</b>：|0⟩ → |00⟩、|1⟩ → |11⟩</span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">赤</span><span><b>ADD</b>：|a⟩|b⟩ → |a ⊕ b⟩</span></li>
+      </ul>
+      <div class="point frag">入力と出力の本数が違うので、<br>どちらも <b class="k">量子ゲート（ユニタリ行列）ではない</b></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<section class="slide" data-id="supCnot">
+  <div class="chap">補足・教科書外 ／ CNOT の行列</div>
+  <h2>クモの CNOT は、4 × 4 の CNOT ゲートと同じ<small>補足・教科書外</small></h2>
+  <div class="body cols" data-min-text="460">
+    <div class="card pop"><svg class="zx" id="zSupCnot" viewBox="0 0 520 260"></svg></div>
+    <div>
+      <ul class="plain">
+        <li class="pop"><span class="ico">→</span><span>CNOT|a b⟩ = |a, <b class="k">a ⊕ b</b>⟩</span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">例</span><span>CNOT|10⟩ = <b class="k">|11⟩</b><span style="white-space:nowrap">（17 ページの図）</span></span></li>
+      </ul>
+      <div class="point frag">『量子コンピュータの頭の中』の<br>CNOT ゲートと同じ行列</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+<!-- ===== 補足ここまで ===== -->
+
+<!-- まとめ -->
+<section class="slide">
+  <div class="chap">Summary ／ 2.2</div>
+  <h2>2.2 のまとめ<small>A spider bit me!</small></h2>
+  <div class="body sumfig">
+    <div class="sumlist">
+      <div class="sl pop" style="--d:0.00s;--c:var(--ink)"><span class="sl-n">1</span><div>量子ビットも状態と箱をしぼれば <b class="k">ビット</b> として使える</div></div>
+      <div class="sl pop" style="--d:0.07s;--c:var(--ink)"><span class="sl-n">2</span><div>2 つの状態だけを許す：<b>赤 0° ＝ 0、赤 180° ＝ 1</b></div></div>
+      <div class="sl pop" style="--d:0.14s;--c:var(--accent)"><span class="sl-n">3</span><div><b>緑のクモ</b> は 0 も 1 も <b class="k">コピー</b> する</div></div>
+      <div class="sl pop" style="--d:0.21s;--c:var(--blue)"><span class="sl-n">4</span><div><b>ADD 箱</b>：ビットの足し算では <b class="k">1 + 1 = 0</b></div></div>
+      <div class="sl pop" style="--d:0.28s;--c:var(--blue)"><span class="sl-n">5</span><div><b>180° の赤のクモ</b> は <b class="k">NOT 箱</b>（0 と 1 を入れかえる）</div></div>
+      <div class="sl pop" style="--d:0.35s;--c:var(--purple)"><span class="sl-n">6</span><div><b class="k">CNOT ＝ COPY ＋ ADD</b></div></div>
+    </div>
+    <div class="card pop" style="--d:.2s"><svg class="zx" id="zSum" viewBox="0 0 480 450"></svg></div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+</div></div>
+<div id="ui">
+  <button id="btnPrev">◀</button><span id="counter"></span><button id="btnNext">▶</button>
+  <button id="btnFs">全画面 (F)</button>
+  <button id="btnOv">一覧 (O)</button>
+  <span>← → / Space でページ送り</span>
+</div>
+<div id="progress"></div>
+<div id="penbar" aria-label="ペンの道具">
+  <button data-tool="none" class="on" title="普通のカーソル（文字の選択・コピーができる）">🖱️ カーソル</button>
+  <button data-tool="laser" title="レーザーポインター（書き込みは残らない）">🔴 レーザー</button>
+  <button data-tool="pen" title="黒ペンで書き込む (P)">✏️ 黒ペン</button>
+  <button data-tool="eraser" title="消しゴム（なぞった線を消す）">🧽 消す</button>
+  <button data-tool="lasso" title="投げ縄：書き込みを囲んで選択・移動・複製 (L)">➰ 投げ縄</button>
+  <button id="inkPaste" title="コピーした書き込みを貼り付け (V)" disabled>📌 貼り付け</button>
+  <span class="sep"></span>
+  <button id="inkUndo" title="元に戻す (Z)">↩️</button>
+  <button id="inkClear" title="このスライドの書き込みを全部消す">🗑️</button>
+</div>
+<script>
+const NS = 'http://www.w3.org/2000/svg';
+const $ = s => document.querySelector(s);
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+const stoppers = [];
+window.onEnter = window.onEnter || {};
+
+/* 選択ボタンの列 */
+function picker(root, items, onPick) {
+  root = typeof root === 'string' ? $(root) : root;
+  const lab = root.dataset.label;
+  root.innerHTML = (lab ? `<span class="pk-l">${lab}</span>` : '') +
+    items.map((it, i) => `<button data-i="${i}" class="${it.cls || ''}">${it.label}</button>`).join('');
+  const bs = [...root.querySelectorAll('button')];
+  const set = (i, user = false) => { bs.forEach((b, j) => b.classList.toggle('on', i === j)); onPick(items[i], i, user); };
+  bs.forEach((b, i) => b.addEventListener('click', e => { e.stopPropagation(); e.currentTarget.blur(); set(i, true); }));
+  return set;
+}
+const BITS = [{ label: '0', v: 0 }, { label: '1', v: 1 }];
+/* =====================================================================
+   スパイダー図（ZX 図）を描いて、状態から状態へなめらかに動かす
+   状態 = { n: { id: ノード }, w: { id: 線 } }
+     ノード：クモ {x, y, c:'r'|'g', p:角度, r:半径, o:不透明度, clk, hl}
+             文字 {x, y, t:'文字', cls}
+             新しく出てくるノードに from:'id' を付けると、そのノードの位置から出てくる
+     線    ：{a, b, h, s, o}（a・b はノードの id か [x, y]。h：横向きに出る曲線、s：直線）
+   ===================================================================== */
+const ease = t => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+const norm = p => (((p || 0) % 360) + 360) % 360;
+const plab = p => (norm(p) ? norm(p) + '°' : '');
+const lerp = (a, b, e) => a + (b - a) * e;
+function zxScene(svg, { onClick } = {}) {
+  svg = typeof svg === 'string' ? document.getElementById(svg) : svg;
+  const gW = el('g', {}, svg), gN = el('g', {}, svg);
+  let S = { n: {}, w: {} };
+  const D = { n: {}, w: {} };
+  let raf = 0, finish = null;
+
+  function nodeEl(id, n) {
+    let e = D.n[id];
+    const isText = n.t !== undefined;
+    if (e && e.isText !== isText) { e.remove(); e = null; }
+    if (!e) {
+      if (isText) e = el('text', {}, gN);
+      else { e = el('g', {}, gN); el('circle', { r: 20 }, e); el('text', {}, e); }
+      e.isText = isText;
+      e.dataset.id = id;
+      if (onClick) e.addEventListener('click', ev => { ev.stopPropagation(); onClick(id); });
+      D.n[id] = e;
+    }
+    return e;
+  }
+  function wireEl(id) {
+    if (!D.w[id]) D.w[id] = el('path', { class: 'zw' }, gW);
+    return D.w[id];
+  }
+  function drawNode(e, n, x, y, r, o, label) {
+    e.style.opacity = o;
+    e.style.pointerEvents = o < .5 ? 'none' : '';
+    if (e.isText) {
+      e.setAttribute('x', x); e.setAttribute('y', y);
+      e.setAttribute('class', 'zt ' + (n.cls || ''));
+      if (e.textContent !== n.t) e.textContent = n.t;
+      return;
+    }
+    e.setAttribute('transform', `translate(${x},${y})`);
+    e.setAttribute('class', `zn ${n.c || 'r'}${n.clk ? ' clk' : ''}${n.hl ? ' hl' : ''}`);
+    e.firstChild.setAttribute('r', r);
+    const tx = e.lastChild;
+    if (tx.textContent !== label) tx.textContent = label;
+    tx.style.fontSize = (r >= 23 ? 14 : r >= 17 ? 12.5 : 10) + 'px';
+  }
+  function wpath(a, b, w) {
+    if (w.s) return `M${a[0]},${a[1]} L${b[0]},${b[1]}`;
+    if (w.h) { const mx = (a[0] + b[0]) / 2; return `M${a[0]},${a[1]} C${mx},${a[1]} ${mx},${b[1]} ${b[0]},${b[1]}`; }
+    const my = (a[1] + b[1]) / 2;
+    return `M${a[0]},${a[1]} C${a[0]},${my} ${b[0]},${my} ${b[0]},${b[1]}`;
+  }
+  const defR = n => n.r ?? 20;
+
+  // from → to を e（0〜1）の割合で描く
+  function frame(F, T, e, pos) {
+    for (const id in T.n) {
+      const f = F.n[id], t = T.n[id];
+      const x = lerp(f.x, t.x, e), y = lerp(f.y, t.y, e);
+      pos[id] = [x, y];
+      const lab = norm(f.p) === norm(t.p) ? plab(t.p) : (e < .8 ? plab(f.p) : plab(t.p));
+      drawNode(nodeEl(id, t), e < .5 && f.c ? { ...t, c: f.c } : t, x, y, lerp(defR(f), defR(t), e), lerp(f.o ?? 1, t.o ?? 1, e), lab);
+    }
+    const end = (ref, P) => (typeof ref === 'string' ? (pos[ref] || [P.n[ref]?.x ?? 0, P.n[ref]?.y ?? 0]) : ref);
+    for (const id in T.w) {
+      const f = F.w[id], t = T.w[id];
+      const a0 = end(f.a, F), a1 = end(t.a, T), b0 = end(f.b, F), b1 = end(t.b, T);
+      const a = [lerp(a0[0], a1[0], e), lerp(a0[1], a1[1], e)], b = [lerp(b0[0], b1[0], e), lerp(b0[1], b1[1], e)];
+      const p = wireEl(id);
+      p.setAttribute('d', wpath(a, b, t));
+      p.style.opacity = lerp(f.o ?? 1, t.o ?? 1, e);
+    }
+  }
+  function cleanup(next) {
+    for (const id in D.n) if (!next.n[id]) { D.n[id].remove(); delete D.n[id]; }
+    for (const id in D.w) if (!next.w[id]) { D.w[id].remove(); delete D.w[id]; }
+  }
+  function stopAnim() { if (raf) { cancelAnimationFrame(raf); raf = 0; } if (finish) { const f = finish; finish = null; f(); } }
+  function set(next) {
+    stopAnim();
+    cleanup(next);
+    // 描く順番（後ろのものほど上）を状態の並び順にそろえる
+    for (const id in next.w) gW.appendChild(wireEl(id));
+    for (const id in next.n) gN.appendChild(nodeEl(id, next.n[id]));
+    frame(next, next, 1, {});
+    S = next;
+  }
+  function to(next, dur = 700) {
+    stopAnim();
+    const prev = S, F = { n: {}, w: {} }, T = { n: {}, w: {} };
+    for (const id in prev.n) { if (!next.n[id]) { F.n[id] = prev.n[id]; T.n[id] = { ...prev.n[id], o: 0 }; } }
+    for (const id in next.n) {
+      const q = next.n[id], p = prev.n[id];
+      if (p) F.n[id] = p;
+      else if (q.from && prev.n[q.from]) { const s = prev.n[q.from]; F.n[id] = { ...q, x: s.x, y: s.y, r: s.r ?? q.r, o: s.o ?? 1 }; }
+      else F.n[id] = { ...q, o: 0 };
+      T.n[id] = q;
+    }
+    for (const id in prev.w) { if (!next.w[id]) { F.w[id] = prev.w[id]; T.w[id] = { ...prev.w[id], o: 0 }; } }
+    for (const id in next.w) { F.w[id] = prev.w[id] || { ...next.w[id], o: 0 }; T.w[id] = next.w[id]; }
+    for (const id in T.n) nodeEl(id, T.n[id]);
+    for (const id in next.n) gN.appendChild(D.n[id]);
+    for (const id in T.w) wireEl(id);
+    const t0 = performance.now();
+    return new Promise(res => {
+      finish = res;
+      const tick = now => {
+        const k = Math.min(1, (now - t0) / dur);
+        frame(F, T, ease(k), {});
+        if (k < 1) raf = requestAnimationFrame(tick);
+        else { raf = 0; cleanup(next); S = next; const f = finish; finish = null; f && f(); }
+      };
+      raf = requestAnimationFrame(tick);
+    });
+  }
+  return { set, to, state: () => S };
+}
+/* =====================================================================
+   ステップ再生（1.2 の stepper と同じ操作）：カードの下に ▶ 自動再生・◀・●●●・▶
+   build() が返す状態の列を、ボタンで 1 つずつ進める（進む・戻るときはなめらかに動かす）。
+   next があると、自動再生で最後まで行ったあと入力を変えて最初からくり返す。
+   controls: false のときはボタンを出さず、start() で自動再生する（タイトル用）
+   ===================================================================== */
+function zstep(card, sc, build, { interval = 1600, hold = 2400, dur = 800, next = null, onStep = null, controls = true } = {}) {
+  card = typeof card === 'string' ? $(card) : card;
+  let st = [], k = 0, timer = null, once = false;
+  const ctl = document.createElement('div');
+  ctl.className = 'stp-ctl';
+  ctl.innerHTML = '<button class="b" data-autoplay>▶ 自動再生</button><button class="b sm" data-a="-1">◀</button><span class="dots"></span><button class="b sm" data-a="1">▶</button>';
+  if (controls) card.append(ctl);
+  const play = ctl.querySelector('[data-autoplay]'), dotsEl = ctl.querySelector('.dots');
+  let dots = [];
+  function rebuildDots() {
+    if (dots.length === st.length) return;
+    dotsEl.innerHTML = '<span></span>'.repeat(st.length);
+    dots = [...dotsEl.children];
+    dots.forEach((d, i) => d.addEventListener('click', e => { e.stopPropagation(); stop(); set(i, true); }));
+  }
+  function set(i, anim) {
+    const from = k;
+    k = i;
+    dots.forEach((d, j) => d.classList.toggle('on', j <= k));
+    if (anim && Math.abs(i - from) === 1) sc.to(st[i], (st[i].dur || dur) * (i < from ? .7 : 1)); else sc.set(st[i]);
+    if (onStep) onStep(k, st.length);
+  }
+  function reset() { st = build(); rebuildDots(); k = 0; set(0, false); }
+  function stop() { clearTimeout(timer); timer = null; once = false; play.textContent = '▶ 自動再生'; play.classList.remove('playing'); }
+  function tick() {
+    if (k < st.length - 1) { set(k + 1, true); timer = setTimeout(tick, k === st.length - 1 ? hold : (st[k + 1]?.wait || interval)); return; }
+    if (once) return stop();
+    if (next) next();
+    reset();
+    timer = setTimeout(tick, interval * .6);
+  }
+  function start(isOnce = false) {
+    stop(); reset(); once = isOnce;
+    if (!isOnce) { play.textContent = '■ 停止'; play.classList.add('playing'); }
+    timer = setTimeout(tick, interval * .6);
+  }
+  play.addEventListener('click', e => { e.stopPropagation(); play.blur(); if (timer && !once) return stop(); start(); });
+  ctl.querySelectorAll('[data-a]').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation(); b.blur(); stop();
+    set(Math.max(0, Math.min(st.length - 1, k + +b.dataset.a)), true);
+  }));
+  stoppers.push(stop);
+  reset();
+  return { reset, stop, start, playOnce: () => start(true), step: () => k };
+}
+
+const deg = b => b * 180;
+const zfig = (id, st) => { const sc = zxScene(id); sc.set(st); return sc; };
+/* 動く図：すべての状態を描いたときに収まる範囲で viewBox を決める（fitFigures で切り落としすぎないように） */
+function cropAll(svg, sc, lists, m = 14) {
+  svg = typeof svg === 'string' ? document.getElementById(svg) : svg;
+  let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+  lists.flat().forEach(st => {
+    sc.set(st);
+    const b = svg.getBBox();
+    x0 = Math.min(x0, b.x); y0 = Math.min(y0, b.y); x1 = Math.max(x1, b.x + b.width); y1 = Math.max(y1, b.y + b.height);
+  });
+  svg.setAttribute('viewBox', `${x0 - m} ${y0 - m} ${x1 - x0 + 2 * m} ${y1 - y0 + 2 * m}`);
+  svg.dataset.cropped = 1;
+}
+
+/* ---------- タイトル：CNOT（緑 ＝ コピー、赤 ＝ 足し算） ---------- */
+/* タイトルの図は、2.2 のねらい（2 ページ）と同じビットの辞書 */
+
+/* ---------- 2.2 のねらい：ビットの辞書（0・1・COPY・ADD・NOT・CNOT） ---------- */
+{
+  const n = {}, w = {};
+  const lab = (id, x, y, t) => { n[id] = { x, y, t, cls: 'dl' }; };
+  n.s0 = { x: 120, y: 90, c: 'r', r: 22 }; w.s0 = { a: 's0', b: [120, 25] }; lab('l0', 120, 135, '0');
+  n.s1 = { x: 360, y: 90, c: 'r', p: 180, r: 22 }; w.s1 = { a: 's1', b: [360, 25] }; lab('l1', 360, 135, '1');
+  n.cp = { x: 120, y: 215, c: 'g', r: 22 }; w.cp1 = { a: 'cp', b: [86, 162] }; w.cp2 = { a: 'cp', b: [154, 162] }; w.cp3 = { a: 'cp', b: [120, 262] }; lab('l2', 120, 290, 'COPY');
+  n.ad = { x: 360, y: 208, c: 'r', r: 22 }; w.ad1 = { a: 'ad', b: [360, 162] }; w.ad2 = { a: 'ad', b: [326, 262] }; w.ad3 = { a: 'ad', b: [394, 262] }; lab('l3', 360, 290, 'ADD ⊕');
+  n.nt = { x: 120, y: 365, c: 'r', p: 180, r: 22 }; w.nt1 = { a: 'nt', b: [120, 318] }; w.nt2 = { a: 'nt', b: [120, 412] }; lab('l4', 120, 440, 'NOT');
+  n.cg = { x: 326, y: 365, c: 'g', r: 19 }; n.cx = { x: 394, y: 365, c: 'r', r: 19 };
+  w.c1 = { a: 'cg', b: [326, 318] }; w.c2 = { a: 'cg', b: [326, 412] }; w.c3 = { a: 'cx', b: [394, 318] }; w.c4 = { a: 'cx', b: [394, 412] }; w.c5 = { a: 'cg', b: 'cx', h: 1 };
+  lab('l5', 360, 440, 'CNOT');
+  zfig('zMsg', { n, w });
+  zfig('zTitle', { n, w });
+  zxScene.dict = { n, w };
+}
+
+/* ---------- ビット：文字 → 0 と 1 の列 ---------- */
+{
+  const inp = $('#binIn');
+  const upd = () => {
+    const chars = [...inp.value].filter(ch => ch.charCodeAt(0) < 128).slice(0, 4);
+    $('#binList').innerHTML = chars.map(ch => {
+      const bits = ch.charCodeAt(0).toString(2).padStart(8, '0');
+      return `<div class="bin-row"><div class="bin-ch">${ch === ' ' ? '␣' : ch.replace(/[<>&]/g, m => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[m]))}</div><div class="bin-bits">${[...bits].map(x => `<span class="${x === '1' ? 'one' : ''}">${x}</span>`).join('')}</div></div>`;
+    }).join('');
+    $('#binAll').textContent = chars.map(ch => ch.charCodeAt(0).toString(2).padStart(8, '0')).join('');
+  };
+  inp.addEventListener('input', upd);
+  inp.addEventListener('keydown', e => e.stopPropagation());
+  upd();
+}
+
+/* ---------- 2 つのビット状態：赤 0° と赤 180° だけを使う ---------- */
+{
+  const n = {}, w = {};
+  [['g', 0], ['g', 90], ['g', 180], ['g', 270], ['r', 0], ['r', 90], ['r', 180], ['r', 270]].forEach(([c, p], i) => {
+    const x = 50 + (i % 4) * 78, y = i < 4 ? 85 : 205, id = c + p, use = c === 'r' && (p === 0 || p === 180);
+    n[id] = { x, y, c, p, r: 23, o: use ? 1 : .16, hl: use };
+    w['w' + id] = { a: id, b: [x, y - 60], o: use ? 1 : .16 };
+  });
+  n.d0 = { x: 50, y: 262, t: '0', cls: 'big o' };
+  n.d1 = { x: 206, y: 262, t: '1', cls: 'big o' };
+  zfig('zBs', { n, w });
+}
+
+/* ---------- ビット列：10010（静止図） ---------- */
+{
+  const n = {}, w = {}, bits = '10010', gap = 68, x0 = 300 - (bits.length - 1) * gap / 2;
+  [...bits].forEach((b, i) => {
+    const x = x0 + i * gap;
+    n['s' + i] = { x, y: 110, c: 'r', p: deg(+b), r: 23 };
+    n['d' + i] = { x, y: 172, t: b, cls: 'big' + (b === '1' ? ' o' : '') };
+    w['w' + i] = { a: 's' + i, b: [x, 30] };
+  });
+  zfig('zStr', { n, w });
+}
+
+/* ---------- 緑のクモ = COPY：入力が 0 と 1 の場合を並べ、同じステップで同時に動かす ---------- */
+{
+  const svg = document.getElementById('zCopy'), DX = 300;
+  const g0 = el('g', {}, svg), g1 = el('g', { transform: `translate(${DX},0)` }, svg);
+  const head = (x, t) => { const e = el('text', { x, y: -18, class: 'zt hd' }, svg); e.textContent = t; };
+  head(180, '入力が 0'); head(180 + DX, '入力が 1');
+  el('line', { x1: 330, y1: -30, x2: 330, y2: 410, class: 'zsep' }, svg);
+  // 各列の下に、教科書と同じ静的な等式（緑のクモ ＋ 入力 ＝ 2 つの出力）
+  [[0, 30], [1, 330]].forEach(([a, gx]) => zxScene(el('g', { transform: `translate(${gx},272)` }, svg)).set({
+    n: { G: { x: 70, y: 60, c: 'g', r: 19 }, A: { x: 70, y: 112, c: 'r', p: deg(a), r: 15 }, e: { x: 145, y: 72, t: '=', cls: 'eqs' }, f: { x: 145, y: 42, t: 'コピー', cls: 'sm' },
+      B: { x: 205, y: 84, c: 'r', p: deg(a), r: 15 }, C: { x: 255, y: 84, c: 'r', p: deg(a), r: 15 } },
+    w: { u1: { a: 'G', b: [44, 8] }, u2: { a: 'G', b: [96, 8] }, i: { a: 'G', b: 'A' }, b: { a: 'B', b: [205, 20] }, c: { a: 'C', b: [255, 20] } },
+  }));
+  const s0 = zxScene(g0), s1 = zxScene(g1);
+  const both = { set: st => { s0.set(st[0]); s1.set(st[1]); }, to: (st, d) => Promise.all([s0.to(st[0], d), s1.to(st[1], d)]) };
+  const states = a => {
+    const st0 = { n: { G: { x: 180, y: 140, c: 'g', r: 26 }, A: { x: 180, y: 232, c: 'r', p: deg(a), r: 21 }, da: { x: 128, y: 236, t: String(a), cls: 'big b' } },
+      w: { l: { a: 'G', b: [110, 22] }, r: { a: 'G', b: [250, 22] }, i: { a: 'G', b: 'A' } } };
+    const st1 = JSON.parse(JSON.stringify(st0));
+    st1.n.A = { ...st1.n.A, x: 180, y: 140 }; st1.n.da = { ...st1.n.da, x: 128, y: 144, o: 0 }; st1.dur = 650;
+    const st2 = { n: { G: { x: 180, y: 140, c: 'g', r: 26, o: 0 }, A: { x: 110, y: 104, c: 'r', p: deg(a), r: 21, hl: true }, B: { from: 'A', x: 250, y: 104, c: 'r', p: deg(a), r: 21, hl: true },
+      d1: { x: 110, y: 160, t: String(a), cls: 'big o' }, d2: { x: 250, y: 160, t: String(a), cls: 'big o' } },
+      w: { l: { a: 'A', b: [110, 22] }, r: { a: 'B', b: [250, 22] } } };
+    return [st0, st1, st2];
+  };
+  const build = () => { const A = states(0), B = states(1); return A.map((x, k) => Object.assign([x, B[k]], { dur: x.dur })); };
+  cropAll(svg, both, [build()]);
+  zstep('#cdCopy', both, build, { interval: 1300, hold: 2400 });
+}
+
+/* ---------- 赤のクモにビットを 2 つ：4 通りの融合（静止図） ---------- */
+{
+  const n = {}, w = {};
+  [[0, 0], [0, 1], [1, 0], [1, 1]].forEach(([a, b], i) => {
+    const ox = (i % 2) * 265, oy = i < 2 ? 0 : 170, k = 'c' + i;
+    n[k + 'S'] = { x: ox + 60, y: oy + 70, c: 'r', r: 19 };
+    n[k + 'A'] = { x: ox + 28, y: oy + 128, c: 'r', p: deg(a), r: 16 };
+    n[k + 'B'] = { x: ox + 92, y: oy + 128, c: 'r', p: deg(b), r: 16 };
+    n[k + 'e'] = { x: ox + 140, y: oy + 88, t: '=', cls: 'eqs' };
+    n[k + 'f'] = { x: ox + 140, y: oy + 58, t: '融合', cls: 'sm' };
+    n[k + 'R'] = { x: ox + 205, y: oy + 100, c: 'r', p: deg(a) + deg(b), r: 17 };
+    w[k + 'o'] = { a: k + 'S', b: [ox + 60, oy + 18] }; w[k + 'a'] = { a: k + 'S', b: k + 'A' }; w[k + 'b'] = { a: k + 'S', b: k + 'B' };
+    w[k + 'r'] = { a: k + 'R', b: [ox + 205, oy + 38] };
+  });
+  zfig('zAdd4', { n, w });
+}
+
+/* ---------- ADD 箱（静止図） ---------- */
+zfig('zAddBox', {
+  n: { S: { x: 130, y: 140, c: 'r', r: 26 }, a: { x: 62, y: 284, t: 'a', cls: 'big b' }, b: { x: 198, y: 284, t: 'b', cls: 'big b' }, o: { x: 130, y: 22, t: 'a ⊕ b', cls: 'big o' } },
+  w: { o: { a: 'S', b: [130, 44] }, a: { a: 'S', b: [72, 258] }, b: { a: 'S', b: [188, 258] } },
+});
+
+/* ---------- NOT 箱：0 と 1 に作用させる（静止図） ---------- */
+{
+  const n = {}, w = {};
+  [[0, 0], [1, 245]].forEach(([a, ox]) => {
+    const k = 'n' + a;
+    n[k + 'N'] = { x: ox + 60, y: 90, c: 'r', p: 180, r: 21 };
+    n[k + 'A'] = { x: ox + 60, y: 172, c: 'r', p: deg(a), r: 16 };
+    n[k + 'e'] = { x: ox + 125, y: 112, t: '=', cls: 'eqs' };
+    n[k + 'f'] = { x: ox + 125, y: 82, t: '融合', cls: 'sm' };
+    n[k + 'R'] = { x: ox + 188, y: 125, c: 'r', p: 180 + deg(a), r: 17 };
+    n[k + 'l'] = { x: ox + 60, y: 222, t: `NOT ${a}`, cls: 'big b' };
+    n[k + 'm'] = { x: ox + 188, y: 222, t: String(a ^ 1), cls: 'big o' };
+    w[k + 'u'] = { a: k + 'N', b: [ox + 60, 25] }; w[k + 'd'] = { a: k + 'N', b: k + 'A' }; w[k + 'r'] = { a: k + 'R', b: [ox + 188, 60] };
+  });
+  zfig('zNot', { n, w });
+}
+
+/* ---------- ADD に 1 を差しこむと NOT（静止図） ---------- */
+zfig('zAnEq', {
+  n: { S: { x: 80, y: 95, c: 'r', r: 22 }, P: { x: 128, y: 148, c: 'r', p: 180, r: 17 }, pl: { x: 160, y: 158, t: '1', cls: 'big b' },
+    eq: { x: 195, y: 110, t: '=', cls: 'eqs' }, N: { x: 262, y: 110, c: 'r', p: 180, r: 24 }, nl: { x: 262, y: 200, t: 'NOT', cls: 'tag' } },
+  w: { o: { a: 'S', b: [80, 25] }, i: { a: 'S', b: [42, 205] }, p: { a: 'S', b: 'P' }, no: { a: 'N', b: [262, 25] }, ni: { a: 'N', b: [262, 180] } },
+});
+
+/* ---------- CNOT の形（静止図） ---------- */
+zfig('zCn', {
+  n: { G: { x: 150, y: 165, c: 'g', r: 28 }, X: { x: 270, y: 165, c: 'r', r: 28 },
+    i1: { x: 150, y: 318, t: '入力 1', cls: '' }, i2: { x: 270, y: 318, t: '入力 2', cls: '' }, o1: { x: 150, y: 12, t: '出力 1', cls: '' }, o2: { x: 270, y: 12, t: '出力 2', cls: '' },
+    hd: { x: 210, y: 140, t: '握手', cls: 'tag' } },
+  w: { a: { a: 'G', b: [150, 32] }, b: { a: 'G', b: [150, 298] }, c: { a: 'X', b: [270, 32] }, d: { a: 'X', b: [270, 298] }, h: { a: 'G', b: 'X', h: 1 } },
+});
+/* =====================================================================
+   CNOT：緑（コピー）と赤（ADD）の握手
+   a = 左の入力、b = 右の入力（null なら右は入力なしの線）
+   ===================================================================== */
+function cnotStates(a, b) {
+  const L = 150, R = 270, Y = 160, TOP = 22, BOT = 302, SY = 258, OY = 92;
+  const hasB = b !== null && b !== undefined;
+  const base = () => ({
+    n: { G: { x: L, y: Y, c: 'g', r: 26 }, X: { x: R, y: Y, c: 'r', r: 26 }, A: { x: L, y: SY, c: 'r', p: deg(a), r: 21 },
+      ...(hasB ? { B: { x: R, y: SY, c: 'r', p: deg(b), r: 21 } } : {}),
+      da: { x: L - 46, y: SY + 4, t: String(a), cls: 'big b' },
+      ...(hasB ? { db: { x: R + 46, y: SY + 4, t: String(b), cls: 'big b' } } : {}) },
+    w: { wG: { a: 'G', b: [L, TOP] }, wX: { a: 'X', b: [R, TOP] }, hs: { a: 'G', b: 'X', h: 1 }, wA: { a: 'G', b: 'A' }, wB: hasB ? { a: 'X', b: 'B' } : { a: 'X', b: [R, BOT] } },
+  });
+  const s0 = base();
+  const s1 = base(); s1.n.A = { ...s1.n.A, y: Y }; s1.n.da = { ...s1.n.da, y: Y + 4, o: 0 };
+  const s2 = base();
+  s2.n.G = { ...s2.n.G, o: 0 };
+  s2.n.A = { ...s2.n.A, y: OY, hl: true };
+  s2.n.C = { from: 'A', x: L + 64, y: Y, c: 'r', p: deg(a), r: 18, hl: true };
+  s2.n.da = { ...s2.n.da, y: OY + 4 };
+  s2.n.t1 = { x: L - 4, y: Y + 46, t: '① コピー', cls: 'tag' };
+  delete s2.w.wA;
+  s2.w.wG = { a: 'A', b: [L, TOP] };
+  s2.w.hs = { a: 'C', b: 'X', h: 1 };
+  const s3 = JSON.parse(JSON.stringify(s2));
+  delete s3.n.C; delete s3.w.hs; delete s3.n.t1;
+  s3.n.C = { x: R, y: Y, c: 'r', p: deg(a), r: 18, o: 0 };
+  s3.n.X = { ...s3.n.X, p: deg(a), hl: true, o: !hasB && !a ? 0 : 1 };
+  s3.n.t2 = { x: R - 60, y: Y + 48, t: '② 融合', cls: 'tag' };
+  if (!hasB) s3.n.nl = { x: R + 76, y: Y, t: a ? '← NOT' : '← 何もしない線', cls: 'tag pk' };
+  else s3.n.nl = { x: R + 62, y: Y, t: a ? '← NOT' : '← ただの線', cls: 'tag pk' };
+  if (!a) s3.n.X.o = 0;
+  const steps = [s0, s1, s2, s3];
+  if (hasB) {
+    const s4 = JSON.parse(JSON.stringify(s3));
+    delete s4.n.t2; delete s4.n.nl; delete s4.n.C;
+    s4.n.X = { x: R, y: OY, c: 'r', p: deg(a) + deg(b), r: 21, hl: true };
+    s4.n.B = { ...s4.n.B, x: R, y: OY, o: 0 };
+    s4.n.db = { x: R + 46, y: OY + 4, t: String(a ^ b), cls: 'big o' };
+    s4.n.da = { ...s4.n.da, cls: 'big o' };
+    s4.n.t3 = { x: (L + R) / 2, y: Y + 30, t: '③ 右の入力も融合', cls: 'tag' };
+    delete s4.w.wB;
+    steps.push(s4);
+  }
+  return steps;
+}
+/* ---------- CNOT の中で起きること：左が 0 と 1 を並べ、同じステップで同時に動かす（右は入力なし） ---------- */
+{
+  const svg = document.getElementById('zCs'), DX = 350;
+  const g0 = el('g', {}, svg), g1 = el('g', { transform: `translate(${DX},0)` }, svg);
+  const head = (x, t) => { const e = el('text', { x, y: -18, class: 'zt hd' }, svg); e.textContent = t; };
+  head(210, '左が 0'); head(210 + DX, '左が 1');
+  el('line', { x1: 425, y1: -30, x2: 425, y2: 480, class: 'zsep' }, svg);
+  // 各列の下に、教科書と同じ静的な等式（CNOT ＋ 左の入力 ＝ 出力 1 と、右の線）
+  [[0, 50], [1, 400]].forEach(([a, gx]) => zxScene(el('g', { transform: `translate(${gx},325)` }, svg)).set({
+    n: { G: { x: 40, y: 65, c: 'g', r: 19 }, X: { x: 115, y: 65, c: 'r', r: 19 }, A: { x: 40, y: 128, c: 'r', p: deg(a), r: 15 },
+      e: { x: 172, y: 80, t: '=', cls: 'eqs' }, f: { x: 172, y: 50, t: '融合', cls: 'sm' },
+      R: { x: 228, y: 92, c: 'r', p: deg(a), r: 15 }, ...(a ? { N: { x: 290, y: 80, c: 'r', p: 180, r: 17 } } : {}) },
+    w: { g: { a: 'G', b: [40, 8] }, x: { a: 'X', b: [115, 8] }, h: { a: 'G', b: 'X', h: 1 }, i: { a: 'G', b: 'A' }, d: { a: 'X', b: [115, 150] },
+      r: { a: 'R', b: [228, 28] }, ...(a ? { n1: { a: 'N', b: [290, 8] }, n2: { a: 'N', b: [290, 150] } } : { n0: { a: [290, 8], b: [290, 150], s: 1 } }) },
+  }));
+  const s0 = zxScene(g0), s1 = zxScene(g1);
+  const both = { set: st => { s0.set(st[0]); s1.set(st[1]); }, to: (st, d) => Promise.all([s0.to(st[0], d), s1.to(st[1], d)]) };
+  const build = () => { const A = cnotStates(0, null), B = cnotStates(1, null); return A.map((x, k) => Object.assign([x, B[k]], { dur: x.dur })); };
+  const lis = [...document.querySelectorAll('#csSteps li')];
+  const mark = i => {
+    lis[0].classList.toggle('on', i === 1 || i === 2); lis[0].classList.toggle('done', i >= 3);
+    lis[1].classList.toggle('on', i >= 3); lis[2].classList.toggle('on', i >= 3);
+  };
+  cropAll(svg, both, [build()]);
+  zstep('#cdCs', both, build, { interval: 1500, hold: 2800, onStep: mark });
+}
+
+/* ---------- CNOT の入力と出力：左に 1、右に 0（静止図）と表 ---------- */
+{
+  zfig('zCt', {
+    n: { G: { x: 70, y: 120, c: 'g', r: 23 }, X: { x: 160, y: 120, c: 'r', r: 23 }, A: { x: 70, y: 210, c: 'r', p: 180, r: 17 }, B: { x: 160, y: 210, c: 'r', r: 17 },
+      la: { x: 36, y: 214, t: '1', cls: 'big b' }, lb: { x: 194, y: 214, t: '0', cls: 'big b' }, eq: { x: 240, y: 135, t: '=', cls: 'eqs' },
+      R1: { x: 315, y: 160, c: 'r', p: 180, r: 18 }, R2: { x: 400, y: 160, c: 'r', p: 180, r: 18 }, l1: { x: 315, y: 210, t: '1', cls: 'big o' }, l2: { x: 400, y: 210, t: '1', cls: 'big o' } },
+    w: { a: { a: 'G', b: [70, 30] }, c: { a: 'X', b: [160, 30] }, h: { a: 'G', b: 'X', h: 1 }, ia: { a: 'G', b: 'A' }, ib: { a: 'X', b: 'B' }, r1: { a: 'R1', b: [315, 70] }, r2: { a: 'R2', b: [400, 70] } },
+  });
+  $('#ctTbl tbody').innerHTML = [[0, 0], [0, 1], [1, 0], [1, 1]].map(([a, b]) =>
+    `<tr${a === 1 && b === 0 ? ' class="cur"' : ''}><td>${a}</td><td>${b}</td><td class="out ${a ? 'one' : ''}">${a}</td><td class="out ${a ^ b ? 'one' : ''}">${a ^ b}</td></tr>`).join('');
+}
+
+/* ---------- CNOT = COPY + ADD（形を変える動く図） ---------- */
+{
+  const sc = zxScene('zCa');
+  const cn = () => ({ n: { G: { x: 140, y: 160, c: 'g', r: 26 }, X: { x: 260, y: 160, c: 'r', r: 26 }, i1: { x: 140, y: 312, t: 'a', cls: 'big b' }, i2: { x: 300, y: 312, t: 'b', cls: 'big b' } },
+    w: { a: { a: 'G', b: [140, 22] }, b: { a: 'G', b: [140, 292] }, c: { a: 'X', b: [260, 22] }, d: { a: 'X', b: [300, 292] }, h: { a: 'G', b: 'X', h: 1 } } });
+  const ca = () => ({ n: { G: { x: 140, y: 225, c: 'g', r: 26 }, X: { x: 260, y: 105, c: 'r', r: 26 }, i1: { x: 140, y: 312, t: 'a', cls: 'big b' }, i2: { x: 300, y: 312, t: 'b', cls: 'big b' },
+    o1: { x: 108, y: 34, t: 'a', cls: 'big o' }, o2: { x: 296, y: 34, t: 'a⊕b', cls: 'big o' },
+    gl: { x: 72, y: 235, t: 'COPY', cls: 'tag' }, rl: { x: 330, y: 105, t: 'ADD', cls: 'tag' } },
+    w: { a: { a: 'G', b: [140, 22] }, b: { a: 'G', b: [140, 292] }, c: { a: 'X', b: [260, 22] }, d: { a: 'X', b: [300, 292] }, h: { a: 'G', b: 'X', s: 1 } }, dur: 1000 });
+  zstep('#cdCa', sc, () => [cn(), ca()], { interval: 1700, hold: 2600 });
+  cropAll('zCa', sc, [[cn(), ca()]]);
+  sc.set(cn());
+}
+
+/* ---------- いろいろな箱（静止図） ---------- */
+{
+  const n = {}, w = {};
+  [['g', 0], ['g', 90], ['g', 180], ['g', 270], ['r', 0], ['r', 90], ['r', 180], ['r', 270]].forEach(([c, p], i) => {
+    const x = 50 + i * 77 + (i >= 4 ? 10 : 0), id = c + p;
+    n[id] = { x, y: 90, c, p, r: 23 };
+    w['u' + id] = { a: id, b: [x, 22] }; w['d' + id] = { a: id, b: [x, 158] };
+  });
+  n.l1 = { x: 522, y: 186, t: 'NOT', cls: 'tag' };
+  zfig('zMore', { n, w });
+}
+
+/* ---------- 補足・教科書外：量子状態・量子ゲートとの対応（ベクトル・行列を図の中に） ---------- */
+function drawMat(svg, x, y, M, cell = 28) {
+  const r = M.length, c = M[0].length, w = c * cell + 12, h = r * cell + 6, t = y - h / 2;
+  el('path', { d: `M${x + 7},${t} H${x} V${t + h} H${x + 7}`, class: 'zmb' }, svg);
+  el('path', { d: `M${x + w - 7},${t} H${x + w} V${t + h} H${x + w - 7}`, class: 'zmb' }, svg);
+  M.forEach((row, i) => row.forEach((v, k) => { el('text', { x: x + 6 + cell * (k + .5), y: t + 3 + cell * (i + .5), class: 'zm' }, svg).textContent = v; }));
+  return x + w;
+}
+function mtext(svg, x, y, s, cls = '') { const e = el('text', { x, y, class: 'zt mk ' + cls }, svg); e.style.textAnchor = 'start'; e.textContent = s; return e; }
+{
+  // 状態：赤 0°・180° ∝ |0⟩・|1⟩、緑 0°・180° ∝ |+⟩・|−⟩
+  const svg = document.getElementById('zSupState'), n = {}, w = {};
+  const L = [['r', 0, '|0⟩', [[1], [0]]], ['r', 180, '|1⟩', [[0], [1]]], ['g', 0, '|+⟩', '= (|0⟩ + |1⟩) / √2'], ['g', 180, '|−⟩', '= (|0⟩ − |1⟩) / √2']];
+  L.forEach(([c, p], i) => { const ox = (i % 2) * 300, y = i < 2 ? 95 : 235, id = 's' + i; n[id] = { x: ox + 40, y, c, p, r: 22 }; w[id] = { a: id, b: [ox + 40, y - 58] }; });
+  zxScene(el('g', {}, svg)).set({ n, w });
+  L.forEach(([c, p, ket, v], i) => {
+    const ox = (i % 2) * 300, y = i < 2 ? 95 : 235;
+    mtext(svg, ox + 74, y, '∝'); mtext(svg, ox + 104, y, ket, c === 'r' ? 'k' : 'g');
+    if (Array.isArray(v)) { mtext(svg, ox + 150, y, '='); drawMat(svg, ox + 176, y, v); } else mtext(svg, ox + 148, y, v, 's');
+  });
+}
+{
+  // 1 量子ビットのゲート：180° の赤 ＝ X、180° の緑 ＝ Z、0° ＝ I
+  const svg = document.getElementById('zSupGate'), n = {}, w = {};
+  const L = [[0, 70, 'r', 180, 'X', [[0, 1], [1, 0]]], [0, 215, 'g', 180, 'Z', [[1, 0], [0, '−1']]], [275, 70, 'r', 0, 'I', [[1, 0], [0, 1]]], [275, 215, 'g', 0, 'I', [[1, 0], [0, 1]]]];
+  L.forEach(([ox, y, c, p], i) => { const id = 'g' + i; n[id] = { x: ox + 30, y, c, p, r: 21 }; w[id + 'u'] = { a: id, b: [ox + 30, y - 55] }; w[id + 'd'] = { a: id, b: [ox + 30, y + 55] }; });
+  zxScene(el('g', {}, svg)).set({ n, w });
+  L.forEach(([ox, y, c, p, g, M]) => { mtext(svg, ox + 62, y, '='); mtext(svg, ox + 88, y, g, 'k'); mtext(svg, ox + 116, y, '='); drawMat(svg, ox + 142, y, M); });
+}
+{
+  // COPY と ADD の行列
+  const svg = document.getElementById('zSupCA');
+  zxScene(el('g', {}, svg)).set({
+    n: { C: { x: 45, y: 120, c: 'g', r: 21 }, A: { x: 300, y: 120, c: 'r', r: 21 }, lc: { x: 110, y: 222, t: 'COPY', cls: 'dl' }, la: { x: 395, y: 222, t: 'ADD', cls: 'dl' } },
+    w: { c1: { a: 'C', b: [20, 60] }, c2: { a: 'C', b: [70, 60] }, c3: { a: 'C', b: [45, 180] }, a1: { a: 'A', b: [300, 60] }, a2: { a: 'A', b: [275, 180] }, a3: { a: 'A', b: [325, 180] } },
+  });
+  mtext(svg, 84, 120, '='); drawMat(svg, 110, 120, [[1, 0], [0, 0], [0, 0], [0, 1]]);
+  mtext(svg, 336, 120, '∝'); drawMat(svg, 364, 120, [[1, 0, 0, 1], [0, 1, 1, 0]]);
+}
+{
+  // CNOT の行列
+  const svg = document.getElementById('zSupCnot');
+  zxScene(el('g', {}, svg)).set({
+    n: { G: { x: 40, y: 130, c: 'g', r: 21 }, X: { x: 108, y: 130, c: 'r', r: 21 } },
+    w: { a: { a: 'G', b: [40, 62] }, b: { a: 'G', b: [40, 198] }, c: { a: 'X', b: [108, 62] }, d: { a: 'X', b: [108, 198] }, h: { a: 'G', b: 'X', h: 1 } },
+  });
+  mtext(svg, 150, 130, '∝'); drawMat(svg, 178, 130, [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]], 30);
+}
+
+/* ---------- まとめ：1・2 ページと同じビットの辞書の図（静止図。描いた範囲に合わせて切り落とす） ---------- */
+{
+  const svg = document.getElementById('zSum');
+  zxScene(svg).set(zxScene.dict);
+  const bb = svg.getBBox(), m = 12;
+  svg.setAttribute('viewBox', `${bb.x - m} ${bb.y - m} ${bb.width + 2 * m} ${bb.height + 2 * m}`);
+}
+
+/* ---------- 図と枠のすき間をなくす（1.2 の fitFigures と同じ考え方。スパイダー図・操作の列にも対応） ---------- */
+function fitFigures() {
+  document.querySelectorAll('.body.cols, .body.wide-fig').forEach(body => {
+    const card = body.querySelector(':scope > .card'), svg = card && card.querySelector('svg.zx');
+    if (!svg) return;
+    if (!svg.dataset.cropped) {
+      const bb = svg.getBBox(), m = 14;
+      svg.setAttribute('viewBox', `${bb.x - m} ${bb.y - m} ${bb.width + 2 * m} ${bb.height + 2 * m}`);
+      svg.dataset.cropped = 1;
+    }
+    const vb = svg.viewBox.baseVal, r = vb.width / vb.height;
+    const cs = getComputedStyle(card), px = v => parseFloat(cs[v]) || 0;
+    const padX = px('paddingLeft') + px('paddingRight') + px('borderLeftWidth') + px('borderRightWidth');
+    const padY = px('paddingTop') + px('paddingBottom') + px('borderTopWidth') + px('borderBottomWidth');
+    const rows = [...card.children].filter(c => c !== svg);
+    const ctlH = rows.reduce((s, c) => s + c.offsetHeight + 14, 0) + 6;
+    const minW = rows.reduce((m, c) => Math.max(m, [...c.children].reduce((s, x) => s + x.offsetWidth, 0) + 12 * Math.max(0, c.children.length - 1)), 0);
+    const cols = body.classList.contains('cols');
+    let otherH = 0;
+    if (!cols) [...body.children].forEach(c => { if (c !== card) otherH += c.offsetHeight + 12; });
+    const minText = cols ? +(body.dataset.minText || 460) + 28 : 0;
+    const h = Math.min(body.clientHeight - padY - ctlH - otherH, (body.clientWidth - padX - minText) / r), w = h * r;
+    Object.assign(svg.style, { width: w + 'px', height: h + 'px', flex: 'none' });
+    Object.assign(card.style, { alignSelf: 'center', flex: 'none', width: Math.ceil(Math.max(w, minW) + padX) + 'px', height: 'auto' });
+    if (cols) body.style.gridTemplateColumns = `${Math.ceil(Math.max(w, minW) + padX)}px 1fr`;
+  });
+}
+fitFigures();
+if (document.fonts) document.fonts.ready.then(fitFigures);
+
+/* ---------- スライド制御 ---------- */
+const stage = $('#stage');
+/* 右上の道具（#penbar）がスライドの文字に重ならないように、ステージを少し縮めて下げる。
+   道具の下端がスライドの上の余白（40px）より下に来るときだけ動かす */
+function fit() {
+  const W = innerWidth, H = innerHeight;
+  let s = Math.min(W / 1280, H / 720), top = H / 2;
+  const pb = document.getElementById('penbar');
+  const pbB = pb && getComputedStyle(pb).display !== 'none' ? pb.getBoundingClientRect().bottom + 4 : 0;
+  if (pbB > (H - 720 * s) / 2 + 40 * s) {
+    s = Math.min(W / 1280, (H - pbB) / 680);
+    top = pbB - 40 * s + 360 * s;
+  }
+  stage.style.top = top + 'px';
+  stage.style.transform = `translate(-50%,-50%) scale(${s})`;
+}
+addEventListener('resize', fit); fit();
+
+const slides = [...document.querySelectorAll('.slide')];
+slides.forEach((s, i) => { const p = s.querySelector('.pageno'); if (p) p.textContent = `${i + 1} / ${slides.length}`; });
+let cur = 0;
+const frags = s => [...s.querySelectorAll('.frag')];
+function showFrag(f, on) {
+  f.classList.toggle('vis', on);
+  if (f.dataset.slideClass) f.closest('.slide').classList.toggle(f.dataset.slideClass, on);
+}
+function go(n, showAll = false) {
+  if (n < 0 || n >= slides.length) return;
+  stoppers.forEach(f => f());
+  cur = n;
+  slides.forEach((s, i) => { s.classList.toggle('active', i === n); s.classList.toggle('past', i < n); });
+  frags(slides[n]).forEach(f => showFrag(f, showAll));
+  $('#counter').textContent = `${n + 1} / ${slides.length}`;
+  $('#progress').style.width = `${(n + 1) / slides.length * 100}%`;
+  history.replaceState(null, '', '#' + (n + 1));
+  const id = slides[n].dataset.id;
+  if (window.onEnter && onEnter[id]) onEnter[id]();
+  // 自動再生ボタンのあるスライドは、開いた時点で再生を始める（ボタンで停止できる）
+  slides[n].querySelectorAll('[data-autoplay]').forEach(b => b.click());
+  ink.render();
+}
+function next() {
+  const f = frags(slides[cur]).find(x => !x.classList.contains('vis'));
+  if (f) showFrag(f, true); else go(cur + 1);
+}
+function prev() {
+  const v = frags(slides[cur]).filter(x => x.classList.contains('vis'));
+  if (v.length) showFrag(v[v.length - 1], false); else go(cur - 1, true);
+}
+function fullscreen() {
+  if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen();
+}
+let overview = false;
+function layoutOverview() {
+  const cols = innerWidth < 900 ? 2 : innerWidth < 1400 ? 3 : 4;
+  const w = (document.body.clientWidth - 48 - 22 * (cols - 1)) / cols;
+  stage.style.setProperty('--cols', cols);
+  stage.style.setProperty('--z', w / 1280);
+  stage.style.setProperty('--ow', `${w}px`);
+  stage.style.setProperty('--oh', `${w * 720 / 1280}px`);
+}
+function markCurrent() { slides.forEach((s, i) => s.classList.toggle('current', i === cur)); }
+function toggleOverview(on = !overview) {
+  overview = on;
+  document.body.classList.toggle('overview', on);
+  if (on) {
+    stoppers.forEach(f => f());
+    layoutOverview(); markCurrent();
+    slides[cur].scrollIntoView({ block: 'center' });
+  } else {
+    document.body.scrollTop = 0;
+    go(cur);
+  }
+}
+slides.forEach((s, i) => s.addEventListener('click', () => {
+  if (!overview) return;
+  cur = i; toggleOverview(false);
+}));
+addEventListener('resize', () => { if (overview) layoutOverview(); });
+addEventListener('keydown', e => {
+  // 動画を操作しているときの Space・矢印キーは動画に任せる
+  if (e.target.tagName === 'VIDEO' && [' ', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+  if (overview) {
+    if (['o', 'O', 'Escape'].includes(e.key)) toggleOverview(false);
+    else if (e.key === 'Enter') { e.preventDefault(); toggleOverview(false); }
+    else if (['ArrowRight', 'ArrowLeft'].includes(e.key)) {
+      e.preventDefault();
+      cur = Math.max(0, Math.min(slides.length - 1, cur + (e.key === 'ArrowRight' ? 1 : -1)));
+      markCurrent(); slides[cur].scrollIntoView({ block: 'nearest' });
+    }
+    return;
+  }
+  if(e.target.closest('.slide-resource-links'))return;
+  if (e.target.closest('#qcWebSearch, .qc-walkthrough, #quantumLab, #qcSign, #qcAccount, #qcCloudLogin, #qcCloudHome, #qcInstances, #qcInstanceWizard, #qcViz, .cv-modal, .qj-page, .qj-notice, .qj-data-modal, .qpd-overlay') || ['SUMMARY','INPUT','SELECT','TEXTAREA','BUTTON'].includes(e.target.tagName)) return;
+  if (e.key === 'p' || e.key === 'P') return ink.setTool(ink.tool() === 'pen' ? 'none' : 'pen');
+  if (e.key === 'z' || e.key === 'Z') return ink.undo();
+  if (e.key === 'o' || e.key === 'O') return toggleOverview(true);
+  if (['ArrowRight', 'PageDown', ' ', 'Enter', 'ArrowDown'].includes(e.key)) { e.preventDefault(); next(); }
+  else if (['ArrowLeft', 'PageUp', 'Backspace', 'ArrowUp'].includes(e.key)) { e.preventDefault(); prev(); }
+  else if (e.key === 'Home') go(0);
+  else if (e.key === 'End') go(slides.length - 1);
+  else if (e.key === 'f' || e.key === 'F') fullscreen();
+});
+let tx = null;
+// スライダー操作や Apple Pencil のタッチはスワイプのページ送りに使わない
+addEventListener('touchstart', e => tx = laser.blocksSwipe(e.touches[0]) || e.target.closest('input,select,textarea,.qj-page,.qj-data-modal,#qcViz,.qpd-overlay') ? null : e.touches[0].clientX, { passive: true });
+addEventListener('touchend', e => {
+  if (tx === null || overview) return;
+  const dx = e.changedTouches[0].clientX - tx; tx = null;
+  if (Math.abs(dx) > 60) dx < 0 ? next() : prev();
+});
+// Apple Pencil のタッチは、Safari のスクリブル（手書き入力）・スクロール・拡大鏡などの判定に使わせない。
+// これらが働くと、速く書いたときにペンの動きが一瞬ページに届かなくなり、固まって見えるため。
+// タッチの既定の動作を止めるとクリックも起きなくなるので、ペンで軽くタップしたときはこちらでクリックを送る
+let penTap = null;
+const findPen = e => penTap && [...e.changedTouches].find(t => t.identifier === penTap.id);
+stage.addEventListener('touchstart', e => {
+  const t = e.changedTouches[0];
+  if (t.touchType !== 'stylus' || overview || e.target.closest('input')) return;
+  e.preventDefault();
+  penTap = { id: t.identifier, x: t.clientX, y: t.clientY, target: e.target, moved: 0 };
+}, { passive: false });
+stage.addEventListener('touchmove', e => {
+  const t = findPen(e);
+  if (!t) return;
+  e.preventDefault();
+  penTap.moved = Math.max(penTap.moved, Math.hypot(t.clientX - penTap.x, t.clientY - penTap.y));
+}, { passive: false });
+stage.addEventListener('touchend', e => {
+  const t = findPen(e);
+  if (!t) return;
+  const { target, moved } = penTap;
+  penTap = null;
+  // ほとんど動かさなかったときはタップとみなしてクリックを送る（ボタン・回路の入力・復習問題のカードなど）
+  if (moved < 8) {
+    if (typeof target.click === 'function') target.click();
+    else target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: t.clientX, clientY: t.clientY }));
+  }
+});
+stage.addEventListener('touchcancel', () => { penTap = null; });
+$('#btnNext').onclick = e => { e.currentTarget.blur(); next(); };
+$('#btnPrev').onclick = e => { e.currentTarget.blur(); prev(); };
+$('#btnFs').onclick = e => { e.currentTarget.blur(); fullscreen(); };
+$('#btnOv').onclick = e => { e.currentTarget.blur(); toggleOverview(true); };
+$('#btnOvClose').onclick = e => { e.currentTarget.blur(); toggleOverview(false); };
+addEventListener('beforeprint', () => slides.forEach(s => frags(s).forEach(f => showFrag(f, true))));
+/* ---------- 黒ペン・消しゴム・投げ縄 ----------
+   右上の道具で「黒ペン」を選ぶと、Apple Pencil（パソコンではマウス）でスライドに書き込める。指では書かない（指はスワイプやタップに使う）。
+   ペン先で軽くタップしただけのときは線を残さず、ボタンや入力の丸のクリックとして扱う。
+   書き込みはスライドごとに保持し、ページを戻ると再表示される（再読み込みで消える）。
+   「投げ縄」で書き込みを囲むと選択できる。選択した線はドラッグで移動、枠のボタンで複製・コピー・削除。
+   コピーした線は別のスライドに移ってから「貼り付け」で貼れる（ページをまたいだ複製）。 */
+const ink = (() => {
+  const W = 1280, H = 720, COLOR = '#111', SEL = '#3b6cff', PAD = 12;
+  const canvas = document.createElement('canvas');
+  canvas.id = 'ink';
+  stage.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  const bar = $('#penbar');
+  const pages = slides.map(() => ({ strokes: [], undo: [] }));
+  let tool = 'none', active = null;
+  document.body.classList.add('tool-none');
+  // 投げ縄の選択（sel.items は選択中の線そのもの）とクリップボード（ページをまたいで使う）
+  let sel = null, clip = null, lassoPts = null;
+
+  // 選択中の線の操作ボタン（スライドの中に置くので、スライドと一緒に拡大縮小される）
+  const lbar = document.createElement('div');
+  lbar.id = 'lassoBar';
+  lbar.innerHTML = '<button data-act="dup" title="複製 (D)">⧉ 複製</button><button data-act="copy" title="コピー：別のスライドで貼り付けできる (C)">📋 コピー</button><button data-act="del" title="削除 (Delete)">🗑️ 削除</button>';
+  stage.appendChild(lbar);
+  const st = document.createElement('style');
+  st.textContent = `
+#lassoBar{position:absolute;z-index:6;display:none;gap:4px;background:#fff;border:2.5px solid #1f1a3d;border-radius:999px;box-shadow:3px 3px 0 #1f1a3d;padding:3px}
+#lassoBar button{border:0;background:none;font:800 14px "Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;color:#1f1a3d;border-radius:999px;padding:5px 10px;cursor:pointer;white-space:nowrap}
+#lassoBar button:hover{background:#dfe8ff}
+#penbar button:disabled{opacity:.35;cursor:default}
+#inkToast{position:absolute;left:50%;bottom:58px;transform:translateX(-50%);z-index:7;background:#1f1a3d;color:#fff;font:800 15px sans-serif;border-radius:999px;padding:6px 16px;opacity:0;transition:opacity .3s;pointer-events:none}
+#inkToast.on{opacity:.92}
+body.overview #lassoBar,body.overview #inkToast{display:none!important}`;
+  document.head.appendChild(st);
+  const toastEl = document.createElement('div');
+  toastEl.id = 'inkToast';
+  stage.appendChild(toastEl);
+  let toastT = 0;
+  const toast = msg => { toastEl.textContent = msg; toastEl.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('on'), 1600); };
+
+  function resize() {
+    const k = Math.min(4096 / W, stage.getBoundingClientRect().width / W * (devicePixelRatio || 1));
+    canvas.width = Math.round(W * k); canvas.height = Math.round(H * k);
+    render();
+  }
+  // 筆圧で太さを変え、点の中点を結ぶ曲線でなめらかにする。i 番目の区間は p[i-1]・p[i]・p[i+1] で決まる
+  const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+  function drawSeg(p, i) {
+    const m0 = i === 1 ? p[0] : mid(p[i - 1], p[i]);
+    const m1 = i === p.length - 1 ? p[i] : mid(p[i], p[i + 1]);
+    ctx.lineWidth = 4 * (.4 + p[i][2] * 1.2);
+    ctx.beginPath(); ctx.moveTo(m0[0], m0[1]); ctx.quadraticCurveTo(p[i][0], p[i][1], m1[0], m1[1]); ctx.stroke();
+  }
+  function drawStroke(p) { for (let i = 1; i < p.length; i++) drawSeg(p, i); }
+  const bbox = items => {
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    items.forEach(s => s.forEach(([x, y]) => { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }));
+    return [x0 - PAD, y0 - PAD, x1 + PAD, y1 + PAD];
+  };
+  // スライド全体の描き直し（元に戻す・消しゴム・スライド切り替え・投げ縄の操作など）
+  function render() {
+    if (sel && (sel.page !== cur || !sel.items.every(s => pages[cur].strokes.includes(s)))) setSel(null, false);
+    const k = canvas.width / W;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    // 選択中の線は青く縁取る
+    if (sel) {
+      ctx.strokeStyle = 'rgba(59,108,255,.35)'; ctx.lineWidth = 12;
+      sel.items.forEach(s => { ctx.beginPath(); s.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); if (s.length === 1) ctx.lineTo(s[0][0] + .1, s[0][1]); ctx.stroke(); });
+    }
+    ctx.strokeStyle = COLOR;
+    pages[cur].strokes.forEach(drawStroke);
+    if (active && active.pts) { drawStroke(active.pts); active.drawn = active.pts.length - 2; }
+    if (sel) {
+      const [x0, y0, x1, y1] = bbox(sel.items);
+      ctx.save(); ctx.strokeStyle = SEL; ctx.lineWidth = 2; ctx.setLineDash([7, 5]);
+      ctx.strokeRect(x0, y0, x1 - x0, y1 - y0); ctx.restore();
+      placeBar([x0, y0, x1, y1]);
+    }
+    if (lassoPts && lassoPts.length > 1) {
+      ctx.save(); ctx.strokeStyle = SEL; ctx.fillStyle = 'rgba(59,108,255,.08)'; ctx.lineWidth = 2.5; ctx.setLineDash([6, 6]);
+      ctx.beginPath(); lassoPts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+    }
+  }
+  function placeBar([x0, y0, x1, y1]) {
+    lbar.style.display = 'flex';
+    const w = lbar.offsetWidth || 230, h = lbar.offsetHeight || 36;
+    let left = Math.max(8, Math.min(W - w - 8, x1 - w)), top = y0 - h - 8;
+    if (top < 70) top = Math.min(H - h - 8, y1 + 8);
+    lbar.style.left = left + 'px'; lbar.style.top = top + 'px';
+  }
+  function setSel(items, draw = true) {
+    sel = items && items.length ? { page: cur, items } : null;
+    if (!sel) lbar.style.display = 'none';
+    if (draw) render();
+  }
+  // 書いている途中は、まだ描いていない区間だけを描き足す（毎回全部を描き直すと速く書いたときに固まるため）。
+  // 最後の区間は次の点が来ないと形が決まらないので、ペンを離したときに描く
+  function drawNew(final) {
+    const p = active.pts, upto = final ? p.length - 1 : p.length - 2;
+    for (let i = Math.max(1, active.drawn + 1); i <= upto; i++) drawSeg(p, i);
+    active.drawn = Math.max(active.drawn, upto);
+  }
+  // ペンの点はたくさん届くので、画面の書き換え 1 回につき 1 回だけまとめて描く
+  let queued = false;
+  function flush() {
+    queued = false;
+    if (!active) return;
+    if (active.mode === 'lasso' || active.mode === 'move') render();
+    else if (active.pts) drawNew(false);
+    else if (active.erase.length) { const qs = active.erase; active.erase = []; if (qs.map(eraseAt).some(Boolean)) render(); }
+  }
+  const schedule = () => { if (!queued) { queued = true; requestAnimationFrame(flush); } };
+  function toStage(e) {
+    const r = stage.getBoundingClientRect();
+    // マウスは筆圧が取れないので 0.5 として扱う
+    const pr = e.pointerType === 'pen' && e.pressure > 0 ? e.pressure : .5;
+    return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H, pr];
+  }
+  function snapshot() { const pg = pages[cur]; pg.undo.push(pg.strokes.slice()); if (pg.undo.length > 100) pg.undo.shift(); }
+  function segDist(q, a, b) {
+    const dx = b[0] - a[0], dy = b[1] - a[1], L = dx * dx + dy * dy;
+    const t = L ? Math.max(0, Math.min(1, ((q[0] - a[0]) * dx + (q[1] - a[1]) * dy) / L)) : 0;
+    return Math.hypot(q[0] - a[0] - t * dx, q[1] - a[1] - t * dy);
+  }
+  // q の近くを通る線を消す。消したら true（描き直しは呼び出し側でまとめて行う）
+  function eraseAt(q) {
+    const pg = pages[cur];
+    const keep = pg.strokes.filter(st => !st.some((pt, i) => segDist(q, st[Math.max(0, i - 1)], pt) < 14));
+    if (keep.length === pg.strokes.length) return false;
+    if (!active.erased) { snapshot(); active.erased = true; }
+    pg.strokes = keep;
+    return true;
+  }
+  // 点が多角形の内側か（投げ縄の判定）
+  function inPoly(p, poly) {
+    let c = false;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const [xi, yi] = poly[i], [xj, yj] = poly[j];
+      if ((yi > p[1]) !== (yj > p[1]) && p[0] < (xj - xi) * (p[1] - yi) / (yj - yi) + xi) c = !c;
+    }
+    return c;
+  }
+  const inBox = (q, [x0, y0, x1, y1]) => q[0] >= x0 && q[0] <= x1 && q[1] >= y0 && q[1] <= y1;
+  const clone = items => items.map(s => s.map(p => p.slice()));
+  const shift = (items, dx, dy) => items.forEach(s => s.forEach(p => { p[0] += dx; p[1] += dy; }));
+
+  // ---- 投げ縄の操作 ----
+  function duplicate() {
+    if (!sel) return;
+    snapshot();
+    const items = clone(sel.items); shift(items, 24, 24);
+    pages[cur].strokes.push(...items);
+    setSel(items); toast('複製しました');
+  }
+  function copy() {
+    if (!sel) return;
+    clip = { items: clone(sel.items), from: cur, n: 0 };
+    $('#inkPaste').disabled = false;
+    toast('コピーしました。別のスライドで「貼り付け」できます');
+  }
+  function paste() {
+    if (!clip) return;
+    snapshot();
+    const items = clone(clip.items);
+    // 同じスライドに貼るときは重ならないように少しずらす
+    if (clip.from === cur) { clip.n++; shift(items, 24 * clip.n, 24 * clip.n); }
+    pages[cur].strokes.push(...items);
+    setTool('lasso'); setSel(items); toast('貼り付けました（ドラッグで移動できます）');
+  }
+  function del() {
+    if (!sel) return;
+    snapshot();
+    pages[cur].strokes = pages[cur].strokes.filter(s => !sel.items.includes(s));
+    setSel(null);
+  }
+  lbar.addEventListener('pointerdown', e => e.stopPropagation());
+  lbar.querySelectorAll('button').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation(); b.blur();
+    ({ dup: duplicate, copy, del })[b.dataset.act]();
+  }));
+
+  stage.addEventListener('pointerdown', e => {
+    if (overview || active || tool === 'laser' || tool === 'none' || e.target.closest('input') || e.target.closest('#lassoBar')) return;
+    if (!(e.pointerType === 'pen' || (e.pointerType === 'mouse' && e.button === 0))) return;
+    e.preventDefault();
+    const q = toStage(e);
+    if (tool === 'lasso') {
+      // 選択枠の中をつかんだら移動、外なら新しく囲む
+      if (sel && inBox(q, bbox(sel.items))) active = { id: e.pointerId, mode: 'move', start: q, last: q, moved: 0 };
+      else { setSel(null, false); lassoPts = [q]; active = { id: e.pointerId, mode: 'lasso', start: q, moved: 0 }; render(); }
+      return;
+    }
+    // ペンの消しゴム側（対応ペンのみ）は消しゴムとして扱う
+    const erase = tool === 'eraser' || e.button === 5;
+    active = { id: e.pointerId, start: q, moved: 0, pts: erase ? null : [q], drawn: 0, erase: [] };
+    if (erase) { if (eraseAt(q)) render(); }
+  });
+  addEventListener('pointermove', e => {
+    if (!active || e.pointerId !== active.id) return;
+    e.preventDefault();
+    const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [];
+    for (const ev of evs.length ? evs : [e]) {
+      const q = toStage(ev);
+      active.moved = Math.max(active.moved, Math.hypot(q[0] - active.start[0], q[1] - active.start[1]));
+      if (active.mode === 'lasso') {
+        const last = lassoPts[lassoPts.length - 1];
+        if (Math.hypot(q[0] - last[0], q[1] - last[1]) >= 3) lassoPts.push(q);
+      } else if (active.mode === 'move') {
+        if (!active.began && active.moved >= 3) {
+          // 元に戻せるよう、動かす前の状態を残し、選択中の線は複製に差し替えてから動かす
+          active.began = true; snapshot();
+          const pg = pages[cur], copies = clone(sel.items);
+          pg.strokes = pg.strokes.map(s => { const i = sel.items.indexOf(s); return i < 0 ? s : copies[i]; });
+          sel.items = copies;
+        }
+        if (active.began) { shift(sel.items, q[0] - active.last[0], q[1] - active.last[1]); active.last = q; }
+      } else if (active.pts) {
+        // ほとんど動いていない点は間引く（見た目は変わらず、描く量が減る）
+        const last = active.pts[active.pts.length - 1];
+        if (Math.hypot(q[0] - last[0], q[1] - last[1]) >= 1.2) active.pts.push(q); else last[2] = Math.max(last[2], q[2]);
+      } else active.erase.push(q);
+    }
+    schedule();
+  }, { passive: false });
+  function end(e) {
+    if (!active || e.pointerId !== active.id) return;
+    if (active.mode === 'lasso') {
+      const poly = lassoPts; lassoPts = null;
+      // 点の半分以上が投げ縄の内側にある線を選ぶ
+      const items = active.moved >= 6 ? pages[cur].strokes.filter(s => s.filter(p => inPoly(p, poly)).length * 2 >= s.length) : [];
+      active = null; setSel(items);
+      return;
+    }
+    if (active.mode === 'move') { active = null; render(); return; }
+    flush();
+    // ほとんど動かさなかったペン先はタップ（クリック）として扱い、線は残さない
+    if (active.pts && active.moved >= 4) {
+      drawNew(true); snapshot(); pages[cur].strokes.push(active.pts); active = null;
+    } else { active = null; render(); }
+  }
+  addEventListener('pointerup', end);
+  addEventListener('pointercancel', end);
+
+  function setTool(t) {
+    tool = t;
+    document.body.classList.toggle('tool-none', t === 'none');
+    if (t !== 'none') { const s = getSelection(); if (s) s.removeAllRanges(); }
+    if (t !== 'lasso') setSel(null);
+    bar.querySelectorAll('[data-tool]').forEach(b => b.classList.toggle('on', b.dataset.tool === t));
+  }
+  function undo() { const pg = pages[cur]; if (pg.undo.length) { pg.strokes = pg.undo.pop(); setSel(null, false); render(); } }
+  bar.querySelectorAll('[data-tool]').forEach(b => b.onclick = () => { b.blur(); setTool(tool === b.dataset.tool ? 'none' : b.dataset.tool); });
+  $('#inkUndo').onclick = e => { e.currentTarget.blur(); undo(); };
+  $('#inkPaste').onclick = e => { e.currentTarget.blur(); paste(); };
+  $('#inkClear').onclick = e => {
+    e.currentTarget.blur();
+    if (pages[cur].strokes.length) { snapshot(); pages[cur].strokes = []; setSel(null, false); render(); }
+  };
+  // 投げ縄の選択中のキー操作（ページ送りより先に受け取る）
+  addEventListener('keydown', e => {
+    if (overview || e.target.tagName === 'INPUT') return;
+    const k = e.key.toLowerCase(), mod = e.ctrlKey || e.metaKey;
+    if (mod && String(getSelection())) return;
+    let f = null;
+    if (k === 'l' && !mod) f = () => setTool(tool === 'lasso' ? 'none' : 'lasso');
+    else if (sel && (k === 'delete' || k === 'backspace')) f = del;
+    else if (sel && k === 'escape') f = () => setSel(null);
+    else if (sel && k === 'd') f = duplicate;
+    else if (sel && k === 'c') f = copy;
+    else if (clip && k === 'v') f = paste;
+    if (!f) return;
+    e.preventDefault(); e.stopImmediatePropagation(); f();
+  }, true);
+  addEventListener('resize', resize);
+  resize();
+  return { render, undo, setTool, tool: () => tool, drawing: () => !!active };
+})();
+
+/* ---------- レーザーポインター ----------
+   Apple Pencil：ペン先を画面に当てている間だけ赤く光る点を表示し、なぞった軌跡を光らせる（書き込みは残らない）。
+   パソコン（マウス）：「レーザー」を選んでいる間、マウスの位置に赤い点が出る（3 秒止めると消える）。
+   ボタンを押したままドラッグすると軌跡が光る。ボタン・回路の入力など、クリックできる場所の上では軌跡を描かずクリックを優先する。
+   軌跡は離してから約1秒で消える。消えきる前にもう一度当てると、それまでの軌跡は消えずに残り続ける。 */
+const laser = (() => {
+  const W = 1280, H = 720, LIFE = 1000, IDLE = 3000;
+  const canvas = document.createElement('canvas');
+  canvas.id = 'laser';
+  stage.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  // trail は線ごとの点の配列。fadeFrom は離した時刻（当てている間は null）。hover はマウスの位置
+  let trail = [], down = null, raf = 0, fadeFrom = null, hover = null, idleT = 0;
+
+  function resize() {
+    const k = Math.min(4096 / W, stage.getBoundingClientRect().width / W * (devicePixelRatio || 1));
+    canvas.width = Math.round(W * k); canvas.height = Math.round(H * k);
+    kick();
+  }
+  function toStage(e) {
+    const r = stage.getBoundingClientRect();
+    return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H];
+  }
+  const level = () => fadeFrom === null ? 1 : Math.max(0, 1 - (performance.now() - fadeFrom) / LIFE);
+  const hoverLevel = () => {
+    if (!hover || down || ink.tool() !== 'laser' || overview) return 0;
+    const t = performance.now() - hover.t;
+    return t < IDLE ? 1 : Math.max(0, 1 - (t - IDLE) / 400);
+  };
+  function dot([x, y], a = 1) {
+    const g = ctx.createRadialGradient(x, y, 0, x, y, 13);
+    g.addColorStop(0, `rgba(255,255,255,${a})`); g.addColorStop(.35, `rgba(255,90,110,${a})`); g.addColorStop(1, 'rgba(255,30,60,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x, y, 13, 0, Math.PI * 2); ctx.fill();
+  }
+  function frame() {
+    raf = 0;
+    const k = canvas.width / W, f = level(), hl = hoverLevel();
+    if (!f) trail = [];
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    // 影のぼかし（shadowBlur）は重いので使わず、太い半透明の線の上に細い線を重ねて光って見せる
+    const path = new Path2D();
+    trail.forEach(line => { if (!line.length) return; path.moveTo(line[0][0], line[0][1]); line.forEach(q => path.lineTo(q[0], q[1])); });
+    ctx.strokeStyle = `rgba(255,40,70,${.18 * f})`; ctx.lineWidth = 6 + 14 * f; ctx.stroke(path);
+    ctx.strokeStyle = `rgba(255,40,70,${.8 * f})`; ctx.lineWidth = 2 + 5 * f; ctx.stroke(path);
+    if (down) dot(down.pos);
+    else if (hl > 0) dot(hover.pos, hl);
+    if ((fadeFrom !== null && trail.length) || (hl > 0 && hl < 1)) kick();
+    else if (hl === 1) { clearTimeout(idleT); idleT = setTimeout(kick, IDLE + 20 - (performance.now() - hover.t)); }
+  }
+  function kick() { if (!raf) raf = requestAnimationFrame(frame); }
+  function add(q) {
+    const line = trail[trail.length - 1], last = line[line.length - 1];
+    // ほとんど動いていない点は間引く
+    if (!last || Math.hypot(q[0] - last[0], q[1] - last[1]) >= 1.5) line.push(q);
+    down.pos = q;
+  }
+  // クリックできる場所（ボタン・入力の丸・カードなど）の上ではマウスの軌跡を描かない
+  const clickable = t => !!t.closest('button,input,select,textarea,a,label,summary,#lassoBar') || ['pointer', 'grab', 'grabbing'].includes(getComputedStyle(t).cursor);
+
+  stage.addEventListener('pointerdown', e => {
+    if (overview || down || e.target.closest('input')) return;
+    if (!(ink.tool() === 'laser' || (ink.tool() === 'none' && e.pointerType === 'pen'))) return;
+    const mouse = e.pointerType === 'mouse';
+    if (!(e.pointerType === 'pen' || (mouse && e.button === 0 && !clickable(e.target)))) return;
+    e.preventDefault();
+    // 前の軌跡が消えきっていなければ残したまま続ける
+    if (!level()) trail = [];
+    fadeFrom = null; down = { id: e.pointerId, pos: null };
+    trail.push([]); add(toStage(e)); kick();
+  });
+  addEventListener('pointermove', e => {
+    if (down && e.pointerId === down.id) {
+      e.preventDefault();
+      const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [];
+      (evs.length ? evs : [e]).forEach(ev => add(toStage(ev)));
+      kick();
+      return;
+    }
+    if (e.pointerType === 'mouse' && ink.tool() === 'laser' && !overview && stage.contains(e.target)) {
+      hover = { pos: toStage(e), t: performance.now() }; kick();
+    }
+    else if (e.pointerType === 'mouse' && hover && ink.tool() !== 'laser') { hover = null; kick(); }
+  }, { passive: false });
+  stage.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') { hover = null; kick(); } });
+  const up = e => { if (down && e.pointerId === down.id) { down = null; fadeFrom = performance.now(); if (e.pointerType === 'mouse') hover = { pos: toStage(e), t: performance.now() }; kick(); } };
+  addEventListener('pointerup', up);
+  addEventListener('pointercancel', up);
+  addEventListener('resize', resize);
+  resize();
+
+  // Apple Pencil のタッチはスワイプのページ送りに使わない
+  return { blocksSwipe: t => t.touchType === 'stylus' || !!down, refresh: kick };
+})();
+
+go(Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1)) || 1) - 1)));
+</script>
+</body>
+</html>
