@@ -574,6 +574,8 @@ svg.zx{display:block;width:100%;height:auto;user-select:none;-webkit-user-select
 .slide:is([data-id="bitstate"],[data-id="copy"],[data-id="add4"],[data-id="addnot"],[data-id="cnotca"]) .point{font-size:26px}
 .sumlist{gap:14px !important}
 .sumlist .sl{padding:12px 24px !important}
+.zt.hd{font:900 24px var(--serif);fill:var(--ink)}
+.zsep{stroke:#c9c5da;stroke-width:2.5;stroke-dasharray:10 8}
 
 </style>
 </head>
@@ -598,8 +600,7 @@ svg.zx{display:block;width:100%;height:auto;user-select:none;-webkit-user-select
       </ul>
     </div>
     <div class="card pop" style="--d:.4s;padding:14px 18px">
-      <svg class="zx" id="zTitle" viewBox="0 0 420 330"></svg>
-      <div class="hint" style="text-align:center;font-size:17px;font-weight:700"><b style="color:var(--accent-d)">緑のクモ ＝ コピー</b>　<b style="color:var(--blue)">赤のクモ ＝ 足し算</b></div>
+      <svg class="zx" id="zTitle" viewBox="0 0 480 450"></svg>
     </div>
   </div>
 </section>
@@ -664,7 +665,6 @@ svg.zx{display:block;width:100%;height:auto;user-select:none;-webkit-user-select
         <li class="pop" style="--d:.08s"><span class="ico">0</span><span><b>0° の赤のクモ状態</b> ＝ ビットの <b class="k">0</b></span></li>
         <li class="pop" style="--d:.16s"><span class="ico">1</span><span><b>180° の赤のクモ状態</b> ＝ ビットの <b class="k">1</b></span></li>
       </ul>
-      <div class="point frag">角度 0° は何も書かないので、<b style="white-space:nowrap">無地の赤丸 ＝ 0</b></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -677,11 +677,6 @@ svg.zx{display:block;width:100%;height:auto;user-select:none;-webkit-user-select
   <div class="body wide-fig">
     <div class="card pop">
       <svg class="zx" id="zStr" viewBox="0 0 600 220"></svg>
-      <div class="btns" style="justify-content:center;margin-top:4px">
-        <button class="b" data-bits="10010">10010</button>
-        <button class="b" data-bits="01101000">01101000（h）</button>
-        <button class="b" data-bits="01101001">01101001（i）</button>
-      </div>
     </div>
     <p class="lead pop" style="--d:.1s;text-align:center;margin:0">1 つ 1 つの量子ビットを 0 か 1 にすると、ふつうのコンピュータと同じ <b class="k">0 と 1 の列</b></p>
   </div>
@@ -849,13 +844,12 @@ svg.zx{display:block;width:100%;height:auto;user-select:none;-webkit-user-select
 <section class="slide" data-id="cnotstep">
   <div class="chap">SECTION 4 ／ CNOT の中で何が起きている？</div>
   <h2>左が 0 なら右はそのまま、1 なら右に NOT<small>2.2（CNOT）</small></h2>
-  <div class="body cols" data-min-text="500">
+  <div class="body cols" data-min-text="380">
     <div class="card stp pop" id="cdCs">
-      <svg class="zx" id="zCs" viewBox="0 0 420 320"></svg>
-      <div class="zctl"><div class="picker" id="pkCs" data-label="左の入力"></div></div>
+      <svg class="zx" id="zCs" viewBox="0 -40 770 360"></svg>
     </div>
     <div>
-      <ol class="steps pop" id="csSteps">
+      <ol class="steps pop a0 a1" id="csSteps">
         <li><span class="sn">①</span><div><b>コピー</b>：左の入力を緑のクモがコピー</div></li>
         <li><span class="sn">②</span><div><b>融合</b>：届いたコピーと赤のクモがくっつく</div></li>
         <li><span class="sn">③</span><div><span class="r0">0 → 右は <b>何もしない線</b></span><br><span class="r1">1 → 右は <b>NOT</b></span></div></li>
@@ -1164,12 +1158,7 @@ function cropAll(svg, sc, lists, m = 14) {
 }
 
 /* ---------- タイトル：CNOT（緑 ＝ コピー、赤 ＝ 足し算） ---------- */
-zfig('zTitle', {
-  n: { G: { x: 150, y: 165, c: 'g', r: 26 }, X: { x: 270, y: 165, c: 'r', r: 26 },
-    i1: { x: 150, y: 312, t: 'a', cls: 'big b' }, i2: { x: 270, y: 312, t: 'b', cls: 'big b' },
-    o1: { x: 150, y: 18, t: 'a', cls: 'big o' }, o2: { x: 270, y: 18, t: 'a ⊕ b', cls: 'big o' } },
-  w: { a: { a: 'G', b: [150, 42] }, b: { a: 'G', b: [150, 290] }, c: { a: 'X', b: [270, 42] }, d: { a: 'X', b: [270, 290] }, h: { a: 'G', b: 'X', h: 1 } },
-});
+/* タイトルの図は、2.2 のねらい（2 ページ）と同じビットの辞書 */
 
 /* ---------- 2.2 のねらい：ビットの辞書（0・1・COPY・ADD・NOT・CNOT） ---------- */
 {
@@ -1184,6 +1173,7 @@ zfig('zTitle', {
   w.c1 = { a: 'cg', b: [326, 318] }; w.c2 = { a: 'cg', b: [326, 412] }; w.c3 = { a: 'cx', b: [394, 318] }; w.c4 = { a: 'cx', b: [394, 412] }; w.c5 = { a: 'cg', b: 'cx', h: 1 };
   lab('l5', 360, 440, 'CNOT');
   zfig('zMsg', { n, w });
+  zfig('zTitle', { n, w });
 }
 
 /* ---------- ビット：文字 → 0 と 1 の列 ---------- */
@@ -1215,24 +1205,16 @@ zfig('zTitle', {
   zfig('zBs', { n, w });
 }
 
-/* ---------- ビット列：クリックで 0 ⇄ 1 ---------- */
+/* ---------- ビット列：10010（静止図） ---------- */
 {
-  let bits = '10010';
-  const sc = zxScene('zStr', { onClick: id => { if (id[0] === 's') toggle(+id.slice(1)); } });
-  const st = () => {
-    const n = {}, w = {}, k = bits.length, gap = 68, x0 = 300 - (k - 1) * gap / 2;
-    [...bits].forEach((b, i) => {
-      const x = x0 + i * gap;
-      n['s' + i] = { x, y: 110, c: 'r', p: deg(+b), r: 23, clk: true };
-      n['d' + i] = { x, y: 172, t: b, cls: 'big' + (b === '1' ? ' o' : '') };
-      w['w' + i] = { a: 's' + i, b: [x, 30] };
-    });
-    return { n, w };
-  };
-  const toggle = i => { bits = bits.slice(0, i) + (bits[i] === '1' ? '0' : '1') + bits.slice(i + 1); sc.to(st(), 380); };
-  document.querySelectorAll('[data-bits]').forEach(b => b.addEventListener('click', e => { e.currentTarget.blur(); bits = b.dataset.bits; sc.to(st(), 600); }));
-  sc.set(st());
-  onEnter.bitstr = () => { bits = '10010'; sc.set(st()); };
+  const n = {}, w = {}, bits = '10010', gap = 68, x0 = 300 - (bits.length - 1) * gap / 2;
+  [...bits].forEach((b, i) => {
+    const x = x0 + i * gap;
+    n['s' + i] = { x, y: 110, c: 'r', p: deg(+b), r: 23 };
+    n['d' + i] = { x, y: 172, t: b, cls: 'big' + (b === '1' ? ' o' : '') };
+    w['w' + i] = { a: 's' + i, b: [x, 30] };
+  });
+  zfig('zStr', { n, w });
 }
 
 /* ---------- 緑のクモ = COPY（動く図） ---------- */
@@ -1355,22 +1337,23 @@ function cnotStates(a, b) {
   }
   return steps;
 }
-/* ---------- CNOT の中で起きること（動く図・右は入力なし） ---------- */
+/* ---------- CNOT の中で起きること：左が 0 と 1 を並べ、同じステップで同時に動かす（右は入力なし） ---------- */
 {
-  const sc = zxScene('zCs');
-  let a = 0;
+  const svg = document.getElementById('zCs'), DX = 350;
+  const g0 = el('g', {}, svg), g1 = el('g', { transform: `translate(${DX},0)` }, svg);
+  const head = (x, t) => { const e = el('text', { x, y: -18, class: 'zt hd' }, svg); e.textContent = t; };
+  head(210, '左が 0'); head(210 + DX, '左が 1');
+  el('line', { x1: 425, y1: -30, x2: 425, y2: 300, class: 'zsep' }, svg);
+  const s0 = zxScene(g0), s1 = zxScene(g1);
+  const both = { set: st => { s0.set(st[0]); s1.set(st[1]); }, to: (st, d) => Promise.all([s0.to(st[0], d), s1.to(st[1], d)]) };
+  const build = () => { const A = cnotStates(0, null), B = cnotStates(1, null); return A.map((x, k) => Object.assign([x, B[k]], { dur: x.dur })); };
   const lis = [...document.querySelectorAll('#csSteps li')];
   const mark = i => {
-    $('#csSteps').className = 'steps pop a' + a;
     lis[0].classList.toggle('on', i === 1 || i === 2); lis[0].classList.toggle('done', i >= 3);
     lis[1].classList.toggle('on', i >= 3); lis[2].classList.toggle('on', i >= 3);
   };
-  let setA;
-  const z = zstep('#cdCs', sc, () => cnotStates(a, null), { interval: 1500, hold: 2600, onStep: mark, next: () => setA(a ^ 1) });
-  setA = picker('#pkCs', BITS, (it, j, u) => { a = it.v; if (u) z.stop(); z.reset(); });
-  cropAll('zCs', sc, [cnotStates(0, null), cnotStates(1, null)]);
-  setA(0);
-  onEnter.cnotstep = () => setA(0);
+  cropAll(svg, both, [build()]);
+  zstep('#cdCs', both, build, { interval: 1500, hold: 2800, onStep: mark });
 }
 
 /* ---------- CNOT の入力と出力：左に 1、右に 0（静止図）と表 ---------- */
