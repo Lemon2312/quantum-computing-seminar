@@ -1,0 +1,2441 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>n 量子ビットの世界 ― 第8章</title>
+<style>
+:root{
+  --ink:#1f1a3d; --muted:#6b6790; --line:#1f1a3d; --bg:#fffaf0;
+  --accent:#ff6b1a; --accent-d:#e04e00; --accent-l:#fff1c2;
+  --blue:#3b6cff; --blue-l:#dfe8ff; --green:#14a35a;
+  --off:#b9b5d0; --pink:#ff4f9a; --yellow:#ffd53d; --purple:#8a5cff;
+  --hard:4px 4px 0 var(--ink);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{margin:0;height:100%;background:#1e293b;overflow:hidden;
+  font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;color:var(--ink)}
+#viewport{position:fixed;inset:0}
+#stage{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform-origin:center center;
+  background:var(--bg);box-shadow:0 20px 60px rgba(0,0,0,.4);overflow:hidden}
+
+/* ---------- slides ---------- */
+.slide{position:absolute;inset:0;padding:44px 64px 50px;opacity:0;pointer-events:none;
+  transform:translateX(60px);transition:opacity .55s ease,transform .55s ease;display:flex;flex-direction:column}
+.slide.past{transform:translateX(-60px)}
+.slide.active{opacity:1;transform:none;pointer-events:auto}
+.slide::before{content:"";position:absolute;left:0;top:0;right:0;height:6px;
+  background:linear-gradient(90deg,var(--accent),#facc15 50%,var(--blue))}
+.chap{font-size:15px;color:var(--muted);letter-spacing:.05em}
+h2{font-size:38px;margin:6px 0 22px;padding-left:16px;border-left:10px solid var(--accent);line-height:1.25}
+h2 small{font-size:22px;color:var(--muted);font-weight:500;margin-left:12px}
+.pageno{position:absolute;right:30px;bottom:16px;font-size:14px;color:var(--muted)}
+.body{flex:1;min-height:0}
+p,li{font-size:23px;line-height:1.6}
+ul{margin:0;padding-left:1.2em}
+li{margin:6px 0}
+b.k{color:var(--accent-d)}
+b.kb{color:var(--blue)}
+.muted{color:var(--muted)}
+.cols{display:grid;grid-template-columns:1.25fr 1fr;gap:30px;align-items:center;height:100%}
+.cols.even{grid-template-columns:1fr 1fr}
+.cols.wide{grid-template-columns:1.7fr 1fr}
+.card{background:#fff;border-radius:18px;box-shadow:0 6px 24px rgba(15,23,42,.08);padding:18px 22px}
+.point{background:var(--accent-l);border-left:7px solid var(--accent);padding:12px 18px;border-radius:10px;font-size:22px;line-height:1.55;margin-top:14px}
+.point.blue{background:var(--blue-l);border-left-color:var(--blue)}
+.hint{font-size:16px;color:var(--muted);margin-top:6px}
+.formula{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:30px;background:#fff;border-radius:12px;
+  padding:10px 20px;display:inline-block;box-shadow:0 3px 12px rgba(15,23,42,.08)}
+sub{font-size:.65em}
+.center{display:flex;justify-content:center;align-items:center}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+button.b{font:inherit;font-size:16px;padding:7px 16px;border-radius:999px;border:2px solid var(--blue);background:#fff;color:var(--blue);cursor:pointer;font-weight:700}
+button.b:hover{background:var(--blue-l)}
+button.b.playing{background:var(--blue);color:#fff}
+
+/* fragments & entrance animations */
+.frag{opacity:0;transform:translateY(18px);transition:opacity .45s ease,transform .45s ease}
+.frag.vis{opacity:1;transform:none}
+.slide.active .pop{animation:pop .6s cubic-bezier(.2,.8,.3,1.2) both;animation-delay:var(--d,0s)}
+@keyframes pop{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+
+/* ---------- truth tables ---------- */
+.ttcap{text-align:center;font-size:18px;font-weight:800;color:#334155;margin:0 0 6px}
+.bitex{display:flex;gap:10px;margin:6px 0 4px;flex-wrap:wrap}
+.bitex span{background:#fff;border-radius:10px;padding:4px 12px;font-size:18px;box-shadow:0 2px 8px rgba(15,23,42,.08)}
+.bitex small{display:block;font-size:12px;color:var(--muted)}
+.bitex b{color:var(--accent-d);font-family:Consolas,Menlo,monospace}
+.quote{display:block;background:#fff;border-left:6px solid var(--blue);border-radius:8px;padding:6px 14px;box-shadow:0 2px 8px rgba(15,23,42,.08)}
+.quote small{display:block;text-align:right;font-size:15px;color:var(--muted)}
+.mapline{text-align:center;font-size:20px;margin-top:4px;font-family:Consolas,Menlo,monospace}
+.mapline b{color:var(--blue);font-size:24px}
+.mapline b.o{color:var(--accent-d)}
+table.tt{border-collapse:collapse;font-size:22px;text-align:center;background:#fff;border-radius:12px;overflow:hidden;
+  box-shadow:0 4px 16px rgba(15,23,42,.08);margin:0 auto}
+table.tt th,table.tt td{padding:6px 16px;border:1px solid var(--line)}
+table.tt th{background:#e2e8f0;font-size:18px;white-space:nowrap}
+table.tt th.out{background:#fde7d3}
+table.tt td.calc{font-family:Consolas,Menlo,monospace;color:var(--muted);font-size:19px}
+table.tt td.out.one{color:var(--accent-d);font-weight:800}
+table.tt tbody tr{cursor:pointer;transition:background .2s}
+table.tt tbody tr:hover td{background:#f8fafc}
+table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(250,204,21,.38)}
+table.tt.small{font-size:18px}
+.point.logic{display:flex;align-items:center;gap:14px}
+.venn{width:112px;flex:none}
+table.tt.small th,table.tt.small td{padding:3px 12px}
+table.tt.small th{font-size:15px}
+table.tt td{transition:background .3s,color .3s}
+.slide.show-s table.tt td.s1{background:var(--blue-l);color:var(--blue);font-weight:800}
+.slide.show-c table.tt td.c1{background:#fed7aa;color:var(--accent-d);font-weight:800}
+
+/* ---------- circuits (SVG) ---------- */
+svg.circ{width:100%;height:auto;display:block;user-select:none}
+.wire{fill:none;stroke:var(--off);stroke-width:4;stroke-linejoin:round;stroke-linecap:round;transition:stroke .25s}
+.wire.on{stroke:var(--accent)}
+.flow{fill:none;stroke:#fff;stroke-width:2.2;stroke-dasharray:4 12;stroke-linecap:round;opacity:0;transition:opacity .25s}
+.flow.on{opacity:.95;animation:flow .55s linear infinite}
+@keyframes flow{from{stroke-dashoffset:16}to{stroke-dashoffset:0}}
+.dot{fill:var(--off);transition:fill .25s}
+.dot.on{fill:var(--accent)}
+.gate path,.gate circle{fill:#fff;stroke:#1e293b;stroke-width:3;transition:fill .3s,stroke .3s}
+.gate path.xorback{fill:none}
+.gate.on path:not(.xorback),.gate.on circle{fill:var(--accent-l);stroke:var(--accent-d)}
+.gate.on path.xorback{stroke:var(--accent-d)}
+.gate.on{filter:drop-shadow(0 0 6px rgba(249,115,22,.55))}
+.glabel{font-size:11px;fill:var(--muted);text-anchor:middle;font-weight:700;pointer-events:none}
+.inp{cursor:pointer}
+.inp circle{fill:#fff;stroke:var(--blue);stroke-width:3;transition:fill .2s}
+.inp:hover circle{fill:var(--blue-l)}
+.inp.on circle{fill:var(--blue);stroke:var(--blue)}
+.inp .val{fill:var(--blue)}
+.inp.on .val{fill:#fff}
+.val{font-size:19px;font-weight:800;text-anchor:middle;pointer-events:none;font-family:Consolas,Menlo,monospace}
+.lbl{font-size:20px;font-weight:700;fill:var(--ink)}
+.lamp circle{fill:#f1f5f9;stroke:#475569;stroke-width:3;transition:fill .3s,stroke .3s}
+.lamp .val{fill:#475569}
+.lamp.on circle{fill:#facc15;stroke:var(--accent-d);filter:drop-shadow(0 0 10px rgba(250,204,21,.9))}
+.lamp.on .val{fill:#7c2d12}
+.probe{font-size:15px;font-weight:700;fill:var(--muted);font-family:Consolas,Menlo,monospace;transition:fill .3s}
+.probe.on{fill:var(--accent-d)}
+.habox{fill:rgba(37,99,235,.05);stroke:var(--blue);stroke-width:2;stroke-dasharray:7 6}
+.halbl{font-size:15px;font-weight:700;fill:var(--blue)}
+
+/* ripple adder */
+.fa rect{fill:#fff;stroke:#1e293b;stroke-width:3;transition:fill .3s,stroke .3s}
+.fa.active rect{fill:#fef3c7;stroke:var(--accent);filter:drop-shadow(0 0 12px rgba(249,115,22,.7))}
+.fa.done rect{fill:#f8fafc}
+.fa .t1{font-size:22px;font-weight:800;text-anchor:middle}
+.fa .t2{font-size:18px;text-anchor:middle;fill:var(--muted);font-family:Consolas,Menlo,monospace}
+.fa .t3{font-size:20px;text-anchor:middle;fill:var(--accent-d);font-weight:800;font-family:Consolas,Menlo,monospace}
+.wait .val{fill:#94a3b8}
+.wire.wait{stroke:#cbd5e1;stroke-dasharray:6 6}
+.readout{font-size:26px;text-align:center;margin-top:6px;font-family:Consolas,Menlo,monospace}
+.readout .eq{color:var(--accent-d);font-weight:800}
+
+/* column addition */
+.ca-grid{display:grid;grid-template-columns:110px repeat(5,72px);gap:6px 6px;justify-content:center;font-family:Consolas,Menlo,monospace}
+.ca-grid div{height:64px;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700;border-radius:10px;transition:background .3s}
+.ca-grid .rl{font-size:18px;font-family:inherit;color:var(--muted);justify-content:flex-end;padding-right:10px;font-weight:700}
+.ca-grid .carry{font-size:26px;color:var(--accent);height:44px}
+.ca-grid .carry span,.ca-grid .sum span{opacity:0;transform:translateY(-20px);transition:all .5s cubic-bezier(.2,.8,.3,1.3)}
+.ca-grid .carry.show span,.ca-grid .sum.show span{opacity:1;transform:none}
+.ca-grid .sum{color:var(--blue)}
+.ca-grid .hl{background:#fef3c7}
+.ca-grid .bar{grid-column:1/-1;height:4px;background:var(--ink);border-radius:2px}
+.ca-msg{min-height:80px;font-size:23px;margin-top:16px;line-height:1.5;text-align:center}
+
+/* bars */
+.barrow{display:grid;grid-template-columns:190px 1fr;align-items:center;gap:10px;margin:8px 0;font-size:18px}
+.bar-bg{background:#e2e8f0;border-radius:8px;height:30px;overflow:hidden}
+.bar-fill{height:100%;width:0;border-radius:8px;transition:width 1.2s cubic-bezier(.2,.8,.3,1);display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-weight:800}
+.slide.active .bar-fill{width:var(--w)}
+.bar-fill.o{background:var(--off)}
+.bar-fill.a{background:var(--accent)}
+
+/* bit tiles */
+.tiles{display:flex;gap:14px;justify-content:center;margin:6px 0 16px}
+.tile{background:#fff;border-radius:14px;padding:10px 18px;font-family:Consolas,Menlo,monospace;font-size:28px;box-shadow:0 4px 14px rgba(15,23,42,.08);text-align:center}
+.tile b{color:var(--accent-d)}
+.tile small{display:block;font-size:14px;color:var(--muted);font-family:inherit}
+.chips{display:inline-flex;gap:6px;vertical-align:middle}
+.chip{display:inline-block;width:34px;text-align:center;border-radius:6px;background:#fff;font-family:Consolas,monospace;font-weight:800;border:2px solid var(--line)}
+.chip.ng{border-color:#dc2626;color:#dc2626;background:#fee2e2}
+.chip.ok{border-color:var(--green);color:var(--green)}
+
+/* title */
+.title-wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:30px;align-items:center;height:100%}
+.title-wrap h1{font-size:54px;line-height:1.25;margin:0 0 14px}
+.title-wrap .sub{font-size:30px;color:var(--accent-d);font-weight:700;margin-bottom:34px}
+.title-wrap .meta{font-size:20px;color:var(--muted);line-height:1.8}
+.agenda li{font-size:27px;margin:16px 0;list-style:none;display:flex;align-items:center;gap:16px}
+.agenda .num{width:46px;height:46px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;flex:none}
+.agenda .new{background:var(--accent)}
+.tag{font-size:15px;background:var(--accent);color:#fff;border-radius:999px;padding:2px 12px;font-weight:700}
+details{background:#fff;border-radius:12px;padding:10px 18px;margin:10px 0;box-shadow:0 3px 12px rgba(15,23,42,.06);font-size:22px}
+details summary{cursor:pointer;font-weight:700}
+details[open] summary{color:var(--accent-d)}
+details div{margin-top:8px;line-height:1.6;color:#334155}
+
+/* ---------- UI ---------- */
+#ui{position:fixed;left:0;right:0;bottom:0;height:40px;display:flex;align-items:center;gap:10px;padding:0 14px;
+  color:#cbd5e1;font-size:14px;opacity:.25;transition:opacity .3s;z-index:10}
+#ui:hover{opacity:1}
+#ui button{background:#334155;color:#fff;border:0;border-radius:6px;padding:5px 12px;cursor:pointer;font:inherit}
+#progress{position:fixed;left:0;bottom:0;height:4px;background:var(--accent);transition:width .4s;z-index:11}
+
+/* ---------- 一覧モード ---------- */
+#ovHead{display:none}
+body.overview{overflow:auto}
+body.overview #viewport{position:static;padding:64px 24px 60px}
+body.overview #ovHead{display:flex;position:fixed;left:0;right:0;top:0;height:52px;align-items:center;gap:16px;padding:0 24px;
+  background:#0f172a;color:#e2e8f0;font-size:16px;z-index:12}
+body.overview #ovHead b{font-size:18px}
+body.overview #ovHead b,body.overview #ovHead button{white-space:nowrap}
+@media (max-width:900px){body.overview #ovHead span{display:none}}
+body.overview #ovHead button{background:var(--accent);color:#fff;border:0;border-radius:6px;padding:6px 14px;cursor:pointer;font:inherit;font-weight:700;margin-left:auto}
+body.overview #stage{position:static;transform:none!important;width:auto;height:auto;overflow:visible;background:none;box-shadow:none;
+  display:grid;grid-template-columns:repeat(var(--cols,4),var(--ow,256px));gap:22px}
+/* 縮小は zoom ではなく transform で行う（iPad の Safari は zoom の扱いが異なり、中身の位置がずれるため）。
+   transform は並べるときの大きさに影響しないので、負の余白で縮小後の大きさ（--ow × --oh）に合わせる */
+body.overview .slide{position:relative;inset:auto;width:1280px;height:720px;opacity:1;pointer-events:auto;
+  transform:scale(var(--z,.2));transform-origin:0 0;margin:0 calc(var(--ow,256px) - 1280px) calc(var(--oh,144px) - 720px) 0;
+  cursor:pointer;background:var(--bg);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);outline:0 solid var(--accent);transition:outline-width .15s}
+body.overview .slide *{pointer-events:none}
+body.overview .slide:hover{outline-width:14px}
+body.overview .slide.current{outline-width:22px}
+body.overview .frag{opacity:1;transform:none}
+body.overview .bar-fill{width:var(--w);transition:none}
+body.overview .slide{overflow:hidden}
+/* 一覧ではページ番号を右下の札にして、中身と重なっても読めるようにする */
+body.overview .slide .pageno{font-size:40px;font-weight:900;color:#fff;background:var(--ink);border-radius:16px;padding:2px 20px;bottom:14px;right:14px;z-index:6}
+body.overview #ui,body.overview #progress{display:none}
+
+/* ---------- ポップ調デザイン（太枠・ずらし影・弾むアニメ） ---------- */
+html,body{background:#2a2350}
+#stage{background:
+  radial-gradient(circle at 92% 8%,#ffd6e8 0 120px,transparent 121px),
+  radial-gradient(circle at 4% 96%,#d4f4ff 0 150px,transparent 151px),
+  radial-gradient(circle at 98% 92%,#fff0b3 0 70px,transparent 71px),
+  radial-gradient(#e9e2cf 1.4px,transparent 1.6px) 0 0/22px 22px,
+  var(--bg)}
+.slide{transition:opacity .45s ease,transform .6s cubic-bezier(.3,1.5,.5,1)}
+.slide::before{height:10px;background:repeating-linear-gradient(90deg,var(--accent) 0 80px,var(--yellow) 80px 160px,var(--pink) 160px 240px,var(--blue) 240px 320px)}
+.chap{font-weight:700;color:var(--pink);letter-spacing:.08em}
+h2{border-left:none;padding-left:54px;position:relative}
+h2::before{content:"";position:absolute;left:0;top:50%;width:34px;height:34px;margin-top:-17px;border-radius:10px;
+  background:linear-gradient(135deg,var(--yellow),var(--accent) 55%,var(--pink));border:3px solid var(--ink);transform:rotate(-12deg);box-shadow:3px 3px 0 var(--ink)}
+.slide.active h2::before{animation:wiggle 1s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes wiggle{from{transform:rotate(-120deg) scale(.3)}to{transform:rotate(-12deg)}}
+h2 small{white-space:nowrap;background:var(--accent-l);color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:2px 14px;font-size:18px;font-weight:700;vertical-align:middle}
+b.k{color:var(--accent-d);background:linear-gradient(transparent 62%,#ffe58a 62%)}
+b.kb{color:var(--blue);background:linear-gradient(transparent 62%,#cfe0ff 62%)}
+.card{border:3px solid var(--ink);border-radius:22px;box-shadow:6px 6px 0 var(--ink)}
+.point{border:2.5px solid var(--ink);border-left:10px solid var(--accent);border-radius:16px;box-shadow:var(--hard)}
+.point.blue{border-left-color:var(--blue)}
+.formula{border:2.5px solid var(--ink);box-shadow:var(--hard)}
+button.b{border:2.5px solid var(--ink);background:var(--yellow);color:var(--ink);box-shadow:3px 3px 0 var(--ink);transition:transform .1s,box-shadow .1s}
+button.b:hover{background:#ffe06b;transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+button.b:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+button.b.playing{background:var(--pink);color:#fff}
+.slide.active .pop{animation:pop .7s cubic-bezier(.3,1.6,.5,1) both;animation-delay:var(--d,0s)}
+@keyframes pop{from{opacity:0;transform:translateY(30px) scale(.85) rotate(-2deg)}to{opacity:1;transform:none}}
+.frag{transform:translateY(18px) scale(.95);transition:opacity .4s ease,transform .5s cubic-bezier(.3,1.6,.5,1)}
+
+.bitex span,.quote,.tile,details{border:2.5px solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
+table.tt{border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);border-collapse:separate;border-spacing:0}
+table.tt th,table.tt td{border:0;border-right:1.5px solid #d9d4ea;border-bottom:1.5px solid #d9d4ea}
+table.tt th{background:#ece6ff;border-bottom:2.5px solid var(--ink)}
+table.tt th.out{background:#ffe1c7}
+table.tt tbody tr.cur td{box-shadow:inset 0 0 0 999px rgba(255,213,61,.55)}
+
+.wire{stroke-width:5}
+.gate path,.gate circle{stroke:var(--ink);stroke-width:3.5}
+.gate.on path:not(.xorback),.gate.on circle{fill:#ffe1c7;stroke:var(--ink)}
+.gate.on path.xorback{stroke:var(--ink)}
+.gate.on{filter:drop-shadow(3px 3px 0 var(--accent))}
+.inp circle{stroke-width:3.5}
+.inp.on circle{stroke:var(--ink)}
+.lamp circle{stroke:var(--ink)}
+.lamp.on circle{fill:var(--yellow);stroke:var(--ink);filter:drop-shadow(0 0 12px rgba(255,213,61,.95))}
+.fa rect{stroke:var(--ink);rx:16}
+.fa.active rect{fill:#fff1c2;stroke:var(--ink);filter:drop-shadow(4px 4px 0 var(--accent))}
+.ca-grid .hl{background:#fff1c2;border:2px dashed var(--accent)}
+.bar-bg{background:#ece6ff;border:2px solid var(--ink)}
+.bar-fill.a{background:linear-gradient(90deg,var(--accent),var(--pink))}
+
+.title-wrap h1{font-size:64px;background:linear-gradient(transparent 70%,#ffe58a 70%) no-repeat;display:inline;line-height:1.3;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.title-wrap .sub{color:var(--pink);margin-top:18px;margin-bottom:22px;font-size:23px;white-space:nowrap}
+.tchaps{display:flex;flex-direction:column;gap:12px}
+.tchap{display:flex;align-items:center;gap:12px;background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:3px 3px 0 var(--ink);padding:6px 14px 6px 6px}
+.tchap .tno{background:var(--c);color:#fff;font-weight:900;border:2px solid var(--ink);border-radius:10px;padding:2px 10px;font-size:18px;flex:none}
+.tchap .tname{font-weight:900;font-size:21px}
+.tchap .tsec{margin-left:auto;font-size:14px;color:var(--muted);font-weight:700;white-space:nowrap}
+.agenda .num{border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);background:var(--blue)}
+.agenda li:nth-child(3) .num{background:var(--pink)}
+.agenda li:nth-child(4) .num{background:var(--green)}
+.agenda li:nth-child(6) .num{background:var(--purple)}
+.agenda li:nth-child(7) .num{background:var(--accent)}
+.agenda .new{background:var(--accent)}
+.tag{background:var(--pink);border:2px solid var(--ink);white-space:nowrap;flex:none}
+
+/* 量子ビット（第4章）の数式・図 */
+.math,.vec,.frac{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif}
+.eq{display:flex;align-items:center;justify-content:center;gap:8px;font-size:26px;flex-wrap:wrap}
+.eq.inline{display:inline-flex;font-size:inherit;vertical-align:middle;gap:5px}
+.vec{display:inline-grid;text-align:center;padding:1px 10px;border-left:3px solid currentColor;border-right:3px solid currentColor;border-radius:14px;line-height:1.25}
+.vec.row{grid-auto-flow:column;column-gap:14px}
+.eq.inline .vec{line-height:1.05;padding:0 7px;border-width:2px;border-radius:10px;font-size:.85em}
+.frac{display:inline-grid;text-align:center;line-height:1.1;font-size:.85em;vertical-align:middle}
+.frac>span:first-child{border-bottom:2px solid currentColor;padding:0 2px}
+.brace{font-size:2.3em;font-weight:200;line-height:1;transform:scaleX(.7)}
+.bar{width:2px;align-self:stretch;background:currentColor;margin:6px 2px}
+.defbox{position:relative;background:#fff;border:3px solid var(--ink);border-radius:16px;box-shadow:var(--hard);padding:16px 18px 12px;margin-top:18px;font-size:20px;line-height:1.7}
+.defbox::before{content:"定義";position:absolute;left:14px;top:-16px;background:var(--ink);color:#fff;font-weight:800;font-size:15px;border-radius:999px;padding:2px 14px}
+.qrow{display:flex;align-items:center;gap:16px}
+.qlab{width:110px;flex:none;font-weight:800;font-size:19px}
+.qcells{display:flex;gap:26px;align-items:center}
+.qbit{width:56px;height:56px;border:3px solid var(--ink);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;font-family:Consolas,Menlo,monospace;box-shadow:3px 3px 0 var(--ink);background:#fff}
+.qarrow{margin:14px 0 14px 126px;color:var(--muted);font-weight:700}
+.qverdict{margin-top:12px;text-align:center;font-size:24px;font-weight:900;padding:6px;border-radius:12px;border:2.5px solid var(--ink)}
+.qverdict.ok{background:#d9f7e6;color:var(--green)}
+.qverdict.ng{background:#ffe0e6;color:#d61f45}
+
+/* 目次の教科書の章見出し */
+.agenda li.agroup{font-size:17px;font-weight:900;color:var(--pink);letter-spacing:.06em;margin:14px 0 -4px;border-bottom:2.5px dashed #e3dcf2;padding-bottom:4px}
+.agenda li.agroup:first-child{margin-top:0}
+
+/* 教科書の章の扉（本の章扉風） */
+.partdoor .pd-wrap{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-bottom:40px}
+.pd-src{font-size:18px;font-weight:700;color:var(--muted);letter-spacing:.08em}
+.pd-no{margin-top:14px;font-size:30px;font-weight:900;color:#fff;background:var(--c);border:3px solid var(--ink);border-radius:999px;padding:4px 26px;box-shadow:4px 4px 0 var(--ink);letter-spacing:.12em}
+.pd-title{font-size:68px;line-height:1.25;margin:22px 0 26px;background:linear-gradient(transparent 70%,#ffe58a 70%);display:inline;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.pd-secs{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:22px}
+.pd-secs span{background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:4px 18px;font-size:19px;font-weight:700;box-shadow:3px 3px 0 var(--ink)}
+.pd-secs span.add{background:var(--accent-l)}
+.pd-bg{position:absolute;left:0;right:0;bottom:4px;display:flex;justify-content:center;color:var(--c);opacity:.13;font-size:84px;pointer-events:none}
+.pd-bg .eq{font-size:50px;gap:14px}
+.pd-bg .vec{border-width:5px;border-radius:40px;padding:4px 26px;line-height:1.15}
+
+/* 復習問題：カードをクリックすると答えが出る */
+.quiz{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;gap:12px 16px;align-content:center}
+.qz{display:flex;flex-direction:column;background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:10px 14px;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.qz:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.qz-q{display:flex;gap:10px;align-items:flex-start;font-size:17px;line-height:1.5;font-weight:600}
+.qz-no{flex:none;background:var(--blue);color:#fff;font-weight:900;font-size:14px;border:2px solid var(--ink);border-radius:999px;padding:1px 9px;margin-top:2px}
+.qz-a{margin-top:auto;padding-top:8px;min-height:40px;display:flex;align-items:center;border-top:2px dashed #e3dcf2;font-size:17px;line-height:1.5}
+.qz-hide{color:var(--muted);font-weight:800;font-size:15px}
+.qz-ans{display:none;color:#1f1a3d}
+.qz.open{background:#fffaf0}
+.qz.open .qz-no{background:var(--green)}
+.qz.open .qz-hide{display:none}
+.qz.open .qz-ans{display:inline;animation:qzIn .4s cubic-bezier(.3,1.6,.5,1)}
+@keyframes qzIn{from{opacity:0;transform:translateY(6px) scale(.96)}to{opacity:1;transform:none}}
+.quiz.q2{grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:auto}
+.quiz.q2 .qz{grid-column:span 2}
+.quiz.q2 .qz.dia{grid-column:span 3}
+.quiz.q2 .qz.wide .qzc{max-height:200px}
+.quiz.q2 .qz-q{font-size:16px}
+.quiz.q2 .qz-a{font-size:15.5px;min-height:34px}
+.qz-q > span:last-child{min-width:0;flex:1}
+.qzc{display:block;width:100%;max-height:170px;margin:6px auto 0;font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif}
+.qzc .qg{fill:#f1ecff;stroke:#1f1a3d;stroke-width:2.5;stroke-dasharray:6 4}
+.qzc .g-q{font-size:26px;font-weight:900;fill:#8a5cff}
+.qzc .g-ans{display:none;font-weight:900;fill:#1f1a3d}
+.qz.open .qzc .qg{fill:#fff1c2;stroke-dasharray:none}
+.qz.open .qzc .g-q{display:none}
+.qz.open .qzc .g-ans{display:inline}
+.quiz.q3{grid-auto-rows:auto}
+.quiz.q3 .qz{min-height:118px}
+.quiz.q3 .qz:last-child{grid-column:span 2}
+.qzc.qzbloch{max-height:145px}
+.qgb{cursor:pointer}
+.qgb:hover .qg{fill:#e6dcff}
+.qgb.shown .qg{fill:#fff1c2;stroke-dasharray:none}
+.qgb.shown .g-q{display:none}
+.qgb.shown .g-ans{display:inline;animation:qzIn .35s cubic-bezier(.3,1.6,.5,1)}
+h2 .qz-all{font-size:14px;padding:4px 14px;margin-left:16px;vertical-align:middle}
+
+/* 章の扉スライド */
+.door-wrap{position:relative;display:grid;grid-template-columns:auto 1fr;gap:64px;align-items:center;height:100%;padding:0 40px}
+.door-num{width:210px;height:210px;border-radius:46px;background:var(--c);color:#fff;border:5px solid var(--ink);box-shadow:10px 10px 0 var(--ink);
+  display:flex;align-items:center;justify-content:center;font-size:140px;font-weight:900;font-family:Consolas,Menlo,monospace;transform:rotate(-6deg)}
+.slide.active .door-num{animation:doorIn .9s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes doorIn{from{opacity:0;transform:rotate(-120deg) scale(.3)}to{opacity:1;transform:rotate(-6deg)}}
+.door-label{font-size:22px;font-weight:900;letter-spacing:.14em;color:var(--c)}
+.door-label .door-book{display:block;font-size:16px;letter-spacing:.04em;color:var(--muted);margin-bottom:2px}
+.door-label .tag{font-size:15px;letter-spacing:0;vertical-align:middle;margin-left:8px}
+.door h1{font-size:80px;line-height:1.15;margin:6px 0 4px}
+.door-lead{font-size:32px;font-weight:700;color:var(--muted);margin:0 0 30px}
+.door-topics{display:flex;flex-wrap:wrap;gap:12px}
+.door-topics span{background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:4px 18px;font-size:19px;font-weight:700;box-shadow:3px 3px 0 var(--ink)}
+.door-bg{position:absolute;right:-20px;bottom:-150px;font-size:600px;font-weight:900;line-height:1;color:var(--c);opacity:.09;
+  font-family:Consolas,Menlo,monospace;pointer-events:none}
+#progress{height:6px;background:linear-gradient(90deg,var(--accent),var(--pink),var(--blue))}
+
+/* ---------- レーザーポインター（Apple Pencil） ---------- */
+#stage{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body:not(.overview) #stage{touch-action:none}
+#laser{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none;z-index:5}
+body.overview #laser{display:none}
+/* 黒ペン（Apple Pencil で書き込み） */
+#ink{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none;z-index:4}
+#penbar{position:fixed;right:12px;top:14px;z-index:20;display:flex;align-items:center;gap:4px;background:#fff;border:2.5px solid var(--ink);
+  border-radius:999px;box-shadow:3px 3px 0 var(--ink);padding:4px;touch-action:manipulation;opacity:.85}
+#penbar:hover{opacity:1}
+#penbar button{height:38px;min-width:38px;border-radius:999px;border:2px solid transparent;background:none;font:inherit;font-size:14px;font-weight:800;
+  color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;padding:0 10px}
+#penbar button.on{background:var(--accent-l);border-color:var(--ink)}
+#penbar .sep{width:2px;height:24px;background:#e3dcf2;border-radius:1px}
+body.overview #ink,body.overview #penbar{display:none}
+
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{overflow:visible;background:#fff}
+  #viewport{position:static}
+  #stage{position:static;transform:none!important;box-shadow:none;width:auto;height:auto;overflow:visible;background:none}
+  .slide{position:relative;width:1280px;height:720px;opacity:1;transform:none;page-break-after:always;background:var(--bg)}
+  .frag{opacity:1;transform:none}
+  #ui,#progress,.btns,.hint,#laser,#penbar{display:none}
+}
+
+/* ---------- 3.3（続き）〜 3.4.3 で追加した部品 ---------- */
+
+/* まとめ（5 項目） */
+.sumlist{display:flex;flex-direction:column;gap:12px;justify-content:center}
+.sl{display:flex;gap:14px;align-items:center;background:#fff;border:2.5px solid var(--ink);border-left:12px solid var(--c);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:10px 18px;font-size:21px;line-height:1.5}
+.sl-n{flex:none;width:36px;height:36px;border-radius:50%;background:var(--c);color:#fff;font-weight:900;font-size:18px;display:flex;align-items:center;justify-content:center;border:2px solid var(--ink)}
+.sl-s{font-size:16px;color:var(--muted);margin-left:4px}
+/* =====================================================================
+   第6章・第7章 追加スタイル
+   ===================================================================== */
+:root{--teal:#0e9aa7;--red:#d61f45;--gold:#d99a00}
+.mono{font-family:Consolas,Menlo,monospace}
+.mt6{margin-top:6px}.mt10{margin-top:10px}.mt14{margin-top:14px}.mt18{margin-top:18px}
+.col{display:flex;flex-direction:column;justify-content:center;gap:12px}
+.row{display:flex;align-items:center;gap:12px}
+.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:stretch}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:stretch}
+.slide .lead{font-size:19px !important}
+.ctr{text-align:center}
+.tiny{font-size:14px;color:var(--muted);font-weight:700}
+.gchip{display:inline-block;background:#fff;border:2px solid var(--ink);border-radius:999px;padding:0 10px;font-weight:800;font-size:.85em;box-shadow:2px 2px 0 var(--ink);white-space:nowrap}
+.gchip.y{background:var(--yellow)}.gchip.p{background:#ffd3e6}.gchip.b{background:var(--blue-l)}.gchip.g{background:#d6f3e2}
+.xtra{position:absolute;right:74px;top:86px;background:var(--teal);color:#fff;font-weight:900;font-size:16px;letter-spacing:.1em;border:2.5px solid var(--ink);border-radius:999px;padding:3px 16px;box-shadow:3px 3px 0 var(--ink);transform:rotate(4deg);z-index:3}
+.door-label .tag{background:var(--teal);color:#fff;border-radius:999px;padding:1px 10px}
+
+/* 定理ボックス（番号つき） */
+.thm6{position:relative;background:#fff;border:3px solid var(--ink);border-left:12px solid var(--pink);border-radius:16px;box-shadow:var(--hard);padding:20px 22px 12px;font-size:20px;line-height:1.7}
+.thm6 .thm-t{position:absolute;left:16px;top:-16px;background:var(--pink);color:#fff;font-weight:900;font-size:15px;border:2px solid var(--ink);border-radius:999px;padding:2px 14px}
+
+/* ---------- SVG 量子回路 ---------- */
+svg.qcs{display:block;width:100%;height:auto;overflow:visible;user-select:none;font-family:"Cambria Math","Times New Roman",serif}
+.qcs .w{stroke:var(--ink);stroke-width:2.5}
+.qcs .cw{stroke:var(--ink);stroke-width:2}
+.qcs .nm{font-size:22px;font-style:italic;fill:var(--ink)}
+.qcs .nm-s{font-size:15px;font-style:normal}
+.qcs .init{font-size:20px;fill:var(--ink)}
+.qcs .gb{stroke:var(--ink);stroke-width:2.5}
+.qcs .gt{fill:#fff;font-size:22px;font-weight:700;text-anchor:middle;dominant-baseline:central;font-family:"Cambria Math","Times New Roman",serif}
+.qcs .gt.g-sm{font-size:14px}
+.qcs .ctl{fill:var(--ink)}
+.qcs .tgt{fill:#fff;stroke:var(--ink);stroke-width:2.5}
+.qcs .vl{stroke:var(--ink);stroke-width:2.5}
+.qcs .mbox{fill:#1f1a3d;stroke:var(--ink);stroke-width:2.5}
+.qcs .mi{fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round}
+.qcs .ma{stroke:#8f8aa8;stroke-width:2.2;fill:none}
+.qcs .mah{fill:#8f8aa8}
+.qcs .cbn{font-size:15px;fill:var(--ink);font-family:Consolas,Menlo,monospace}
+.qcs .bar{fill:#d9d4ea;opacity:.75}
+.qcs .barl{stroke:#6b6790;stroke-width:1.6;stroke-dasharray:5 4}
+.qcs .box{fill:none;stroke:var(--ink);stroke-width:1.8;stroke-dasharray:4 3}
+.qcs .boxl{font-size:15px;text-anchor:middle;fill:var(--ink);font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif}
+.qcs .sx{stroke:var(--ink);stroke-width:3;stroke-linecap:round}
+.qcs .op{transition:opacity .4s,transform .45s cubic-bezier(.3,1.6,.5,1);transform-box:fill-box;transform-origin:center}
+.qcs .op.fut{opacity:.18}
+.qcs .op.hid{opacity:0}
+.qcs .op.now{filter:drop-shadow(0 0 7px rgba(255,107,26,.95)) drop-shadow(2px 2px 0 var(--accent))}
+.qcs .hl{fill:rgba(255,213,61,.35);stroke:var(--accent);stroke-width:2.5;rx:10;opacity:0;transition:opacity .35s}
+.qcs .hl.on{opacity:1}
+.qcs .pulse{fill:var(--accent);opacity:0}
+
+/* ---------- 振幅バー（2 量子ビット） ---------- */
+.amp4{display:grid;grid-template-columns:auto 1fr 1fr auto;align-items:center;gap:5px 6px;font-size:18px}
+.amp4 .k{font-family:"Cambria Math","Times New Roman",serif;font-size:21px;font-weight:700;text-align:right;padding-right:4px}
+.amp4 .neg,.amp4 .pos{position:relative;height:24px;background:#f3effc;border:2px solid var(--ink)}
+.amp4 .neg{border-radius:8px 0 0 8px;border-right:1px solid var(--ink)}
+.amp4 .pos{border-radius:0 8px 8px 0;border-left:1px solid var(--ink)}
+.amp4 .neg i,.amp4 .pos i{position:absolute;top:0;bottom:0;width:0;transition:width .5s cubic-bezier(.2,.8,.3,1)}
+.amp4 .pos i{left:0;background:var(--accent);border-radius:0 6px 6px 0}
+.amp4 .neg i{right:0;background:var(--blue);border-radius:6px 0 0 6px}
+.amp4 .v{font:800 14px Consolas,Menlo,monospace;min-width:118px;white-space:nowrap}
+.amp4 .v b{color:var(--accent-d)}
+.amp4 .hd{font-size:12px;font-weight:800;color:var(--muted);text-align:center}
+.amp4.a-sm{font-size:15px;gap:3px 5px}.amp4.a-sm .k{font-size:17px}.amp4.a-sm .neg,.amp4.a-sm .pos{height:18px}.amp4.a-sm .v{font-size:12px;min-width:92px}
+
+/* ---------- 選択ボタン ---------- */
+.pk{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.pk .pk-l{font-size:14px;font-weight:900;color:var(--muted);margin-right:2px}
+.pk button{font:700 17px "Cambria Math","Times New Roman",serif;padding:3px 11px;border:2px solid var(--ink);border-radius:10px;background:#fff;cursor:pointer;box-shadow:2px 2px 0 var(--ink);color:var(--ink)}
+.pk button.on{background:var(--yellow)}
+.pk button:hover{background:#fff6cf}
+.pk.jp button{font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;font-size:15px}
+
+/* ---------- 数式の行 ---------- */
+.eqrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:"Cambria Math","Times New Roman",serif;font-size:22px}
+.eqrow .vec{font-size:.92em}
+.mx .vec.m4{column-gap:10px}
+.mx .vec span{transition:background .3s,color .3s;border-radius:5px;padding:0 3px}
+.mx .vec span.hc{background:#fff1c2}
+.mx .vec span.hr{background:#dfe8ff}
+.mx .vec span.hx{background:var(--yellow);font-weight:900}
+.res{background:var(--yellow);border:2px solid var(--ink);border-radius:10px;padding:1px 10px;font-weight:700;white-space:nowrap}
+.verd{display:inline-block;font:900 17px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;border:2.5px solid var(--ink);border-radius:999px;padding:2px 14px;box-shadow:2px 2px 0 var(--ink)}
+.verd.ok{background:#d6f3e2;color:#0a6b3a}.verd.ng{background:#ffd6de;color:var(--red)}
+
+/* ---------- バイトオーダ ---------- */
+.bo-ket{display:flex;justify-content:center;align-items:flex-end;gap:4px;font:400 92px "Cambria Math","Times New Roman",serif;line-height:1}
+.bo-d{position:relative;display:inline-flex;flex-direction:column;align-items:center;width:76px}
+.bo-d .dg{border-radius:14px;padding:0 8px;transition:background .4s}
+.bo-d .ix{font:900 18px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:#fff;border:2px solid var(--ink);border-radius:999px;padding:1px 10px;margin-top:8px;transition:background .4s,transform .5s cubic-bezier(.3,1.6,.5,1);white-space:nowrap}
+.bo-arrow{text-align:center;font:900 20px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;margin-top:8px;transition:color .4s}
+.bo-tabs{display:flex;gap:10px;justify-content:center}
+.bo-tabs button{font:800 16px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;border:2.5px solid var(--ink);border-radius:12px;background:#fff;padding:6px 14px;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+.bo-tabs button.on{background:var(--yellow)}
+.bo-read{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.bo-read div{background:#fff;border:2px solid var(--ink);border-radius:12px;padding:6px 10px;text-align:center;font-size:18px}
+.bo-read b{font-family:"Cambria Math","Times New Roman",serif;font-size:22px}
+
+/* ---------- 行列ウィジェット（CNOT・SWAP） ---------- */
+.gw{display:flex;flex-direction:column;gap:8px;align-items:center}
+.gw .eqrow{font-size:21px;justify-content:center}
+.gw .vec.m4{font-size:20px}
+.gw .gw-res{font-size:22px;min-height:34px}
+.inbtn{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.inbtn button{font:700 20px "Cambria Math","Times New Roman",serif;border:2.5px solid var(--ink);border-radius:12px;background:#fff;padding:3px 14px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);color:var(--ink)}
+.inbtn button.on{background:var(--yellow)}
+.maptbl{display:grid;grid-template-columns:auto auto auto;gap:4px 12px;font:400 21px "Cambria Math","Times New Roman",serif;align-items:center;justify-content:center}
+.maptbl span{padding:1px 8px;border-radius:8px;transition:background .3s}
+.maptbl span.on{background:var(--yellow)}
+.maptbl .ar{color:var(--muted)}
+.maptbl .chg{color:var(--accent-d);font-weight:700}
+
+/* =====================================================================
+   第8章 n 量子ビットの世界 ― 追加スタイル
+   ===================================================================== */
+.agenda.ag-t li{font-size:19px;margin:7px 0;gap:12px}
+.agenda.ag-t .num{width:34px;height:34px;font-size:16px}
+.agenda.ag-t em{font-style:normal;font-size:14px;color:var(--muted);font-weight:700;margin-left:auto;white-space:nowrap}
+.nw{white-space:nowrap}
+.vec.m4{grid-template-columns:repeat(4,auto);column-gap:10px}
+.vec.m8{grid-template-columns:repeat(8,auto);column-gap:6px;font-size:15px;line-height:1.2;padding:2px 8px;border-radius:12px}
+.vec span.hc{background:#fff1c2;border-radius:4px}
+.vec span.hx{background:var(--yellow);font-weight:900;border-radius:4px}
+.vec span.hp{background:#ffd3e6;font-weight:900;border-radius:4px}
+.vec.col8{font-size:15px;line-height:1.2;padding:2px 6px;border-radius:12px}
+ul.plain{list-style:none;padding:0;margin:0}
+ul.plain li{position:relative;padding-left:30px;margin:10px 0;font-size:23px;line-height:1.55}
+ul.plain li::before{content:"";position:absolute;left:3px;top:.5em;width:13px;height:13px;border-radius:50%;background:var(--accent);border:2.5px solid var(--ink)}
+ul.plain li:nth-child(2)::before{background:var(--blue)}
+ul.plain li:nth-child(3)::before{background:var(--pink)}
+ul.plain.sm li{font-size:19px;margin:4px 0}
+.defbox ul.plain{margin-top:4px}
+.mp-lbl{font-size:16px;font-weight:800;color:var(--muted);text-align:center;margin-bottom:4px}
+
+/* 復習 */
+.rv8{align-items:stretch}
+.rvc8{background:#fff;border:3px solid var(--ink);border-top:12px solid var(--c);border-radius:18px;box-shadow:5px 5px 0 var(--ink);padding:12px 16px;display:flex;flex-direction:column;gap:12px;font-size:19px;line-height:1.6}
+.rvc8 .rh{font-weight:900;font-size:21px;color:var(--ink)}
+.rvc8 .eqrow{font-size:22px}
+
+/* 確率のゲージ（太枠の箱 ＝ 確率 1） */
+.pg{display:grid;grid-template-columns:auto 1fr auto;gap:10px 12px;align-items:center}
+.pg .k{font:700 22px "Cambria Math","Times New Roman",serif;white-space:nowrap}
+.pg .box{height:30px;border:3px solid var(--ink);border-radius:8px;background:repeating-linear-gradient(45deg,#ece8f6 0 5px,#fff 5px 10px);position:relative;overflow:hidden}
+.pg .box i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--accent),var(--pink));transition:width .6s cubic-bezier(.2,.8,.3,1)}
+.pg .v{font:800 18px Consolas,Menlo,monospace;min-width:64px}
+.pg .row-hit .k{color:var(--accent-d)}
+.ms-res{min-height:44px;margin:12px 0 4px;text-align:center;font-size:21px;font-weight:800}
+.ms-res .math{font-size:24px}
+.ms-cnt{text-align:center;font-size:16px;color:var(--muted);font-weight:700;margin-top:8px;min-height:22px}
+
+/* 行列のマス目（8.4） */
+.ue-card,.an-card{display:flex;flex-direction:column;align-items:center;gap:8px}
+.ue-lbl{font:800 24px "Cambria Math","Times New Roman",serif;min-height:34px}
+.ue-lbl b{color:var(--accent-d)}
+.ue-grid{width:330px;height:330px;display:grid;gap:1px;background:var(--ink);border:3px solid var(--ink);border-radius:6px;overflow:hidden}
+.ue-grid i{background:#fff1c2}
+.ue-grid i.d{background:var(--accent)}
+.ue-tbl{margin:8px auto 0 !important}
+
+/* ステップ再生 */
+.stpr{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px}
+.stpr .sb{font:900 16px inherit;width:36px;height:34px;border:2.5px solid var(--ink);border-radius:10px;background:#fff;box-shadow:2px 2px 0 var(--ink);cursor:pointer}
+.stpr .dots{display:flex;gap:6px}
+.stpr .dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--ink);background:#fff;cursor:pointer}
+.stpr .dots i.on{background:var(--accent)}
+
+/* 一部の測定 */
+.pm-card{display:flex;flex-direction:column;gap:10px}
+.pm-st{justify-content:center;font-size:23px}
+.pm-groups{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pm-groups.four{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.pmg{border:3px solid var(--ink);border-radius:14px;background:#fff;box-shadow:3px 3px 0 var(--ink);padding:8px 10px;display:flex;flex-direction:column;gap:6px;transition:opacity .4s,transform .4s,box-shadow .4s}
+.pmg .gh{font-weight:900;font-size:17px;text-align:center;border-radius:8px;padding:1px 6px;color:#fff;background:var(--gc)}
+.pmg .gt{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;min-height:36px;align-items:center}
+.pmg .term{font:400 22px "Cambria Math","Times New Roman",serif;background:#faf7ff;border:2px solid #d9d4ea;border-radius:8px;padding:0 7px}
+.pmg .term u{text-decoration:none;color:var(--gc);font-weight:900}
+.pmg .none{color:var(--muted);font-size:16px;font-weight:700}
+.pmg .gp,.pmg .gs{font:400 19px "Cambria Math","Times New Roman",serif;text-align:center;border-top:2px dashed #e3dcf2;padding-top:4px;transition:opacity .4s}
+.pmg .gp b{color:var(--accent-d)}
+.pmg .lab{display:block;font:800 13px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:var(--muted)}
+.pm-groups.four .term{font-size:18px}
+.pm-groups.four .gp,.pm-groups.four .gs{font-size:16px}
+.pm-card.s0 .gp,.pm-card.s0 .gs,.pm-card.s1 .gs{opacity:0}
+.pmg.hit{box-shadow:0 0 0 4px var(--yellow),5px 5px 0 var(--ink);transform:translateY(-3px)}
+.pmg.miss{opacity:.3}
+.pm-ctl{display:flex;align-items:center;justify-content:center;gap:18px}
+.pm-ctl .stpr{margin-top:0}
+.pm-st .t{transition:color .3s}
+.g0{color:var(--accent-d);text-decoration:none;font-weight:900}
+.g1{color:var(--blue);text-decoration:none;font-weight:900}
+
+/* 3 ステップのルール */
+.pmr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:stretch;padding-top:6px}
+.pmr-c{background:#fff;border:3px solid var(--ink);border-top:14px solid var(--c);border-radius:18px;box-shadow:6px 6px 0 var(--ink);padding:14px 18px;display:flex;flex-direction:column;gap:12px}
+.pmr-n{align-self:flex-start;background:var(--c);color:#fff;font-weight:900;font-size:18px;border:2px solid var(--ink);border-radius:999px;padding:2px 14px}
+.pmr-t{font-size:23px;line-height:1.55;font-weight:700}
+.pmr-ex{margin-top:auto;background:#faf7ff;border:2px dashed #cfc7e6;border-radius:12px;padding:10px 12px;font-size:19px;line-height:1.9}
+
+/* テンソル積 */
+.tp-l{gap:16px}
+.tpc{background:#fff;border:3px solid var(--ink);border-left:12px solid var(--c);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:10px 14px}
+.tpc .ch{font-weight:900;font-size:17px;margin-bottom:6px;color:var(--c)}
+.tpc .eqrow{font-size:18px;gap:6px}
+.nt-c{padding:12px 10px}
+.nt-eq{justify-content:center;font-size:20px;margin-top:6px}
+
+/* 3 量子ビットの動く回路 */
+.g3c{padding:12px 16px}
+svg.gsim{display:block;width:100%;height:auto;overflow:visible;user-select:none}
+.gsim text{font-family:"Cambria Math","Times New Roman",serif}
+.gsim .w{stroke:var(--ink);stroke-width:4;stroke-linecap:round;transition:stroke .3s}
+.gsim .w.one{stroke:var(--accent)}
+.gsim .inp{cursor:pointer}
+.gsim .inp circle{fill:#fff;stroke:var(--ink);stroke-width:3;transition:fill .3s}
+.gsim .inp.one circle{fill:var(--yellow)}
+.gsim .inp.fix{cursor:default}
+.gsim .inp.fix circle{fill:#ece8f6;stroke-dasharray:4 3}
+.gsim .inp text,.gsim .out text{font-size:21px;text-anchor:middle;dominant-baseline:central;fill:var(--ink)}
+.gsim .out rect{fill:#fff;stroke:var(--ink);stroke-width:3;transition:fill .3s}
+.gsim .out.one rect{fill:var(--yellow)}
+.gsim .out.chg rect{fill:#ffd3e6;stroke:var(--pink)}
+.gsim .lbl{font:800 15px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--muted)}
+.gsim .nm{font-size:21px;font-style:italic;fill:var(--ink)}
+.gsim .gl{stroke:var(--ink);stroke-width:4;fill:none}
+.gsim .gd{fill:var(--ink)}
+.gsim .gt{fill:#fff;stroke:var(--ink);stroke-width:4}
+.gsim .gate.on .gd{fill:var(--accent)}
+.gsim .gate.on .gt{fill:#ffd3e6}
+.gsim .msg{font:900 17px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;text-anchor:middle}
+.gsim .bx{fill:#2a2350;stroke:var(--ink);stroke-width:3}
+.gsim .bxt{fill:#fff;font-size:30px;font-style:italic;text-anchor:middle;dominant-baseline:central}
+.gsim .q{fill:var(--yellow);font:900 40px Consolas,monospace;text-anchor:middle;dominant-baseline:central}
+.maptbl.two{grid-template-columns:repeat(2,auto auto auto);column-gap:10px;font-size:20px;margin-top:4px}
+.maptbl.two span:nth-child(6n+4){margin-left:16px}
+table.tt.small td{font-family:"Cambria Math","Times New Roman",serif;font-size:19px}
+
+/* 重ね合わせ（8 つの状態の振幅） */
+.sp-card{display:flex;flex-direction:column;gap:8px}
+.amp8{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;align-items:end;height:150px;padding:0 6px;border-bottom:3px solid var(--ink);position:relative}
+.amp8 .c{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;position:relative}
+.amp8 .bar{width:70%;background:linear-gradient(180deg,var(--accent),var(--pink));border:2.5px solid var(--ink);border-bottom:0;border-radius:8px 8px 0 0;transition:height .6s cubic-bezier(.3,1.4,.5,1),background .3s}
+.amp8 .c.mv .bar{background:linear-gradient(180deg,var(--purple),var(--blue))}
+.amp8 .c.hit .bar{background:var(--yellow)}
+.amp8 .val{font:800 14px Consolas,monospace;margin-bottom:2px;min-height:18px}
+.amp8k{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;padding:0 6px;font:700 19px "Cambria Math","Times New Roman",serif;text-align:center}
+.sp-eq{justify-content:center;font-size:20px;min-height:40px}
+
+/* 計算量 */
+.cx-card{display:flex;flex-direction:column;gap:8px}
+.cx-chart{height:260px;display:flex;align-items:flex-end;gap:6px;border-bottom:3px solid var(--ink);border-left:3px solid var(--ink);padding:0 6px}
+.cx-chart .c{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.cx-chart .bar{width:80%;background:linear-gradient(180deg,var(--accent),var(--pink));border:2px solid var(--ink);border-bottom:0;border-radius:6px 6px 0 0;transition:height .6s cubic-bezier(.3,1.2,.5,1);min-height:0}
+.cx-chart .c.cur .bar{background:var(--yellow)}
+.cx-chart .n{font:800 14px Consolas,monospace;margin-top:3px;position:relative;top:22px}
+.cx-num{margin-top:22px;text-align:center;font-size:20px;line-height:1.6}
+.cx-num b{font:900 26px "Cambria Math","Times New Roman",serif;color:var(--accent-d)}
+
+/* 8.10 */
+.mt-fig{gap:16px}
+.mtc{display:flex;align-items:center;gap:16px;background:#fff;border:3px solid var(--ink);border-left:12px solid var(--c);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:12px 16px;font-size:21px}
+.mtc .math{font-size:24px}
+.mt-ic{flex:none;width:46px;height:46px;border-radius:50%;background:var(--c);color:#fff;font-weight:900;font-size:26px;display:flex;align-items:center;justify-content:center;border:2.5px solid var(--ink)}
+.mt-who{margin-left:auto;font-size:16px;font-weight:800;color:var(--c);white-space:nowrap}
+.pa-card{display:flex;flex-direction:column;gap:12px}
+.pa-in{display:flex;align-items:center;justify-content:center;gap:12px;font:400 24px "Cambria Math","Times New Roman",serif}
+.pa-grid{display:grid;grid-template-columns:auto auto;gap:6px 14px;border-left:3px solid var(--ink);border-right:3px solid var(--ink);border-radius:14px;padding:4px 10px}
+.pa-cell{display:flex;align-items:center;gap:4px}
+.pa-cell button{width:26px;height:26px;border:2px solid var(--ink);border-radius:8px;background:var(--yellow);font:900 16px sans-serif;cursor:pointer;box-shadow:1px 1px 0 var(--ink);padding:0;line-height:1}
+.pa-cell span{min-width:40px;text-align:center;font-size:24px}
+.pa-cell i{font-size:15px;color:var(--muted);font-style:italic;width:12px}
+.pa-al{justify-content:center;font-size:20px;gap:14px}
+.pa-al span{background:#faf7ff;border:2px solid #d9d4ea;border-radius:10px;padding:1px 10px}
+.pa-sum{justify-content:center;font-size:19px;gap:6px}
+.pa-sum .lbl{display:block;font:800 12px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:var(--muted);text-align:center}
+.pa-sum .t{display:inline-flex;flex-direction:column;align-items:center}
+u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text-decoration-thickness:2px}
+.a2g{display:grid;grid-template-columns:auto repeat(4,1fr);gap:6px;font:400 19px "Cambria Math","Times New Roman",serif;text-align:center}
+.a2g .h{font-weight:800;color:var(--muted);font-size:16px;align-self:center}
+.a2g .t{background:#fff1c2;border:2px solid var(--ink);border-radius:10px;padding:8px 2px;box-shadow:2px 2px 0 var(--ink);white-space:nowrap}
+.a2g .t.d{background:#dfe8ff}
+.an-dots{width:330px;height:330px;display:grid;gap:2px;align-content:center;justify-content:center}
+.an-dots i{background:var(--accent);border-radius:50%;border:1.5px solid var(--ink)}
+
+/* 復習問題 */
+.quiz.q8{grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:auto;gap:14px 16px}
+.quiz.q8 .qz{min-height:200px}
+.quiz.q8 .qz-q{font-size:18px}
+.quiz.q8 .qz-a{font-size:17px;min-height:70px}
+h2 .qz-all{font-size:14px;padding:4px 14px;margin-left:16px;vertical-align:middle}
+.sumlist .sl{font-size:21px;padding:9px 18px}
+
+.vec.m2{grid-template-columns:repeat(2,auto);column-gap:12px}
+.eqtx{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:22px;line-height:1.75;text-align:center}
+.big8 .vec.m8{font-size:19px;column-gap:9px}
+.title-wrap .sub{font-size:24px;line-height:1.5}
+.pmr-t{font-size:26px}
+.pmr-ex{font-size:21px}
+.quiz.q8 .qz{min-height:220px}
+.quiz.q8 .qz-q{font-size:20px}
+.quiz.q8 .qz-a{font-size:19px}
+#anSvg{max-height:230px}
+
+.sig{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:.95;margin:0 3px;font-size:1.2em}
+.sig sup,.sig sub{font-size:.5em;vertical-align:baseline;line-height:1}
+.pmr{align-content:center;align-items:stretch}
+.pmr-ex{margin-top:6px}
+
+</style>
+</head>
+<body>
+<div id="ovHead"><b>スライド一覧</b><span>クリックでそのスライドへ ／ ← → で選択、Enter で開く、O / Esc で戻る</span><button id="btnOvClose">一覧を閉じる</button></div>
+<div id="viewport"><div id="stage">
+
+<!-- タイトル -->
+<section class="slide" data-id="title">
+  <div class="title-wrap" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px">
+    <div>
+      <div class="chap pop">『量子コンピュータの頭の中』 ゼミ資料</div>
+      <h1 class="pop" style="--d:.1s;white-space:nowrap">n 量子ビットの世界</h1>
+      <div class="sub pop" style="--d:.2s;white-space:normal">― 測定・ユニタリ発展から<br>トフォリゲート・オラクルまで ―</div>
+    </div>
+    <div>
+      <ul class="agenda ag-t">
+        <li class="agroup pop" style="--d:.25s">復習</li>
+        <li class="pop" style="--d:.27s"><span class="num" style="background:#9a93bd">0</span>n 量子ビットの量子状態<em>8.1・8.2</em></li>
+        <li class="agroup pop" style="--d:.29s">第8章 n 量子ビットの世界</li>
+        <li class="pop" style="--d:.31s"><span class="num" style="background:var(--blue)">1</span>測定とユニタリ発展<em>8.3・8.4</em></li>
+        <li class="pop" style="--d:.33s"><span class="num" style="background:var(--pink)">2</span>一部の量子ビットの測定<em>8.5</em></li>
+        <li class="pop" style="--d:.35s"><span class="num" style="background:var(--green)">3</span>テンソル積を用いた計算<em>8.6</em></li>
+        <li class="pop" style="--d:.37s"><span class="num" style="background:var(--accent)">4</span>代表的な n 量子ビットの量子ゲート<em>8.7</em></li>
+        <li class="pop" style="--d:.39s"><span class="num" style="background:var(--purple)">5</span>重ね合わせ・排他的論理和・オラクル<em>8.8・8.9</em></li>
+        <li class="pop" style="--d:.41s"><span class="num" style="background:var(--gold)">6</span>発展：任意の 2ⁿ 次正方行列のかけ算<em>8.10</em></li>
+        <li class="pop" style="--d:.43s"><span class="num" style="background:var(--ink)">✓</span>まとめ と 復習問題</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 復習 -->
+<section class="slide" data-id="rv">
+  <div class="chap">復習 ／ 第5章・第6章・8.1〜8.2</div>
+  <h2>これまでの復習<small>第5章・第6章・8.2（p.196）</small></h2>
+  <div class="body g3 rv8">
+    <div class="rvc8 pop" style="--c:var(--accent)">
+      <div class="rh">① n 量子ビットの量子状態</div>
+      <div class="eqrow" style="justify-content:center"><span>|φ⟩ =</span><span class="vec"><span>a<sub>0</sub></span><span>a<sub>1</sub></span><span>⋮</span><span>a<sub>2ⁿ−1</sub></span></span><span>∈ ℂ<sup>2ⁿ</sup></span></div>
+      <div class="eqrow" style="justify-content:center;font-size:20px"><span>⟨φ|φ⟩ = |a<sub>0</sub>|² + ⋯ + |a<sub>2ⁿ−1</sub>|² = 1</span></div>
+      <div class="eqrow" style="justify-content:center;font-size:20px"><span><b>Q</b> = { |φ⟩ ∈ ℂ<sup>2ⁿ</sup> | ⟨φ|φ⟩ = 1 }</span></div>
+    </div>
+    <div class="rvc8 pop" style="--d:.1s;--c:var(--blue)">
+      <div class="rh">② 基本の状態はテンソル積</div>
+      <div class="eqrow" style="justify-content:center"><span>|0⟩ ⊗ |1⟩ ⊗ |1⟩ = |011⟩</span></div>
+      <div>n 量子ビットの基本の状態は <span class="math nw">|00⋯0⟩</span> 〜 <span class="math nw">|11⋯1⟩</span> の <b class="k">2ⁿ 個</b></div>
+      <div>量子ビットは <b class="kb">左から 0 番目、1 番目、…</b> と数える</div>
+    </div>
+    <div class="rvc8 pop" style="--d:.2s;--c:var(--green)">
+      <div class="rh">③ 測定とユニタリ発展</div>
+      <div><b>測定</b>：<span class="math nw">a|0⟩ + b|1⟩</span> を測定すると確率 <span class="math nw"><b>|a|²</b></span> で |0⟩、<span class="math nw"><b>|b|²</b></span> で |1⟩。状態は得られた値に <b class="k">変化する</b></div>
+      <div><b>ユニタリ発展</b>：ユニタリ行列 <span class="math">U</span>（<span class="math nw">U<sup>†</sup>U = I</span>）で <span class="math nw">|φ⟩ → U|φ⟩</span>。1 量子ビットは 2 × 2、2 量子ビットは 4 × 4</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 第8章 扉 -->
+<section class="slide partdoor" style="--c:var(--blue)">
+  <div class="pd-bg"><span class="eq"><span class="math">|φ⟩ =</span><span class="vec"><span>a</span><span>b</span></span><span class="math">∈ ℂ²</span></span></div>
+  <div class="pd-wrap">
+    <div class="pd-src pop">『量子コンピュータの頭の中』</div>
+    <div class="pd-no pop" style="--d:.05s">第 8 章</div>
+    <h1 class="pd-title pop" style="--d:.15s">n 量子ビットの世界</h1>
+    <div class="pd-secs pop" style="--d:.3s"><span>SECTION 1　測定とユニタリ発展（8.3・8.4）</span><span>SECTION 2　一部の量子ビットの測定（8.5）</span><span>SECTION 3　テンソル積を用いた計算（8.6）</span><span>SECTION 4　代表的な n 量子ビットの量子ゲート（8.7）</span><span>SECTION 5　重ね合わせ・排他的論理和・オラクル（8.8・8.9）</span><span>SECTION 6　発展：任意の 2ⁿ 次正方行列のかけ算（8.10）</span></div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- SECTION 1 -->
+<section class="slide door" style="--c:var(--blue)">
+  <div class="door-bg">1</div>
+  <div class="door-wrap">
+    <div class="door-num">1</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 1</div>
+      <h1 class="pop" style="--d:.1s">測定とユニタリ発展</h1>
+      <p class="door-lead pop" style="--d:.2s">確率の世界と行列の世界（8.3・8.4）</p>
+      <div class="door-topics pop" style="--d:.3s"><span>測定値と確率</span><span>測定で状態が変わる</span><span>2ⁿ × 2ⁿ のユニタリ行列</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.3 測定 -->
+<section class="slide" data-id="ms">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.3 測定（確率の世界）</div>
+  <h2>測定値は確率で決まり、状態も変わる<small>8.3（pp.196–198）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+    <div class="card pop">
+      <div class="eqrow" style="justify-content:center;font-size:25px" id="msState"></div>
+      <div class="pg mt14" id="msBars"></div>
+      <div class="ms-res" id="msRes"></div>
+      <div class="btns" style="justify-content:center"><button class="b" id="msGo">🎲 測定する</button><button class="b" id="msBack">↺ 測定前に戻す</button></div>
+      <div class="ms-cnt" id="msCnt"></div>
+    </div>
+    <div class="col">
+      <div class="defbox pop" style="--d:.1s;margin-top:6px"><span class="math nw">a<sub>0</sub>|00⋯0⟩ + a<sub>1</sub>|00⋯1⟩ + ⋯ + a<sub>2ⁿ−1</sub>|11⋯1⟩</span> を測定すると
+        <ul class="plain sm">
+          <li>測定値 <span class="math nw">|00⋯0⟩</span> を得る確率は <span class="math nw"><b>|a<sub>0</sub>|²</b></span></li>
+          <li>測定値 <span class="math nw">|11⋯1⟩</span> を得る確率は <span class="math nw"><b>|a<sub>2ⁿ−1</sub>|²</b></span></li>
+          <li>測定後の状態は、<b class="k">得られた測定値に変化</b>する</li>
+        </ul>
+      </div>
+      <div class="point blue pop" style="--d:.2s">古典コンピュータと違うのは<br>(1) 測定値は <b class="kb">確率</b> で変わる<br>(2) 測定で <b class="kb">状態が変化</b> する</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.4 ユニタリ発展 -->
+<section class="slide" data-id="ue">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.4 ユニタリ発展（行列の世界）</div>
+  <h2>量子ビットが 1 個増えると行列は縦横 2 倍<small>8.4（p.198）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+    <div class="card pop ue-card">
+      <div class="ue-lbl" id="ueLbl"></div>
+      <div class="ue-grid" id="ueGrid"></div>
+      <div id="ueStp"></div>
+    </div>
+    <div class="col">
+      <div class="defbox pop" style="--d:.1s">量子状態 <span class="math">|φ⟩</span> は、<b class="k nw">2ⁿ × 2ⁿ のユニタリ行列</b> <span class="math">U</span> を使って <span class="math nw">U|φ⟩</span> に写すことができる。これを <b>ユニタリ発展</b> という</div>
+      <table class="tt small pop ue-tbl" style="--d:.2s">
+        <thead><tr><th>量子ビット数</th><th class="out">行列のサイズ</th></tr></thead>
+        <tbody><tr><td>1</td><td>2 × 2</td></tr><tr><td>2</td><td>4 × 4</td></tr><tr><td>3</td><td>8 × 8</td></tr><tr><td>n</td><td><b>2ⁿ × 2ⁿ</b></td></tr></tbody>
+      </table>
+      <div class="point pop" style="--d:.3s">量子ビットが増えると、行列のサイズは <b class="k">指数関数的</b> に大きくなる</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- SECTION 2 -->
+<section class="slide door" style="--c:var(--pink)">
+  <div class="door-bg">2</div>
+  <div class="door-wrap">
+    <div class="door-num">2</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 2</div>
+      <h1 class="pop" style="--d:.1s">一部の量子ビットの測定</h1>
+      <p class="door-lead pop" style="--d:.2s">3 量子ビットのうち、左側だけを測る（8.5）</p>
+      <div class="door-topics pop" style="--d:.3s"><span>具体例 1：左 1 量子ビット</span><span>一般的なルール</span><span>具体例 2：左 2 量子ビット</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.5.1 具体例 1 -->
+<section class="slide" data-id="pm1">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.5 一部の量子ビットの測定</div>
+  <h2>左の 1 量子ビットだけを測定する<small>8.5.1（pp.199–201）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr)">
+    <div class="card pop pm-card">
+      <div class="eqrow pm-st" id="pm1St"></div>
+      <div class="pm-groups" id="pm1G"></div>
+      <div class="pm-ctl"><div id="pm1Stp"></div><button class="b" id="pm1Go">🎲 測定する</button></div>
+    </div>
+    <div class="col">
+      <ul class="plain pop" style="--d:.1s">
+        <li>左側の量子ビットで <b class="k">項をまとめる</b></li>
+        <li>まとめた項の係数の絶対値 2 乗和が <b class="k">確率</b></li>
+        <li>残った項は確率の和が 1 にならないので、<b class="kb nw">確率の平方根</b> で割る</li>
+      </ul>
+      <div class="point blue pop" style="--d:.2s;font-size:20px"><span class="math nw"><span class="eq inline"><span class="frac"><span>14</span><span>55</span></span></span> ≠ 1</span> なので、<span class="math nw">√<span class="eq inline"><span class="frac"><span>14</span><span>55</span></span></span></span> で割ったものが測定後の量子状態</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.5.2 一般的なルール -->
+<section class="slide" data-id="pmr">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.5 一部の量子ビットの測定</div>
+  <h2>一部の測定は 3 ステップで計算できる<small>8.5.2（p.202）</small></h2>
+  <div class="body pmr">
+    <div class="pmr-c pop" style="--c:var(--accent)">
+      <div class="pmr-n">ステップ 1</div>
+      <div class="pmr-t">測定する量子ビットの <b class="k">種類ごとに項をまとめる</b></div>
+      <div class="pmr-ex"><span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√55</span></span></span>{ <u class="g0">|0⟩</u>(|00⟩ + 2|01⟩ + 3|10⟩)<br>　+ <u class="g1">|1⟩</u>(4|10⟩ + 5|11⟩) }</span></div>
+    </div>
+    <div class="pmr-c pop" style="--d:.1s;--c:var(--pink)">
+      <div class="pmr-n">ステップ 2</div>
+      <div class="pmr-t">まとめた項の <b class="k">係数の絶対値 2 乗和</b> が、その測定値を得る <b class="k">確率</b></div>
+      <div class="pmr-ex"><span class="math">|0⟩：<span class="eq inline"><span class="frac"><span>1² + 2² + 3²</span><span>55</span></span></span> = <span class="eq inline"><span class="frac"><span>14</span><span>55</span></span></span><br>|1⟩：<span class="eq inline"><span class="frac"><span>4² + 5²</span><span>55</span></span></span> = <span class="eq inline"><span class="frac"><span>41</span><span>55</span></span></span></span></div>
+    </div>
+    <div class="pmr-c pop" style="--d:.2s;--c:var(--blue)">
+      <div class="pmr-n">ステップ 3</div>
+      <div class="pmr-t">測定した値の項だけ残し、<b class="kb">確率の平方根で割った</b> ものが測定後の状態</div>
+      <div class="pmr-ex"><span class="math">|0⟩ のとき：<span class="eq inline"><span class="frac"><span>1</span><span>√14</span></span></span>(|000⟩ + 2|001⟩ + 3|010⟩)<br>|1⟩ のとき：<span class="eq inline"><span class="frac"><span>1</span><span>√41</span></span></span>(4|110⟩ + 5|111⟩)</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.5.3 具体例 2 -->
+<section class="slide" data-id="pm2">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.5 一部の量子ビットの測定</div>
+  <h2>左の 2 量子ビットを測定する<small>8.5.3（pp.202–204）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr)">
+    <div class="card pop pm-card">
+      <div class="eqrow pm-st" id="pm2St"></div>
+      <div class="pm-groups four" id="pm2G"></div>
+      <div class="pm-ctl"><div id="pm2Stp"></div><button class="b" id="pm2Go">🎲 測定する</button></div>
+    </div>
+    <div class="col">
+      <ul class="plain pop" style="--d:.1s">
+        <li>左 2 量子ビットは <span class="math nw">|00⟩, |01⟩, |10⟩, |11⟩</span> の 4 種類でまとめる</li>
+        <li><span class="math">|10⟩</span> の項はないので、確率は <b class="k">0</b></li>
+      </ul>
+      <div class="point blue pop" style="--d:.2s;font-size:20px"><span class="math">|010⟩</span> のように項が 1 個のときは、係数で割るので係数は（実質的に）<b class="kb">1</b></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- SECTION 3 -->
+<section class="slide door" style="--c:var(--green)">
+  <div class="door-bg">3</div>
+  <div class="door-wrap">
+    <div class="door-num">3</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 3</div>
+      <h1 class="pop" style="--d:.1s">テンソル積を用いた計算</h1>
+      <p class="door-lead pop" style="--d:.2s">1 量子ビットのテンソル積で計算を簡単に（8.6）</p>
+      <div class="door-topics pop" style="--d:.3s"><span>定理 8.1</span><span>8 × 8 行列 と 2 × 2 行列</span><span>H<sub>0</sub>・H<sup>⊗n</sup></span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.6.1 定理8.1 -->
+<section class="slide" data-id="tp">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.6 1 量子ビットのテンソル積を用いた計算</div>
+  <h2>2 × 2 のテンソル積に分ければ計算が楽<small>8.6.1・定理 8.1（pp.204–206）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)">
+    <div class="col tp-l">
+      <div class="tpc pop" style="--c:var(--pink)">
+        <div class="ch">そのまま：8 × 8 行列の積</div>
+        <div class="eqrow" id="tpBig"></div>
+      </div>
+      <div class="tpc pop" style="--d:.1s;--c:var(--green)">
+        <div class="ch">分けて：2 × 2 行列の積のテンソル積</div>
+        <div class="eqtx" style="text-align:left;font-size:21px">(X ⊗ X ⊗ Z)(|1⟩ ⊗ |0⟩ ⊗ |1⟩)<br>= X|1⟩ ⊗ X|0⟩ ⊗ Z|1⟩ = |0⟩ ⊗ |1⟩ ⊗ (−|1⟩)<br>= <span class="res">−|0⟩ ⊗ |1⟩ ⊗ |1⟩</span></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="thm6 pop" style="--d:.15s"><span class="thm-t">定理 8.1</span><span class="math">U<sub>1</sub>, …, U<sub>n</sub></span> を 2 × 2 のユニタリ行列、<span class="math nw">|φ<sub>1</sub>⟩, …, |φ<sub>n</sub>⟩</span> を 1 量子ビットの量子状態とすると
+        <div class="math" style="font-size:19px;margin-top:4px">(U<sub>1</sub> ⊗ ⋯ ⊗ U<sub>n</sub>)(|φ<sub>1</sub>⟩ ⊗ ⋯ ⊗ |φ<sub>n</sub>⟩)<br>= (U<sub>1</sub>|φ<sub>1</sub>⟩) ⊗ ⋯ ⊗ (U<sub>n</sub>|φ<sub>n</sub>⟩)</div>
+      </div>
+      <div class="point blue pop" style="--d:.25s;font-size:20px">エンタングルした状態は 1 量子ビットのテンソル積に <b class="kb">分解できない</b> ので、この方法は使えない</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.6.2 記法の工夫 -->
+<section class="slide" data-id="nt">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.6 1 量子ビットのテンソル積を用いた計算</div>
+  <h2>1 個だけなら H<sub>0</sub>、全部なら H<sup>⊗n</sup><small>8.6.2（pp.206–207）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+    <div class="g2">
+      <div class="card pop nt-c"><div class="mp-lbl">0 番目だけに H</div><div id="ntA"></div><div class="eqrow nt-eq">H ⊗ I ⊗ I ⊗ I = <b>H<sub>0</sub></b></div></div>
+      <div class="card pop nt-c" style="--d:.1s"><div class="mp-lbl">すべてに H</div><div id="ntB"></div><div class="eqrow nt-eq">H ⊗ H ⊗ H ⊗ H = <b>H<sup>⊗4</sup></b></div></div>
+    </div>
+    <div class="col">
+      <ul class="plain pop" style="--d:.15s">
+        <li>ほかの量子ビットは <b class="k">単位行列 I</b> でユニタリ発展する</li>
+        <li><span class="math nw">H ⊗ I ⊗ ⋯ ⊗ I</span> を <b class="k nw">H<sub>0</sub></b> と書く（右下の 0 は「0 番目の量子ビットに H」）</li>
+        <li><span class="math nw">H ⊗ H ⊗ ⋯ ⊗ H</span> を <b class="kb nw">H<sup>⊗n</sup></b> と書く（「n 個のテンソル積」）</li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- SECTION 4 -->
+<section class="slide door" style="--c:var(--accent)">
+  <div class="door-bg">4</div>
+  <div class="door-wrap">
+    <div class="door-num">4</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 4</div>
+      <h1 class="pop" style="--d:.1s;font-size:58px">代表的な<br>n 量子ビットの量子ゲート</h1>
+      <p class="door-lead pop" style="--d:.2s">3 量子ビットの CCNOT と CSWAP（8.7）</p>
+      <div class="door-topics pop" style="--d:.3s"><span>トフォリゲート</span><span>トフォリゲートで AND</span><span>n 量子ビット・トフォリゲート</span><span>フレドキンゲート</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.7.1 トフォリ -->
+<section class="slide" data-id="tf">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.7 代表的な n 量子ビットの量子ゲート</div>
+  <h2>トフォリ：制御 2 つが |1⟩ なら標的を反転<small>8.7.1・図 8.1（pp.207–209）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
+    <div class="card pop g3c">
+      <svg class="gsim" id="tfSvg"></svg>
+      <div class="maptbl two" id="tfTbl"></div>
+      <div class="btns" style="justify-content:center;margin-top:6px"><button class="b" id="tfAuto" data-autoplay>▶ 自動再生</button></div>
+    </div>
+    <div class="col">
+      <div class="eqrow pop" style="--d:.1s;justify-content:center"><span>CCNOT :=</span><span id="tfMat" class="big8"></span></div>
+      <ul class="plain pop" style="--d:.2s">
+        <li>0・1 番目が <b class="k">制御ビット</b>、2 番目が <b class="kb">標的ビット</b>（<span class="math nw">CCNOT<sub>0,1,2</sub></span>）</li>
+        <li>CNOT の標的ビットに CNOT をかける：<b class="nw">Controlled Controlled NOT</b></li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- トフォリで AND -->
+<section class="slide" data-id="and">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.7 代表的な n 量子ビットの量子ゲート</div>
+  <h2>q<sub>2</sub> に |0⟩ を入れたトフォリ ＝ AND<small>図 8.2・表 8.1（pp.209–210）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
+    <div class="card pop g3c">
+      <svg class="gsim" id="anSvg"></svg>
+      <div id="anTbl"></div>
+      <div class="btns" style="justify-content:center;margin-top:6px"><button class="b" id="anAuto" data-autoplay>▶ 自動再生</button></div>
+    </div>
+    <div class="col">
+      <ul class="plain pop" style="--d:.1s">
+        <li>q<sub>0</sub> を入力 1、q<sub>1</sub> を入力 2、q<sub>2</sub> に固定値 <span class="math">|0⟩</span></li>
+        <li>出力 q<sub>2</sub> は、古典回路の <b class="k">AND</b> と同じ真理値表</li>
+      </ul>
+      <div class="point blue pop" style="--d:.2s;font-size:20px">
+        <div class="row" style="gap:16px"><div id="anN" style="width:120px;flex:none"></div><div>制御ビットを n−1 個に拡張したもの ＝ <b class="kb">n 量子ビット・トフォリゲート</b>。量子誤り訂正（第10章）やグローバーのアルゴリズム（第12章）で使う</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.7.2 フレドキン -->
+<section class="slide" data-id="fr">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.7 代表的な n 量子ビットの量子ゲート</div>
+  <h2>フレドキン：制御が |1⟩ なら 2 つを入れ替え<small>8.7.2・図 8.3（pp.210–212）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
+    <div class="card pop g3c">
+      <svg class="gsim" id="frSvg"></svg>
+      <div class="maptbl two" id="frTbl"></div>
+      <div class="btns" style="justify-content:center;margin-top:6px"><button class="b" id="frAuto" data-autoplay>▶ 自動再生</button></div>
+    </div>
+    <div class="col">
+      <div class="eqrow pop" style="--d:.1s;justify-content:center"><span>CSWAP :=</span><span id="frMat" class="big8"></span></div>
+      <ul class="plain pop" style="--d:.2s">
+        <li>0 番目が <b class="k">制御ビット</b>、1・2 番目が <b class="kb">標的ビット</b>（<span class="math nw">SWAP<sub>0,1,2</sub> = SWAP<sub>0,2,1</sub></span>）</li>
+        <li><span class="math nw">|101⟩</span> と <span class="math nw">|110⟩</span> が入れ替わる。<span class="math nw">|100⟩, |111⟩</span> は同じものどうしなので変化なしに見える</li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- SECTION 5 -->
+<section class="slide door" style="--c:var(--purple)">
+  <div class="door-bg">5</div>
+  <div class="door-wrap">
+    <div class="door-num">5</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 5</div>
+      <h1 class="pop" style="--d:.1s;font-size:68px">重ね合わせ・<br>排他的論理和・オラクル</h1>
+      <p class="door-lead pop" style="--d:.2s">たくさんの状態を一度に計算する（8.8・8.9）</p>
+      <div class="door-topics pop" style="--d:.3s"><span>重ね合わせに CCNOT</span><span>計算量 O(2²ⁿ)</span><span>x ⊕ y</span><span>ブラックボックス関数</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.8 重ね合わせ -->
+<section class="slide" data-id="sp">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.8 重ね合わせ状態を利用した計算</div>
+  <h2>4 つの状態に一度に CCNOT をかけられる<small>8.8・図 8.4（pp.212–213）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)">
+    <div class="card pop sp-card">
+      <div id="spQC" style="width:330px;margin:0 auto"></div>
+      <div class="amp8" id="spAmp"></div>
+      <div class="eqrow sp-eq" id="spEq"></div>
+      <div id="spStp"></div>
+    </div>
+    <div class="col">
+      <ul class="plain pop" style="--d:.1s">
+        <li><span class="math nw">H ⊗ H ⊗ I</span> で、左 2 量子ビットを <b class="k">重ね合わせ</b> にする</li>
+        <li>CCNOT は 4 つの状態すべてに <b class="k">一度に</b> かかる</li>
+        <li>n 量子ビットなら <b class="kb">2ⁿ 個</b> の状態に一度にユニタリ発展できる</li>
+      </ul>
+      <div class="point blue pop" style="--d:.2s;font-size:20px">古典コンピュータには重ね合わせ状態がなく、1 個の状態にしか演算できない</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.8 測定は 1 個だけ -->
+<section class="slide" data-id="sp2">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.8 重ね合わせ状態を利用した計算</div>
+  <h2>でも測定で得られる結果は 1 個だけ<small>8.8（p.214）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
+    <div class="card pop sp-card">
+      <div class="eqrow sp-eq" style="font-size:21px"><span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>(|000⟩ + |010⟩ + |100⟩ + |111⟩) を測定</div>
+      <div class="amp8" id="sp2Amp"></div>
+      <div class="ms-res" id="sp2Res"></div>
+      <div class="btns" style="justify-content:center"><button class="b" id="sp2Go">🎲 測定する</button><button class="b" id="sp2Back">↺ 測定前に戻す</button></div>
+    </div>
+    <div class="col">
+      <ul class="plain pop" style="--d:.1s">
+        <li>測定で得られるのは <b class="k">1 個だけ</b>。どれも同じ確率なので、ランダムに 1 つ選ぶのと変わらない</li>
+        <li>目的の結果を得る確率が <b class="kb">高くなるように</b> ユニタリ発展を工夫したときだけ、高速に計算できる</li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.8 計算量 -->
+<section class="slide" data-id="cx">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.8 重ね合わせ状態を利用した計算</div>
+  <h2>古典で真似すると O(2²ⁿ) の計算時間<small>8.8（p.214）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
+    <div class="card pop cx-card">
+      <div class="cx-chart" id="cxChart"></div>
+      <div class="cx-num" id="cxNum"></div>
+      <div id="cxStp"></div>
+    </div>
+    <div class="col">
+      <ul class="plain pop" style="--d:.1s">
+        <li>n が大きいときの計算ステップ数のおおよその数を <span class="math nw">O(f(n))</span> で表し、<b class="k">計算量</b> という</li>
+        <li>2ⁿ × 2ⁿ 行列と 2ⁿ 次元ベクトルの積は <span class="math nw"><b>O((2ⁿ)²) = O(2²ⁿ)</b></span></li>
+        <li>量子コンピュータなら、ユニタリ発展は <b class="kb">一定時間以内</b> に実行できる</li>
+      </ul>
+      <div class="tiny pop" style="--d:.2s">※ 計算量の正確な定義ではなく、標準的な表現。疎行列ならもっと速いが、指数関数的なのは変わらない</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.9 排他的論理和 -->
+<section class="slide" data-id="xr">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.9 排他的論理和とオラクル</div>
+  <h2>CNOT で排他的論理和 x ⊕ y を計算できる<small>8.9・表 8.2・図 8.5（p.215）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
+    <div class="card pop g3c">
+      <svg class="gsim" id="xrSvg"></svg>
+      <div id="xrTbl"></div>
+      <div class="btns" style="justify-content:center;margin-top:6px"><button class="b" id="xrAuto" data-autoplay>▶ 自動再生</button></div>
+    </div>
+    <div class="col">
+      <ul class="plain pop" style="--d:.1s">
+        <li><b class="k">排他的論理和</b>（XOR、⊕）：どちらか一方だけが <span class="math">|1⟩</span> なら <span class="math">|1⟩</span>、それ以外は <span class="math">|0⟩</span></li>
+        <li>x が 0 でも 1 でも <span class="math nw"><b>|x ⊕ 0⟩ = |0 ⊕ x⟩ = |x⟩</b></span>（第11章・第12章で使う）</li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.9 オラクル -->
+<section class="slide" data-id="or">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.9 排他的論理和とオラクル</div>
+  <h2>中身は分からないが実行できる ＝ オラクル<small>8.9・図 8.6（p.216）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+    <div class="card pop"><svg class="gsim" id="orSvg" viewBox="0 0 520 230"></svg></div>
+    <div class="col">
+      <ul class="plain pop" style="--d:.1s">
+        <li>具体的な形は分からないけど実行することはできる関数 ＝ <b class="k">ブラックボックス関数</b></li>
+        <li>関数 <span class="math nw">f : {0,1} → {0,1}</span> に対応するブラックボックス関数を <b class="kb">オラクル</b> といい、<span class="math nw"><b>U<sub>f</sub></b></span> と書く</li>
+        <li><span class="math nw">|x⟩|y⟩ → |x⟩|y ⊕ f(x)⟩</span></li>
+      </ul>
+      <div class="point blue pop" style="--d:.2s;font-size:20px">oracle ＝「神託」。中身は神様が知っていて私たちには計り知れないけど、実行はできる（ご神託は得られる）イメージ</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- SECTION 6 -->
+<section class="slide door" style="--c:var(--gold)">
+  <div class="door-bg">6</div>
+  <div class="door-wrap">
+    <div class="door-num">6</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 6 ／ 発展</div>
+      <h1 class="pop" style="--d:.1s;font-size:66px">任意の 2ⁿ 次正方行列の<br>かけ算を計算する</h1>
+      <p class="door-lead pop" style="--d:.2s">パウリ行列で分解して、量子と古典で分担（8.10）</p>
+      <div class="door-topics pop" style="--d:.3s"><span>パウリ行列 X・Y・Z</span><span>A<sub>1</sub> = Σ α<sub>k</sub>σ<sub>k</sub></span><span>定理 8.2</span><span>4ⁿ 回の計算</span></div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.10 動機 -->
+<section class="slide" data-id="mt">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展：量子コンピュータを使って任意の 2ⁿ 次正方行列のかけ算を計算する</div>
+  <h2>ユニタリでない A でも A|φ⟩ を求めたい<small>8.10（pp.216–217）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)">
+    <div class="col mt-fig">
+      <div class="mtc pop" style="--c:var(--green)"><span class="mt-ic">✓</span><div><b>ユニタリ行列 U</b><div class="math">|φ⟩ → U|φ⟩</div></div><span class="mt-who">量子コンピュータで計算できる</span></div>
+      <div class="mtc pop" style="--d:.1s;--c:var(--red)"><span class="mt-ic">?</span><div><b>ユニタリでない行列 A</b><div class="math">|φ⟩ → A|φ⟩</div></div><span class="mt-who">そのままでは計算できない</span></div>
+      <div class="mtc pop" style="--d:.2s;--c:var(--blue)"><span class="mt-ic">＋</span><div><b>古典コンピュータ</b><div>数をかける・行列の和</div></div><span class="mt-who">手伝ってもらう</span></div>
+    </div>
+    <div class="col">
+      <ul class="plain pop" style="--d:.15s">
+        <li>例：物理学のハミルトニアン <span class="math">Ĥ</span>（エルミート行列。ユニタリ行列とは限らない）</li>
+        <li>古典コンピュータで、行列に実数や複素数をかけたり、行列の和を計算したりしてよい（行列どうしの積やテンソル積は計算しない）とすれば、<b class="k">任意の 2ⁿ 次正方行列 A</b> で <span class="math nw">A|φ⟩</span> を計算できる</li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.10.1 パウリ行列で 2 次正方行列 -->
+<section class="slide" data-id="pa">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展：量子コンピュータを使って任意の 2ⁿ 次正方行列のかけ算を計算する</div>
+  <h2>2 × 2 行列は I・X・Y・Z の和で書ける<small>8.10.1（pp.217–219）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)">
+    <div class="card pop pa-card">
+      <div class="pa-in" id="paIn"></div>
+      <div class="eqrow pa-al" id="paAl"></div>
+      <div class="eqrow pa-sum" id="paSum"></div>
+    </div>
+    <div class="col">
+      <div class="eqrow pop" style="--d:.1s;font-size:19px;justify-content:center;gap:6px">
+        <span>X =</span><span class="vec m2"><span>0</span><span>1</span><span>1</span><span>0</span></span>
+        <span>Y =</span><span class="vec m2"><span>0</span><span>−i</span><span>i</span><span>0</span></span>
+        <span>Z =</span><span class="vec m2"><span>1</span><span>0</span><span>0</span><span>−1</span></span>
+      </div>
+      <div class="eqtx pop" style="--d:.15s;font-size:20px">A<sub>1</sub> = <span class="eq inline"><span class="vec m2"><span>a</span><span>b</span><span>c</span><span>d</span></span></span> = <span class="eq inline"><span class="frac"><span>a + d</span><span>2</span></span></span>I + <span class="eq inline"><span class="frac"><span>b + c</span><span>2</span></span></span>X + <span class="eq inline"><span class="frac"><span>b − c</span><span>2</span></span></span>iY + <span class="eq inline"><span class="frac"><span>a − d</span><span>2</span></span></span>Z</div>
+      <ul class="plain pop" style="--d:.2s">
+        <li><span class="math nw">σ<sub>0</sub> := I, σ<sub>1</sub> := X, σ<sub>2</sub> := Y, σ<sub>3</sub> := Z</span> とすると <span class="math nw"><b>A<sub>1</sub> = <span class="sig"><sup>3</sup>Σ<sub>k=0</sub></span> α<sub>k</sub>σ<sub>k</sub></b></span></li>
+        <li><span class="math">α<sub>k</sub></span> は複素数で、<span class="math">A<sub>1</sub></span> の成分から求められる</li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.10.1 量子と古典の分担 -->
+<section class="slide" data-id="qc4">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展：量子コンピュータを使って任意の 2ⁿ 次正方行列のかけ算を計算する</div>
+  <h2>量子で 4 回計算し、古典で足し合わせる<small>8.10.1（p.219）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)">
+    <div class="card pop"><svg class="gsim" id="q4Svg" viewBox="0 0 600 400"></svg></div>
+    <div class="col">
+      <div class="eqtx pop" style="--d:.1s;font-size:21px;text-align:left">A<sub>1</sub>|φ⟩ = <span class="eq inline"><span class="frac"><span>a + d</span><span>2</span></span></span><u class="wv">I|φ⟩</u> + <span class="eq inline"><span class="frac"><span>b + c</span><span>2</span></span></span><u class="wv">X|φ⟩</u><br>　+ <span class="eq inline"><span class="frac"><span>b − c</span><span>2</span></span></span>i<u class="wv">Y|φ⟩</u> + <span class="eq inline"><span class="frac"><span>a − d</span><span>2</span></span></span><u class="wv">Z|φ⟩</u></div>
+      <ul class="plain pop" style="--d:.2s">
+        <li>波線の部分は <b class="k">量子コンピュータ</b> で計算できる</li>
+        <li>その結果に数をかけて足すのは <b class="kb">古典コンピュータ</b></li>
+        <li>波線が 4 か所なので、量子コンピュータで <b class="k">4 回</b> 計算する</li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.10.2–8.10.3 -->
+<section class="slide" data-id="a2">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展：量子コンピュータを使って任意の 2ⁿ 次正方行列のかけ算を計算する</div>
+  <h2>4 次正方行列は σ ⊗ σ の 16 通りで表す<small>8.10.2・8.10.3（pp.220–221）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)">
+    <div class="card pop"><div class="mp-lbl">σ<sub>k₁</sub> ⊗ σ<sub>k₂</sub>（どれもユニタリ行列）</div><div class="a2g" id="a2G"></div></div>
+    <div class="col">
+      <div class="thm6 pop" style="--d:.1s;font-size:18px;padding-top:18px"><span class="thm-t">定理 8.2</span><span class="math">U<sub>i</sub>, V<sub>i</sub></span>：2 × 2 のユニタリ行列、<span class="math">|φ⟩</span>：n 量子ビットの量子状態
+        <div class="math" style="font-size:18px">(1) (U<sub>1</sub> ⊗ V<sub>1</sub> + U<sub>2</sub> ⊗ V<sub>2</sub>)|φ⟩ = U<sub>1</sub> ⊗ V<sub>1</sub>|φ⟩ + U<sub>2</sub> ⊗ V<sub>2</sub>|φ⟩<br>(2) (U<sub>1</sub> ⊗ V<sub>1</sub> + ⋯ + U<sub>n</sub> ⊗ V<sub>n</sub>)|φ⟩ = U<sub>1</sub> ⊗ V<sub>1</sub>|φ⟩ + ⋯ + U<sub>n</sub> ⊗ V<sub>n</sub>|φ⟩</div>
+      </div>
+      <div class="eqtx pop" style="--d:.2s;font-size:21px">A<sub>2</sub>|φ⟩ = <span class="sig"><sup>3</sup>Σ<sub>k₁=0</sub></span><span class="sig"><sup>3</sup>Σ<sub>k₂=0</sub></span> α<sub>k₁,k₂</sub> <u class="wv">(σ<sub>k₁</sub> ⊗ σ<sub>k₂</sub>|φ⟩)</u></div>
+      <div class="point blue pop" style="--d:.3s;font-size:20px">σ が 4 種類、Σ が 2 個あるので、量子コンピュータで <b class="kb">4² = 16 回</b> 計算する</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.10.4 -->
+<section class="slide" data-id="an">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展：量子コンピュータを使って任意の 2ⁿ 次正方行列のかけ算を計算する</div>
+  <h2>n 量子ビットでは 4ⁿ 回の計算が必要<small>8.10.4（pp.221–222）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+    <div class="card pop an-card">
+      <div class="ue-lbl" id="anLbl"></div>
+      <div class="an-dots" id="anDots"></div>
+      <div id="anStp"></div>
+    </div>
+    <div class="col">
+      <div class="eqtx pop" style="--d:.1s;font-size:20px">A<sub>n</sub> = <span class="sig"><sup>3</sup>Σ<sub>k₁=0</sub></span> ⋯ <span class="sig"><sup>3</sup>Σ<sub>kₙ=0</sub></span> α<sub>k₁,…,kₙ</sub> σ<sub>k₁</sub> ⊗ ⋯ ⊗ σ<sub>kₙ</sub></div>
+      <ul class="plain pop" style="--d:.2s">
+        <li>Σ が n 個あるので、量子コンピュータで <b class="k">4ⁿ 回</b>（指数関数的）の計算が必要</li>
+        <li>現実的な時間で計算するには「<span class="math">A<sub>n</sub></span> を <b class="kb">少ない個数の和</b> で表せる」などの前提が必要</li>
+        <li>ハミルトニアンを使う量子アルゴリズム：<b>VQE</b>（変分量子固有値法）、<b>QAOA</b>（量子近似最適化アルゴリズム）</li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- まとめ -->
+<section class="slide" data-id="sum8">
+  <div class="chap">Summary ／ 第8章</div>
+  <h2>第8章のまとめ<small>8.3〜8.10（pp.196–222）</small></h2>
+  <div class="body sumlist">
+    <div class="sl pop" style="--d:0s;--c:var(--blue)"><span class="sl-n">1</span><div>測定値は確率で決まり、状態も変わる。ユニタリ発展は <b class="k">2ⁿ × 2ⁿ</b> のユニタリ行列</div></div>
+    <div class="sl pop" style="--d:.05s;--c:var(--pink)"><span class="sl-n">2</span><div>一部の測定は 3 ステップ：<b>項をまとめる → 係数の 2 乗和が確率 → 確率の平方根で割る</b></div></div>
+    <div class="sl pop" style="--d:.1s;--c:var(--green)"><span class="sl-n">3</span><div>2 × 2 のテンソル積に分ければ計算が楽（定理 8.1）。<b>H<sub>0</sub></b>・<b>H<sup>⊗n</sup></b> と書く</div></div>
+    <div class="sl pop" style="--d:.15s;--c:var(--accent)"><span class="sl-n">4</span><div><b class="k">トフォリ（CCNOT）</b>：制御 2 つが |1⟩ なら反転（AND になる）。<b class="k">フレドキン（CSWAP）</b>：制御が |1⟩ なら入れ替え</div></div>
+    <div class="sl pop" style="--d:.2s;--c:var(--purple)"><span class="sl-n">5</span><div>重ね合わせなら 2ⁿ 個の状態に一度に計算できるが、測定で得られるのは 1 個だけ。CNOT で <b>x ⊕ y</b>、オラクル <b>U<sub>f</sub></b></div></div>
+    <div class="sl pop" style="--d:.25s;--c:var(--gold)"><span class="sl-n">6</span><div>任意の行列もパウリ行列のテンソル積の和で表せば、量子と古典の分担で計算できる（<b>4ⁿ 回</b>）</div></div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 復習問題 -->
+<section class="slide" data-id="quiz8">
+  <div class="chap">Practice ／ 第8章</div>
+  <h2>復習問題<small>クリックで答え</small><button class="b qz-all" data-quiz-all>答えをぜんぶ表示</button></h2>
+  <div class="body quiz q8">
+    <div class="qz pop"><div class="qz-q"><span class="qz-no">Q1</span><span><span class="math nw"><span class="eq inline"><span class="frac"><span>1</span><span>√10</span></span></span>|000⟩ + <span class="eq inline"><span class="frac"><span>3</span><span>√10</span></span></span>|111⟩</span> を測定したとき、<span class="math">|111⟩</span> を得る確率と、測定後の状態は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">確率 <b class="math"><span class="eq inline"><span class="frac"><span>9</span><span>10</span></span></span></b>（<span class="math nw">|3/√10|² = 9/10</span> なので）。測定後は <b class="math">|111⟩</b></span></div></div>
+    <div class="qz pop" style="--d:.05s"><div class="qz-q"><span class="qz-no">Q2</span><span>4 量子ビットのユニタリ発展に使うユニタリ行列のサイズは？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b class="math">16 × 16</b>（2⁴ = 16 なので）</span></div></div>
+    <div class="qz pop" style="--d:.1s"><div class="qz-q"><span class="qz-no">Q3</span><span><span class="math nw"><span class="eq inline"><span class="frac"><span>1</span><span>√30</span></span></span>(|000⟩ + 2|011⟩ + 3|101⟩ + 4|110⟩)</span> の左の 1 量子ビットを測定して <span class="math">|0⟩</span> を得る確率と、測定後の状態は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">確率 <b class="math"><span class="eq inline"><span class="frac"><span>1</span><span>6</span></span></span></b>（(1² + 2²)/30 = 5/30 なので）。測定後は <b class="math nw"><span class="eq inline"><span class="frac"><span>1</span><span>√5</span></span></span>(|000⟩ + 2|011⟩)</b></span></div></div>
+    <div class="qz pop" style="--d:.15s"><div class="qz-q"><span class="qz-no">Q4</span><span><span class="math nw">(Z ⊗ X ⊗ X)(|1⟩ ⊗ |0⟩ ⊗ |1⟩)</span> は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><span class="math nw">Z|1⟩ ⊗ X|0⟩ ⊗ X|1⟩</span> = <b class="math nw">−|1⟩ ⊗ |1⟩ ⊗ |0⟩</b>（定理 8.1 で分けられるので）</span></div></div>
+    <div class="qz pop" style="--d:.2s"><div class="qz-q"><span class="qz-no">Q5</span><span><span class="math nw">CCNOT(|1⟩ ⊗ |1⟩ ⊗ |1⟩)</span> と <span class="math nw">CSWAP(|1⟩ ⊗ |1⟩ ⊗ |0⟩)</span> は？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b class="math nw">|1⟩ ⊗ |1⟩ ⊗ |0⟩</b>（制御ビットが 2 つとも |1⟩ なので反転）と <b class="math nw">|1⟩ ⊗ |0⟩ ⊗ |1⟩</b>（制御ビットが |1⟩ なので入れ替え）</span></div></div>
+    <div class="qz pop" style="--d:.25s"><div class="qz-q"><span class="qz-no">Q6</span><span><span class="math nw">A<sub>1</sub> = </span><span class="eq inline"><span class="vec m2"><span>2</span><span>1</span><span>1</span><span>0</span></span></span> を I・X・Y・Z で表すと？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b class="math nw">I + X + Z</b>（α<sub>0</sub> = (2+0)/2 = 1, α<sub>1</sub> = (1+1)/2 = 1, α<sub>2</sub> = 0, α<sub>3</sub> = (2−0)/2 = 1 なので）</span></div></div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+</div></div>
+<div id="ui">
+  <button id="btnPrev">◀</button><span id="counter"></span><button id="btnNext">▶</button>
+  <button id="btnFs">全画面 (F)</button>
+  <button id="btnOv">一覧 (O)</button>
+  <span>← → / Space でページ送り</span>
+</div>
+<div id="progress"></div>
+<div id="penbar" aria-label="ペンの道具">
+  <button data-tool="none" class="on" title="普通のカーソル（文字の選択・コピーができる）">🖱️ カーソル</button>
+  <button data-tool="laser" title="レーザーポインター（書き込みは残らない）">🔴 レーザー</button>
+  <button data-tool="pen" title="黒ペンで書き込む (P)">✏️ 黒ペン</button>
+  <button data-tool="eraser" title="消しゴム（なぞった線を消す）">🧽 消す</button>
+  <button data-tool="lasso" title="投げ縄：書き込みを囲んで選択・移動・複製 (L)">➰ 投げ縄</button>
+  <button id="inkPaste" title="コピーした書き込みを貼り付け (V)" disabled>📌 貼り付け</button>
+  <span class="sep"></span>
+  <button id="inkUndo" title="元に戻す (Z)">↩️</button>
+  <button id="inkClear" title="このスライドの書き込みを全部消す">🗑️</button>
+</div>
+<script>
+const NS = 'http://www.w3.org/2000/svg';
+const $ = s => (typeof s === 'string' ? document.querySelector(s) : s);
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+// "q_{0}" 形式の下付き文字に対応した SVG テキスト
+function rich(t, str) {
+  t.textContent = '';
+  str.split(/(_\{[^}]*\})/).forEach(part => {
+    if (!part) return;
+    const m = part.match(/^_\{([^}]*)\}$/);
+    if (m) { el('tspan', { dy: 6, 'font-size': '68%' }, t).textContent = m[1]; el('tspan', { dy: -6 }, t).textContent = '​'; }
+    else el('tspan', {}, t).textContent = part;
+  });
+  return t;
+}
+const text = (parent, x, y, str, attrs = {}) => rich(el('text', { x, y, ...attrs }, parent), str);
+const stoppers = [];
+window.onEnter = window.onEnter || {};
+
+/* ---------- 共通：ボタン・タイマー ---------- */
+function looper(btn, step, interval) {
+  btn = $(btn);
+  let t = null;
+  const stop = () => { clearInterval(t); t = null; btn.textContent = '▶ 自動再生'; btn.classList.remove('playing'); };
+  btn.addEventListener('click', () => {
+    btn.blur();
+    if (t) return stop();
+    btn.textContent = '■ 停止'; btn.classList.add('playing');
+    step(); t = setInterval(step, interval);
+  });
+  stoppers.push(stop);
+  return stop;
+}
+function timerBag() {
+  let ts = [];
+  const bag = { later(f, ms) { ts.push(setTimeout(f, ms)); }, clear() { ts.forEach(clearTimeout); ts = []; } };
+  stoppers.push(bag.clear);
+  return bag;
+}
+function picker(root, items, onPick) {
+  root = $(root);
+  const lab = root.dataset.label;
+  root.innerHTML = (lab ? `<span class="pk-l">${lab}</span>` : '') +
+    items.map((it, i) => `<button data-i="${i}">${it.label}</button>`).join('');
+  const bs = [...root.querySelectorAll('button')];
+  let cur = -1;
+  const set = (i, user = false) => { cur = i; bs.forEach((b, j) => b.classList.toggle('on', i === j)); onPick(items[i], i, user); };
+  bs.forEach((b, i) => b.addEventListener('click', e => { e.currentTarget.blur(); set(i, true); }));
+  set.cur = () => cur;
+  return set;
+}
+// タブ（data-m を持つボタン）
+function tabs(root, onPick) {
+  root = $(root);
+  const bs = [...root.querySelectorAll('button')];
+  let cur = 0;
+  const set = (m, user) => { cur = m; bs.forEach(b => b.classList.toggle('on', +b.dataset.m === m)); onPick(m, user); };
+  bs.forEach(b => b.addEventListener('click', e => { e.currentTarget.blur(); set(+b.dataset.m, true); }));
+  set.cur = () => cur;
+  return set;
+}
+const rnd = a => a[Math.floor(Math.random() * a.length)];
+const replay = (e, cls) => { e.classList.remove(cls); void e.offsetWidth; e.classList.add(cls); };
+
+/* ---------- 共通：数・ベクトル・行列 ---------- */
+const s2 = Math.SQRT1_2;
+const near = (a, b) => Math.abs(a - b) < 1e-6;
+const FR = (n, d) => `<span class="frac"><span>${n}</span><span>${d}</span></span>`;
+const R2 = `<span class="eq inline">${FR(1, '√2')}</span>`;
+function fmtN(x) {
+  if (near(x, 1)) return '1'; if (near(x, 0)) return '0'; if (near(x, .5)) return '½';
+  if (near(x, s2)) return FR(1, '√2');
+  if (Number.isInteger(x)) return '' + x;
+  return x.toFixed(2);
+}
+const sgn = x => (Math.abs(x) < 1e-9 ? '0' : x < 0 ? '−' + fmtN(-x) : fmtN(x));
+const fmtS = x => (Math.abs(x) < 5e-3 ? '0' : (x < 0 ? '−' : '+') + Math.abs(x).toFixed(2));
+const vecN = (...xs) => `<span class="vec">${xs.map(x => `<span>${x}</span>`).join('')}</span>`;
+const matN = (m, cls = '', cell = () => '') => `<span class="vec ${m.length === 4 ? 'm4' : 'm2'} ${cls}">${m.map((r, i) => r.map((v, j) => `<span class="${cell(i, j)}">${v}</span>`).join('')).join('')}</span>`;
+const KETS = ['|00⟩', '|01⟩', '|10⟩', '|11⟩'];
+const coefH = a => (near(a, s2) ? R2 : near(a, .5) ? '½' : a.toFixed(2));
+// 係数がそろっていれば  1/√2(|00⟩ + |11⟩)  のようにくくり出す
+function ketF(v, kets = KETS, dec = false) {
+  const t = v.map((c, i) => [c, i]).filter(([c]) => Math.abs(c) > 1e-9);
+  if (!t.length) return '0';
+  const co = a => (dec ? a.toFixed(2) : coefH(a));
+  const m = Math.abs(t[0][0]);
+  if (!dec && t.length > 1 && !near(m, 1) && t.every(([c]) => near(Math.abs(c), m)))
+    return `${co(m)}(${t.map(([c, i], j) => (j ? (c < 0 ? ' − ' : ' + ') : (c < 0 ? '−' : '')) + kets[i]).join('')})`;
+  return t.map(([c, i], j) => { const a = Math.abs(c); return (c < 0 ? (j ? ' − ' : '−') : (j ? ' + ' : '')) + (near(a, 1) ? '' : co(a)) + kets[i]; }).join('');
+}
+const kron = (A, B) => [0, 1, 2, 3].map(r => [0, 1, 2, 3].map(c => A[r >> 1][c >> 1] * B[r & 1][c & 1]));
+const kv = (a, b) => [a[0] * b[0], a[0] * b[1], a[1] * b[0], a[1] * b[1]];
+const mv = (M, v) => M.map(r => r.reduce((s, x, j) => s + x * v[j], 0));
+const G1 = { I: [[1, 0], [0, 1]], X: [[0, 1], [1, 0]], Z: [[1, 0], [0, -1]], H: [[s2, s2], [s2, -s2]] };
+const ST1 = { '|0⟩': [1, 0], '|1⟩': [0, 1], '|+⟩': [s2, s2], '|−⟩': [s2, -s2] };
+const CNOT01 = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]];
+const CNOT10 = [[1, 0, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0], [0, 1, 0, 0]];
+const SWAPM = [[1, 0, 0, 0], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 0, 1]];
+const BELL = [s2, 0, 0, s2];
+const sample4 = v => { let r = Math.random(), i = 0; for (; i < 3; i++) { r -= v[i] * v[i]; if (r < 0) break; } return i; };
+const binom = (n, p) => { let k = 0; for (let i = 0; i < n; i++) if (Math.random() < p) k++; return k; };
+const name1 = v => Object.keys(ST1).find(k => near(ST1[k][0], v[0]) && near(ST1[k][1], v[1])) || null;
+const vec2H = v => vecN(sgn(v[0]), sgn(v[1]));
+const vec4H = v => vecN(...v.map(sgn));
+
+/* ---------- 共通：SVG の量子回路 ----------
+   ops: {g:'H'|'X'|'Z'|'I'|'SX'|'RZ', q, col} / {g:'CX', c(配列可), t, col} / {g:'SW', a, b, c?, col}
+        {g:'M', q, cb, col} / {g:'BAR', col} / {g:'BOX', c0, c1, label, init?, toC?}
+   k を指定すると set(k) で「済み・実行中・これから」を切り替えられる（省略時は col） */
+const GC = { H: 'var(--blue)', X: 'var(--accent)', Z: 'var(--green)', I: '#9a93bd', SX: 'var(--purple)', RZ: 'var(--teal)' };
+function drawQC(root, o) {
+  root = $(root);
+  root.innerHTML = '';
+  const n = o.n, nc = o.nc || 0, cw = o.colW || 62, rh = o.rowH || 56, top = o.top ?? 30, latex = o.style === 'latex';
+  const ops = o.ops;
+  const ncol = o.cols ?? Math.max(1, ...ops.map(p => (p.c1 ?? p.col ?? 0) + 1));
+  const L0 = (o.noNames ? 12 : 48) + (o.init ? 42 : 0);
+  const X = c => L0 + 18 + c * cw + cw / 2;
+  const Y = q => top + q * rh;
+  const cy = Y(n - 1) + rh * .92;
+  const W = o.W || X(ncol - 1) + cw / 2 + 22;
+  const H = (nc ? cy + 28 : Y(n - 1) + 30) + (o.bottom || 0);
+  const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, class: 'qcs' }, root);
+  if (o.maxW) svg.style.maxWidth = o.maxW;
+  if (o.maxW) svg.style.margin = '0 auto';
+  const gHl = el('g', {}, svg);
+  const items = [];
+  const grp = k => { const g = el('g', { class: 'op' }, svg); g._k = k; items.push(g); return g; };
+  const base = grp(-Infinity);
+  for (let q = 0; q < n; q++) {
+    if (!o.noNames) text(base, 6, Y(q) + 7, (o.names || [])[q] ?? `q_{${q}}`, { class: 'nm' });
+    if (o.init) text(base, L0 - 40, Y(q) + 7, '|0⟩', { class: 'init' });
+    el('line', { x1: L0, y1: Y(q), x2: W - 6, y2: Y(q), class: 'w' }, base);
+  }
+  if (nc) {
+    const g = grp(o.cK ?? -Infinity);
+    el('line', { x1: L0, y1: cy - 2.5, x2: W - 6, y2: cy - 2.5, class: 'cw' }, g);
+    el('line', { x1: L0, y1: cy + 2.5, x2: W - 6, y2: cy + 2.5, class: 'cw' }, g);
+    if (!o.noNames) text(g, 6, cy + 7, o.cname || 'c', { class: 'nm', 'font-style': o.cname ? 'normal' : 'italic', 'font-size': o.cname ? 17 : 22 });
+    el('line', { x1: L0 + 10, y1: cy + 9, x2: L0 + 22, y2: cy - 9, class: 'cw' }, g);
+    text(g, L0 + 16, cy - 12, '' + nc, { class: 'cbn', 'text-anchor': 'middle', 'font-size': 13 });
+  }
+  const gate = (g, x, y, p) => {
+    const fill = latex ? '#fff' : (GC[p.g] || '#9a93bd');
+    el('rect', { x: x - 20, y: y - 20, width: 40, height: 40, rx: latex ? 2 : 6, class: 'gb', style: `fill:${fill}` }, g);
+    const tc = latex ? 'fill:#1f1a3d;font-style:italic' : '';
+    if (p.g === 'RZ') {
+      text(g, x, y - 5, 'R_{Z}', { class: 'gt', style: tc + ';font-size:16px' });
+      text(g, x, y + 12, p.arg || 'π/2', { class: 'gt g-sm', style: tc + ';font-size:10px' });
+    } else text(g, x, y + 1, p.label || (p.g === 'SX' ? '√X' : p.g), { class: 'gt' + (p.g === 'SX' ? ' g-sm' : ''), style: tc + (p.g === 'SX' ? ';font-size:16px' : '') });
+  };
+  for (const p of ops) {
+    const g = grp(p.k ?? p.col ?? 0), x = X(p.col ?? 0);
+    if (G1[p.g] || GC[p.g]) gate(g, x, Y(p.q), p);
+    else if (p.g === 'CX') {
+      const cs = [].concat(p.c), all = [...cs, p.t].map(Y);
+      el('line', { x1: x, y1: Math.min(...all), x2: x, y2: Math.max(...all), class: 'vl' }, g);
+      cs.forEach(c => el('circle', { cx: x, cy: Y(c), r: 7, class: 'ctl' }, g));
+      const ty = Y(p.t);
+      el('circle', { cx: x, cy: ty, r: 14, class: 'tgt' }, g);
+      el('line', { x1: x - 14, y1: ty, x2: x + 14, y2: ty, class: 'vl' }, g);
+      el('line', { x1: x, y1: ty - 14, x2: x, y2: ty + 14, class: 'vl' }, g);
+    } else if (p.g === 'SW') {
+      const ys = [p.a, p.b, ...(p.c !== undefined ? [p.c] : [])].map(Y);
+      el('line', { x1: x, y1: Math.min(...ys), x2: x, y2: Math.max(...ys), class: 'vl' }, g);
+      [p.a, p.b].forEach(q => { const y = Y(q); el('path', { d: `M${x - 9},${y - 9}L${x + 9},${y + 9}M${x + 9},${y - 9}L${x - 9},${y + 9}`, class: 'sx' }, g); });
+      if (p.c !== undefined) el('circle', { cx: x, cy: Y(p.c), r: 7, class: 'ctl' }, g);
+    } else if (p.g === 'M') {
+      const y = Y(p.q);
+      if (nc && p.cb !== undefined) {
+        el('line', { x1: x - 2.5, y1: y + 20, x2: x - 2.5, y2: cy - 9, class: 'ma' }, g);
+        el('line', { x1: x + 2.5, y1: y + 20, x2: x + 2.5, y2: cy - 9, class: 'ma' }, g);
+        el('path', { d: `M${x - 8},${cy - 11}L${x + 8},${cy - 11}L${x},${cy - 1}Z`, class: 'mah' }, g);
+        text(g, x + 9, cy + 20, '' + p.cb, { class: 'cbn' });
+      }
+      el('rect', { x: x - 20, y: y - 20, width: 40, height: 40, rx: latex ? 2 : 6, class: 'mbox', style: latex ? 'fill:#fff' : '' }, g);
+      el('path', { d: `M${x - 13},${y + 9}A13,13 0 0 1 ${x + 13},${y + 9}M${x},${y + 9}L${x + 9},${y - 8}`, class: 'mi', style: latex ? 'stroke:#1f1a3d' : '' }, g);
+    } else if (p.g === 'BAR') {
+      el('rect', { x: x - 9, y: Y(0) - 24, width: 18, height: Y(n - 1) - Y(0) + 48, class: 'bar' }, g);
+      el('line', { x1: x, y1: Y(0) - 24, x2: x, y2: Y(n - 1) + 24, class: 'barl' }, g);
+    } else if (p.g === 'BOX') {
+      const x0 = p.init ? L0 - 44 : X(p.c0) - cw / 2 + 3, x1 = p.init ? L0 + 4 : X(p.c1) + cw / 2 - 3;
+      const y0 = Y(p.q0 ?? 0) - 25, y1 = p.toC ? cy + 6 : Y(p.q1 ?? n - 1) + 25;
+      el('rect', { x: x0, y: y0, width: x1 - x0, height: y1 - y0, rx: 4, class: 'box' }, g);
+      if (p.label) text(g, (x0 + x1) / 2, y0 - 6, p.label, { class: 'boxl' });
+    }
+  }
+  return {
+    svg, X, Y, cy, W, H, L0, cw, rh,
+    set(k, hide = false) {
+      items.forEach(g => {
+        const kk = g._k;
+        g.classList.toggle('now', kk === k);
+        g.classList.toggle(hide ? 'hid' : 'fut', kk > k);
+        g.classList.remove(hide ? 'fut' : 'hid');
+      });
+    },
+    hl(x, y, w, h) { return el('rect', { x, y, width: w, height: h, class: 'hl' }, gHl); },
+  };
+}
+
+window.onEnter = window.onEnter || {};
+/* =====================================================================
+   第8章 n 量子ビットの世界 ― スライド固有のスクリプト
+   ===================================================================== */
+const FI = (n, d) => `<span class="eq inline">${FR(n, d)}</span>`;
+const MINUS = x => String(x).replace('-', '−');
+
+/* ---------- 共通：ステップ再生（▶ 自動再生・◀・●●●・▶）。図の下に説明文は付けない ---------- */
+function stepper(root, n, show, ms = 1700) {
+  root = $(root);
+  root.classList.add('stpr');
+  root.innerHTML = `<button class="b" data-autoplay>▶ 自動再生</button><button class="sb">◀</button><span class="dots">${'<i></i>'.repeat(n)}</span><button class="sb">▶</button>`;
+  const [play, pv, nx] = root.querySelectorAll('button'), dots = [...root.querySelectorAll('.dots i')];
+  let k = 0, t = null;
+  const set = i => { k = (i + n) % n; dots.forEach((d, j) => d.classList.toggle('on', j <= k)); show(k); };
+  const stop = () => { clearInterval(t); t = null; play.textContent = '▶ 自動再生'; play.classList.remove('playing'); };
+  play.addEventListener('click', () => {
+    play.blur();
+    if (t) return stop();
+    play.textContent = '■ 停止'; play.classList.add('playing');
+    set(0); t = setInterval(() => set(k + 1), ms);
+  });
+  pv.addEventListener('click', () => { pv.blur(); stop(); set(k - 1); });
+  nx.addEventListener('click', () => { nx.blur(); stop(); set(k + 1); });
+  dots.forEach((d, j) => d.addEventListener('click', () => { stop(); set(j); }));
+  stoppers.push(stop);
+  set(n - 1);
+  return { set, stop };
+}
+
+/* ---------- 共通：行列・ベクトル ---------- */
+const kronM = (A, B) => A.flatMap(ra => B.map(rb => ra.flatMap(a => rb.map(b => a * b))));
+const matH = (M, cls, mark = () => '') => `<span class="vec ${cls}">${M.map((r, i) => r.map((v, j) => `<span class="${mark(i, j, v)}">${MINUS(v)}</span>`).join('')).join('')}</span>`;
+const colH = (v, mark = () => '') => `<span class="vec col8">${v.map((x, i) => `<span class="${mark(i, x)}">${MINUS(x)}</span>`).join('')}</span>`;
+const bits = (i, n) => i.toString(2).padStart(n, '0');
+
+/* ---------- 8.3 測定 ---------- */
+{
+  const keys = ['|00⋯0⟩', '|11⋯1⟩'], P = [.2, .8], cnt = [0, 0];
+  $('#msState').innerHTML = `<span>|φ⟩ = ${FI(1, '√5')}|00⋯0⟩ + ${FI(2, '√5')}|11⋯1⟩</span>`;
+  $('#msBars').innerHTML = keys.map((k, i) => `<span class="k">${k}</span><span class="box"><i></i></span><span class="v"></span>`).join('');
+  const bars = [...$('#msBars').querySelectorAll('.box i')], vs = [...$('#msBars').querySelectorAll('.v')], ks = [...$('#msBars').querySelectorAll('.k')];
+  const draw = p => p.forEach((x, i) => { bars[i].style.width = x * 100 + '%'; vs[i].textContent = x.toFixed(1); });
+  const reset = () => { draw(P); ks.forEach(k => k.style.color = ''); $('#msRes').innerHTML = `確率 <span class="math">|1/√5|² = 0.2</span> と <span class="math">|2/√5|² = 0.8</span>`; };
+  const showCnt = () => { $('#msCnt').textContent = cnt[0] + cnt[1] ? `これまでの測定：${keys[0]} ${cnt[0]} 回 ／ ${keys[1]} ${cnt[1]} 回` : ''; };
+  $('#msGo').onclick = e => {
+    e.currentTarget.blur();
+    const r = Math.random() < P[0] ? 0 : 1;
+    cnt[r]++; showCnt();
+    draw(r ? [0, 1] : [1, 0]);
+    ks.forEach((k, i) => k.style.color = i === r ? 'var(--accent-d)' : '');
+    $('#msRes').innerHTML = `測定値 <span class="math">${keys[r]}</span> → 状態も <span class="math">${keys[r]}</span> に変化`;
+  };
+  $('#msBack').onclick = e => { e.currentTarget.blur(); reset(); };
+  onEnter.ms = () => { cnt[0] = cnt[1] = 0; showCnt(); reset(); };
+  reset();
+}
+
+/* ---------- 8.4 ユニタリ発展：2ⁿ × 2ⁿ のマス目 ---------- */
+{
+  const g = $('#ueGrid');
+  stepper('#ueStp', 5, k => {
+    const n = k + 1, s = 2 ** n;
+    g.style.gridTemplateColumns = `repeat(${s},1fr)`;
+    g.innerHTML = '<i></i>'.repeat(s * s);
+    $('#ueLbl').innerHTML = `n = ${n} → <b>${s} × ${s}</b> 行列（成分 ${s * s} 個）`;
+  }, 1500);
+}
+
+/* ---------- 8.5 一部の量子ビットの測定 ---------- */
+function partial(id, m) {
+  const T = [['000', 1], ['001', 2], ['010', 3], ['110', 4], ['111', 5]], N = 55;
+  const GC8 = ['var(--accent)', 'var(--blue)', 'var(--green)', 'var(--purple)'];
+  const term = ([k, c], col = true) => `${c === 1 ? '' : c}|${col ? `<u>${k.slice(0, m)}</u>` : k.slice(0, m)}${k.slice(m)}⟩`;
+  $(`#${id}St`).innerHTML = `<span>|φ⟩ = ${FI(1, '√55')}(${T.map(([k, c]) => `${c === 1 ? '' : c}|<span class="t" style="color:${GC8[parseInt(k.slice(0, m), 2)]};font-weight:900">${k.slice(0, m)}</span>${k.slice(m)}⟩`).join(' + ')})</span>`;
+  const groups = [...Array(2 ** m)].map((_, p) => {
+    const pre = bits(p, m), ts = T.filter(([k]) => k.startsWith(pre)), S = ts.reduce((s, [, c]) => s + c * c, 0);
+    const state = !ts.length ? '—' : ts.length === 1 ? `|${ts[0][0]}⟩` : `${FI(1, '√' + S)}(${ts.map(t => term(t, false)).join(' + ')})`;
+    return { pre, ts, S, html: `<div class="pmg" style="--gc:${GC8[p]}"><div class="gh">左側が |${pre}⟩</div>
+      <div class="gt">${ts.length ? ts.map(t => `<span class="term">${term(t)}</span>`).join('') : '<span class="none">項がない</span>'}</div>
+      <div class="gp"><span class="lab">確率</span>${ts.length ? `${FI(ts.map(([, c]) => c + '²').join(' + '), N)} = <b>${FI(S, N)}</b>` : '<b>0</b>'}</div>
+      <div class="gs"><span class="lab">測定後の状態</span>${state}</div></div>` };
+  });
+  const box = $(`#${id}G`);
+  box.innerHTML = groups.map(g => g.html).join('');
+  const els = [...box.children], card = box.closest('.pm-card');
+  const st = stepper(`#${id}Stp`, 3, k => {
+    card.classList.remove('s0', 's1', 's2'); card.classList.add('s' + k);
+    els.forEach(e => e.classList.remove('hit', 'miss'));
+  }, 1900);
+  $(`#${id}Go`).onclick = e => {
+    e.currentTarget.blur(); st.stop(); st.set(2);
+    let r = Math.random() * N, i = 0;
+    for (; i < groups.length - 1; i++) { r -= groups[i].S; if (r < 0) break; }
+    while (!groups[i].S) i--;
+    els.forEach((el, j) => { el.classList.toggle('hit', j === i); el.classList.toggle('miss', j !== i); });
+  };
+}
+partial('pm1', 1);
+partial('pm2', 2);
+
+/* ---------- 8.6.1 8 × 8 行列 と 2 × 2 行列 ---------- */
+{
+  const X = [[0, 1], [1, 0]], Z = [[1, 0], [0, -1]];
+  const M = kronM(kronM(X, X), Z), e = [0, 0, 0, 0, 0, 1, 0, 0], r = M.map(row => row[5]);
+  $('#tpBig').innerHTML = `<span>(X ⊗ X ⊗ Z)|101⟩ =</span>${matH(M, 'm8', (i, j, v) => (j === 5 ? (v ? 'hx' : 'hc') : ''))}${colH(e, (i, x) => (x ? 'hx' : ''))}<span>=</span>${colH(r, (i, x) => (x ? 'hx' : ''))}<span>= <span class="res">−|011⟩</span></span>`;
+}
+
+/* ---------- 8.6.2 記法 ---------- */
+drawQC('#ntA', { n: 4, ops: [{ g: 'H', q: 0, col: 0 }], colW: 70, maxW: '200px' });
+drawQC('#ntB', { n: 4, ops: [0, 1, 2, 3].map(q => ({ g: 'H', q, col: 0 })), colW: 70, maxW: '200px' });
+
+/* ---------- 8.7・8.9 動く回路（入力の丸をクリックで 0 / 1） ---------- */
+function gsim(o) {
+  const svg = $(o.svg), n = o.n, Y = o.Y, XI = 74, XG = o.XG || 270, XO = 450, W = 560, H = Y[n - 1] + (o.bottom || 40);
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const tb = timerBag();
+  el('text', { x: XI, y: 18, class: 'lbl', 'text-anchor': 'middle' }, svg).textContent = '入力';
+  el('text', { x: XO + 24, y: 18, class: 'lbl', 'text-anchor': 'middle' }, svg).textContent = '出力';
+  const w1 = [], w2 = [];
+  for (let q = 0; q < n; q++) {
+    text(svg, 6, Y[q] + 7, o.names ? o.names[q] : `q_{${q}}`, { class: 'nm' });
+    w1.push(el('line', { x1: XI, y1: Y[q], x2: XG, y2: Y[q], class: 'w' }, svg));
+    w2.push(el('line', { x1: XG, y1: Y[q], x2: XO, y2: Y[q], class: 'w' }, svg));
+    if (o.inLab && o.inLab[q]) el('text', { x: XI + 34, y: Y[q] - 12, class: 'lbl' }, svg).textContent = o.inLab[q];
+    if (o.outLab && o.outLab[q]) el('text', { x: XO + 58, y: Y[q] + 6, class: 'lbl', style: 'font-size:18px;fill:var(--ink)' }, svg).textContent = o.outLab[q];
+  }
+  const gate = el('g', { class: 'gate' }, svg);
+  o.draw(gate, XG, Y);
+  let v = o.cases[o.start || 0].slice();
+  const inp = Y.map((y, q) => {
+    const fix = o.fixed && o.fixed[q] !== undefined;
+    const g = el('g', { class: 'inp' + (fix ? ' fix' : '') }, svg);
+    el('circle', { cx: XI, cy: y, r: 22 }, g);
+    const t = el('text', { x: XI, y: y + 1 }, g);
+    if (!fix) g.addEventListener('click', () => { v[q] ^= 1; run(); });
+    return { g, t };
+  });
+  const out = Y.map(y => { const g = el('g', { class: 'out' }, svg); el('rect', { x: XO - 2, y: y - 20, width: 52, height: 40, rx: 10 }, g); return { g, t: el('text', { x: XO + 24, y: y + 1 }, g) }; });
+  const msg = o.msg ? el('text', { x: (XI + XO) / 2 + 20, y: H - 8, class: 'msg' }, svg) : null;
+  const tbl = $(o.tbl);
+  tbl.innerHTML = o.table(o.cases, o.f);
+  const idx = () => o.cases.findIndex(c => c.every((x, i) => x === v[i]));
+  const run = () => {
+    tb.clear();
+    const w = o.f(v), on = o.active(v);
+    inp.forEach((p, q) => { p.g.classList.toggle('one', v[q] === 1); p.t.textContent = `|${v[q]}⟩`; w1[q].classList.toggle('one', v[q] === 1); w2[q].classList.remove('one'); });
+    out.forEach(p => { p.g.classList.remove('one', 'chg'); p.t.textContent = ''; });
+    gate.classList.remove('on');
+    if (msg) msg.textContent = '';
+    const i = idx();
+    tbl.querySelectorAll('[data-i]').forEach(s => s.classList.toggle(s.tagName === 'TR' ? 'cur' : 'on', +s.dataset.i === i));
+    tb.later(() => gate.classList.toggle('on', on), 200);
+    tb.later(() => {
+      out.forEach((p, q) => { p.t.textContent = `|${w[q]}⟩`; p.g.classList.toggle('one', w[q] === 1); p.g.classList.toggle('chg', w[q] !== v[q]); w2[q].classList.toggle('one', w[q] === 1); });
+      if (msg) { const [s, c] = o.msg(v, w); msg.textContent = s; msg.setAttribute('fill', c); }
+    }, 550);
+  };
+  run();
+  let ci = o.start || 0;
+  looper(o.auto, () => { ci = (ci + 1) % o.cases.length; v = o.cases[ci].slice(); run(); }, 1900);
+}
+const all3 = [...Array(8)].map((_, i) => [i >> 2 & 1, i >> 1 & 1, i & 1]);
+const ket = a => `|${a.join('')}⟩`;
+const pairTbl = name => (cs, f) => [0, 1, 2, 3].flatMap(r => [r, r + 4]).map(i => { const a = cs[i], b = f(a), ch = a.some((x, j) => x !== b[j]); return `<span data-i="${i}">${name}${ket(a)}</span><span class="ar">=</span><span data-i="${i}" class="${ch ? 'chg' : ''}">${ket(b)}</span>`; }).join('');
+const drawCtl = (g, x, y) => el('circle', { cx: x, cy: y, r: 9, class: 'gd' }, g);
+const drawTgt = (g, x, y) => { el('circle', { cx: x, cy: y, r: 20, class: 'gt' }, g); el('path', { d: `M${x - 20},${y}H${x + 20}M${x},${y - 20}V${y + 20}`, class: 'gl' }, g); };
+const drawSw = (g, x, y) => el('path', { d: `M${x - 12},${y - 12}L${x + 12},${y + 12}M${x + 12},${y - 12}L${x - 12},${y + 12}`, class: 'gl', style: 'stroke-width:5;stroke-linecap:round' }, g);
+const toffoli = (g, x, Y) => { el('line', { x1: x, y1: Y[0], x2: x, y2: Y[2], class: 'gl' }, g); drawCtl(g, x, Y[0]); drawCtl(g, x, Y[1]); drawTgt(g, x, Y[2]); };
+const fCC = v => [v[0], v[1], v[2] ^ (v[0] & v[1])];
+const Y3 = [56, 136, 216];
+
+gsim({ svg: '#tfSvg', tbl: '#tfTbl', auto: '#tfAuto', n: 3, Y: Y3, cases: all3, start: 6, draw: toffoli, f: fCC, active: v => v[0] && v[1], table: pairTbl('CCNOT'), bottom: 30 });
+gsim({
+  svg: '#anSvg', tbl: '#anTbl', auto: '#anAuto', n: 3, Y: [50, 115, 180], cases: [[0, 0, 0], [0, 1, 0], [1, 0, 0], [1, 1, 0]], start: 3, fixed: { 2: 0 },
+  inLab: ['入力 1', '入力 2', '固定値'], outLab: ['', '', '出力'], draw: toffoli, f: fCC, active: v => v[0] && v[1], bottom: 30,
+  table: (cs, f) => `<table class="tt small"><thead><tr><th>入力 1（q<sub>0</sub>）</th><th>入力 2（q<sub>1</sub>）</th><th class="out">出力（q<sub>2</sub>）</th></tr></thead><tbody>${cs.map((c, i) => `<tr data-i="${i}"><td>|${c[0]}⟩</td><td>|${c[1]}⟩</td><td class="out ${f(c)[2] ? 'one' : ''}">|${f(c)[2]}⟩</td></tr>`).join('')}</tbody></table>`,
+});
+drawQC('#anN', { n: 4, ops: [{ g: 'CX', c: [0, 1, 2], t: 3, col: 0 }], colW: 60, rowH: 40 });
+gsim({
+  svg: '#frSvg', tbl: '#frTbl', auto: '#frAuto', n: 3, Y: Y3, cases: all3, start: 5, bottom: 30,
+  draw: (g, x, Y) => { el('line', { x1: x, y1: Y[0], x2: x, y2: Y[2], class: 'gl' }, g); drawCtl(g, x, Y[0]); drawSw(g, x, Y[1]); drawSw(g, x, Y[2]); },
+  f: v => (v[0] ? [v[0], v[2], v[1]] : v.slice()), active: v => v[0] === 1, table: pairTbl('CSWAP'),
+});
+gsim({
+  svg: '#xrSvg', tbl: '#xrTbl', auto: '#xrAuto', n: 2, Y: [60, 150], cases: [[0, 0], [0, 1], [1, 0], [1, 1]], start: 3, names: ['x', 'y'], bottom: 34,
+  outLab: ['|x⟩', '|x ⊕ y⟩'],
+  draw: (g, x, Y) => { el('line', { x1: x, y1: Y[0], x2: x, y2: Y[1], class: 'gl' }, g); drawCtl(g, x, Y[0]); drawTgt(g, x, Y[1]); },
+  f: v => [v[0], v[0] ^ v[1]], active: v => v[0] === 1,
+  table: (cs, f) => `<table class="tt small"><thead><tr><th>入力値 |x⟩</th><th>入力値 |y⟩</th><th class="out">出力値 |x ⊕ y⟩</th></tr></thead><tbody>${cs.map((c, i) => `<tr data-i="${i}"><td>|${c[0]}⟩</td><td>|${c[1]}⟩</td><td class="out ${f(c)[1] ? 'one' : ''}">|${f(c)[1]}⟩</td></tr>`).join('')}</tbody></table>`,
+});
+
+/* 8 × 8 の行列（CCNOT・CSWAP） */
+{
+  const perm = f => [...Array(8)].map((_, r) => [...Array(8)].map((_, c) => { const o = f(all3[c]); return parseInt(o.join(''), 2) === r ? 1 : 0; }));
+  const mk = (f) => { const M = perm(f); return matH(M, 'm8', (i, j, v) => (i !== j && v ? 'hp' : '')); };
+  $('#tfMat').innerHTML = mk(fCC);
+  $('#frMat').innerHTML = mk(v => (v[0] ? [v[0], v[2], v[1]] : v));
+}
+
+/* ---------- 8.8 重ね合わせ状態に CCNOT ---------- */
+function amp8(root) {
+  root = $(root);
+  root.innerHTML = [...Array(8)].map(() => '<div class="c"><span class="val"></span><div class="bar"></div></div>').join('');
+  root.insertAdjacentHTML('afterend', `<div class="amp8k">${[...Array(8)].map((_, i) => `<span>|${bits(i, 3)}⟩</span>`).join('')}</div>`);
+  const cs = [...root.children];
+  return (a, mv = -1, hit = -1) => cs.forEach((c, i) => {
+    c.querySelector('.bar').style.height = a[i] * 118 + 'px';
+    c.querySelector('.bar').style.borderWidth = a[i] ? '' : '0';
+    c.querySelector('.val').innerHTML = a[i] === 1 ? '1' : a[i] ? '½' : '';
+    c.classList.toggle('mv', i === mv); c.classList.toggle('hit', i === hit);
+  });
+}
+const S0 = [1, 0, 0, 0, 0, 0, 0, 0], S1 = [.5, 0, .5, 0, .5, 0, .5, 0], S2 = [.5, 0, .5, 0, .5, 0, 0, .5];
+{
+  const qc = drawQC('#spQC', { n: 3, init: true, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'H', q: 1, col: 0 }, { g: 'CX', c: [0, 1], t: 2, col: 1 }], colW: 80 });
+  const draw = amp8('#spAmp'), h = FI(1, 2);
+  const eqs = ['|0⟩|0⟩|0⟩ = |000⟩', `(H ⊗ H ⊗ I)|000⟩ = ${h}(|000⟩ + |010⟩ + |100⟩ + |110⟩)`, `CCNOT → ${h}(|000⟩ + |010⟩ + |100⟩ + <b style="color:var(--purple)">|111⟩</b>)`];
+  stepper('#spStp', 3, k => { qc.set(k - 1); draw([S0, S1, S2][k], k === 2 ? 7 : -1); $('#spEq').innerHTML = `<span>${eqs[k]}</span>`; }, 1900);
+}
+{
+  const draw = amp8('#sp2Amp'), reset = () => { draw(S2); $('#sp2Res').innerHTML = 'どれも確率 <span class="math">|1/2|² = 1/4</span>'; };
+  $('#sp2Go').onclick = e => {
+    e.currentTarget.blur();
+    const i = rnd([0, 2, 4, 7]), a = Array(8).fill(0); a[i] = 1;
+    draw(a, -1, i);
+    $('#sp2Res').innerHTML = `得られたのは <span class="math">|${bits(i, 3)}⟩</span> の 1 個だけ`;
+  };
+  $('#sp2Back').onclick = e => { e.currentTarget.blur(); reset(); };
+  onEnter.sp2 = reset;
+  reset();
+}
+
+/* ---------- 8.8 計算量 O(2²ⁿ) ---------- */
+{
+  const N = 10, ch = $('#cxChart');
+  ch.innerHTML = [...Array(N)].map((_, i) => `<div class="c"><div class="bar"></div><span class="n">${i + 1}</span></div>`).join('');
+  const cs = [...ch.children];
+  stepper('#cxStp', N, k => {
+    const n = k + 1;
+    cs.forEach((c, i) => { c.querySelector('.bar').style.height = i <= k ? Math.max(4 ** (i + 1) / 4 ** n * 240, 1) + 'px' : '0'; c.classList.toggle('cur', i === k); });
+    $('#cxNum').innerHTML = `n = ${n}：(2<sup>${n}</sup>)² = <b>${(4 ** n).toLocaleString()}</b> 回くらいの計算`;
+  }, 1200);
+}
+
+/* ---------- 8.9 オラクル（図 8.6） ---------- */
+{
+  const svg = $('#orSvg'), Y = [70, 160], x0 = 190, x1 = 330;
+  Y.forEach((y, q) => {
+    el('line', { x1: 80, y1: y, x2: 440, y2: y, class: 'w' }, svg);
+    el('text', { x: 70, y: y + 8, 'text-anchor': 'end', style: 'font-size:26px' }, svg).textContent = q ? '|y⟩' : '|x⟩';
+    el('text', { x: 450, y: y + 8, style: 'font-size:26px' }, svg).textContent = q ? '|y ⊕ f(x)⟩' : '|x⟩';
+  });
+  el('rect', { x: x0, y: 28, width: x1 - x0, height: 174, rx: 14, class: 'bx' }, svg);
+  rich(el('text', { x: (x0 + x1) / 2, y: 100, class: 'bxt' }, svg), 'U_{f}');
+  el('text', { x: (x0 + x1) / 2, y: 150, class: 'q' }, svg).textContent = '?';
+}
+
+/* ---------- 8.10.1 パウリ行列で 2 次正方行列を表す ---------- */
+{
+  const v = { a: 3, b: 2, c: 0, d: 1 };
+  const fh = x => { const s = x < 0 ? '−' : '', a = Math.abs(x); return Number.isInteger(a) ? s + a : s + FI(a * 2, 2); };
+  const fi = x => (x === 0 ? '0' : x === 1 ? 'i' : x === -1 ? '−i' : fh(x) + 'i');
+  const m2 = m => `<span class="vec m2">${m.flat().map(x => `<span>${fh(x)}</span>`).join('')}</span>`;
+  const render = () => {
+    const { a, b, c, d } = v, A0 = (a + d) / 2, A1 = (b + c) / 2, B = (b - c) / 2, A3 = (a - d) / 2;
+    $('#paAl').innerHTML = `<span>α<sub>0</sub> = ${fh(A0)}</span><span>α<sub>1</sub> = ${fh(A1)}</span><span>α<sub>2</sub> = ${fi(B)}</span><span>α<sub>3</sub> = ${fh(A3)}</span>`;
+    const t = (lab, m) => `<span class="t"><span class="lbl">${lab}</span>${m2(m)}</span>`;
+    $('#paSum').innerHTML = `${t('α<sub>0</sub>I', [[A0, 0], [0, A0]])}<span>+</span>${t('α<sub>1</sub>X', [[0, A1], [A1, 0]])}<span>+</span>${t('α<sub>2</sub>Y', [[0, B], [-B, 0]])}<span>+</span>${t('α<sub>3</sub>Z', [[A3, 0], [0, -A3]])}<span>=</span>${t('A<sub>1</sub>', [[A0 + A3, A1 + B], [A1 - B, A0 - A3]])}<span class="verd ok">✓</span>`;
+    $('#paIn').querySelectorAll('[data-v]').forEach(s => s.textContent = MINUS(v[s.dataset.v]));
+  };
+  $('#paIn').innerHTML = `<span>A<sub>1</sub> =</span><div class="pa-grid">${'abcd'.split('').map(k => `<div class="pa-cell"><i>${k}</i><button data-k="${k}" data-d="-1">−</button><span data-v="${k}"></span><button data-k="${k}" data-d="1">＋</button></div>`).join('')}</div>`;
+  $('#paIn').querySelectorAll('button').forEach(b => b.addEventListener('click', () => { b.blur(); v[b.dataset.k] = Math.max(-5, Math.min(5, v[b.dataset.k] + +b.dataset.d)); render(); }));
+  render();
+}
+
+/* ---------- 8.10.1 量子で 4 回、古典で足す ---------- */
+{
+  const svg = $('#q4Svg'), ys = [100, 180, 260, 340], G = ['I', 'X', 'Y', 'Z'], yc = 220;
+  el('rect', { x: 110, y: 18, width: 200, height: 370, rx: 18, style: 'fill:#fff1c2;stroke:var(--ink);stroke-width:2.5;stroke-dasharray:7 5' }, svg);
+  el('rect', { x: 330, y: 18, width: 180, height: 370, rx: 18, style: 'fill:#dfe8ff;stroke:var(--ink);stroke-width:2.5;stroke-dasharray:7 5' }, svg);
+  el('text', { x: 210, y: 50, class: 'lbl', 'text-anchor': 'middle', style: 'fill:var(--accent-d);font-size:17px' }, svg).textContent = '量子コンピュータ';
+  el('text', { x: 420, y: 50, class: 'lbl', 'text-anchor': 'middle', style: 'fill:var(--blue);font-size:17px' }, svg).textContent = '古典コンピュータ';
+  el('text', { x: 40, y: yc + 8, 'text-anchor': 'middle', style: 'font-size:26px' }, svg).textContent = '|φ⟩';
+  ys.forEach((y, k) => {
+    el('path', { d: `M66,${yc} C100,${yc} 110,${y} 140,${y}`, style: 'fill:none;stroke:var(--ink);stroke-width:2.5' }, svg);
+    el('rect', { x: 140, y: y - 24, width: 140, height: 48, rx: 10, style: 'fill:#fff;stroke:var(--ink);stroke-width:3' }, svg);
+    el('text', { x: 210, y: y + 8, 'text-anchor': 'middle', style: 'font-size:24px' }, svg).textContent = `${G[k]}|φ⟩`;
+    el('line', { x1: 280, y1: y, x2: 395, y2: y, style: 'stroke:var(--ink);stroke-width:2.5' }, svg);
+    rich(el('text', { x: 365, y: y - 8, 'text-anchor': 'middle', style: 'font-size:19px' }, svg), `×α_{${k}}`);
+    el('path', { d: `M395,${y} C415,${y} 415,${yc} 430,${yc}`, style: 'fill:none;stroke:var(--ink);stroke-width:2.5' }, svg);
+  });
+  el('circle', { cx: 452, cy: yc, r: 22, style: 'fill:#fff;stroke:var(--ink);stroke-width:3' }, svg);
+  el('text', { x: 452, y: yc + 9, 'text-anchor': 'middle', style: 'font-size:28px;font-weight:700' }, svg).textContent = '＋';
+  el('line', { x1: 474, y1: yc, x2: 522, y2: yc, style: 'stroke:var(--ink);stroke-width:2.5' }, svg);
+  rich(el('text', { x: 526, y: yc + 8, style: 'font-size:22px' }, svg), 'A_{1}|φ⟩');
+}
+
+/* ---------- 8.10.3 σ_{k1} ⊗ σ_{k2} の 16 通り ---------- */
+{
+  const G = ['I', 'X', 'Y', 'Z'];
+  $('#a2G').innerHTML = `<span></span>${G.map((g, j) => `<span class="h">k₂=${j}</span>`).join('')}` + G.map((g, i) => `<span class="h">k₁=${i}</span>${G.map(h => `<span class="t">${g} ⊗ ${h}</span>`).join('')}`).join('');
+}
+
+/* ---------- 8.10.4 4ⁿ 回 ---------- */
+{
+  const g = $('#anDots');
+  stepper('#anStp', 5, k => {
+    const n = k + 1, s = 2 ** n, sz = Math.min(44, Math.floor(320 / s) - 2);
+    g.style.gridTemplateColumns = `repeat(${s},${sz}px)`;
+    g.style.gridAutoRows = sz + 'px';
+    g.innerHTML = '<i></i>'.repeat(s * s);
+    $('#anLbl').innerHTML = `n = ${n} → 4<sup>${n}</sup> = <b>${4 ** n}</b> 回`;
+  }, 1500);
+}
+
+/* ---------- 復習問題：カードをクリックすると答えが出る（もう一度押すと隠れる） ---------- */
+{
+  document.querySelectorAll('.qz').forEach(q => q.addEventListener('click', () => {
+    const open = q.classList.toggle('open');
+    q.querySelectorAll('.qgb').forEach(g => g.classList.toggle('shown', open));
+  }));
+  // 図の ? は 1 つずつクリックで開ける。全部開いたら答えの文も出す
+  document.querySelectorAll('.qgb').forEach(g => g.addEventListener('click', e => {
+    e.stopPropagation();
+    g.classList.toggle('shown');
+    const q = g.closest('.qz'), all = [...q.querySelectorAll('.qgb')];
+    q.classList.toggle('open', all.every(x => x.classList.contains('shown')));
+  }));
+  document.querySelectorAll('[data-quiz-all]').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation(); b.blur();
+    const qs = [...b.closest('.slide').querySelectorAll('.qz')], open = !qs.every(q => q.classList.contains('open'));
+    qs.forEach(q => { q.classList.toggle('open', open); q.querySelectorAll('.qgb').forEach(g => g.classList.toggle('shown', open)); });
+    b.textContent = open ? '答えをぜんぶ隠す' : '答えをぜんぶ表示';
+  }));
+  // スライドを開くたびに答えを隠した状態に戻す
+  const reset = id => () => {
+    const sl = document.querySelector(`.slide[data-id="${id}"]`);
+    sl.querySelectorAll('.qz').forEach(q => q.classList.remove('open'));
+    sl.querySelectorAll('.qgb').forEach(g => g.classList.remove('shown'));
+    sl.querySelector('[data-quiz-all]').textContent = '答えをぜんぶ表示';
+  };
+  window.onEnter = window.onEnter || {};
+  ['quiz8'].forEach(id => onEnter[id] = reset(id));
+  // 印刷（配布資料）では答えも見えるようにする
+  addEventListener('beforeprint', () => document.querySelectorAll('.qz, .qgb').forEach(q => q.classList.add(q.classList.contains('qz') ? 'open' : 'shown')));
+}
+
+/* ---------- スライド制御 ---------- */
+const stage = $('#stage');
+function fit() {
+  let s = Math.min(innerWidth / 1280, innerHeight / 720);
+  stage.style.top = '50%';
+  stage.style.transformOrigin = '';
+  stage.style.transform = `translate(-50%,-50%) scale(${s})`;
+  const pb = document.getElementById('penbar');
+  if (!pb || document.body.classList.contains('overview')) return;
+  const r = pb.getBoundingClientRect(), top = (innerHeight - 720 * s) / 2, right = innerWidth / 2 + 640 * s;
+  if (r.left < right && r.bottom > top + 40 * s) {
+    s = Math.min(innerWidth / 1280, (innerHeight - r.bottom) / 680);
+    stage.style.top = (r.bottom - 40 * s) + 'px';
+    stage.style.transformOrigin = 'top center';
+    stage.style.transform = `translate(-50%,0) scale(${s})`;
+  }
+}
+addEventListener('resize', fit); fit();
+
+const slides = [...document.querySelectorAll('.slide')];
+slides.forEach((s, i) => { const p = s.querySelector('.pageno'); if (p) p.textContent = `${i + 1} / ${slides.length}`; });
+let cur = 0;
+const frags = s => [...s.querySelectorAll('.frag')];
+function showFrag(f, on) {
+  f.classList.toggle('vis', on);
+  if (f.dataset.slideClass) f.closest('.slide').classList.toggle(f.dataset.slideClass, on);
+}
+function go(n, showAll = false) {
+  if (n < 0 || n >= slides.length) return;
+  stoppers.forEach(f => f());
+  cur = n;
+  slides.forEach((s, i) => { s.classList.toggle('active', i === n); s.classList.toggle('past', i < n); });
+  frags(slides[n]).forEach(f => showFrag(f, showAll));
+  $('#counter').textContent = `${n + 1} / ${slides.length}`;
+  $('#progress').style.width = `${(n + 1) / slides.length * 100}%`;
+  history.replaceState(null, '', '#' + (n + 1));
+  const id = slides[n].dataset.id;
+  if (window.onEnter && onEnter[id]) onEnter[id]();
+  // 自動再生ボタンのあるスライドは、開いた時点で再生を始める（ボタンで停止できる）
+  slides[n].querySelectorAll('[data-autoplay]').forEach(b => b.click());
+  ink.render();
+}
+function next() {
+  const f = frags(slides[cur]).find(x => !x.classList.contains('vis'));
+  if (f) showFrag(f, true); else go(cur + 1);
+}
+function prev() {
+  const v = frags(slides[cur]).filter(x => x.classList.contains('vis'));
+  if (v.length) showFrag(v[v.length - 1], false); else go(cur - 1, true);
+}
+function fullscreen() {
+  if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen();
+}
+let overview = false;
+function layoutOverview() {
+  const cols = innerWidth < 900 ? 2 : innerWidth < 1400 ? 3 : 4;
+  const w = (document.body.clientWidth - 48 - 22 * (cols - 1)) / cols;
+  stage.style.setProperty('--cols', cols);
+  stage.style.setProperty('--z', w / 1280);
+  stage.style.setProperty('--ow', `${w}px`);
+  stage.style.setProperty('--oh', `${w * 720 / 1280}px`);
+}
+function markCurrent() { slides.forEach((s, i) => s.classList.toggle('current', i === cur)); }
+function toggleOverview(on = !overview) {
+  overview = on;
+  document.body.classList.toggle('overview', on);
+  if (on) {
+    stoppers.forEach(f => f());
+    layoutOverview(); markCurrent();
+    slides[cur].scrollIntoView({ block: 'center' });
+  } else {
+    document.body.scrollTop = 0;
+    go(cur);
+  }
+}
+slides.forEach((s, i) => s.addEventListener('click', () => {
+  if (!overview) return;
+  cur = i; toggleOverview(false);
+}));
+addEventListener('resize', () => { if (overview) layoutOverview(); });
+addEventListener('keydown', e => {
+  // 動画を操作しているときの Space・矢印キーは動画に任せる
+  if (e.target.tagName === 'VIDEO' && [' ', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+  if (overview) {
+    if (['o', 'O', 'Escape'].includes(e.key)) toggleOverview(false);
+    else if (e.key === 'Enter') { e.preventDefault(); toggleOverview(false); }
+    else if (['ArrowRight', 'ArrowLeft'].includes(e.key)) {
+      e.preventDefault();
+      cur = Math.max(0, Math.min(slides.length - 1, cur + (e.key === 'ArrowRight' ? 1 : -1)));
+      markCurrent(); slides[cur].scrollIntoView({ block: 'nearest' });
+    }
+    return;
+  }
+  if (['SUMMARY','INPUT','SELECT','TEXTAREA','BUTTON'].includes(e.target.tagName)) return;
+  if (e.key === 'p' || e.key === 'P') return ink.setTool(ink.tool() === 'pen' ? 'none' : 'pen');
+  if (e.key === 'z' || e.key === 'Z') return ink.undo();
+  if (e.key === 'o' || e.key === 'O') return toggleOverview(true);
+  if (['ArrowRight', 'PageDown', ' ', 'Enter', 'ArrowDown'].includes(e.key)) { e.preventDefault(); next(); }
+  else if (['ArrowLeft', 'PageUp', 'Backspace', 'ArrowUp'].includes(e.key)) { e.preventDefault(); prev(); }
+  else if (e.key === 'Home') go(0);
+  else if (e.key === 'End') go(slides.length - 1);
+  else if (e.key === 'f' || e.key === 'F') fullscreen();
+});
+let tx = null;
+// スライダー操作や Apple Pencil のタッチはスワイプのページ送りに使わない
+addEventListener('touchstart', e => tx = laser.blocksSwipe(e.touches[0]) || e.target.closest('input,select,textarea') ? null : e.touches[0].clientX, { passive: true });
+addEventListener('touchend', e => {
+  if (tx === null || overview) return;
+  const dx = e.changedTouches[0].clientX - tx; tx = null;
+  if (Math.abs(dx) > 60) dx < 0 ? next() : prev();
+});
+// Apple Pencil のタッチは、Safari のスクリブル（手書き入力）・スクロール・拡大鏡などの判定に使わせない。
+// これらが働くと、速く書いたときにペンの動きが一瞬ページに届かなくなり、固まって見えるため。
+// タッチの既定の動作を止めるとクリックも起きなくなるので、ペンで軽くタップしたときはこちらでクリックを送る
+let penTap = null;
+const findPen = e => penTap && [...e.changedTouches].find(t => t.identifier === penTap.id);
+stage.addEventListener('touchstart', e => {
+  const t = e.changedTouches[0];
+  if (t.touchType !== 'stylus' || overview || e.target.closest('input')) return;
+  e.preventDefault();
+  penTap = { id: t.identifier, x: t.clientX, y: t.clientY, target: e.target, moved: 0 };
+}, { passive: false });
+stage.addEventListener('touchmove', e => {
+  const t = findPen(e);
+  if (!t) return;
+  e.preventDefault();
+  penTap.moved = Math.max(penTap.moved, Math.hypot(t.clientX - penTap.x, t.clientY - penTap.y));
+}, { passive: false });
+stage.addEventListener('touchend', e => {
+  const t = findPen(e);
+  if (!t) return;
+  const { target, moved } = penTap;
+  penTap = null;
+  // ほとんど動かさなかったときはタップとみなしてクリックを送る（ボタン・回路の入力・復習問題のカードなど）
+  if (moved < 8) {
+    if (typeof target.click === 'function') target.click();
+    else target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: t.clientX, clientY: t.clientY }));
+  }
+});
+stage.addEventListener('touchcancel', () => { penTap = null; });
+$('#btnNext').onclick = e => { e.currentTarget.blur(); next(); };
+$('#btnPrev').onclick = e => { e.currentTarget.blur(); prev(); };
+$('#btnFs').onclick = e => { e.currentTarget.blur(); fullscreen(); };
+$('#btnOv').onclick = e => { e.currentTarget.blur(); toggleOverview(true); };
+$('#btnOvClose').onclick = e => { e.currentTarget.blur(); toggleOverview(false); };
+addEventListener('beforeprint', () => slides.forEach(s => frags(s).forEach(f => showFrag(f, true))));
+/* ---------- 黒ペン・消しゴム・投げ縄 ----------
+   右上の道具で「黒ペン」を選ぶと、Apple Pencil（パソコンではマウス）でスライドに書き込める。指では書かない（指はスワイプやタップに使う）。
+   ペン先で軽くタップしただけのときは線を残さず、ボタンや入力の丸のクリックとして扱う。
+   書き込みはスライドごとに保持し、ページを戻ると再表示される（再読み込みで消える）。
+   「投げ縄」で書き込みを囲むと選択できる。選択した線はドラッグで移動、枠のボタンで複製・コピー・削除。
+   コピーした線は別のスライドに移ってから「貼り付け」で貼れる（ページをまたいだ複製）。 */
+const ink = (() => {
+  const W = 1280, H = 720, COLOR = '#111', SEL = '#3b6cff', PAD = 12;
+  const canvas = document.createElement('canvas');
+  canvas.id = 'ink';
+  stage.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  const bar = $('#penbar');
+  const pages = slides.map(() => ({ strokes: [], undo: [] }));
+  let tool = 'none', active = null;
+  document.body.classList.add('tool-none');
+  // 投げ縄の選択（sel.items は選択中の線そのもの）とクリップボード（ページをまたいで使う）
+  let sel = null, clip = null, lassoPts = null;
+
+  // 選択中の線の操作ボタン（スライドの中に置くので、スライドと一緒に拡大縮小される）
+  const lbar = document.createElement('div');
+  lbar.id = 'lassoBar';
+  lbar.innerHTML = '<button data-act="dup" title="複製 (D)">⧉ 複製</button><button data-act="copy" title="コピー：別のスライドで貼り付けできる (C)">📋 コピー</button><button data-act="del" title="削除 (Delete)">🗑️ 削除</button>';
+  stage.appendChild(lbar);
+  const st = document.createElement('style');
+  st.textContent = `
+#lassoBar{position:absolute;z-index:6;display:none;gap:4px;background:#fff;border:2.5px solid #1f1a3d;border-radius:999px;box-shadow:3px 3px 0 #1f1a3d;padding:3px}
+#lassoBar button{border:0;background:none;font:800 14px "Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;color:#1f1a3d;border-radius:999px;padding:5px 10px;cursor:pointer;white-space:nowrap}
+#lassoBar button:hover{background:#dfe8ff}
+#penbar button:disabled{opacity:.35;cursor:default}
+#inkToast{position:absolute;left:50%;bottom:58px;transform:translateX(-50%);z-index:7;background:#1f1a3d;color:#fff;font:800 15px sans-serif;border-radius:999px;padding:6px 16px;opacity:0;transition:opacity .3s;pointer-events:none}
+#inkToast.on{opacity:.92}
+body.overview #lassoBar,body.overview #inkToast{display:none!important}`;
+  document.head.appendChild(st);
+  const toastEl = document.createElement('div');
+  toastEl.id = 'inkToast';
+  stage.appendChild(toastEl);
+  let toastT = 0;
+  const toast = msg => { toastEl.textContent = msg; toastEl.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('on'), 1600); };
+
+  function resize() {
+    const k = Math.min(4096 / W, stage.getBoundingClientRect().width / W * (devicePixelRatio || 1));
+    canvas.width = Math.round(W * k); canvas.height = Math.round(H * k);
+    render();
+  }
+  // 筆圧で太さを変え、点の中点を結ぶ曲線でなめらかにする。i 番目の区間は p[i-1]・p[i]・p[i+1] で決まる
+  const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+  function drawSeg(p, i) {
+    const m0 = i === 1 ? p[0] : mid(p[i - 1], p[i]);
+    const m1 = i === p.length - 1 ? p[i] : mid(p[i], p[i + 1]);
+    ctx.lineWidth = 4 * (.4 + p[i][2] * 1.2);
+    ctx.beginPath(); ctx.moveTo(m0[0], m0[1]); ctx.quadraticCurveTo(p[i][0], p[i][1], m1[0], m1[1]); ctx.stroke();
+  }
+  function drawStroke(p) { for (let i = 1; i < p.length; i++) drawSeg(p, i); }
+  const bbox = items => {
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    items.forEach(s => s.forEach(([x, y]) => { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }));
+    return [x0 - PAD, y0 - PAD, x1 + PAD, y1 + PAD];
+  };
+  // スライド全体の描き直し（元に戻す・消しゴム・スライド切り替え・投げ縄の操作など）
+  function render() {
+    if (sel && (sel.page !== cur || !sel.items.every(s => pages[cur].strokes.includes(s)))) setSel(null, false);
+    const k = canvas.width / W;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    // 選択中の線は青く縁取る
+    if (sel) {
+      ctx.strokeStyle = 'rgba(59,108,255,.35)'; ctx.lineWidth = 12;
+      sel.items.forEach(s => { ctx.beginPath(); s.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); if (s.length === 1) ctx.lineTo(s[0][0] + .1, s[0][1]); ctx.stroke(); });
+    }
+    ctx.strokeStyle = COLOR;
+    pages[cur].strokes.forEach(drawStroke);
+    if (active && active.pts) { drawStroke(active.pts); active.drawn = active.pts.length - 2; }
+    if (sel) {
+      const [x0, y0, x1, y1] = bbox(sel.items);
+      ctx.save(); ctx.strokeStyle = SEL; ctx.lineWidth = 2; ctx.setLineDash([7, 5]);
+      ctx.strokeRect(x0, y0, x1 - x0, y1 - y0); ctx.restore();
+      placeBar([x0, y0, x1, y1]);
+    }
+    if (lassoPts && lassoPts.length > 1) {
+      ctx.save(); ctx.strokeStyle = SEL; ctx.fillStyle = 'rgba(59,108,255,.08)'; ctx.lineWidth = 2.5; ctx.setLineDash([6, 6]);
+      ctx.beginPath(); lassoPts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+    }
+  }
+  function placeBar([x0, y0, x1, y1]) {
+    lbar.style.display = 'flex';
+    const w = lbar.offsetWidth || 230, h = lbar.offsetHeight || 36;
+    let left = Math.max(8, Math.min(W - w - 8, x1 - w)), top = y0 - h - 8;
+    if (top < 70) top = Math.min(H - h - 8, y1 + 8);
+    lbar.style.left = left + 'px'; lbar.style.top = top + 'px';
+  }
+  function setSel(items, draw = true) {
+    sel = items && items.length ? { page: cur, items } : null;
+    if (!sel) lbar.style.display = 'none';
+    if (draw) render();
+  }
+  // 書いている途中は、まだ描いていない区間だけを描き足す（毎回全部を描き直すと速く書いたときに固まるため）。
+  // 最後の区間は次の点が来ないと形が決まらないので、ペンを離したときに描く
+  function drawNew(final) {
+    const p = active.pts, upto = final ? p.length - 1 : p.length - 2;
+    for (let i = Math.max(1, active.drawn + 1); i <= upto; i++) drawSeg(p, i);
+    active.drawn = Math.max(active.drawn, upto);
+  }
+  // ペンの点はたくさん届くので、画面の書き換え 1 回につき 1 回だけまとめて描く
+  let queued = false;
+  function flush() {
+    queued = false;
+    if (!active) return;
+    if (active.mode === 'lasso' || active.mode === 'move') render();
+    else if (active.pts) drawNew(false);
+    else if (active.erase.length) { const qs = active.erase; active.erase = []; if (qs.map(eraseAt).some(Boolean)) render(); }
+  }
+  const schedule = () => { if (!queued) { queued = true; requestAnimationFrame(flush); } };
+  function toStage(e) {
+    const r = stage.getBoundingClientRect();
+    // マウスは筆圧が取れないので 0.5 として扱う
+    const pr = e.pointerType === 'pen' && e.pressure > 0 ? e.pressure : .5;
+    return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H, pr];
+  }
+  function snapshot() { const pg = pages[cur]; pg.undo.push(pg.strokes.slice()); if (pg.undo.length > 100) pg.undo.shift(); }
+  function segDist(q, a, b) {
+    const dx = b[0] - a[0], dy = b[1] - a[1], L = dx * dx + dy * dy;
+    const t = L ? Math.max(0, Math.min(1, ((q[0] - a[0]) * dx + (q[1] - a[1]) * dy) / L)) : 0;
+    return Math.hypot(q[0] - a[0] - t * dx, q[1] - a[1] - t * dy);
+  }
+  // q の近くを通る線を消す。消したら true（描き直しは呼び出し側でまとめて行う）
+  function eraseAt(q) {
+    const pg = pages[cur];
+    const keep = pg.strokes.filter(st => !st.some((pt, i) => segDist(q, st[Math.max(0, i - 1)], pt) < 14));
+    if (keep.length === pg.strokes.length) return false;
+    if (!active.erased) { snapshot(); active.erased = true; }
+    pg.strokes = keep;
+    return true;
+  }
+  // 点が多角形の内側か（投げ縄の判定）
+  function inPoly(p, poly) {
+    let c = false;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const [xi, yi] = poly[i], [xj, yj] = poly[j];
+      if ((yi > p[1]) !== (yj > p[1]) && p[0] < (xj - xi) * (p[1] - yi) / (yj - yi) + xi) c = !c;
+    }
+    return c;
+  }
+  const inBox = (q, [x0, y0, x1, y1]) => q[0] >= x0 && q[0] <= x1 && q[1] >= y0 && q[1] <= y1;
+  const clone = items => items.map(s => s.map(p => p.slice()));
+  const shift = (items, dx, dy) => items.forEach(s => s.forEach(p => { p[0] += dx; p[1] += dy; }));
+
+  // ---- 投げ縄の操作 ----
+  function duplicate() {
+    if (!sel) return;
+    snapshot();
+    const items = clone(sel.items); shift(items, 24, 24);
+    pages[cur].strokes.push(...items);
+    setSel(items); toast('複製しました');
+  }
+  function copy() {
+    if (!sel) return;
+    clip = { items: clone(sel.items), from: cur, n: 0 };
+    $('#inkPaste').disabled = false;
+    toast('コピーしました。別のスライドで「貼り付け」できます');
+  }
+  function paste() {
+    if (!clip) return;
+    snapshot();
+    const items = clone(clip.items);
+    // 同じスライドに貼るときは重ならないように少しずらす
+    if (clip.from === cur) { clip.n++; shift(items, 24 * clip.n, 24 * clip.n); }
+    pages[cur].strokes.push(...items);
+    setTool('lasso'); setSel(items); toast('貼り付けました（ドラッグで移動できます）');
+  }
+  function del() {
+    if (!sel) return;
+    snapshot();
+    pages[cur].strokes = pages[cur].strokes.filter(s => !sel.items.includes(s));
+    setSel(null);
+  }
+  lbar.addEventListener('pointerdown', e => e.stopPropagation());
+  lbar.querySelectorAll('button').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation(); b.blur();
+    ({ dup: duplicate, copy, del })[b.dataset.act]();
+  }));
+
+  stage.addEventListener('pointerdown', e => {
+    if (overview || active || tool === 'laser' || tool === 'none' || e.target.closest('input') || e.target.closest('#lassoBar')) return;
+    if (!(e.pointerType === 'pen' || (e.pointerType === 'mouse' && e.button === 0))) return;
+    e.preventDefault();
+    const q = toStage(e);
+    if (tool === 'lasso') {
+      // 選択枠の中をつかんだら移動、外なら新しく囲む
+      if (sel && inBox(q, bbox(sel.items))) active = { id: e.pointerId, mode: 'move', start: q, last: q, moved: 0 };
+      else { setSel(null, false); lassoPts = [q]; active = { id: e.pointerId, mode: 'lasso', start: q, moved: 0 }; render(); }
+      return;
+    }
+    // ペンの消しゴム側（対応ペンのみ）は消しゴムとして扱う
+    const erase = tool === 'eraser' || e.button === 5;
+    active = { id: e.pointerId, start: q, moved: 0, pts: erase ? null : [q], drawn: 0, erase: [] };
+    if (erase) { if (eraseAt(q)) render(); }
+  });
+  addEventListener('pointermove', e => {
+    if (!active || e.pointerId !== active.id) return;
+    e.preventDefault();
+    const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [];
+    for (const ev of evs.length ? evs : [e]) {
+      const q = toStage(ev);
+      active.moved = Math.max(active.moved, Math.hypot(q[0] - active.start[0], q[1] - active.start[1]));
+      if (active.mode === 'lasso') {
+        const last = lassoPts[lassoPts.length - 1];
+        if (Math.hypot(q[0] - last[0], q[1] - last[1]) >= 3) lassoPts.push(q);
+      } else if (active.mode === 'move') {
+        if (!active.began && active.moved >= 3) {
+          // 元に戻せるよう、動かす前の状態を残し、選択中の線は複製に差し替えてから動かす
+          active.began = true; snapshot();
+          const pg = pages[cur], copies = clone(sel.items);
+          pg.strokes = pg.strokes.map(s => { const i = sel.items.indexOf(s); return i < 0 ? s : copies[i]; });
+          sel.items = copies;
+        }
+        if (active.began) { shift(sel.items, q[0] - active.last[0], q[1] - active.last[1]); active.last = q; }
+      } else if (active.pts) {
+        // ほとんど動いていない点は間引く（見た目は変わらず、描く量が減る）
+        const last = active.pts[active.pts.length - 1];
+        if (Math.hypot(q[0] - last[0], q[1] - last[1]) >= 1.2) active.pts.push(q); else last[2] = Math.max(last[2], q[2]);
+      } else active.erase.push(q);
+    }
+    schedule();
+  }, { passive: false });
+  function end(e) {
+    if (!active || e.pointerId !== active.id) return;
+    if (active.mode === 'lasso') {
+      const poly = lassoPts; lassoPts = null;
+      // 点の半分以上が投げ縄の内側にある線を選ぶ
+      const items = active.moved >= 6 ? pages[cur].strokes.filter(s => s.filter(p => inPoly(p, poly)).length * 2 >= s.length) : [];
+      active = null; setSel(items);
+      return;
+    }
+    if (active.mode === 'move') { active = null; render(); return; }
+    flush();
+    // ほとんど動かさなかったペン先はタップ（クリック）として扱い、線は残さない
+    if (active.pts && active.moved >= 4) {
+      drawNew(true); snapshot(); pages[cur].strokes.push(active.pts); active = null;
+    } else { active = null; render(); }
+  }
+  addEventListener('pointerup', end);
+  addEventListener('pointercancel', end);
+
+  function setTool(t) {
+    tool = t;
+    document.body.classList.toggle('tool-none', t === 'none');
+    if (t !== 'none') { const s = getSelection(); if (s) s.removeAllRanges(); }
+    if (t !== 'lasso') setSel(null);
+    bar.querySelectorAll('[data-tool]').forEach(b => b.classList.toggle('on', b.dataset.tool === t));
+  }
+  function undo() { const pg = pages[cur]; if (pg.undo.length) { pg.strokes = pg.undo.pop(); setSel(null, false); render(); } }
+  bar.querySelectorAll('[data-tool]').forEach(b => b.onclick = () => { b.blur(); setTool(tool === b.dataset.tool ? 'none' : b.dataset.tool); });
+  $('#inkUndo').onclick = e => { e.currentTarget.blur(); undo(); };
+  $('#inkPaste').onclick = e => { e.currentTarget.blur(); paste(); };
+  $('#inkClear').onclick = e => {
+    e.currentTarget.blur();
+    if (pages[cur].strokes.length) { snapshot(); pages[cur].strokes = []; setSel(null, false); render(); }
+  };
+  // 投げ縄の選択中のキー操作（ページ送りより先に受け取る）
+  addEventListener('keydown', e => {
+    if (overview || e.target.tagName === 'INPUT') return;
+    const k = e.key.toLowerCase(), mod = e.ctrlKey || e.metaKey;
+    if (mod && String(getSelection())) return;
+    let f = null;
+    if (k === 'l' && !mod) f = () => setTool(tool === 'lasso' ? 'none' : 'lasso');
+    else if (sel && (k === 'delete' || k === 'backspace')) f = del;
+    else if (sel && k === 'escape') f = () => setSel(null);
+    else if (sel && k === 'd') f = duplicate;
+    else if (sel && k === 'c') f = copy;
+    else if (clip && k === 'v') f = paste;
+    if (!f) return;
+    e.preventDefault(); e.stopImmediatePropagation(); f();
+  }, true);
+  addEventListener('resize', resize);
+  resize();
+  return { render, undo, setTool, tool: () => tool, drawing: () => !!active };
+})();
+
+/* ---------- レーザーポインター ----------
+   Apple Pencil：ペン先を画面に当てている間だけ赤く光る点を表示し、なぞった軌跡を光らせる（書き込みは残らない）。
+   パソコン（マウス）：「レーザー」を選んでいる間、マウスの位置に赤い点が出る（3 秒止めると消える）。
+   ボタンを押したままドラッグすると軌跡が光る。ボタン・回路の入力など、クリックできる場所の上では軌跡を描かずクリックを優先する。
+   軌跡は離してから約1秒で消える。消えきる前にもう一度当てると、それまでの軌跡は消えずに残り続ける。 */
+const laser = (() => {
+  const W = 1280, H = 720, LIFE = 1000, IDLE = 3000;
+  const canvas = document.createElement('canvas');
+  canvas.id = 'laser';
+  stage.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  // trail は線ごとの点の配列。fadeFrom は離した時刻（当てている間は null）。hover はマウスの位置
+  let trail = [], down = null, raf = 0, fadeFrom = null, hover = null, idleT = 0;
+
+  function resize() {
+    const k = Math.min(4096 / W, stage.getBoundingClientRect().width / W * (devicePixelRatio || 1));
+    canvas.width = Math.round(W * k); canvas.height = Math.round(H * k);
+    kick();
+  }
+  function toStage(e) {
+    const r = stage.getBoundingClientRect();
+    return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H];
+  }
+  const level = () => fadeFrom === null ? 1 : Math.max(0, 1 - (performance.now() - fadeFrom) / LIFE);
+  const hoverLevel = () => {
+    if (!hover || down || ink.tool() !== 'laser' || overview) return 0;
+    const t = performance.now() - hover.t;
+    return t < IDLE ? 1 : Math.max(0, 1 - (t - IDLE) / 400);
+  };
+  function dot([x, y], a = 1) {
+    const g = ctx.createRadialGradient(x, y, 0, x, y, 13);
+    g.addColorStop(0, `rgba(255,255,255,${a})`); g.addColorStop(.35, `rgba(255,90,110,${a})`); g.addColorStop(1, 'rgba(255,30,60,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x, y, 13, 0, Math.PI * 2); ctx.fill();
+  }
+  function frame() {
+    raf = 0;
+    const k = canvas.width / W, f = level(), hl = hoverLevel();
+    if (!f) trail = [];
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    // 影のぼかし（shadowBlur）は重いので使わず、太い半透明の線の上に細い線を重ねて光って見せる
+    const path = new Path2D();
+    trail.forEach(line => { if (!line.length) return; path.moveTo(line[0][0], line[0][1]); line.forEach(q => path.lineTo(q[0], q[1])); });
+    ctx.strokeStyle = `rgba(255,40,70,${.18 * f})`; ctx.lineWidth = 6 + 14 * f; ctx.stroke(path);
+    ctx.strokeStyle = `rgba(255,40,70,${.8 * f})`; ctx.lineWidth = 2 + 5 * f; ctx.stroke(path);
+    if (down) dot(down.pos);
+    else if (hl > 0) dot(hover.pos, hl);
+    if ((fadeFrom !== null && trail.length) || (hl > 0 && hl < 1)) kick();
+    else if (hl === 1) { clearTimeout(idleT); idleT = setTimeout(kick, IDLE + 20 - (performance.now() - hover.t)); }
+  }
+  function kick() { if (!raf) raf = requestAnimationFrame(frame); }
+  function add(q) {
+    const line = trail[trail.length - 1], last = line[line.length - 1];
+    // ほとんど動いていない点は間引く
+    if (!last || Math.hypot(q[0] - last[0], q[1] - last[1]) >= 1.5) line.push(q);
+    down.pos = q;
+  }
+  // クリックできる場所（ボタン・入力の丸・カードなど）の上ではマウスの軌跡を描かない
+  const clickable = t => !!t.closest('button,input,select,textarea,a,label,summary,#lassoBar') || ['pointer', 'grab', 'grabbing'].includes(getComputedStyle(t).cursor);
+
+  stage.addEventListener('pointerdown', e => {
+    if (overview || down || e.target.closest('input')) return;
+    if (!(ink.tool() === 'laser' || (ink.tool() === 'none' && e.pointerType === 'pen'))) return;
+    const mouse = e.pointerType === 'mouse';
+    if (!(e.pointerType === 'pen' || (mouse && e.button === 0 && !clickable(e.target)))) return;
+    e.preventDefault();
+    // 前の軌跡が消えきっていなければ残したまま続ける
+    if (!level()) trail = [];
+    fadeFrom = null; down = { id: e.pointerId, pos: null };
+    trail.push([]); add(toStage(e)); kick();
+  });
+  addEventListener('pointermove', e => {
+    if (down && e.pointerId === down.id) {
+      e.preventDefault();
+      const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [];
+      (evs.length ? evs : [e]).forEach(ev => add(toStage(ev)));
+      kick();
+      return;
+    }
+    if (e.pointerType === 'mouse' && ink.tool() === 'laser' && !overview && stage.contains(e.target)) {
+      hover = { pos: toStage(e), t: performance.now() }; kick();
+    }
+    else if (e.pointerType === 'mouse' && hover && ink.tool() !== 'laser') { hover = null; kick(); }
+  }, { passive: false });
+  stage.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') { hover = null; kick(); } });
+  const up = e => { if (down && e.pointerId === down.id) { down = null; fadeFrom = performance.now(); if (e.pointerType === 'mouse') hover = { pos: toStage(e), t: performance.now() }; kick(); } };
+  addEventListener('pointerup', up);
+  addEventListener('pointercancel', up);
+  addEventListener('resize', resize);
+  resize();
+
+  // Apple Pencil のタッチはスワイプのページ送りに使わない
+  return { blocksSwipe: t => t.touchType === 'stylus' || !!down, refresh: kick };
+})();
+
+go(Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1)) || 1) - 1)));
+</script>
+</body>
+</html>
