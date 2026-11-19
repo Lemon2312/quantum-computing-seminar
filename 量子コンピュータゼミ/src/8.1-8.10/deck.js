@@ -28,7 +28,7 @@
     const n = k + 1, s = 2 ** n;
     g.style.gridTemplateColumns = `repeat(${s},1fr)`;
     g.innerHTML = '<i></i>'.repeat(s * s);
-    $('#ueLbl').innerHTML = `n = ${n} → <b>${s} × ${s}</b> 行列`;
+    $('#ueLbl').innerHTML = `${n} 量子ビットのとき：<b>${s} × ${s}</b> のユニタリ行列`;
   }, 1500);
 }
 
@@ -148,7 +148,7 @@ const S0 = [1, 0, 0, 0, 0, 0, 0, 0], S1 = [.5, 0, .5, 0, .5, 0, .5, 0], S2 = [.5
   stepper('#cxStp', N, k => {
     const n = k + 1;
     cs.forEach((c, i) => { c.querySelector('.bar').style.height = i <= k ? Math.max(4 ** (i + 1) / 4 ** n * 240, 1) + 'px' : '0'; c.classList.toggle('cur', i === k); });
-    $('#cxNum').innerHTML = `n = ${n}：(2<sup>${n}</sup>)² = <b>${(4 ** n).toLocaleString()}</b>`;
+    $('#cxNum').innerHTML = `${n} 量子ビットのとき：(2<sup>${n}</sup>)² = <b>${(4 ** n).toLocaleString()}</b> 回の計算`;
   }, 1200);
 }
 
@@ -201,7 +201,7 @@ const S0 = [1, 0, 0, 0, 0, 0, 0, 0], S1 = [.5, 0, .5, 0, .5, 0, .5, 0], S2 = [.5
     g.style.gridTemplateColumns = `repeat(${s},${sz}px)`;
     g.style.gridAutoRows = sz + 'px';
     g.innerHTML = '<i></i>'.repeat(s * s);
-    $('#anLbl').innerHTML = `n = ${n} → 4<sup>${n}</sup> = <b>${4 ** n}</b> 回`;
+    $('#anLbl').innerHTML = `${n} 量子ビットのとき：4<sup>${n}</sup> = <b>${4 ** n}</b> 回の計算`;
   }, 1500);
 }
 
@@ -211,20 +211,8 @@ const S0 = [1, 0, 0, 0, 0, 0, 0, 0], S1 = [.5, 0, .5, 0, .5, 0, .5, 0], S2 = [.5
   stepper('#gqStp', 5, k => {
     const n = k + 1, m = 2 ** n, h = Math.min(38, Math.floor(330 / m));
     v.innerHTML = [...Array(m)].map((_, i) => `<i style="height:${h}px">${h >= 18 ? `a<sub>${i}</sub>` : ''}</i>`).join('');
-    $('#gqLbl').innerHTML = `n = ${n} → 2<sup>${n}</sup> = <b>${m}</b> 個`;
+    $('#gqLbl').innerHTML = `${n} 量子ビットのとき：<br>2<sup>${n}</sup> = <b>${m}</b> 個の複素数`;
   }, 1500);
-}
-
-/* ---------- 8.2 |0⟩ ⊗ |0⟩ ⊗ |0⟩ を順に計算 ---------- */
-{
-  const V = a => `<span class="vec">${a.map(x => `<span${x ? ' class="one"' : ''}>${x}</span>`).join('')}</span>`;
-  const z2 = [1, 0], z4 = [1, 0, 0, 0], z8 = [1, 0, 0, 0, 0, 0, 0, 0];
-  const rows = [
-    `<span>|0⟩ ⊗ |0⟩ ⊗ |0⟩ =</span>${V(z2)}<span>⊗</span>${V(z2)}<span>⊗</span>${V(z2)}`,
-    `<span>=</span>${V(z2)}<span>⊗</span>${V(z4)}`,
-    `<span>=</span>${V(z8)}<span class="tiny">（8 × 1）</span>`,
-  ];
-  stepper('#t0Stp', 3, k => { $('#t0Eq').innerHTML = rows.map((r, i) => `<div class="t0-r${i > k ? ' hid' : ''}${i === k ? ' now' : ''}">${r}</div>`).join(''); }, 1700);
 }
 
 /* ---------- 8.2 ビット列 ↔ 10 進法 ↔ 状態ベクトル ---------- */
@@ -240,3 +228,8 @@ const S0 = [1, 0, 0, 0, 0, 0, 0, 0], S1 = [.5, 0, .5, 0, .5, 0, .5, 0], S2 = [.5
   $('#bdIn').querySelectorAll('button').forEach(x => x.addEventListener('click', () => { x.blur(); b[+x.dataset.i] ^= 1; render(); }));
   render();
 }
+
+/* ---------- 復習：1 量子ビット・2 量子ビットの量子回路 ---------- */
+drawQC('#rvC1', { n: 1, init: true, noNames: true, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'M', q: 0, col: 1 }], colW: 56 });
+drawQC('#rvC2', { n: 2, noNames: true, ops: [{ g: 'CX', c: 0, t: 1, col: 0 }], colW: 56, rowH: 44 });
+drawQC('#rvC3', { n: 2, noNames: true, ops: [{ g: 'SW', a: 0, b: 1, col: 0 }], colW: 56, rowH: 44 });

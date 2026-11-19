@@ -3,6 +3,7 @@
   <div class="title-wrap" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px">
     <div>
       <div class="chap pop">『量子コンピュータの頭の中』 ゼミ資料</div>
+      <div class="t-no pop" style="--d:.05s">第 8 章</div>
       <h1 class="pop" style="--d:.1s;white-space:nowrap">n 量子ビットの世界</h1>
       <div class="sub pop" style="--d:.2s;white-space:normal">― 測定・ユニタリ発展から<br>トフォリゲート・オラクルまで ―</div>
     </div>
@@ -27,37 +28,30 @@
 <!-- 復習 -->
 <section class="slide" data-id="rv">
   <div class="chap">復習 ／ 第3章〜第6章</div>
-  <h2>これまでの復習<small>第3章（pp.84–88）・第5章・第6章</small></h2>
-  <div class="body g3 rv8">
+  <h2>これまでの復習<small>第3章〜第6章</small></h2>
+  <div class="body rv4">
     <div class="rvc8 pop" style="--c:var(--accent)">
-      <div class="rh">① 1 量子ビットの量子状態</div>
-      <div class="eqrow" style="justify-content:center"><span>|φ⟩ = a|0⟩ + b|1⟩ =</span><span class="vec"><span>a</span><span>b</span></span><span>∈ ℂ²</span></div>
-      <div class="ctr">（a, b は複素数、<span class="math nw"><b>|a|² + |b|² = 1</b></span>）</div>
-      <div><span class="math nw">|0⟩ = (1, 0)ᵀ</span>, <span class="math nw">|1⟩ = (0, 1)ᵀ</span> の <b class="k">重ね合わせ</b></div>
+      <div class="rh">① 1 量子ビットの量子状態<small>第3章</small></div>
+      <div class="eqrow" style="justify-content:center"><span>|φ⟩ = a|0⟩ + b|1⟩ =</span><span class="vec"><span>a</span><span>b</span></span><span class="nw">（|a|² + |b|² = 1）</span></div>
+      <div><b>測定</b> すると確率 <span class="math nw"><b>|a|²</b></span> で |0⟩、<span class="math nw"><b>|b|²</b></span> で |1⟩。状態は得られた値に <b class="k">変化する</b></div>
     </div>
-    <div class="rvc8 pop" style="--d:.1s;--c:var(--blue)">
-      <div class="rh">② 2 量子ビットはテンソル積</div>
-      <div class="eqrow" style="justify-content:center"><span>|0⟩ ⊗ |1⟩ =</span><span class="vec"><span>1</span><span>0</span></span><span>⊗</span><span class="vec"><span>0</span><span>1</span></span><span>=</span><span class="vec"><span>0</span><span>1</span><span>0</span><span>0</span></span></div>
-      <div>⊗ を省略して <span class="math nw">|0⟩|1⟩</span>、まとめて <span class="math nw"><b>|01⟩</b></span> とも書く</div>
-      <div>基本の状態は <span class="math nw">|00⟩, |01⟩, |10⟩, |11⟩</span> の <b class="k">4 個</b></div>
+    <div class="rvc8 pop" style="--d:.08s;--c:var(--blue)">
+      <div class="rh">② 1 量子ビットの量子回路<small>第4章</small></div>
+      <div class="rv-row"><div id="rvC1" class="rv-qc"></div><div>量子ゲート ＝ 2 × 2 の <b class="k">ユニタリ行列</b>（<span class="math nw">U<sup>†</sup>U = I</span>）</div></div>
+      <div class="rv-gl"><span><b>X</b>：|0⟩ ↔ |1⟩</span><span><b>Z</b>：|1⟩ → −|1⟩</span><span><b>H</b>：|0⟩ → {{1/√2}}(|0⟩ + |1⟩)</span></div>
     </div>
-    <div class="rvc8 pop" style="--d:.2s;--c:var(--green)">
-      <div class="rh">③ 測定とユニタリ発展</div>
-      <div><b>測定</b>：<span class="math nw">a|0⟩ + b|1⟩</span> を測定すると確率 <span class="math nw"><b>|a|²</b></span> で |0⟩、<span class="math nw"><b>|b|²</b></span> で |1⟩。状態は得られた値に <b class="k">変化する</b></div>
-      <div><b>ユニタリ発展</b>：ユニタリ行列 <span class="math">U</span>（<span class="math nw">U<sup>†</sup>U = I</span>）で <span class="math nw">|φ⟩ → U|φ⟩</span>。1 量子ビットは 2 × 2、2 量子ビットは 4 × 4</div>
+    <div class="rvc8 pop" style="--d:.16s;--c:var(--green)">
+      <div class="rh">③ 2 量子ビットの量子状態<small>第5章</small></div>
+      <div class="eqrow" style="justify-content:center"><span>|0⟩ ⊗ |1⟩ =</span><span class="vec"><span>1</span><span>0</span></span><span>⊗</span><span class="vec"><span>0</span><span>1</span></span><span>=</span><span class="vec"><span>0</span><span>1</span><span>0</span><span>0</span></span><span>= |01⟩</span></div>
+      <div><span class="math nw">a|00⟩ + b|01⟩ + c|10⟩ + d|11⟩</span>（<span class="math nw">|a|² + |b|² + |c|² + |d|² = 1</span>）</div>
     </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 第8章 扉 -->
-<section class="slide partdoor" style="--c:var(--blue)">
-  <div class="pd-bg"><span class="eq"><span class="math">|φ⟩ =</span><span class="vec"><span>a</span><span>b</span></span><span class="math">∈ ℂ²</span></span></div>
-  <div class="pd-wrap">
-    <div class="pd-src pop">『量子コンピュータの頭の中』</div>
-    <div class="pd-no pop" style="--d:.05s">第 8 章</div>
-    <h1 class="pd-title pop" style="--d:.15s">n 量子ビットの世界</h1>
-    <div class="pd-secs pop" style="--d:.3s"><span>SECTION 1　量子ビットを一般化する（8.1・8.2）</span><span>SECTION 2　測定とユニタリ発展（8.3・8.4）</span><span>SECTION 3　一部の量子ビットの測定（8.5）</span><span>SECTION 4　テンソル積を用いた計算（8.6）</span><span>SECTION 5　代表的な n 量子ビットの量子ゲート（8.7）</span><span>SECTION 6　重ね合わせ・排他的論理和・オラクル（8.8・8.9）</span><span>SECTION 7　発展：任意の 2ⁿ 次正方行列のかけ算（8.10）</span></div>
+    <div class="rvc8 pop" style="--d:.24s;--c:var(--pink)">
+      <div class="rh">④ 2 量子ビットの量子ゲート<small>第6章</small></div>
+      <div class="rv-2g">
+        <div class="rv-g"><div id="rvC2" class="rv-qc2"></div><div><b class="k">CNOT</b>：制御ビットが |1⟩ のときだけ標的ビットを反転<br><span class="math nw">CNOT|10⟩ = |11⟩</span></div></div>
+        <div class="rv-g"><div id="rvC3" class="rv-qc2"></div><div><b class="k">SWAP</b>：2 つの量子ビットを入れ替える<br><span class="math nw">SWAP|01⟩ = |10⟩</span></div></div>
+      </div>
+    </div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -71,7 +65,7 @@
       <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 1</div>
       <h1 class="pop" style="--d:.1s">量子ビットを一般化する</h1>
       <p class="door-lead pop" style="--d:.2s">1-2 量子ビットの延長線で n 量子ビットへ（8.1・8.2）</p>
-      <div class="door-topics pop" style="--d:.3s"><span>2ⁿ 個の複素数</span><span>|0⟩ ⊗ ⋯ ⊗ |0⟩</span><span>|100⟩ = |4⟩</span><span>重ね合わせ状態</span><span>内積で表す</span></div>
+      <div class="door-topics pop" style="--d:.3s"><span>2ⁿ 個の複素数</span><span>|100⟩ = |4⟩</span><span>重ね合わせ状態</span><span>内積で表す</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -95,26 +89,6 @@
         <li>3 量子ビットなら 2³ = 8 個、10 量子ビットなら 2¹⁰ = <b class="k">1024 個</b></li>
         <li>n が増えると、ベクトルの次元が <b class="k">急速（指数関数的）</b> に増える。これが量子コンピュータの計算能力の高さにつながる</li>
       </ul>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 8.2 |0>⊗|0>⊗|0> -->
-<section class="slide" data-id="t0">
-  <div class="chap">第8章 n 量子ビットの世界 ／ 8.2 量子ビットを一般化する</div>
-  <h2>|0⟩ を 3 個テンソル積すると 8 × 1 行列<small>8.2（pp.193–194）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)">
-    <div class="card pop t0-card">
-      <div class="eqrow t0-eq" id="t0Eq"></div>
-      <div id="t0Stp"></div>
-    </div>
-    <div class="col">
-      <ul class="plain pop" style="--d:.1s">
-        <li>2 × 1 行列 3 個のテンソル積なので <span class="math nw">2·2·2 × 1·1·1 = <b>8 × 1</b></span></li>
-        <li>テンソル積は <b class="k">結合法則</b> が成り立つので、どこから計算しても同じ</li>
-      </ul>
-      <div class="point blue pop" style="--d:.2s;font-size:20px"><span class="math nw">|0⟩ ⊗ |0⟩ ⊗ ⋯ ⊗ |0⟩</span> は、n 個の 0 が並んだ <b class="kb">ゼロベクトルではない</b></div>
     </div>
   </div>
   <div class="pageno"></div>

@@ -112,12 +112,6 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .gq-vec{width:120px;height:340px;display:flex;flex-direction:column;justify-content:center;border-left:4px solid var(--ink);border-right:4px solid var(--ink);border-radius:22px;padding:6px 10px}
 .gq-vec i{display:flex;align-items:center;justify-content:center;font:italic 19px "Cambria Math","Times New Roman",serif;background:#d4f4f2;border-bottom:1px solid #fff;border-radius:4px}
 .gq-vec i sub{font-style:normal}
-.t0-card{display:flex;flex-direction:column;justify-content:center;gap:10px}
-.t0-eq{flex-direction:column;align-items:flex-start;gap:14px;font-size:26px;min-height:360px;justify-content:center}
-.t0-r{display:flex;align-items:center;gap:10px;transition:opacity .4s}
-.t0-r.hid{opacity:0}
-.t0-r .vec span.one{color:var(--accent-d);font-weight:900}
-.t0-r.now .vec{background:#fff6cf}
 .bd-card{display:flex;flex-direction:column;gap:12px;align-items:center}
 .bd-in{display:flex;align-items:center;gap:10px}
 .bd-in button{width:58px;height:58px;font:900 32px Consolas,Menlo,monospace;border:3px solid var(--ink);border-radius:14px;background:#fff;box-shadow:3px 3px 0 var(--ink);cursor:pointer;color:var(--ink)}
@@ -145,10 +139,24 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .partdoor .pd-title{margin:16px 0 18px}
 .sumlist .sl{font-size:20px;padding:7px 18px}
 
-.t0-eq{flex-direction:row;flex-wrap:wrap;align-items:center;min-height:0;gap:18px 22px;font-size:24px}
-.t0-r:first-child{width:100%}
 
 .pa-card{gap:14px;justify-content:center}
 .pa-r{font-size:20px}
 .pa-g{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;background:#faf7ff;border:2px dashed #cfc7e6;border-radius:12px;padding:8px}
 .pa-g .eqtx{font-size:19px}
+
+/* タイトルの章番号 */
+.t-no{display:inline-block;margin:10px 0 6px;font-size:24px;font-weight:900;color:#fff;background:var(--blue);border:3px solid var(--ink);border-radius:999px;padding:2px 22px;box-shadow:4px 4px 0 var(--ink);letter-spacing:.12em}
+/* 復習（2 × 2） */
+.rv4{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:14px 18px}
+.rv4 .rvc8{gap:8px;padding:10px 16px;font-size:18px;border-top-width:10px}
+.rv4 .rvc8 .rh small{font-size:14px;color:var(--muted);margin-left:8px}
+.rv4 .rvc8 .eqrow{font-size:20px}
+.rv-row{display:flex;align-items:center;gap:14px}
+.rv-qc{width:150px;flex:none}
+.rv-gl{display:flex;flex-wrap:wrap;gap:6px 14px;font-family:"Cambria Math","Times New Roman",serif;font-size:19px}
+.rv-gl > span{background:#faf7ff;border:2px solid #d9d4ea;border-radius:8px;padding:0 8px}
+.rv-2g{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rv-g{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font-size:17px;line-height:1.5}
+.rv-qc2{width:86px}
+.rv4 .rvc8{font-size:19px}
