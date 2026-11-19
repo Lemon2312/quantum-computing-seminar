@@ -702,10 +702,9 @@ svg.zx{display:block;width:100%;height:auto;user-select:none;-webkit-user-select
 <section class="slide" data-id="copy">
   <div class="chap">SECTION 2 ／ 緑のクモはビットをコピーする</div>
   <h2>緑のクモは 0 も 1 もコピーする<small>2.2（COPY）</small></h2>
-  <div class="body cols" data-min-text="520">
+  <div class="body cols" data-min-text="460">
     <div class="card stp pop" id="cdCopy">
-      <svg class="zx" id="zCopy" viewBox="0 0 360 290"></svg>
-      <div class="zctl"><div class="picker" id="pkCopy" data-label="入力"></div></div>
+      <svg class="zx" id="zCopy" viewBox="0 -40 660 330"></svg>
     </div>
     <div>
       <ul class="plain">
@@ -1217,23 +1216,28 @@ function cropAll(svg, sc, lists, m = 14) {
   zfig('zStr', { n, w });
 }
 
-/* ---------- 緑のクモ = COPY（動く図） ---------- */
+/* ---------- 緑のクモ = COPY：入力が 0 と 1 の場合を並べ、同じステップで同時に動かす ---------- */
 {
-  const sc = zxScene('zCopy');
-  let a = 1;
-  const st0 = () => ({ n: { G: { x: 180, y: 140, c: 'g', r: 26 }, A: { x: 180, y: 232, c: 'r', p: deg(a), r: 21 }, da: { x: 128, y: 236, t: String(a), cls: 'big b' } },
-    w: { l: { a: 'G', b: [110, 22] }, r: { a: 'G', b: [250, 22] }, i: { a: 'G', b: 'A' } } });
-  const st1 = () => { const s = st0(); s.n.A = { ...s.n.A, x: 180, y: 140 }; s.n.da = { ...s.n.da, x: 128, y: 144, o: 0 }; s.dur = 650; return s; };
-  const st2 = () => ({ n: { G: { x: 180, y: 140, c: 'g', r: 26, o: 0 }, A: { x: 110, y: 104, c: 'r', p: deg(a), r: 21, hl: true }, B: { from: 'A', x: 250, y: 104, c: 'r', p: deg(a), r: 21, hl: true },
-    d1: { x: 110, y: 160, t: String(a), cls: 'big o' }, d2: { x: 250, y: 160, t: String(a), cls: 'big o' } },
-    w: { l: { a: 'A', b: [110, 22] }, r: { a: 'B', b: [250, 22] } } });
-  const all = () => [st0(), st1(), st2()];
-  let setA;
-  const z = zstep('#cdCopy', sc, all, { interval: 1300, hold: 2200, next: () => setA(a ^ 1) });
-  setA = picker('#pkCopy', BITS, (it, i, u) => { a = it.v; if (u) { z.stop(); z.reset(); } });
-  cropAll('zCopy', sc, [all()]);
-  setA(1); z.reset();
-  onEnter.copy = () => { setA(1); z.reset(); };
+  const svg = document.getElementById('zCopy'), DX = 300;
+  const g0 = el('g', {}, svg), g1 = el('g', { transform: `translate(${DX},0)` }, svg);
+  const head = (x, t) => { const e = el('text', { x, y: -18, class: 'zt hd' }, svg); e.textContent = t; };
+  head(180, '入力が 0'); head(180 + DX, '入力が 1');
+  el('line', { x1: 330, y1: -30, x2: 330, y2: 270, class: 'zsep' }, svg);
+  const s0 = zxScene(g0), s1 = zxScene(g1);
+  const both = { set: st => { s0.set(st[0]); s1.set(st[1]); }, to: (st, d) => Promise.all([s0.to(st[0], d), s1.to(st[1], d)]) };
+  const states = a => {
+    const st0 = { n: { G: { x: 180, y: 140, c: 'g', r: 26 }, A: { x: 180, y: 232, c: 'r', p: deg(a), r: 21 }, da: { x: 128, y: 236, t: String(a), cls: 'big b' } },
+      w: { l: { a: 'G', b: [110, 22] }, r: { a: 'G', b: [250, 22] }, i: { a: 'G', b: 'A' } } };
+    const st1 = JSON.parse(JSON.stringify(st0));
+    st1.n.A = { ...st1.n.A, x: 180, y: 140 }; st1.n.da = { ...st1.n.da, x: 128, y: 144, o: 0 }; st1.dur = 650;
+    const st2 = { n: { G: { x: 180, y: 140, c: 'g', r: 26, o: 0 }, A: { x: 110, y: 104, c: 'r', p: deg(a), r: 21, hl: true }, B: { from: 'A', x: 250, y: 104, c: 'r', p: deg(a), r: 21, hl: true },
+      d1: { x: 110, y: 160, t: String(a), cls: 'big o' }, d2: { x: 250, y: 160, t: String(a), cls: 'big o' } },
+      w: { l: { a: 'A', b: [110, 22] }, r: { a: 'B', b: [250, 22] } } };
+    return [st0, st1, st2];
+  };
+  const build = () => { const A = states(0), B = states(1); return A.map((x, k) => Object.assign([x, B[k]], { dur: x.dur })); };
+  cropAll(svg, both, [build()]);
+  zstep('#cdCopy', both, build, { interval: 1300, hold: 2400 });
 }
 
 /* ---------- 赤のクモにビットを 2 つ：4 通りの融合（静止図） ---------- */
