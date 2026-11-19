@@ -758,6 +758,13 @@ h2 .qz-all{font-size:14px;padding:4px 14px;margin-left:16px;vertical-align:middl
 .t0-eq{flex-direction:row;flex-wrap:wrap;align-items:center;min-height:0;gap:18px 22px;font-size:24px}
 .t0-r:first-child{width:100%}
 
+/* 強調した語句は途中で改行させない */
+b.k,b.kb{white-space:nowrap}
+.pa-card{gap:14px;justify-content:center}
+.pa-r{font-size:20px}
+.pa-g{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;background:#faf7ff;border:2px dashed #cfc7e6;border-radius:12px;padding:8px}
+.pa-g .eqtx{font-size:19px}
+
 </style>
 </head>
 <body>
@@ -974,7 +981,6 @@ h2 .qz-all{font-size:14px;padding:4px 14px;margin-left:16px;vertical-align:middl
       <div class="pg mt14" id="msBars"></div>
       <div class="ms-res" id="msRes"></div>
       <div class="btns" style="justify-content:center"><button class="b" id="msGo">🎲 測定する</button><button class="b" id="msBack">↺ 測定前に戻す</button></div>
-      <div class="ms-cnt" id="msCnt"></div>
     </div>
     <div class="col">
       <div class="defbox pop" style="--d:.1s;margin-top:6px"><span class="math nw">a<sub>0</sub>|00⋯0⟩ + a<sub>1</sub>|00⋯1⟩ + ⋯ + a<sub>2ⁿ−1</sub>|11⋯1⟩</span> を測定すると
@@ -1394,9 +1400,12 @@ h2 .qz-all{font-size:14px;padding:4px 14px;margin-left:16px;vertical-align:middl
   <h2>2 × 2 行列は I・X・Y・Z の和で書ける<small>8.10.1（pp.217–219）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)">
     <div class="card pop pa-card">
-      <div class="pa-in" id="paIn"></div>
-      <div class="eqrow pa-al" id="paAl"></div>
-      <div class="eqrow pa-sum" id="paSum"></div>
+      <div class="eqtx pa-r">A<sub>1</sub> = <span class="eq inline"><span class="vec m2"><span>a</span><span>b</span><span>c</span><span>d</span></span></span> = a<span class="eq inline"><span class="vec m2"><span>1</span><span>0</span><span>0</span><span>0</span></span></span> + b<span class="eq inline"><span class="vec m2"><span>0</span><span>1</span><span>0</span><span>0</span></span></span> + c<span class="eq inline"><span class="vec m2"><span>0</span><span>0</span><span>1</span><span>0</span></span></span> + d<span class="eq inline"><span class="vec m2"><span>0</span><span>0</span><span>0</span><span>1</span></span></span></div>
+      <div class="pa-g">
+        <div class="eqtx"><span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>(I + Z) = <span class="eq inline"><span class="vec m2"><span>1</span><span>0</span><span>0</span><span>0</span></span></span></div><div class="eqtx"><span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>(X + iY) = <span class="eq inline"><span class="vec m2"><span>0</span><span>1</span><span>0</span><span>0</span></span></span></div>
+        <div class="eqtx"><span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>(X − iY) = <span class="eq inline"><span class="vec m2"><span>0</span><span>0</span><span>1</span><span>0</span></span></span></div><div class="eqtx"><span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>(I − Z) = <span class="eq inline"><span class="vec m2"><span>0</span><span>0</span><span>0</span><span>1</span></span></span></div>
+      </div>
+      <div class="eqtx pa-r">A<sub>1</sub> = <span class="eq inline"><span class="frac"><span>a</span><span>2</span></span></span>(I + Z) + <span class="eq inline"><span class="frac"><span>b</span><span>2</span></span></span>(X + iY) + <span class="eq inline"><span class="frac"><span>c</span><span>2</span></span></span>(X − iY) + <span class="eq inline"><span class="frac"><span>d</span><span>2</span></span></span>(I − Z)<br>= <b><span class="eq inline"><span class="frac"><span>a + d</span><span>2</span></span></span>I + <span class="eq inline"><span class="frac"><span>b + c</span><span>2</span></span></span>X + <span class="eq inline"><span class="frac"><span>b − c</span><span>2</span></span></span>iY + <span class="eq inline"><span class="frac"><span>a − d</span><span>2</span></span></span>Z</b></div>
     </div>
     <div class="col">
       <div class="eqrow pop" style="--d:.1s;font-size:19px;justify-content:center;gap:6px">
@@ -1404,7 +1413,6 @@ h2 .qz-all{font-size:14px;padding:4px 14px;margin-left:16px;vertical-align:middl
         <span>Y =</span><span class="vec m2"><span>0</span><span>−i</span><span>i</span><span>0</span></span>
         <span>Z =</span><span class="vec m2"><span>1</span><span>0</span><span>0</span><span>−1</span></span>
       </div>
-      <div class="eqtx pop" style="--d:.15s;font-size:20px">A<sub>1</sub> = <span class="eq inline"><span class="vec m2"><span>a</span><span>b</span><span>c</span><span>d</span></span></span> = <span class="eq inline"><span class="frac"><span>a + d</span><span>2</span></span></span>I + <span class="eq inline"><span class="frac"><span>b + c</span><span>2</span></span></span>X + <span class="eq inline"><span class="frac"><span>b − c</span><span>2</span></span></span>iY + <span class="eq inline"><span class="frac"><span>a − d</span><span>2</span></span></span>Z</div>
       <ul class="plain pop" style="--d:.2s">
         <li><span class="math nw">σ<sub>0</sub> := I, σ<sub>1</sub> := X, σ<sub>2</sub> := Y, σ<sub>3</sub> := Z</span> とすると <span class="math nw"><b>A<sub>1</sub> = <span class="sig"><sup>3</sup>Σ<sub>k=0</sub></span> α<sub>k</sub>σ<sub>k</sub></b></span></li>
         <li><span class="math">α<sub>k</sub></span> は複素数で、<span class="math">A<sub>1</sub></span> の成分から求められる</li>
@@ -1766,23 +1774,20 @@ const bits = (i, n) => i.toString(2).padStart(n, '0');
 
 /* ---------- 8.3 測定 ---------- */
 {
-  const keys = ['|00⋯0⟩', '|11⋯1⟩'], P = [.2, .8], cnt = [0, 0];
+  const keys = ['|00⋯0⟩', '|11⋯1⟩'], P = [.2, .8];
   $('#msState').innerHTML = `<span>|φ⟩ = ${FI(1, '√5')}|00⋯0⟩ + ${FI(2, '√5')}|11⋯1⟩</span>`;
   $('#msBars').innerHTML = keys.map((k, i) => `<span class="k">${k}</span><span class="box"><i></i></span><span class="v"></span>`).join('');
   const bars = [...$('#msBars').querySelectorAll('.box i')], vs = [...$('#msBars').querySelectorAll('.v')], ks = [...$('#msBars').querySelectorAll('.k')];
   const draw = p => p.forEach((x, i) => { bars[i].style.width = x * 100 + '%'; vs[i].textContent = x.toFixed(1); });
   const reset = () => { draw(P); ks.forEach(k => k.style.color = ''); $('#msRes').innerHTML = `確率 <span class="math">|1/√5|² = 0.2</span> と <span class="math">|2/√5|² = 0.8</span>`; };
-  const showCnt = () => { $('#msCnt').textContent = cnt[0] + cnt[1] ? `これまでの測定：${keys[0]} ${cnt[0]} 回 ／ ${keys[1]} ${cnt[1]} 回` : ''; };
   $('#msGo').onclick = e => {
     e.currentTarget.blur();
     const r = Math.random() < P[0] ? 0 : 1;
-    cnt[r]++; showCnt();
     draw(r ? [0, 1] : [1, 0]);
     ks.forEach((k, i) => k.style.color = i === r ? 'var(--accent-d)' : '');
-    $('#msRes').innerHTML = `測定値 <span class="math">${keys[r]}</span> → 状態も <span class="math">${keys[r]}</span> に変化`;
   };
   $('#msBack').onclick = e => { e.currentTarget.blur(); reset(); };
-  onEnter.ms = () => { cnt[0] = cnt[1] = 0; showCnt(); reset(); };
+  onEnter.ms = reset;
   reset();
 }
 
@@ -1793,7 +1798,7 @@ const bits = (i, n) => i.toString(2).padStart(n, '0');
     const n = k + 1, s = 2 ** n;
     g.style.gridTemplateColumns = `repeat(${s},1fr)`;
     g.innerHTML = '<i></i>'.repeat(s * s);
-    $('#ueLbl').innerHTML = `n = ${n} → <b>${s} × ${s}</b> 行列（成分 ${s * s} 個）`;
+    $('#ueLbl').innerHTML = `n = ${n} → <b>${s} × ${s}</b> 行列`;
   }, 1500);
 }
 
@@ -1954,7 +1959,6 @@ const S0 = [1, 0, 0, 0, 0, 0, 0, 0], S1 = [.5, 0, .5, 0, .5, 0, .5, 0], S2 = [.5
     e.currentTarget.blur();
     const i = rnd([0, 2, 4, 7]), a = Array(8).fill(0); a[i] = 1;
     draw(a, -1, i);
-    $('#sp2Res').innerHTML = `得られたのは <span class="math">|${bits(i, 3)}⟩</span> の 1 個だけ`;
   };
   $('#sp2Back').onclick = e => { e.currentTarget.blur(); reset(); };
   onEnter.sp2 = reset;
@@ -1969,7 +1973,7 @@ const S0 = [1, 0, 0, 0, 0, 0, 0, 0], S1 = [.5, 0, .5, 0, .5, 0, .5, 0], S2 = [.5
   stepper('#cxStp', N, k => {
     const n = k + 1;
     cs.forEach((c, i) => { c.querySelector('.bar').style.height = i <= k ? Math.max(4 ** (i + 1) / 4 ** n * 240, 1) + 'px' : '0'; c.classList.toggle('cur', i === k); });
-    $('#cxNum').innerHTML = `n = ${n}：(2<sup>${n}</sup>)² = <b>${(4 ** n).toLocaleString()}</b> 回くらいの計算`;
+    $('#cxNum').innerHTML = `n = ${n}：(2<sup>${n}</sup>)² = <b>${(4 ** n).toLocaleString()}</b>`;
   }, 1200);
 }
 
@@ -1984,24 +1988,6 @@ const S0 = [1, 0, 0, 0, 0, 0, 0, 0], S1 = [.5, 0, .5, 0, .5, 0, .5, 0], S2 = [.5
   el('rect', { x: x0, y: 28, width: x1 - x0, height: 174, rx: 14, class: 'bx' }, svg);
   rich(el('text', { x: (x0 + x1) / 2, y: 100, class: 'bxt' }, svg), 'U_{f}');
   el('text', { x: (x0 + x1) / 2, y: 150, class: 'q' }, svg).textContent = '?';
-}
-
-/* ---------- 8.10.1 パウリ行列で 2 次正方行列を表す ---------- */
-{
-  const v = { a: 3, b: 2, c: 0, d: 1 };
-  const fh = x => { const s = x < 0 ? '−' : '', a = Math.abs(x); return Number.isInteger(a) ? s + a : s + FI(a * 2, 2); };
-  const fi = x => (x === 0 ? '0' : x === 1 ? 'i' : x === -1 ? '−i' : fh(x) + 'i');
-  const m2 = m => `<span class="vec m2">${m.flat().map(x => `<span>${fh(x)}</span>`).join('')}</span>`;
-  const render = () => {
-    const { a, b, c, d } = v, A0 = (a + d) / 2, A1 = (b + c) / 2, B = (b - c) / 2, A3 = (a - d) / 2;
-    $('#paAl').innerHTML = `<span>α<sub>0</sub> = ${fh(A0)}</span><span>α<sub>1</sub> = ${fh(A1)}</span><span>α<sub>2</sub> = ${fi(B)}</span><span>α<sub>3</sub> = ${fh(A3)}</span>`;
-    const t = (lab, m) => `<span class="t"><span class="lbl">${lab}</span>${m2(m)}</span>`;
-    $('#paSum').innerHTML = `${t('α<sub>0</sub>I', [[A0, 0], [0, A0]])}<span>+</span>${t('α<sub>1</sub>X', [[0, A1], [A1, 0]])}<span>+</span>${t('α<sub>2</sub>Y', [[0, B], [-B, 0]])}<span>+</span>${t('α<sub>3</sub>Z', [[A3, 0], [0, -A3]])}<span>=</span>${t('A<sub>1</sub>', [[A0 + A3, A1 + B], [A1 - B, A0 - A3]])}<span class="verd ok">✓</span>`;
-    $('#paIn').querySelectorAll('[data-v]').forEach(s => s.textContent = MINUS(v[s.dataset.v]));
-  };
-  $('#paIn').innerHTML = `<span>A<sub>1</sub> =</span><div class="pa-grid">${'abcd'.split('').map(k => `<div class="pa-cell"><i>${k}</i><button data-k="${k}" data-d="-1">−</button><span data-v="${k}"></span><button data-k="${k}" data-d="1">＋</button></div>`).join('')}</div>`;
-  $('#paIn').querySelectorAll('button').forEach(b => b.addEventListener('click', () => { b.blur(); v[b.dataset.k] = Math.max(-5, Math.min(5, v[b.dataset.k] + +b.dataset.d)); render(); }));
-  render();
 }
 
 /* ---------- 8.10.1 量子で 4 回、古典で足す ---------- */
