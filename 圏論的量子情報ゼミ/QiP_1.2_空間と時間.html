@@ -373,6 +373,93 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
 .suit{background:none !important;font-size:1.12em}
 .stp .cap>span{display:block}
 .quote{padding:8px 14px}
+
+/* =====================================================================
+   圏論的量子情報ゼミのテーマ：ストリング図（箱と線）と ZX 図の雰囲気
+   墨色の線、緑 = Z スパイダー、赤 = X スパイダー、藍 = 補助色、方眼紙の背景、明朝の見出し
+   ===================================================================== */
+:root{
+  --ink:#1c1b2e; --muted:#6d6a80; --line:#1c1b2e; --bg:#fbfaf5;
+  --accent:#17935f; --accent-d:#0f7048; --accent-l:#e1f3ea;
+  --blue:#c43c4c; --blue-l:#fbe4e6; --green:#17935f;
+  --pink:#4a47a3; --purple:#4a47a3; --yellow:#e6f0c8;
+  --hard:0 2px 0 var(--ink);
+  --serif:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP","Noto Serif CJK JP","Times New Roman",serif;
+}
+html,body{background:#191827}
+#stage{background:
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220' fill='none' stroke='%231c1b2e' stroke-width='3' opacity='.06'%3E%3Cpath d='M60 0V70L30 130V220M60 70L100 125M140 0V60L100 125M140 60L175 220M100 125V220'/%3E%3Ccircle cx='60' cy='70' r='14' fill='%2317935f'/%3E%3Ccircle cx='140' cy='60' r='14' fill='%23c43c4c'/%3E%3Ccircle cx='100' cy='125' r='14' fill='%2317935f'/%3E%3C/svg%3E") right -30px bottom -40px/330px no-repeat,
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' fill='none' stroke='%231c1b2e' stroke-width='3' opacity='.05'%3E%3Cpath d='M30 0V70C30 125 120 125 120 70V0M170 200V120M80 200V150C80 110 170 110 170 150'/%3E%3Crect x='145' y='40' width='50' height='36' rx='4' fill='%23fbfaf5'/%3E%3Cpath d='M170 0V40M170 76V120'/%3E%3C/svg%3E") left -90px top 250px/230px no-repeat,
+  linear-gradient(#efece2 1px,transparent 1px) 0 0/24px 24px,
+  linear-gradient(90deg,#efece2 1px,transparent 1px) 0 0/24px 24px,
+  var(--bg)}
+.slide{transition:opacity .5s ease,transform .6s ease}
+.slide::before{height:4px;background:linear-gradient(90deg,var(--accent),var(--purple) 50%,var(--blue))}
+#progress{height:4px;background:linear-gradient(90deg,var(--accent),var(--purple),var(--blue))}
+@keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.slide.active .pop{animation:pop .6s ease both;animation-delay:var(--d,0s)}
+.frag{transform:translateY(12px);transition:opacity .4s ease,transform .45s ease}
+
+/* 見出し：明朝＋スパイダー（ノードと足）の印 */
+.chap{color:var(--purple);font-weight:700;letter-spacing:.14em}
+h2{font-family:var(--serif);font-weight:700;padding-left:56px}
+h2::before{width:40px;height:40px;margin-top:-20px;border:0;border-radius:0;box-shadow:none;transform:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cg stroke='%231c1b2e' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M20 20L20 2M20 20L5 36M20 20L35 36'/%3E%3C/g%3E%3Ccircle cx='20' cy='20' r='10' fill='%2317935f' stroke='%231c1b2e' stroke-width='3'/%3E%3C/svg%3E") center/contain no-repeat}
+@keyframes nodeIn{from{opacity:0;transform:scale(.3) rotate(-90deg)}to{opacity:1;transform:none}}
+.slide.active h2::before{animation:nodeIn .8s cubic-bezier(.3,1.4,.5,1) both}
+h2 small{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;background:#fff;border:1.5px solid var(--ink);color:var(--muted)}
+b.k{color:var(--accent-d);background:linear-gradient(transparent 64%,var(--accent-l) 64%)}
+b.kb{color:var(--blue);background:linear-gradient(transparent 64%,var(--blue-l) 64%)}
+
+/* カード・枠：細い墨の線、ずらし影はやめて控えめに */
+.card{border:2px solid var(--ink);border-radius:14px;box-shadow:0 2px 0 var(--ink),0 12px 28px rgba(28,27,46,.07)}
+.point{background:var(--accent-l);border:1.5px solid var(--ink);border-left:7px solid var(--accent);border-radius:10px;box-shadow:none}
+.point.blue{background:var(--blue-l);border-left-color:var(--blue)}
+.formula{border:1.5px solid var(--ink);box-shadow:none;font-family:"Cambria Math","STIX Two Math","Times New Roman",serif}
+.quote{font-family:var(--serif);border:1.5px solid var(--ink);border-left:5px solid var(--purple);box-shadow:none;background:#fff}
+button.b{background:#fff;color:var(--ink);border:2px solid var(--ink);box-shadow:0 2px 0 var(--ink)}
+button.b:hover{background:var(--accent-l);transform:none;box-shadow:0 2px 0 var(--ink)}
+button.b:active{transform:translateY(2px);box-shadow:none}
+button.b.playing{background:var(--ink);color:#fff}
+ul.plain li .ico{border-radius:50%;border:2px solid var(--ink);box-shadow:none;background:#fff;font-family:var(--serif);font-weight:900;font-size:19px}
+.stp .cap{background:#fff;border:1.5px dashed #c9c5da}
+.dots span{border-width:1.5px}
+.dots span.on{background:var(--accent)}
+.kv .kk{border-radius:999px}
+.kv .kk.ts{background:var(--purple)}
+
+/* タイトル */
+.title-wrap h1{font-family:var(--serif);background:linear-gradient(transparent 80%,rgba(23,147,95,.2) 80%) no-repeat}
+.title-wrap .sub{font-family:var(--serif);font-style:italic;color:var(--purple)}
+.agenda .num{border-radius:50%;border:2px solid var(--ink) !important;box-shadow:none !important}
+.agenda li.agroup{color:var(--purple);border-bottom:1.5px dashed #d8d4e6}
+
+/* 扉：大きな番号を「線の上のノード（スパイダー）」に */
+.door h1{font-family:var(--serif)}
+.door-label{letter-spacing:.18em}
+.door-num{position:relative;width:180px;height:180px;border-radius:50%;border:4px solid var(--ink);box-shadow:0 0 0 10px rgba(255,255,255,.7);
+  transform:none;font-family:var(--serif);font-size:110px}
+.door-num::before,.door-num::after{content:"";position:absolute;left:50%;width:5px;margin-left:-2.5px;height:320px;background:var(--ink)}
+.door-num::before{bottom:100%}
+.door-num::after{top:100%}
+@keyframes doorNode{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
+.slide.active .door-num{animation:doorNode .8s cubic-bezier(.3,1.4,.5,1) both}
+.door-bg{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:560px;right:30px;bottom:-170px;opacity:.07}
+.door-topics span{border:1.5px solid var(--ink);box-shadow:none}
+
+/* まとめ・復習問題 */
+.sl{border:1.5px solid var(--ink);border-left:8px solid var(--c);border-radius:12px;box-shadow:none;background:#fff}
+.qz{border:2px solid var(--ink);border-radius:14px;box-shadow:0 2px 0 var(--ink)}
+.qz:hover{transform:none;box-shadow:0 2px 0 var(--ink),0 8px 18px rgba(28,27,46,.1)}
+.qz-no{background:var(--purple)}
+.qz.open{background:#f4faf6}
+
+/* 図：今の箱は緑の縁と淡い光、済んだ箱は淡い緑 */
+.dg .bx.on rect{fill:#f1f9f4}
+.dg .bx.now rect{fill:#fff;stroke:var(--accent);stroke-width:4.5}
+.dg .bx.now{filter:drop-shadow(0 0 7px rgba(23,147,95,.5))}
+.dg .panel{fill:#eef3fb}
+#penbar{border:2px solid var(--ink);box-shadow:0 2px 0 var(--ink)}
 </style>
 </head>
 <body>
@@ -423,7 +510,7 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
 
 <!-- 扉 1 -->
 <section class="slide door" style="--c:var(--accent)">
-  <div class="door-bg">1</div>
+  <div class="door-bg">∘</div>
   <div class="door-wrap">
     <div class="door-num">1</div>
     <div>
@@ -443,9 +530,9 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
   <div class="body cols" style="grid-template-columns:1fr 1fr">
     <div>
       <ul class="plain">
-        <li class="pop"><span class="ico">📦</span><span>2 つの箱を <b>上下に積んで</b>、線でつなぐ</span></li>
-        <li class="pop" style="--d:.08s"><span class="ico">1️⃣</span><span>まず下の箱 <b class="k suit">◇</b> が作用する</span></li>
-        <li class="pop" style="--d:.16s"><span class="ico">2️⃣</span><span>次に上の箱 <b class="k suit">♡</b> が、<b>◇ の出力</b> に作用する</span></li>
+        <li class="pop"><span class="ico">□</span><span>2 つの箱を <b>上下に積んで</b>、線でつなぐ</span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">1</span><span>まず下の箱 <b class="k suit">◇</b> が作用する</span></li>
+        <li class="pop" style="--d:.16s"><span class="ico">2</span><span>次に上の箱 <b class="k suit">♡</b> が、<b>◇ の出力</b> に作用する</span></li>
       </ul>
       <div class="point frag">図は <b>下から上へ</b> 読む。<br>縦方向 ＝ <b class="k">時間の流れ</b></div>
       <div class="quote frag">“you can always think of box ◇ being applied first and then box ♡ being applied to the output of box ◇.”<small>— Quantum in Pictures, 1.2</small></div>
@@ -463,9 +550,9 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
     <div>
       <p class="lead pop">小麦・水・熱からパンを作る（簡略化した）レシピ</p>
       <ul class="plain">
-        <li class="pop" style="--d:.06s"><span class="ico">〰️</span><span><b>線</b> ＝ もの（小麦・小麦粉・生地・パン）</span></li>
-        <li class="pop" style="--d:.12s"><span class="ico">📦</span><span><b>箱</b> ＝ 作業（砕く・混ぜる・焼く）</span></li>
-        <li class="pop" style="--d:.18s"><span class="ico">⬆️</span><span>下から順に <b>① 砕く → ② 混ぜる → ③ 焼く</b></span></li>
+        <li class="pop" style="--d:.06s"><span class="ico">│</span><span><b>線</b> ＝ もの（小麦・小麦粉・生地・パン）</span></li>
+        <li class="pop" style="--d:.12s"><span class="ico">□</span><span><b>箱</b> ＝ 作業（砕く・混ぜる・焼く）</span></li>
+        <li class="pop" style="--d:.18s"><span class="ico">∘</span><span>下から順に <b>① 砕く → ② 混ぜる → ③ 焼く</b></span></li>
       </ul>
       <div class="point frag">箱の <b>出力</b> が、上の箱の <b>入力</b> になる。<br>途中の線（小麦粉・生地）も「もの」を表している</div>
       <div class="point blue frag">横から入ってくる線（水・熱）は、<b>その作業の時に加わる材料</b></div>
@@ -483,8 +570,8 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
     <div class="card stp pop" id="dgOrder" style="--h:375px;padding:12px 16px"></div>
     <div>
       <ul class="plain">
-        <li class="pop" style="--d:.1s"><span class="ico">✅</span><span>砕く → <b>混ぜる</b> → <b>焼く</b><br>→ いい香りの <b>パン</b> 🍞</span></li>
-        <li class="pop" style="--d:.16s"><span class="ico">❌</span><span>砕く → <b>焼く</b> → <b>混ぜる</b><br>→ <b>べちゃべちゃの泥</b> 🟫</span></li>
+        <li class="pop" style="--d:.1s"><span class="ico" style="color:var(--accent)">✓</span><span>砕く → <b>混ぜる</b> → <b>焼く</b><br>→ いい香りの <b>パン</b> 🍞</span></li>
+        <li class="pop" style="--d:.16s"><span class="ico" style="color:var(--blue)">✗</span><span>砕く → <b>焼く</b> → <b>混ぜる</b><br>→ <b>べちゃべちゃの泥</b> 🟫</span></li>
       </ul>
       <div class="point frag">図の <b>上下を入れ替える</b> ＝ <b class="k">時間の順番を入れ替える</b><br>同じ箱でも、結果がまったく変わる</div>
       <div class="hint frag" style="font-size:17px">→ 図の「縦の位置」には、ちゃんと意味がある</div>
@@ -495,7 +582,7 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
 
 <!-- 扉 2 -->
 <section class="slide door" style="--c:var(--blue)">
-  <div class="door-bg">2</div>
+  <div class="door-bg">⊗</div>
   <div class="door-wrap">
     <div class="door-num">2</div>
     <div>
@@ -515,7 +602,7 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
   <div class="body cols" style="grid-template-columns:1fr 1fr">
     <div>
       <ul class="plain">
-        <li class="pop"><span class="ico">↔️</span><span>2 つの箱 <b class="suit">♠</b> と <b class="suit">♣</b> を <b>横に並べる</b></span></li>
+        <li class="pop"><span class="ico">⊗</span><span>2 つの箱 <b class="suit">♠</b> と <b class="suit">♣</b> を <b>横に並べる</b></span></li>
         <li class="pop" style="--d:.08s"><span class="ico">⏱️</span><span>それぞれの入力に <b class="k">同じ時刻</b> に作用する</span></li>
         <li class="pop" style="--d:.16s"><span class="ico">📍</span><span>ただし <b class="kb">別々の場所</b> で</span></li>
       </ul>
@@ -540,7 +627,7 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
 
 <!-- 扉 3 -->
 <section class="slide door" style="--c:var(--purple)">
-  <div class="door-bg">3</div>
+  <div class="door-bg">⋃</div>
   <div class="door-wrap">
     <div class="door-num">3</div>
     <div>
@@ -618,7 +705,7 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
     <div>
       <ul class="plain">
         <li class="pop" style="--d:.06s"><span class="ico">🎁</span><span>粒子を受け取った 2 人は、<b>何をしてもよい</b></span></li>
-        <li class="pop" style="--d:.12s"><span class="ico">📦</span><span>そのままにしても、箱をかけてもよい（例：<b class="suit">♡</b> と <b class="suit">◇</b>）</span></li>
+        <li class="pop" style="--d:.12s"><span class="ico">□</span><span>そのままにしても、箱をかけてもよい（例：<b class="suit">♡</b> と <b class="suit">◇</b>）</span></li>
       </ul>
       <div class="point frag">広大な宇宙空間で離れていても、2 つの粒子は <b class="k">強くつながったまま</b>。図の線がそれをはっきり示している</div>
       <div class="point blue frag">このつながりを使うと、<b>とんでもない量子の現象</b> が起こせる！ → この先の章へ</div>
