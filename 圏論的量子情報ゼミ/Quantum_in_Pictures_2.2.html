@@ -619,7 +619,6 @@ svg.zx{display:block;width:100%;height:auto;user-select:none;-webkit-user-select
 
 <!-- 扉 1 -->
 <section class="slide door" style="--c:var(--ink)">
-  <div class="door-bg">π</div>
   <div class="door-wrap">
     <div class="door-num">1</div>
     <div>
@@ -685,7 +684,6 @@ svg.zx{display:block;width:100%;height:auto;user-select:none;-webkit-user-select
 
 <!-- 扉 2 -->
 <section class="slide door" style="--c:var(--accent)">
-  <div class="door-bg">Δ</div>
   <div class="door-wrap">
     <div class="door-num">2</div>
     <div>
@@ -719,7 +717,6 @@ svg.zx{display:block;width:100%;height:auto;user-select:none;-webkit-user-select
 
 <!-- 扉 3 -->
 <section class="slide door" style="--c:var(--blue)">
-  <div class="door-bg">⊕</div>
   <div class="door-wrap">
     <div class="door-num">3</div>
     <div>
@@ -809,7 +806,6 @@ svg.zx{display:block;width:100%;height:auto;user-select:none;-webkit-user-select
 
 <!-- 扉 4 -->
 <section class="slide door" style="--c:var(--purple)">
-  <div class="door-bg">∘</div>
   <div class="door-wrap">
     <div class="door-num">4</div>
     <div>
@@ -1222,7 +1218,13 @@ function cropAll(svg, sc, lists, m = 14) {
   const g0 = el('g', {}, svg), g1 = el('g', { transform: `translate(${DX},0)` }, svg);
   const head = (x, t) => { const e = el('text', { x, y: -18, class: 'zt hd' }, svg); e.textContent = t; };
   head(180, '入力が 0'); head(180 + DX, '入力が 1');
-  el('line', { x1: 330, y1: -30, x2: 330, y2: 270, class: 'zsep' }, svg);
+  el('line', { x1: 330, y1: -30, x2: 330, y2: 410, class: 'zsep' }, svg);
+  // 各列の下に、教科書と同じ静的な等式（緑のクモ ＋ 入力 ＝ 2 つの出力）
+  [[0, 30], [1, 330]].forEach(([a, gx]) => zxScene(el('g', { transform: `translate(${gx},272)` }, svg)).set({
+    n: { G: { x: 70, y: 60, c: 'g', r: 19 }, A: { x: 70, y: 112, c: 'r', p: deg(a), r: 15 }, e: { x: 145, y: 72, t: '=', cls: 'eqs' }, f: { x: 145, y: 42, t: 'コピー', cls: 'sm' },
+      B: { x: 205, y: 84, c: 'r', p: deg(a), r: 15 }, C: { x: 255, y: 84, c: 'r', p: deg(a), r: 15 } },
+    w: { u1: { a: 'G', b: [44, 8] }, u2: { a: 'G', b: [96, 8] }, i: { a: 'G', b: 'A' }, b: { a: 'B', b: [205, 20] }, c: { a: 'C', b: [255, 20] } },
+  }));
   const s0 = zxScene(g0), s1 = zxScene(g1);
   const both = { set: st => { s0.set(st[0]); s1.set(st[1]); }, to: (st, d) => Promise.all([s0.to(st[0], d), s1.to(st[1], d)]) };
   const states = a => {
@@ -1347,7 +1349,15 @@ function cnotStates(a, b) {
   const g0 = el('g', {}, svg), g1 = el('g', { transform: `translate(${DX},0)` }, svg);
   const head = (x, t) => { const e = el('text', { x, y: -18, class: 'zt hd' }, svg); e.textContent = t; };
   head(210, '左が 0'); head(210 + DX, '左が 1');
-  el('line', { x1: 425, y1: -30, x2: 425, y2: 300, class: 'zsep' }, svg);
+  el('line', { x1: 425, y1: -30, x2: 425, y2: 480, class: 'zsep' }, svg);
+  // 各列の下に、教科書と同じ静的な等式（CNOT ＋ 左の入力 ＝ 出力 1 と、右の線）
+  [[0, 50], [1, 400]].forEach(([a, gx]) => zxScene(el('g', { transform: `translate(${gx},325)` }, svg)).set({
+    n: { G: { x: 40, y: 65, c: 'g', r: 19 }, X: { x: 115, y: 65, c: 'r', r: 19 }, A: { x: 40, y: 128, c: 'r', p: deg(a), r: 15 },
+      e: { x: 172, y: 80, t: '=', cls: 'eqs' }, f: { x: 172, y: 50, t: '融合', cls: 'sm' },
+      R: { x: 228, y: 92, c: 'r', p: deg(a), r: 15 }, ...(a ? { N: { x: 290, y: 80, c: 'r', p: 180, r: 17 } } : {}) },
+    w: { g: { a: 'G', b: [40, 8] }, x: { a: 'X', b: [115, 8] }, h: { a: 'G', b: 'X', h: 1 }, i: { a: 'G', b: 'A' }, d: { a: 'X', b: [115, 150] },
+      r: { a: 'R', b: [228, 28] }, ...(a ? { n1: { a: 'N', b: [290, 8] }, n2: { a: 'N', b: [290, 150] } } : { n0: { a: [290, 8], b: [290, 150], s: 1 } }) },
+  }));
   const s0 = zxScene(g0), s1 = zxScene(g1);
   const both = { set: st => { s0.set(st[0]); s1.set(st[1]); }, to: (st, d) => Promise.all([s0.to(st[0], d), s1.to(st[1], d)]) };
   const build = () => { const A = cnotStates(0, null), B = cnotStates(1, null); return A.map((x, k) => Object.assign([x, B[k]], { dur: x.dur })); };
