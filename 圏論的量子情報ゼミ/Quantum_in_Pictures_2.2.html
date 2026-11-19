@@ -576,12 +576,12 @@ svg.zx{display:block;width:100%;height:auto;user-select:none;-webkit-user-select
 .sumlist .sl{padding:12px 24px !important}
 .zt.hd{font:900 24px var(--serif);fill:var(--ink)}
 .zsep{stroke:#c9c5da;stroke-width:2.5;stroke-dasharray:10 8}
-/* まとめ：各項目に小さな図 */
-.sumgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:16px 18px}
-.sg{background:#fff;border:1.5px solid var(--ink);border-top:8px solid var(--c);border-radius:12px;padding:10px 16px 12px;display:flex;flex-direction:column;justify-content:space-between;gap:8px;min-height:0}
-.sg svg.zx{height:124px;width:100%;flex:none}
-.sg-t{display:flex;gap:10px;align-items:flex-start;font-size:21px;line-height:1.42}
-.sg-t .sl-n{width:34px;height:34px;font-size:17px;margin-top:1px}
+/* まとめ：項目と文章は左、1・2 ページと同じビットの辞書の図を右 */
+.body.sumfig{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:26px;align-items:center}
+.sumfig .sumlist{gap:12px !important}
+.sumfig .sumlist .sl{font-size:22px !important;padding:10px 18px !important}
+.sumfig .card{padding:12px 18px}
+.sumfig svg.zx{height:470px;width:auto}
 
 </style>
 </head>
@@ -913,13 +913,16 @@ svg.zx{display:block;width:100%;height:auto;user-select:none;-webkit-user-select
 <section class="slide">
   <div class="chap">Summary ／ 2.2</div>
   <h2>2.2 のまとめ<small>A spider bit me!</small></h2>
-  <div class="body sumgrid">
-    <div class="sg pop" style="--d:0.00s;--c:var(--ink)"><svg class="zx" id="zSum1"></svg><div class="sg-t"><span class="sl-n">1</span><div>量子ビットも<br>状態と箱をしぼれば<br><b class="k">ビット</b> として使える</div></div></div>
-    <div class="sg pop" style="--d:0.07s;--c:var(--ink)"><svg class="zx" id="zSum2"></svg><div class="sg-t"><span class="sl-n">2</span><div>2 つの状態だけを許す：<br><span style="white-space:nowrap"><b>赤 0° ＝ 0、赤 180° ＝ 1</b></span></div></div></div>
-    <div class="sg pop" style="--d:0.14s;--c:var(--accent)"><svg class="zx" id="zSum3"></svg><div class="sg-t"><span class="sl-n">3</span><div><b>緑のクモ</b> は <span style="white-space:nowrap">0 も 1 も</span> <span style="white-space:nowrap"><b class="k">コピー</b> する</span></div></div></div>
-    <div class="sg pop" style="--d:0.21s;--c:var(--blue)"><svg class="zx" id="zSum4"></svg><div class="sg-t"><span class="sl-n">4</span><div><b>ADD 箱</b>：<br>ビットの足し算では<br><b class="k">1 + 1 = 0</b></div></div></div>
-    <div class="sg pop" style="--d:0.28s;--c:var(--blue)"><svg class="zx" id="zSum5"></svg><div class="sg-t"><span class="sl-n">5</span><div><b>180° の赤のクモ</b> は <b class="k">NOT 箱</b><br>（0 と 1 を入れかえる）</div></div></div>
-    <div class="sg pop" style="--d:0.35s;--c:var(--purple)"><svg class="zx" id="zSum6"></svg><div class="sg-t"><span class="sl-n">6</span><div><b class="k">CNOT ＝ COPY ＋ ADD</b></div></div></div>
+  <div class="body sumfig">
+    <div class="sumlist">
+      <div class="sl pop" style="--d:0.00s;--c:var(--ink)"><span class="sl-n">1</span><div>量子ビットも状態と箱をしぼれば <b class="k">ビット</b> として使える</div></div>
+      <div class="sl pop" style="--d:0.07s;--c:var(--ink)"><span class="sl-n">2</span><div>2 つの状態だけを許す：<b>赤 0° ＝ 0、赤 180° ＝ 1</b></div></div>
+      <div class="sl pop" style="--d:0.14s;--c:var(--accent)"><span class="sl-n">3</span><div><b>緑のクモ</b> は 0 も 1 も <b class="k">コピー</b> する</div></div>
+      <div class="sl pop" style="--d:0.21s;--c:var(--blue)"><span class="sl-n">4</span><div><b>ADD 箱</b>：ビットの足し算では <b class="k">1 + 1 = 0</b></div></div>
+      <div class="sl pop" style="--d:0.28s;--c:var(--blue)"><span class="sl-n">5</span><div><b>180° の赤のクモ</b> は <b class="k">NOT 箱</b>（0 と 1 を入れかえる）</div></div>
+      <div class="sl pop" style="--d:0.35s;--c:var(--purple)"><span class="sl-n">6</span><div><b class="k">CNOT ＝ COPY ＋ ADD</b></div></div>
+    </div>
+    <div class="card pop" style="--d:.2s"><svg class="zx" id="zSum" viewBox="0 0 480 450"></svg></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -1175,6 +1178,7 @@ function cropAll(svg, sc, lists, m = 14) {
   lab('l5', 360, 440, 'CNOT');
   zfig('zMsg', { n, w });
   zfig('zTitle', { n, w });
+  zxScene.dict = { n, w };
 }
 
 /* ---------- ビット：文字 → 0 と 1 の列 ---------- */
@@ -1414,33 +1418,12 @@ function cnotStates(a, b) {
   zfig('zMore', { n, w });
 }
 
-/* ---------- まとめ：各項目の小さな図（静止図） ---------- */
+/* ---------- まとめ：1・2 ページと同じビットの辞書の図（静止図。描いた範囲に合わせて切り落とす） ---------- */
 {
-  const fig = (id, n, w) => { const svg = document.getElementById(id); zxScene(svg).set({ n, w }); const b = svg.getBBox(), m = 8; svg.setAttribute('viewBox', `${b.x - m} ${b.y - m} ${b.width + 2 * m} ${b.height + 2 * m}`); };
-  // 1：量子ビットを並べてビット列 10010
-  { const n = {}, w = {}; [...'10010'].forEach((b, i) => { const x = 40 + i * 58; n['s' + i] = { x, y: 80, c: 'r', p: deg(+b), r: 19 }; w['w' + i] = { a: 's' + i, b: [x, 20] }; n['d' + i] = { x, y: 128, t: b, cls: 'big' + (b === '1' ? ' o' : '') }; }); fig('zSum1', n, w); }
-  // 2：赤 0° ＝ 0、赤 180° ＝ 1
-  fig('zSum2', { a: { x: 40, y: 80, c: 'r', r: 22 }, da: { x: 40, y: 132, t: '0', cls: 'big o' }, b: { x: 160, y: 80, c: 'r', p: 180, r: 22 }, db: { x: 160, y: 132, t: '1', cls: 'big o' } },
-    { a: { a: 'a', b: [40, 18] }, b: { a: 'b', b: [160, 18] } });
-  // 3：緑のクモは 0 も 1 もコピー
-  { const n = {}, w = {}; [0, 1].forEach(a => { const o = a * 250, k = 'c' + a;
-      n[k + 'G'] = { x: o + 40, y: 55, c: 'g', r: 18 }; n[k + 'A'] = { x: o + 40, y: 108, c: 'r', p: deg(a), r: 15 }; n[k + 'e'] = { x: o + 100, y: 70, t: '=', cls: 'eqs' };
-      n[k + 'B'] = { x: o + 150, y: 80, c: 'r', p: deg(a), r: 15 }; n[k + 'C'] = { x: o + 195, y: 80, c: 'r', p: deg(a), r: 15 };
-      w[k + 'u'] = { a: k + 'G', b: [o + 16, 8] }; w[k + 'v'] = { a: k + 'G', b: [o + 64, 8] }; w[k + 'i'] = { a: k + 'G', b: k + 'A' }; w[k + 'b'] = { a: k + 'B', b: [o + 150, 18] }; w[k + 'c'] = { a: k + 'C', b: [o + 195, 18] }; });
-    fig('zSum3', n, w); }
-  // 4：ADD 箱に 1 と 1 ＝ 0
-  fig('zSum4', { S: { x: 60, y: 60, c: 'r', r: 19 }, A: { x: 28, y: 118, c: 'r', p: 180, r: 15 }, B: { x: 92, y: 118, c: 'r', p: 180, r: 15 }, la: { x: 28, y: 152, t: '1', cls: 'big b' }, lb: { x: 92, y: 152, t: '1', cls: 'big b' },
-    e: { x: 145, y: 82, t: '=', cls: 'eqs' }, R: { x: 205, y: 95, c: 'r', r: 16 }, lr: { x: 205, y: 140, t: '0', cls: 'big o' } },
-    { o: { a: 'S', b: [60, 10] }, a: { a: 'S', b: 'A' }, b: { a: 'S', b: 'B' }, r: { a: 'R', b: [205, 30] } });
-  // 5：NOT 箱に 0 ＝ 1
-  fig('zSum5', { N: { x: 60, y: 70, c: 'r', p: 180, r: 20 }, A: { x: 60, y: 140, c: 'r', r: 15 }, la: { x: 22, y: 144, t: '0', cls: 'big b' }, e: { x: 125, y: 90, t: '=', cls: 'eqs' },
-    R: { x: 185, y: 100, c: 'r', p: 180, r: 17 }, lr: { x: 222, y: 104, t: '1', cls: 'big o' } },
-    { u: { a: 'N', b: [60, 10] }, d: { a: 'N', b: 'A' }, r: { a: 'R', b: [185, 35] } });
-  // 6：CNOT ＝ COPY のあと ADD
-  fig('zSum6', { G: { x: 40, y: 95, c: 'g', r: 18 }, X: { x: 110, y: 95, c: 'r', r: 18 }, e: { x: 165, y: 100, t: '=', cls: 'eqs' },
-    G2: { x: 220, y: 135, c: 'g', r: 18 }, X2: { x: 290, y: 60, c: 'r', r: 18 } },
-    { a: { a: 'G', b: [40, 15] }, b: { a: 'G', b: [40, 180] }, c: { a: 'X', b: [110, 15] }, d: { a: 'X', b: [110, 180] }, h: { a: 'G', b: 'X', h: 1 },
-      a2: { a: 'G2', b: [220, 15] }, b2: { a: 'G2', b: [220, 180] }, c2: { a: 'X2', b: [290, 15] }, d2: { a: 'X2', b: [310, 180] }, h2: { a: 'G2', b: 'X2', s: 1 } });
+  const svg = document.getElementById('zSum');
+  zxScene(svg).set(zxScene.dict);
+  const bb = svg.getBBox(), m = 12;
+  svg.setAttribute('viewBox', `${bb.x - m} ${bb.y - m} ${bb.width + 2 * m} ${bb.height + 2 * m}`);
 }
 
 /* ---------- 図と枠のすき間をなくす（1.2 の fitFigures と同じ考え方。スパイダー図・操作の列にも対応） ---------- */
