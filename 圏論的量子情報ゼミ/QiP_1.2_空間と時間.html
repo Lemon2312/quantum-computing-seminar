@@ -460,6 +460,9 @@ ul.plain li .ico{border-radius:50%;border:2px solid var(--ink);box-shadow:none;b
 .dg .bx.now{filter:drop-shadow(0 0 7px rgba(23,147,95,.5))}
 .dg .panel{fill:#eef3fb}
 #penbar{border:2px solid var(--ink);box-shadow:0 2px 0 var(--ink)}
+
+/* 「カーソル」モード（既定。道具を何も選んでいないとき）：普通のカーソルで文字を選択・コピーできる（6.1-7.9 v44 と同じ） */
+body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default;cursor:auto}
 </style>
 </head>
 <body>
@@ -777,7 +780,8 @@ ul.plain li .ico{border-radius:50%;border:2px solid var(--ink);box-shadow:none;b
 </div>
 <div id="progress"></div>
 <div id="penbar" aria-label="ペンの道具">
-  <button data-tool="laser" class="on" title="レーザーポインター（書き込みは残らない）">🔴 レーザー</button>
+  <button data-tool="none" class="on" title="普通のカーソル（文字の選択・コピーができる）">🖱️ カーソル</button>
+  <button data-tool="laser" title="レーザーポインター（書き込みは残らない）">🔴 レーザー</button>
   <button data-tool="pen" title="黒ペンで書き込む (P)">✏️ 黒ペン</button>
   <button data-tool="eraser" title="消しゴム（なぞった線を消す）">🧽 消す</button>
   <button data-tool="lasso" title="投げ縄：書き込みを囲んで選択・移動・複製 (L)">➰ 投げ縄</button>
@@ -1271,6 +1275,8 @@ slides.forEach((s, i) => s.addEventListener('click', () => {
 }));
 addEventListener('resize', () => { if (overview) layoutOverview(); });
 addEventListener('keydown', e => {
+  // 動画を操作しているときの Space・矢印キーは動画に任せる
+  if (e.target.tagName === 'VIDEO' && [' ', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
   if (overview) {
     if (['o', 'O', 'Escape'].includes(e.key)) toggleOverview(false);
     else if (e.key === 'Enter') { e.preventDefault(); toggleOverview(false); }
@@ -1281,8 +1287,9 @@ addEventListener('keydown', e => {
     }
     return;
   }
-  if (e.target.tagName === 'SUMMARY' || e.target.tagName === 'INPUT') return;
-  if (e.key === 'p' || e.key === 'P') return ink.setTool(ink.tool() === 'pen' ? 'laser' : 'pen');
+  if(e.target.closest('.slide-resource-links'))return;
+  if (e.target.closest('#qcWebSearch, .qc-walkthrough, #quantumLab, #qcSign, #qcAccount, #qcCloudLogin, #qcCloudHome, #qcInstances, #qcInstanceWizard, #qcViz, .cv-modal, .qj-page, .qj-notice, .qj-data-modal, .qpd-overlay') || ['SUMMARY','INPUT','SELECT','TEXTAREA','BUTTON'].includes(e.target.tagName)) return;
+  if (e.key === 'p' || e.key === 'P') return ink.setTool(ink.tool() === 'pen' ? 'none' : 'pen');
   if (e.key === 'z' || e.key === 'Z') return ink.undo();
   if (e.key === 'o' || e.key === 'O') return toggleOverview(true);
   if (['ArrowRight', 'PageDown', ' ', 'Enter', 'ArrowDown'].includes(e.key)) { e.preventDefault(); next(); }
@@ -1293,7 +1300,7 @@ addEventListener('keydown', e => {
 });
 let tx = null;
 // スライダー操作や Apple Pencil のタッチはスワイプのページ送りに使わない
-addEventListener('touchstart', e => tx = laser.blocksSwipe(e.touches[0]) || e.target.closest('input') ? null : e.touches[0].clientX, { passive: true });
+addEventListener('touchstart', e => tx = laser.blocksSwipe(e.touches[0]) || e.target.closest('input,select,textarea,.qj-page,.qj-data-modal,#qcViz,.qpd-overlay') ? null : e.touches[0].clientX, { passive: true });
 addEventListener('touchend', e => {
   if (tx === null || overview) return;
   const dx = e.changedTouches[0].clientX - tx; tx = null;
@@ -1348,7 +1355,8 @@ const ink = (() => {
   const ctx = canvas.getContext('2d');
   const bar = $('#penbar');
   const pages = slides.map(() => ({ strokes: [], undo: [] }));
-  let tool = 'laser', active = null;
+  let tool = 'none', active = null;
+  document.body.classList.add('tool-none');
   // 投げ縄の選択（sel.items は選択中の線そのもの）とクリップボード（ページをまたいで使う）
   let sel = null, clip = null, lassoPts = null;
 
@@ -1517,7 +1525,7 @@ body.overview #lassoBar,body.overview #inkToast{display:none!important}`;
   }));
 
   stage.addEventListener('pointerdown', e => {
-    if (overview || active || tool === 'laser' || e.target.closest('input') || e.target.closest('#lassoBar')) return;
+    if (overview || active || tool === 'laser' || tool === 'none' || e.target.closest('input') || e.target.closest('#lassoBar')) return;
     if (!(e.pointerType === 'pen' || (e.pointerType === 'mouse' && e.button === 0))) return;
     e.preventDefault();
     const q = toStage(e);
@@ -1580,11 +1588,13 @@ body.overview #lassoBar,body.overview #inkToast{display:none!important}`;
 
   function setTool(t) {
     tool = t;
+    document.body.classList.toggle('tool-none', t === 'none');
+    if (t !== 'none') { const s = getSelection(); if (s) s.removeAllRanges(); }
     if (t !== 'lasso') setSel(null);
     bar.querySelectorAll('[data-tool]').forEach(b => b.classList.toggle('on', b.dataset.tool === t));
   }
   function undo() { const pg = pages[cur]; if (pg.undo.length) { pg.strokes = pg.undo.pop(); setSel(null, false); render(); } }
-  bar.querySelectorAll('[data-tool]').forEach(b => b.onclick = () => { b.blur(); setTool(b.dataset.tool); });
+  bar.querySelectorAll('[data-tool]').forEach(b => b.onclick = () => { b.blur(); setTool(tool === b.dataset.tool ? 'none' : b.dataset.tool); });
   $('#inkUndo').onclick = e => { e.currentTarget.blur(); undo(); };
   $('#inkPaste').onclick = e => { e.currentTarget.blur(); paste(); };
   $('#inkClear').onclick = e => {
@@ -1595,8 +1605,9 @@ body.overview #lassoBar,body.overview #inkToast{display:none!important}`;
   addEventListener('keydown', e => {
     if (overview || e.target.tagName === 'INPUT') return;
     const k = e.key.toLowerCase(), mod = e.ctrlKey || e.metaKey;
+    if (mod && String(getSelection())) return;
     let f = null;
-    if (k === 'l' && !mod) f = () => setTool(tool === 'lasso' ? 'laser' : 'lasso');
+    if (k === 'l' && !mod) f = () => setTool(tool === 'lasso' ? 'none' : 'lasso');
     else if (sel && (k === 'delete' || k === 'backspace')) f = del;
     else if (sel && k === 'escape') f = () => setSel(null);
     else if (sel && k === 'd') f = duplicate;
@@ -1673,7 +1684,8 @@ const laser = (() => {
   const clickable = t => !!t.closest('button,input,select,textarea,a,label,summary,#lassoBar') || ['pointer', 'grab', 'grabbing'].includes(getComputedStyle(t).cursor);
 
   stage.addEventListener('pointerdown', e => {
-    if (overview || down || e.target.closest('input') || ink.tool() !== 'laser') return;
+    if (overview || down || e.target.closest('input')) return;
+    if (!(ink.tool() === 'laser' || (ink.tool() === 'none' && e.pointerType === 'pen'))) return;
     const mouse = e.pointerType === 'mouse';
     if (!(e.pointerType === 'pen' || (mouse && e.button === 0 && !clickable(e.target)))) return;
     e.preventDefault();
