@@ -496,6 +496,9 @@ ul.plain li .ico{width:40px;height:40px;font-size:21px}
 .slide[data-id="msg"] .bigmsg{font-size:38px}
 .stp-ctl{white-space:nowrap}
 .body.wide-fig{justify-content:center;align-items:center}
+/* 動かさない図（.frozen）：光る線・流れる点線も止める */
+.frozen .dg .glow.on{animation:none;opacity:.32}
+.frozen .dg .flowl.on{animation:none}
 </style>
 </head>
 <body>
@@ -704,12 +707,12 @@ ul.plain li .ico{width:40px;height:40px;font-size:21px}
   <div class="body cols" data-min-text="500" style="grid-template-columns:0.95fr 1fr">
     <div class="card stp pop" id="dgFriends" style="--h:370px"></div>
     <div>
-      <p class="lead pop">家の中の別々の部屋（寝室・台所・居間…）で、人が何かをしている図だと考えてもよい。</p>
+      <p class="lead pop">左図は、家の中の別々の部屋<br>（寝室・台所・居間…）で、人が何かを<br>している図だと考えてもよい。</p>
       <ul class="plain">
         <li class="pop" style="--d:.06s"><span class="ico">👧</span><span><b>Andrea</b>（左）が箱 <b class="suit">♠₁, ♠₂, ♠₃</b> を順にかける</span></li>
         <li class="pop" style="--d:.12s"><span class="ico">👦</span><span><b>Blaise</b>（右）が箱 <b class="suit">♣₁, ♣₂, ♣₃</b> を順にかける</span></li>
       </ul>
-      <div class="point frag">でも、下で 2 本の線をつないでいる <b class="k">カップ ⋃</b> は、<br>時間と空間の中で何だろう？</div>
+      <div class="point frag">でも、下で 2 本の線をつないでいる<br><b class="k">カップ ⋃</b> は、時間と空間の中で何だろう？</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -741,7 +744,7 @@ ul.plain li .ico{width:40px;height:40px;font-size:21px}
     <div class="card stp pop" id="dgLinked" style="--h:360px;padding:12px 16px"></div>
     <div>
       <ul class="plain">
-        <li class="pop" style="--d:.06s"><span class="ico">🎁</span><span>粒子を受け取った 2 人は、<b>何をしてもよい</b></span></li>
+        <li class="pop" style="--d:.06s"><span class="ico">🎁</span><span>粒子を受け取った 2 人は、<b style="white-space:nowrap">何をしてもよい</b></span></li>
         <li class="pop" style="--d:.12s"><span class="ico">□</span><span>そのままにしても、箱をかけてもよい（例：<b class="suit">♡</b> と <b class="suit">◇</b>）</span></li>
       </ul>
       <div class="point blue frag">このつながりを使うと、<b>とんでもない量子の現象</b> が起こせる！ → この先の章へ</div>
@@ -918,8 +921,8 @@ function stepper(card, caps, { interval = 1900, hold = 3000, cap: showCap = fals
 }
 
 /* 動かさない図：ステップ k までに出る文字（途中の線の名前・結果）をすべて表示する。線・箱は色をつけず墨色のまま。再生ボタン・説明文はつけない */
-function staticFig(card, k) {
-  card.querySelectorAll('.appear[data-on]').forEach(e => e.classList.toggle('on', k >= +e.dataset.on));
+function staticFig(card, k, all = false) {
+  card.querySelectorAll(all ? '[data-on]' : '.appear[data-on]').forEach(e => e.classList.toggle('on', k >= +e.dataset.on));
   card.querySelectorAll('[data-only]').forEach(e => e.classList.toggle('hide', !e.dataset.only.split(',').includes(String(k))));
 }
 
@@ -1139,12 +1142,9 @@ function solar(s, idp) {
   el('path', { d: full, class: 'flowl', 'data-on': 2 }, s);
   box(s, 100, 118, '♡', { on: 1 }); box(s, 560, 118, '◇', { on: 1 });
   el('line', { x1: 118, y1: 268, x2: 542, y2: 268, stroke: 'var(--pink)', 'stroke-width': 3, 'data-on': 2, class: 'appear' }, s);
-  label(s, 330, 286, '↔ どれだけ離れていても', { c: 'wl appear', on: 2 }).setAttribute('style', 'fill:var(--pink);font-weight:900');
-  stepper(card, [
-    '粒子を受け取った。2 人はこれを <b>どう使ってもよい</b>',
-    'たとえば Andrea は <b class="suit">♡</b>、Blaise は <b class="suit">◇</b> をかける',
-    'どれだけ離れていても、2 つの粒子は <b class="k">線でつながったまま</b>！',
-  ]);
+  label(s, 330, 286, '↔ どれだけ離れていても繋がっている', { c: 'wl appear', on: 2 }).setAttribute('style', 'fill:var(--pink);font-weight:900');
+  staticFig(card, 2, true);
+  card.classList.add('frozen');
 }
 
 
