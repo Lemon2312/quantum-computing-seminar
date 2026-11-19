@@ -609,7 +609,7 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
         <li class="pop" style="--d:.08s"><span class="ico">⏱️</span><span>それぞれの入力に <b class="k">同じ時刻</b> に作用する</span></li>
         <li class="pop" style="--d:.16s"><span class="ico">📍</span><span>ただし <b class="kb">別々の場所</b> で</span></li>
       </ul>
-      <div class="point blue frag">横方向 ＝ <b class="kb">空間（場所）</b><br>ピンクの点線「いま」は、<b>同じ瞬間</b> を表す横線</div>
+      <div class="point blue frag">横方向 ＝ <b class="kb">空間（場所）</b><br>点線の「いま」は、<b>同じ瞬間</b> を表す横線</div>
       <div class="quote frag">“the two boxes <span class="suit">♠</span> and <span class="suit">♣</span> are being applied to their inputs at the same time but in different places.”<small>— Quantum in Pictures, 1.2</small></div>
     </div>
     <div class="card stp pop" id="dgSide" style="--d:.2s;--h:350px"></div>
@@ -654,8 +654,8 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
         <li class="pop" style="--d:.06s"><span class="ico">🏢</span><span><b>親</b> は会社で働く（<b class="kb">同時・別の場所</b>）</span></li>
         <li class="pop" style="--d:.12s"><span class="ico">🏠</span><span>そのあと、みんな家に帰って <b>いっしょに夕食</b>（<b class="k">後</b>）</span></li>
       </ul>
-      <div class="point frag"><b>線 ＝ 人</b>（子ども・親）、<b>箱 ＝ 場所での出来事</b><br>線が集まる ＝ 同じ場所に集まる</div>
-      <div class="point blue frag">ピンクの「いま」の線を下から上へ動かすと、<br>その時刻に <b>どこで何が起きているか</b> がわかる</div>
+      <div class="point frag"><b>線 ＝ 子どもたち・親たち</b>（1 本で 1 グループ）<br><b>箱 ＝ その場所で過ごすこと</b><br>2 本の線が 1 つの箱に入る ＝ 同じ場所に集まる</div>
+      <div class="point blue frag">点線の「いま」を下から上へ動かすと、<br>その時刻に <b>どこで何が起きているか</b> がわかる</div>
     </div>
     <div class="card stp pop" id="dgFamily" style="--d:.2s;--h:360px"></div>
   </div>
@@ -717,29 +717,6 @@ body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-ca
   <div class="pageno"></div>
 </section>
 
-<!-- 補足：記号 -->
-<section class="slide" data-id="notation">
-  <div class="chap">補足 ／ 教科書の先取り</div>
-  <h2>縦と横の組み合わせ方に名前をつけると<span class="tagx">補足・先取り</span></h2>
-  <div class="body" style="display:flex;flex-direction:column;justify-content:center">
-    <div class="notation">
-      <div class="card pop" style="--d:.05s">
-        <h3>縦につなぐ ＝ 順次合成<small>sequential composition</small></h3>
-        <div id="ntSeq" style="width:150px"></div>
-        <div class="formula suit">♡ ∘ ◇</div>
-        <div class="nt">「<b><span class="suit">◇</span> のあとに <span class="suit">♡</span></b>」（時間の順番）<br><span class="muted" style="font-size:16px">式では右から左に読む点に注意（<span class="suit">◇</span> が先）</span></div>
-      </div>
-      <div class="card pop" style="--d:.12s">
-        <h3>横に並べる ＝ 並列合成<small>parallel composition</small></h3>
-        <div id="ntPar" style="width:220px"></div>
-        <div class="formula suit">♠ ⊗ ♣</div>
-        <div class="nt">「<b><span class="suit">♠</span> と <span class="suit">♣</span> を同時に、別々の場所で</b>」<br><span class="muted" style="font-size:16px">⊗ はテンソル積の記号</span></div>
-      </div>
-    </div>
-    <div class="point blue frag">この 2 種類の「つなぎ方」を数学的に整理したものが、圏論（<b>モノイダル圏</b>）の考え方につながる。<br>ゼミ名の「圏論的量子情報」の土台になる見方</div>
-  </div>
-  <div class="pageno"></div>
-</section>
 
 <!-- まとめ -->
 <section class="slide">
@@ -887,13 +864,13 @@ function moveTok(e, t) {
 }
 
 /* ステップ再生：カードの下に説明文と ▶ 自動再生・◀ ▶ ボタンをつける */
-function stepper(card, caps, { interval = 1900, hold = 3000 } = {}) {
+function stepper(card, caps, { interval = 1900, hold = 3000, cap: showCap = true } = {}) {
   const n = caps.length;
   const cap = document.createElement('div'); cap.className = 'cap';
   const ctl = document.createElement('div'); ctl.className = 'stp-ctl';
   ctl.innerHTML = `<button class="b" data-autoplay>▶ 自動再生</button><button class="b sm" data-a="-1">◀</button>`
     + `<span class="dots">${'<span></span>'.repeat(n)}</span><button class="b sm" data-a="1">▶</button>`;
-  card.append(cap, ctl);
+  if (showCap) card.append(cap); card.append(ctl);
   const play = ctl.querySelector('[data-autoplay]'), dots = [...ctl.querySelectorAll('.dots span')];
   let k = 0, timer = null;
   function set(s) {
@@ -902,8 +879,7 @@ function stepper(card, caps, { interval = 1900, hold = 3000 } = {}) {
     card.querySelectorAll('[data-only]').forEach(e => e.classList.toggle('hide', !e.dataset.only.split(',').includes(String(k))));
     card.querySelectorAll('[data-y]').forEach(e => { const ys = e.dataset.y.split('|'); e.style.transform = `translate(0px,${ys[Math.min(k, ys.length - 1)]}px)`; });
     card.querySelectorAll('[data-t]').forEach(e => { const ts = e.dataset.t.split('|'); moveTok(e, +ts[Math.min(k, ts.length - 1)]); });
-    cap.innerHTML = `<span>${caps[k]}</span>`;
-    cap.classList.remove('go'); void cap.offsetWidth; cap.classList.add('go');
+    if (showCap) { cap.innerHTML = `<span>${caps[k]}</span>`; cap.classList.remove('go'); void cap.offsetWidth; cap.classList.add('go'); }
     dots.forEach((d, i) => d.classList.toggle('on', i <= k));
   }
   function stop() { clearTimeout(timer); timer = null; play.textContent = '▶ 自動再生'; play.classList.remove('playing'); }
@@ -1033,7 +1009,7 @@ function recipe(s, { ox = 0, oy = 0, id, bad = false, finalOn = 4 }) {
     '2 本の線それぞれに、入力が届く',
     '<b class="k">同じ瞬間</b> に <span class="suit">♠</span> と <span class="suit">♣</span> が作用する（<b class="kb">別々の場所</b> で）',
     '横に並ぶ ＝ <b class="k">同時</b>・<b class="kb">別の場所</b>',
-  ]);
+  ], { cap: false });
 }
 
 /* ---------- 3 人の友人：メキシコ・ブルキナファソ・ベトナム ---------- */
@@ -1058,7 +1034,7 @@ function recipe(s, { ox = 0, oy = 0, id, bad = false, finalOn = 4 }) {
     'Andrea は <b>メキシコ</b>、Blaise は <b>ブルキナファソ</b>、Chi は <b>ベトナム</b> にいる',
     '3 人が <b class="k">同じ瞬間</b> に、それぞれの場所で箱（<span class="suit">♠ ♣ ◇</span>）を作用させる',
     '横の位置 ＝ <b class="kb">場所（空間）</b> の違い',
-  ]);
+  ], { cap: false });
 }
 
 /* ---------- 家族の 1 日 ---------- */
@@ -1081,7 +1057,7 @@ function recipe(s, { ox = 0, oy = 0, id, bad = false, finalOn = 4 }) {
   stepper(card, [
     '🕗 朝：子どもと親が出かける',
     '🕛 昼：子どもは <b class="k">学校</b>、親は <b class="k">会社</b>（<b class="kb">同時・別の場所</b>）',
-    '🕔 夕方：みんな家に向かう（線 ＝ 人の移動）',
+    '🕔 夕方：みんな家に向かう（線が学校・会社から家へつながる）',
     '🕖 夜：<b class="k">家</b> でいっしょに夕食（同じ場所に集まる）',
   ]);
 }
@@ -1162,13 +1138,6 @@ function solar(s, idp) {
   ]);
 }
 
-/* ---------- 補足：順次合成と並列合成の小さな図 ---------- */
-{
-  const s = svgIn($('#ntSeq'), 150, 200); s.style.setProperty('--h', '170px');
-  wire(s, 'M75,195 V5'); box(s, 75, 140, '◇'); box(s, 75, 60, '♡');
-  const t = svgIn($('#ntPar'), 220, 200); t.style.setProperty('--h', '170px');
-  wire(t, 'M60,195 V5'); wire(t, 'M160,195 V5'); box(t, 60, 100, '♠'); box(t, 160, 100, '♣');
-}
 
 /* ---------- 復習問題：カードをクリックすると答えが出る（もう一度押すと隠れる） ---------- */
 {
