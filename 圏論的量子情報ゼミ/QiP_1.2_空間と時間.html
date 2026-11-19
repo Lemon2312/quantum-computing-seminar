@@ -492,15 +492,15 @@ ul.plain li .ico{width:40px;height:40px;font-size:21px}
 .slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) ul.plain li .ico{width:46px;height:46px;font-size:24px}
 .slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) .lead{font-size:29px}
 .slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) .point{font-size:27px}
-.slide[data-id="msg"] .lead{font-size:28px}
-.slide[data-id="msg"] .bigmsg{font-size:38px}
 .stp-ctl{white-space:nowrap}
 .body.wide-fig{justify-content:center;align-items:center}
 /* 動かさない図（.frozen）：光る線・流れる点線も止める */
 .frozen .dg .glow.on{animation:none;opacity:.32}
 .frozen .dg .flowl.on{animation:none}
-.slide[data-id="msg"] h2{font-size:34px}
-.slide[data-id="msg"] .bigmsg{font-size:35px}
+
+/* 2 ページ：見出しの代わりに、この節の主張を図の横に大きく */
+.slide[data-id="msg"] .chap{margin-bottom:18px}
+.keymsg{font-family:var(--serif);font-size:56px;font-weight:900;line-height:1.45}
 </style>
 </head>
 <body>
@@ -533,13 +533,11 @@ ul.plain li .ico{width:40px;height:40px;font-size:21px}
 
 <!-- 2. この節の主張 -->
 <section class="slide" data-id="msg">
-  <div class="chap">第1章 ／ 1.2 Introducing space and time</div>
-  <h2>ストリング図はいつでも時空の中の出来事として読める<small>1.2 のねらい</small></h2>
-  <div class="body cols" data-min-text="600" style="grid-template-columns:1fr 1.25fr">
+  <div class="chap">第1章 ／ 1.2 Introducing space and time ／ 1.2 のねらい</div>
+  <div class="body cols" data-min-text="560" style="grid-template-columns:1fr 1.25fr">
     <div class="card pop"><div id="msgDiag"></div></div>
     <div>
-      <p class="lead pop">箱と線の図（<b>ストリング図</b>）は、<br>ぱっと見では物理らしくありません。</p>
-      <div class="bigmsg pop" style="--d:.1s">でも実は…<br>ストリング図はいつでも<br><b class="k">空間と時間の中で起きていること</b><br>として読める！</div>
+      <div class="keymsg pop" style="--d:.15s">箱と線の図は<br>いつでも<br><b class="k">時空の中の出来事</b><br>として読める</div>
     </div>
   </div>
   <div class="pageno"></div>
