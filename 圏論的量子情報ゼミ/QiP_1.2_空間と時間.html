@@ -494,6 +494,7 @@ ul.plain li .ico{width:40px;height:40px;font-size:21px}
 .slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) .point{font-size:27px}
 .slide[data-id="msg"] .lead{font-size:28px}
 .slide[data-id="msg"] .bigmsg{font-size:38px}
+.stp-ctl{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -528,7 +529,7 @@ ul.plain li .ico{width:40px;height:40px;font-size:21px}
 <section class="slide" data-id="msg">
   <div class="chap">第1章 ／ 1.2 Introducing space and time</div>
   <h2>図はいつでも時空の中の出来事として読める<small>1.2 のねらい</small></h2>
-  <div class="body cols" style="grid-template-columns:1fr 1.25fr">
+  <div class="body cols" data-min-text="600" style="grid-template-columns:1fr 1.25fr">
     <div class="card pop"><div id="msgDiag"></div></div>
     <div>
       <p class="lead pop">箱と線の図は、ぱっと見では<br>物理らしくありません。<br><b>空間</b> も <b>時間</b> も出てこないように見えます。</p>
@@ -699,7 +700,7 @@ ul.plain li .ico{width:40px;height:40px;font-size:21px}
 <section class="slide" data-id="friends">
   <div class="chap">SECTION 4 ／ 2 人の友人が粒子に箱をかける</div>
   <h2>点線で 2 人の箱を分ける<small>1.2（時空）</small></h2>
-  <div class="body cols" style="grid-template-columns:0.95fr 1fr">
+  <div class="body cols" data-min-text="500" style="grid-template-columns:0.95fr 1fr">
     <div class="card stp pop" id="dgFriends" style="--h:370px"></div>
     <div>
       <p class="lead pop">家の中の別々の部屋（寝室・台所・居間…）で、人が何かをしている図だと考えてもよい。</p>
@@ -717,7 +718,7 @@ ul.plain li .ico{width:40px;height:40px;font-size:21px}
 <section class="slide" data-id="rocket">
   <div class="chap">SECTION 4 ／ カップを時間と空間で考える</div>
   <h2>カップ ＝ 昔 Chi が送り出した 2 つの粒子<small>1.2（時空）</small></h2>
-  <div class="body cols" style="grid-template-columns:1.5fr 1fr">
+  <div class="body cols" data-min-text="480" style="grid-template-columns:1.5fr 1fr">
     <div class="card stp pop" id="dgRocket" style="--h:350px;padding:12px 16px"></div>
     <div>
       <ul class="plain">
@@ -735,7 +736,7 @@ ul.plain li .ico{width:40px;height:40px;font-size:21px}
 <section class="slide" data-id="linked">
   <div class="chap">SECTION 4 ／ 離れていてもつながっている</div>
   <h2>離れても、2 つの粒子は線でつながったまま<small>1.2（時空）</small></h2>
-  <div class="body cols" style="grid-template-columns:1.5fr 1fr">
+  <div class="body cols" data-min-text="480" style="grid-template-columns:1.5fr 1fr">
     <div class="card stp pop" id="dgLinked" style="--h:360px;padding:12px 16px"></div>
     <div>
       <ul class="plain">
@@ -1153,6 +1154,40 @@ function solar(s, idp) {
   ]);
 }
 
+
+/* ---------- 図と枠のすき間をなくす ----------
+   1) 図の中で何も描いていない部分を viewBox から切り落とす（描いたものの外側に少しだけ余白を残す）
+   2) 本文の高さ・幅に収まる最大の大きさで図を描き、枠（カード）は図の大きさにぴったり合わせる
+      （図と文章が左右に並ぶページでは、図の列の幅を図に合わせ、残りを文章に使う） */
+function fitFigures() {
+  document.querySelectorAll('.body.cols, .body.wide-fig').forEach(body => {
+    const card = body.querySelector(':scope > .card'), svg = card && card.querySelector('svg.dg');
+    if (!svg) return;
+    if (!svg.dataset.cropped) {
+      const bb = svg.getBBox(), m = 14;
+      svg.setAttribute('viewBox', `${bb.x - m} ${bb.y - m} ${bb.width + 2 * m} ${bb.height + 2 * m}`);
+      svg.dataset.cropped = 1;
+    }
+    const vb = svg.viewBox.baseVal, r = vb.width / vb.height;
+    const cs = getComputedStyle(card), px = v => parseFloat(cs[v]) || 0;
+    const padX = px('paddingLeft') + px('paddingRight') + px('borderLeftWidth') + px('borderRightWidth');
+    const padY = px('paddingTop') + px('paddingBottom') + px('borderTopWidth') + px('borderBottomWidth');
+    const ctl = card.querySelector('.stp-ctl'), ctlH = ctl ? ctl.offsetHeight + 8 : 0;
+    const cols = body.classList.contains('cols');
+    let otherH = 0;
+    if (!cols) [...body.children].forEach(c => { if (c !== card) otherH += c.offsetHeight + 12; });
+    const minText = cols ? +(body.dataset.minText || 420) + 28 : 0;
+    const h = Math.min(body.clientHeight - padY - ctlH - otherH, (body.clientWidth - padX - minText) / r), w = h * r;
+    // 再生ボタンの列が折り返さない幅は確保する（ボタンの幅の合計 ＋ すき間）
+    const minW = ctl ? [...ctl.children].reduce((s, c) => s + c.offsetWidth, 0) + 10 * (ctl.children.length - 1) : 0;
+    if (svg.parentElement !== card) svg.parentElement.style.flex = 'none';
+    Object.assign(svg.style, { width: w + 'px', height: h + 'px', flex: 'none' });
+    Object.assign(card.style, { alignSelf: 'center', flex: 'none', width: Math.ceil(Math.max(w, minW) + padX) + 'px', height: 'auto' });
+    if (cols) body.style.gridTemplateColumns = `${Math.ceil(Math.max(w, minW) + padX)}px 1fr`;
+  });
+}
+fitFigures();
+if (document.fonts) document.fonts.ready.then(fitFigures);
 
 /* ---------- 復習問題：カードをクリックすると答えが出る（もう一度押すと隠れる） ---------- */
 {
