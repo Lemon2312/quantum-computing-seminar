@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>図の中の空間と時間 ― Quantum in Pictures 1.2</title>
+<title>1.2 空間と時間の導入 ― Quantum in Pictures</title>
 <style>
 :root{
   --ink:#1f1a3d; --muted:#6b6790; --line:#1f1a3d; --bg:#fffaf0;
@@ -373,6 +373,134 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
 .suit{background:none !important;font-size:1.12em}
 .stp .cap>span{display:block}
 .quote{padding:8px 14px}
+
+/* =====================================================================
+   圏論的量子情報ゼミのテーマ：ストリング図（箱と線）と ZX 図の雰囲気
+   墨色の線、緑 = Z スパイダー、赤 = X スパイダー、藍 = 補助色、方眼紙の背景、明朝の見出し
+   ===================================================================== */
+:root{
+  --ink:#1c1b2e; --muted:#6d6a80; --line:#1c1b2e; --bg:#fbfaf5;
+  --accent:#17935f; --accent-d:#0f7048; --accent-l:#e1f3ea;
+  --blue:#c43c4c; --blue-l:#fbe4e6; --green:#17935f;
+  --pink:#4a47a3; --purple:#4a47a3; --yellow:#e6f0c8;
+  --hard:0 2px 0 var(--ink);
+  --serif:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP","Noto Serif CJK JP","Times New Roman",serif;
+}
+html,body{background:#191827}
+#stage{background:
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220' fill='none' stroke='%231c1b2e' stroke-width='3' opacity='.06'%3E%3Cpath d='M60 0V70L30 130V220M60 70L100 125M140 0V60L100 125M140 60L175 220M100 125V220'/%3E%3Ccircle cx='60' cy='70' r='14' fill='%2317935f'/%3E%3Ccircle cx='140' cy='60' r='14' fill='%23c43c4c'/%3E%3Ccircle cx='100' cy='125' r='14' fill='%2317935f'/%3E%3C/svg%3E") right -30px bottom -40px/330px no-repeat,
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' fill='none' stroke='%231c1b2e' stroke-width='3' opacity='.05'%3E%3Cpath d='M30 0V70C30 125 120 125 120 70V0M170 200V120M80 200V150C80 110 170 110 170 150'/%3E%3Crect x='145' y='40' width='50' height='36' rx='4' fill='%23fbfaf5'/%3E%3Cpath d='M170 0V40M170 76V120'/%3E%3C/svg%3E") left -90px top 250px/230px no-repeat,
+  linear-gradient(#efece2 1px,transparent 1px) 0 0/24px 24px,
+  linear-gradient(90deg,#efece2 1px,transparent 1px) 0 0/24px 24px,
+  var(--bg)}
+.slide{transition:opacity .5s ease,transform .6s ease}
+.slide::before{height:4px;background:linear-gradient(90deg,var(--accent),var(--purple) 50%,var(--blue))}
+#progress{height:4px;background:linear-gradient(90deg,var(--accent),var(--purple),var(--blue))}
+@keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.slide.active .pop{animation:pop .6s ease both;animation-delay:var(--d,0s)}
+.frag{transform:translateY(12px);transition:opacity .4s ease,transform .45s ease}
+
+/* 見出し：明朝＋スパイダー（ノードと足）の印 */
+.chap{color:var(--purple);font-weight:700;letter-spacing:.14em}
+h2{font-family:var(--serif);font-weight:700;padding-left:56px}
+h2::before{width:40px;height:40px;margin-top:-20px;border:0;border-radius:0;box-shadow:none;transform:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cg stroke='%231c1b2e' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M20 20L20 2M20 20L5 36M20 20L35 36'/%3E%3C/g%3E%3Ccircle cx='20' cy='20' r='10' fill='%2317935f' stroke='%231c1b2e' stroke-width='3'/%3E%3C/svg%3E") center/contain no-repeat}
+@keyframes nodeIn{from{opacity:0;transform:scale(.3) rotate(-90deg)}to{opacity:1;transform:none}}
+.slide.active h2::before{animation:nodeIn .8s cubic-bezier(.3,1.4,.5,1) both}
+h2 small{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;background:#fff;border:1.5px solid var(--ink);color:var(--muted)}
+b.k{color:var(--accent-d);background:linear-gradient(transparent 64%,var(--accent-l) 64%)}
+b.kb{color:var(--blue);background:linear-gradient(transparent 64%,var(--blue-l) 64%)}
+
+/* カード・枠：細い墨の線、ずらし影はやめて控えめに */
+.card{border:2px solid var(--ink);border-radius:14px;box-shadow:0 2px 0 var(--ink),0 12px 28px rgba(28,27,46,.07)}
+.point{background:var(--accent-l);border:1.5px solid var(--ink);border-left:7px solid var(--accent);border-radius:10px;box-shadow:none}
+.point.blue{background:var(--blue-l);border-left-color:var(--blue)}
+.formula{border:1.5px solid var(--ink);box-shadow:none;font-family:"Cambria Math","STIX Two Math","Times New Roman",serif}
+.quote{font-family:var(--serif);border:1.5px solid var(--ink);border-left:5px solid var(--purple);box-shadow:none;background:#fff}
+button.b{background:#fff;color:var(--ink);border:2px solid var(--ink);box-shadow:0 2px 0 var(--ink)}
+button.b:hover{background:var(--accent-l);transform:none;box-shadow:0 2px 0 var(--ink)}
+button.b:active{transform:translateY(2px);box-shadow:none}
+button.b.playing{background:var(--ink);color:#fff}
+ul.plain li .ico{border-radius:50%;border:2px solid var(--ink);box-shadow:none;background:#fff;font-family:var(--serif);font-weight:900;font-size:19px}
+.stp .cap{background:#fff;border:1.5px dashed #c9c5da}
+.dots span{border-width:1.5px}
+.dots span.on{background:var(--accent)}
+.kv .kk{border-radius:999px}
+.kv .kk.ts{background:var(--purple)}
+
+/* タイトル */
+.title-wrap h1{font-family:var(--serif);background:linear-gradient(transparent 80%,rgba(23,147,95,.2) 80%) no-repeat}
+.title-wrap .sub{font-family:var(--serif);font-style:italic;color:var(--purple)}
+.agenda .num{border-radius:50%;border:2px solid var(--ink) !important;box-shadow:none !important}
+.agenda li.agroup{color:var(--purple);border-bottom:1.5px dashed #d8d4e6}
+
+/* 扉：大きな番号を「線の上のノード（スパイダー）」に */
+.door h1{font-family:var(--serif)}
+.door-label{letter-spacing:.18em}
+.door-num{position:relative;width:180px;height:180px;border-radius:50%;border:4px solid var(--ink);box-shadow:0 0 0 10px rgba(255,255,255,.7);
+  transform:none;font-family:var(--serif);font-size:110px}
+.door-num::before,.door-num::after{content:"";position:absolute;left:50%;width:5px;margin-left:-2.5px;height:320px;background:var(--ink)}
+.door-num::before{bottom:100%}
+.door-num::after{top:100%}
+@keyframes doorNode{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
+.slide.active .door-num{animation:doorNode .8s cubic-bezier(.3,1.4,.5,1) both}
+.door-bg{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:560px;right:30px;bottom:-170px;opacity:.07}
+.door-topics span{border:1.5px solid var(--ink);box-shadow:none}
+
+/* まとめ・復習問題 */
+.sl{border:1.5px solid var(--ink);border-left:8px solid var(--c);border-radius:12px;box-shadow:none;background:#fff}
+.qz{border:2px solid var(--ink);border-radius:14px;box-shadow:0 2px 0 var(--ink)}
+.qz:hover{transform:none;box-shadow:0 2px 0 var(--ink),0 8px 18px rgba(28,27,46,.1)}
+.qz-no{background:var(--purple)}
+.qz.open{background:#f4faf6}
+
+/* 図：今の箱は緑の縁と淡い光、済んだ箱は淡い緑 */
+.dg .bx.on rect{fill:#f1f9f4}
+.dg .bx.now rect{fill:#fff;stroke:var(--accent);stroke-width:4.5}
+.dg .bx.now{filter:drop-shadow(0 0 7px rgba(23,147,95,.5))}
+.dg .panel{fill:#eef3fb}
+#penbar{border:2px solid var(--ink);box-shadow:0 2px 0 var(--ink)}
+
+/* 「カーソル」モード（既定。道具を何も選んでいないとき）：普通のカーソルで文字を選択・コピーできる（6.1-7.9 v44 と同じ） */
+body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default;cursor:auto}
+.rlab{margin:18px 0 2px;font-size:17px;font-weight:900;color:var(--muted);letter-spacing:.1em;border-bottom:1.5px dashed #d8d4e6;padding-bottom:2px}
+
+/* ---------- 余白を減らす：図は本文の高さいっぱい、文字は大きく ---------- */
+h2{margin:4px 0 14px}
+.body.cols{align-items:stretch;gap:28px}
+.body.cols > .card{display:flex;flex-direction:column;justify-content:center;min-height:0}
+.body.cols > div:not(.card){display:flex;flex-direction:column;justify-content:center}
+.stp svg.dg{flex:1 1 0;height:auto;min-height:0}
+#msgDiag{flex:1;min-height:0;display:flex}
+#msgDiag svg.dg{height:100%}
+ul.plain li{font-size:25px;line-height:1.5;margin:10px 0;gap:12px}
+ul.plain li .ico{width:40px;height:40px;font-size:21px}
+.lead{font-size:25px;line-height:1.6}
+.bigmsg{font-size:34px}
+.point{font-size:24px;line-height:1.55;padding:14px 20px}
+.rlab{font-size:19px}
+.sumlist{gap:16px !important}
+.sumlist .sl{font-size:25px !important;padding:14px 22px !important}
+.sl-n{width:42px;height:42px;font-size:21px}
+.body.wide-fig{display:flex;flex-direction:column;gap:12px}
+.body.wide-fig > .card{flex:1;min-height:0;display:flex;flex-direction:column}
+.sumlist{gap:20px !important}
+.sumlist .sl{font-size:26px !important;padding:16px 24px !important}
+.slide[data-id="rocket"] ul.plain li,.slide[data-id="linked"] ul.plain li{font-size:23px}
+.slide[data-id="rocket"] .point,.slide[data-id="linked"] .point{font-size:22px}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) ul.plain li{font-size:29px;margin:16px 0}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) ul.plain li .ico{width:46px;height:46px;font-size:24px}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) .lead{font-size:29px}
+.slide:is([data-id="stack"],[data-id="recipe"],[data-id="side"],[data-id="family"]) .point{font-size:27px}
+.stp-ctl{white-space:nowrap}
+.body.wide-fig{justify-content:center;align-items:center}
+/* 動かさない図（.frozen）：光る線・流れる点線も止める */
+.frozen .dg .glow.on{animation:none;opacity:.32}
+.frozen .dg .flowl.on{animation:none}
+
+/* 2 ページ：見出しの代わりに、この節の主張を図の横に大きく */
+.slide[data-id="msg"] .chap{margin-bottom:18px}
+.keymsg{font-family:var(--serif);font-size:56px;font-weight:900;line-height:1.45}
 </style>
 </head>
 <body>
@@ -385,14 +513,15 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
   <div class="title-wrap">
     <div>
       <div class="chap pop">『Quantum in Pictures』 ゼミ資料 ／ 圏論的量子情報ゼミ</div>
-      <h1 class="pop" style="--d:.1s">図の中の<br>空間と時間</h1>
+      <h1 class="pop" style="--d:.1s">1.2<br>空間と時間の導入</h1>
       <div class="sub pop" style="--d:.2s">― 1.2 Introducing space and time ―</div>
       <ul class="agenda ag-t">
-        <li class="agroup pop" style="--d:.25s">1.2 空間と時間を導入する</li>
+        <li class="agroup pop" style="--d:.25s">目次</li>
         <li class="pop" style="--d:.27s"><span class="num" style="background:var(--accent)">1</span>時間：箱を <b>縦</b> につなぐ<em>パンのレシピ</em></li>
         <li class="pop" style="--d:.29s"><span class="num" style="background:var(--blue)">2</span>空間：箱を <b>横</b> に並べる<em>3 人の友人</em></li>
-        <li class="pop" style="--d:.31s"><span class="num" style="background:var(--purple)">3</span>時間と空間をいっしょに<em>家族の 1 日・カップ</em></li>
-        <li class="pop" style="--d:.33s"><span class="num" style="background:var(--ink)">✓</span>まとめ と 復習問題</li>
+        <li class="pop" style="--d:.31s"><span class="num" style="background:var(--purple)">3</span>時間と空間をいっしょに<em>家族の 1 日</em></li>
+        <li class="pop" style="--d:.32s"><span class="num" style="background:var(--ink)">4</span>カップ：離れてもつながる 2 つの粒子<em>Andrea・Blaise・Chi</em></li>
+        <li class="pop" style="--d:.33s"><span class="num" style="background:#8f88b3">✓</span>まとめ</li>
       </ul>
     </div>
     <div class="card pop" style="--d:.4s;padding:14px 18px">
@@ -404,26 +533,19 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
 
 <!-- 2. この節の主張 -->
 <section class="slide" data-id="msg">
-  <div class="chap">第1章 ／ 1.2 Introducing space and time</div>
-  <h2>図のどこに「物理」がある？<small>1.2 のねらい</small></h2>
-  <div class="body cols">
+  <div class="chap">第1章 ／ 1.2 Introducing space and time ／ 1.2 のねらい</div>
+  <div class="body cols" data-min-text="560" style="grid-template-columns:1fr 1.25fr">
+    <div class="card pop"><div id="msgDiag"></div></div>
     <div>
-      <p class="lead pop">箱と線の図は、ぱっと見では物理らしくありません。<br><b>空間</b> も <b>時間</b> も出てこないように見えます。</p>
-      <div class="bigmsg pop" style="--d:.1s">でも実は…<br>図はいつでも <b class="k">空間と時間の中で<br>起きていること</b> として読める！</div>
-      <div class="kv">
-        <span class="kk t frag">縦 ↑</span><span class="frag">下の箱が <b>先</b>、上の箱が <b>後</b> ＝ <b class="k">時間</b></span>
-        <span class="kk s frag">横 →</span><span class="frag">左右に並ぶ箱は <b>同時</b>・<b>別の場所</b> ＝ <b class="kb">空間</b></span>
-        <span class="kk ts frag">縦 × 横</span><span class="frag">組み合わせると、図 ＝ <b>時空の中の出来事</b></span>
-      </div>
+      <div class="keymsg pop" style="--d:.15s">箱と線の図は<br>いつでも<br><b class="k">時空の中の出来事</b><br>として読める</div>
     </div>
-    <div class="card pop" style="--d:.2s"><div id="msgDiag"></div></div>
   </div>
   <div class="pageno"></div>
 </section>
 
 <!-- 扉 1 -->
 <section class="slide door" style="--c:var(--accent)">
-  <div class="door-bg">1</div>
+  <div class="door-bg">∘</div>
   <div class="door-wrap">
     <div class="door-num">1</div>
     <div>
@@ -440,17 +562,16 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
 <section class="slide" data-id="stack">
   <div class="chap">SECTION 1 ／ 時間はどこに隠れている？</div>
   <h2>縦に積んだ箱 ＝ 時間の順番<small>1.2（時間）</small></h2>
-  <div class="body cols" style="grid-template-columns:1fr 1fr">
+  <div class="body cols" style="grid-template-columns:0.75fr 1fr">
+    <div class="card stp pop" id="dgStack" style="--h:360px"></div>
     <div>
       <ul class="plain">
-        <li class="pop"><span class="ico">📦</span><span>2 つの箱を <b>上下に積んで</b>、線でつなぐ</span></li>
-        <li class="pop" style="--d:.08s"><span class="ico">1️⃣</span><span>まず下の箱 <b class="k suit">◇</b> が作用する</span></li>
-        <li class="pop" style="--d:.16s"><span class="ico">2️⃣</span><span>次に上の箱 <b class="k suit">♡</b> が、<b>◇ の出力</b> に作用する</span></li>
+        <li class="pop"><span class="ico">□</span><span>2 つの箱を <b>上下に積んで</b>、線でつなぐ</span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">1</span><span>まず下の箱 <b class="suit">◇</b> が作用する</span></li>
+        <li class="pop" style="--d:.16s"><span class="ico">2</span><span>次に上の箱 <b class="suit">♡</b> が、<b><span class="suit">◇</span> の出力</b> に作用する</span></li>
       </ul>
       <div class="point frag">図は <b>下から上へ</b> 読む。<br>縦方向 ＝ <b class="k">時間の流れ</b></div>
-      <div class="quote frag">“you can always think of box ◇ being applied first and then box ♡ being applied to the output of box ◇.”<small>— Quantum in Pictures, 1.2</small></div>
     </div>
-    <div class="card stp pop" id="dgStack" style="--d:.2s;--h:360px"></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -458,19 +579,17 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
 <!-- パンのレシピ -->
 <section class="slide" data-id="recipe">
   <div class="chap">SECTION 1 ／ 例：小麦・水・熱からパンを作る</div>
-  <h2>例：パンのレシピ<small>1.2（時間）</small></h2>
-  <div class="body cols" style="grid-template-columns:1fr 1fr">
+  <h2>パンのレシピも、下から上が作業の順番<small>1.2（時間）</small></h2>
+  <div class="body cols" style="grid-template-columns:0.68fr 1fr">
+    <div class="card stp pop" id="dgRecipe" style="--h:450px"></div>
     <div>
-      <p class="lead pop">小麦・水・熱からパンを作る（簡略化した）レシピ</p>
+      <p class="lead pop">小麦・水・熱からパンを作るレシピ</p>
       <ul class="plain">
-        <li class="pop" style="--d:.06s"><span class="ico">〰️</span><span><b>線</b> ＝ もの（小麦・小麦粉・生地・パン）</span></li>
-        <li class="pop" style="--d:.12s"><span class="ico">📦</span><span><b>箱</b> ＝ 作業（砕く・混ぜる・焼く）</span></li>
-        <li class="pop" style="--d:.18s"><span class="ico">⬆️</span><span>下から順に <b>① 砕く → ② 混ぜる → ③ 焼く</b></span></li>
+        <li class="pop" style="--d:.06s"><span class="ico">│</span><span><b>線</b> ＝ もの（小麦・小麦粉・生地・パン）</span></li>
+        <li class="pop" style="--d:.12s"><span class="ico">□</span><span><b>箱</b> ＝ 作業（砕く・混ぜる・焼く）</span></li>
+        <li class="pop" style="--d:.18s"><span class="ico">∘</span><span>下から順に <b>① 砕く → ② 混ぜる → ③ 焼く</b></span></li>
       </ul>
-      <div class="point frag">箱の <b>出力</b> が、上の箱の <b>入力</b> になる。<br>途中の線（小麦粉・生地）も「もの」を表している</div>
-      <div class="point blue frag">横から入ってくる線（水・熱）は、<b>その作業の時に加わる材料</b></div>
     </div>
-    <div class="card stp pop" id="dgRecipe" style="--d:.2s;--h:370px"></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -478,16 +597,16 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
 <!-- 順番が大事 -->
 <section class="slide" data-id="order">
   <div class="chap">SECTION 1 ／ 作業の順番は大切</div>
-  <h2>順番を入れ替えると…？<small>1.2（時間）</small></h2>
+  <h2>上下を入れ替えると、結果が変わる<small>1.2（時間）</small></h2>
   <div class="body cols" style="grid-template-columns:1.45fr 1fr">
-    <div class="card stp pop" id="dgOrder" style="--h:375px;padding:12px 16px"></div>
+    <div class="card stp pop" id="dgOrder" style="--h:470px;padding:12px 16px"></div>
     <div>
+      <div class="point pop" style="--d:.1s;margin-top:0"><b>操作</b>：「混ぜる」と「焼く」の<br><b style="white-space:nowrap">上下を入れ替える</b><br>＝ <b class="k" style="white-space:nowrap">時間の順番を入れ替える</b></div>
+      <div class="rlab frag">結果</div>
       <ul class="plain">
-        <li class="pop" style="--d:.1s"><span class="ico">✅</span><span>砕く → <b>混ぜる</b> → <b>焼く</b><br>→ いい香りの <b>パン</b> 🍞</span></li>
-        <li class="pop" style="--d:.16s"><span class="ico">❌</span><span>砕く → <b>焼く</b> → <b>混ぜる</b><br>→ <b>べちゃべちゃの泥</b> 🟫</span></li>
+        <li class="frag"><span class="ico" style="color:var(--accent)">✓</span><span>砕く → <b>混ぜる</b> → <b>焼く</b><br>→ いい香りの <b>パン</b> 🍞</span></li>
+        <li class="frag"><span class="ico" style="color:var(--blue)">✗</span><span>砕く → <b>焼く</b> → <b>混ぜる</b><br>→ <b>べちゃべちゃの泥</b> 🟫</span></li>
       </ul>
-      <div class="point frag">図の <b>上下を入れ替える</b> ＝ <b class="k">時間の順番を入れ替える</b><br>同じ箱でも、結果がまったく変わる</div>
-      <div class="hint frag" style="font-size:17px">→ 図の「縦の位置」には、ちゃんと意味がある</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -495,14 +614,14 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
 
 <!-- 扉 2 -->
 <section class="slide door" style="--c:var(--blue)">
-  <div class="door-bg">2</div>
+  <div class="door-bg">⊗</div>
   <div class="door-wrap">
     <div class="door-num">2</div>
     <div>
       <div class="door-label pop"><span class="door-book">1.2 Introducing space and time</span>SECTION 2</div>
       <h1 class="pop" style="--d:.1s">空間</h1>
       <p class="door-lead pop" style="--d:.2s">箱を <b>横に並べる</b> と…</p>
-      <div class="door-topics pop" style="--d:.3s"><span>同じ時刻</span><span>別々の場所</span><span>メキシコ・ブルキナファソ・ベトナム</span></div>
+      <div class="door-topics pop" style="--d:.3s"><span>別々の場所</span><span>メキシコ・ブルキナファソ・ベトナム</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -511,18 +630,15 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
 <!-- 横に並べる -->
 <section class="slide" data-id="side">
   <div class="chap">SECTION 2 ／ 空間はどこに隠れている？</div>
-  <h2>横に並べた箱 ＝ 同時・別の場所<small>1.2（空間）</small></h2>
-  <div class="body cols" style="grid-template-columns:1fr 1fr">
+  <h2>横に並べた箱 ＝ 別々の場所<small>1.2（空間）</small></h2>
+  <div class="body cols" style="grid-template-columns:0.85fr 1fr">
+    <div class="card stp pop" id="dgSide" style="--h:350px"></div>
     <div>
       <ul class="plain">
-        <li class="pop"><span class="ico">↔️</span><span>2 つの箱 <b class="suit">♠</b> と <b class="suit">♣</b> を <b>横に並べる</b></span></li>
-        <li class="pop" style="--d:.08s"><span class="ico">⏱️</span><span>それぞれの入力に <b class="k">同じ時刻</b> に作用する</span></li>
-        <li class="pop" style="--d:.16s"><span class="ico">📍</span><span>ただし <b class="kb">別々の場所</b> で</span></li>
+        <li class="pop"><span class="ico">⊗</span><span>2 つの箱 <b class="suit">♠</b> と <b class="suit">♣</b> を <b>横に並べる</b></span></li>
+        <li class="pop" style="--d:.08s"><span class="ico">📍</span><span><b class="kb">別々の場所</b> で作用する</span></li>
       </ul>
-      <div class="point blue frag">横方向 ＝ <b class="kb">空間（場所）</b><br>ピンクの点線「いま」は、<b>同じ瞬間</b> を表す横線</div>
-      <div class="quote frag">“the two boxes ♠ and ♣ are being applied to their inputs at the same time but in different places.”<small>— Quantum in Pictures, 1.2</small></div>
     </div>
-    <div class="card stp pop" id="dgSide" style="--d:.2s;--h:350px"></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -530,24 +646,23 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
 <!-- 3 人の友人 -->
 <section class="slide" data-id="world">
   <div class="chap">SECTION 2 ／ 例：3 人の友人が世界の別々の場所で</div>
-  <h2>例：Andrea・Blaise・Chi<small>1.2（空間）</small></h2>
-  <div class="body" style="display:flex;flex-direction:column;justify-content:center;gap:12px">
+  <h2>横の位置の違い ＝ 場所の違い<small>1.2（空間）</small></h2>
+  <div class="body wide-fig">
     <div class="card stp pop" id="dgWorld" style="--h:265px;padding:12px 18px"></div>
-    <div class="point blue frag" style="margin-top:0">図の <b>横の位置</b> は、作業をしている <b class="kb">場所</b> の違いを表している。<br>図は「いろいろな場所で、人が何かをしている」様子だと思うとわかりやすい</div>
   </div>
   <div class="pageno"></div>
 </section>
 
 <!-- 扉 3 -->
 <section class="slide door" style="--c:var(--purple)">
-  <div class="door-bg">3</div>
+  <div class="door-bg">×</div>
   <div class="door-wrap">
     <div class="door-num">3</div>
     <div>
       <div class="door-label pop"><span class="door-book">1.2 Introducing space and time</span>SECTION 3</div>
       <h1 class="pop" style="--d:.1s">時間と空間を<br>いっしょに</h1>
       <p class="door-lead pop" style="--d:.2s">縦と横を 1 つの図の中で組み合わせる</p>
-      <div class="door-topics pop" style="--d:.3s"><span>家族の 1 日</span><span>点線でグループ分け</span><span>カップ ＝ ？</span></div>
+      <div class="door-topics pop" style="--d:.3s"><span>家族の 1 日</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -556,46 +671,58 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
 <!-- 家族の 1 日 -->
 <section class="slide" data-id="family">
   <div class="chap">SECTION 3 ／ 時間と空間を 1 つの図に</div>
-  <h2>例：家族の 1 日<small>1.2（時空）</small></h2>
-  <div class="body cols" style="grid-template-columns:1fr 1.1fr">
+  <h2>1 つの図で、時間と空間をいっしょに表せる<small>1.2（時空）</small></h2>
+  <div class="body cols" style="grid-template-columns:1.15fr 1fr">
+    <div class="card stp pop" id="dgFamily" style="--h:360px"></div>
     <div>
       <ul class="plain">
         <li class="pop"><span class="ico">🏫</span><span>昼間、<b>子ども</b> は学校で勉強し</span></li>
-        <li class="pop" style="--d:.06s"><span class="ico">🏢</span><span><b>親</b> は会社で働く（<b class="kb">同時・別の場所</b>）</span></li>
-        <li class="pop" style="--d:.12s"><span class="ico">🏠</span><span>そのあと、みんな家に帰って <b>いっしょに夕食</b>（<b class="k">後</b>）</span></li>
+        <li class="pop" style="--d:.06s"><span class="ico">🏢</span><span><b>親</b> は会社で働く</span></li>
+        <li class="pop" style="--d:.12s"><span class="ico">🏠</span><span>そのあと、みんな家に帰って<br><b style="white-space:nowrap">いっしょに夕食</b><span style="white-space:nowrap">（<b class="k">相互作用</b>）</span></span></li>
       </ul>
-      <div class="point frag"><b>線 ＝ 人</b>（子ども・親）、<b>箱 ＝ 場所での出来事</b><br>線が集まる ＝ 同じ場所に集まる</div>
-      <div class="point blue frag">ピンクの「いま」の線を下から上へ動かすと、<br>その時刻に <b>どこで何が起きているか</b> がわかる</div>
     </div>
-    <div class="card stp pop" id="dgFamily" style="--d:.2s;--h:360px"></div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 扉 4 -->
+<section class="slide door" style="--c:var(--ink)">
+  <div class="door-bg">⋃</div>
+  <div class="door-wrap">
+    <div class="door-num">4</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">1.2 Introducing space and time</span>SECTION 4</div>
+      <h1 class="pop" style="--d:.1s">カップ</h1>
+      <p class="door-lead pop" style="--d:.2s">下でつながった 2 本の線は、時空の中で何？</p>
+      <div class="door-topics pop" style="--d:.3s"><span>点線でグループ分け</span><span>Chi の発射台</span><span>離れてもつながったまま</span></div>
+    </div>
   </div>
   <div class="pageno"></div>
 </section>
 
 <!-- 2 人の友人と粒子 -->
 <section class="slide" data-id="friends">
-  <div class="chap">SECTION 3 ／ 2 人の友人が粒子に箱をかける</div>
-  <h2>Andrea と Blaise と 2 つの粒子<small>1.2（時空）</small></h2>
-  <div class="body cols" style="grid-template-columns:1fr 1fr">
+  <div class="chap">SECTION 4 ／ 2 人の友人が粒子に箱をかける</div>
+  <h2>点線で 2 人の箱を分ける<small>1.2（時空）</small></h2>
+  <div class="body cols" data-min-text="500" style="grid-template-columns:0.95fr 1fr">
+    <div class="card stp pop" id="dgFriends" style="--h:370px"></div>
     <div>
-      <p class="lead pop">家の中の別々の部屋（寝室・台所・居間…）で、人が何かをしている図だと考えてもよい。</p>
+      <p class="lead pop">左図は、別々の場所で、人が何かを<br>している図だと考えてもよい。</p>
       <ul class="plain">
         <li class="pop" style="--d:.06s"><span class="ico">👧</span><span><b>Andrea</b>（左）が箱 <b class="suit">♠₁, ♠₂, ♠₃</b> を順にかける</span></li>
         <li class="pop" style="--d:.12s"><span class="ico">👦</span><span><b>Blaise</b>（右）が箱 <b class="suit">♣₁, ♣₂, ♣₃</b> を順にかける</span></li>
       </ul>
-      <div class="point blue frag"><b>縦の点線</b> で、同じ人がかける箱をまとめる（＝場所の区切り）</div>
-      <div class="point frag">でも、下で 2 本の線をつないでいる <b class="k">カップ ⋃</b> は、<br>時間と空間の中で何だろう？</div>
+      <div class="point frag">でも、下で 2 本の線をつないでいる<br><b class="k">カップ ⋃</b> は、時間と空間の中で何だろう？</div>
     </div>
-    <div class="card stp pop" id="dgFriends" style="--d:.2s;--h:370px"></div>
   </div>
   <div class="pageno"></div>
 </section>
 
 <!-- カップの正体 -->
 <section class="slide" data-id="rocket">
-  <div class="chap">SECTION 3 ／ カップを時間と空間で考える</div>
-  <h2>カップの正体：昔 Chi が送った 2 つの粒子<small>1.2（時空）</small></h2>
-  <div class="body cols" style="grid-template-columns:1.35fr 1fr">
+  <div class="chap">SECTION 4 ／ カップを時間と空間で考える</div>
+  <h2>カップ ＝ 昔 Chi が 2 つの粒子を送り出した発射台<small>1.2（時空）</small></h2>
+  <div class="body cols" data-min-text="480" style="grid-template-columns:1.5fr 1fr">
     <div class="card stp pop" id="dgRocket" style="--h:350px;padding:12px 16px"></div>
     <div>
       <ul class="plain">
@@ -611,75 +738,36 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
 
 <!-- 遠く離れてもつながっている -->
 <section class="slide" data-id="linked">
-  <div class="chap">SECTION 3 ／ 離れていてもつながっている</div>
-  <h2>受け取ったあとは？<small>1.2（時空）</small></h2>
-  <div class="body cols" style="grid-template-columns:1.35fr 1fr">
+  <div class="chap">SECTION 4 ／ 離れていてもつながっている</div>
+  <h2>離れても、2 つの粒子は線でつながったまま<small>1.2（時空）</small></h2>
+  <div class="body cols" data-min-text="480" style="grid-template-columns:1.5fr 1fr">
     <div class="card stp pop" id="dgLinked" style="--h:360px;padding:12px 16px"></div>
     <div>
       <ul class="plain">
-        <li class="pop" style="--d:.06s"><span class="ico">🎁</span><span>粒子を受け取った 2 人は、<b>何をしてもよい</b></span></li>
-        <li class="pop" style="--d:.12s"><span class="ico">📦</span><span>そのままにしても、箱をかけてもよい（例：<b class="suit">♡</b> と <b class="suit">◇</b>）</span></li>
+        <li class="pop" style="--d:.06s"><span class="ico">🎁</span><span>粒子を受け取った 2 人は、<b style="white-space:nowrap">何をしてもよい</b></span></li>
+        <li class="pop" style="--d:.12s"><span class="ico">□</span><span>そのままにしても、箱をかけてもよい</span></li>
       </ul>
-      <div class="point frag">広大な宇宙空間で離れていても、2 つの粒子は <b class="k">強くつながったまま</b>。図の線がそれをはっきり示している</div>
       <div class="point blue frag">このつながりを使うと、<b>とんでもない量子の現象</b> が起こせる！ → この先の章へ</div>
     </div>
   </div>
   <div class="pageno"></div>
 </section>
 
-<!-- 補足：記号 -->
-<section class="slide" data-id="notation">
-  <div class="chap">補足 ／ 教科書の先取り</div>
-  <h2>縦と横の組み合わせ方に名前をつけると<span class="tagx">補足・先取り</span></h2>
-  <div class="body" style="display:flex;flex-direction:column;justify-content:center">
-    <div class="notation">
-      <div class="card pop" style="--d:.05s">
-        <h3>縦につなぐ ＝ 順次合成<small>sequential composition</small></h3>
-        <div id="ntSeq" style="width:150px"></div>
-        <div class="formula suit">♡ ∘ ◇</div>
-        <div class="nt">「<b>◇ のあとに ♡</b>」（時間の順番）<br><span class="muted" style="font-size:16px">式では右から左に読む点に注意（◇ が先）</span></div>
-      </div>
-      <div class="card pop" style="--d:.12s">
-        <h3>横に並べる ＝ 並列合成<small>parallel composition</small></h3>
-        <div id="ntPar" style="width:220px"></div>
-        <div class="formula suit">♠ ⊗ ♣</div>
-        <div class="nt">「<b>♠ と ♣ を同時に、別々の場所で</b>」<br><span class="muted" style="font-size:16px">⊗ はテンソル積の記号</span></div>
-      </div>
-    </div>
-    <div class="point blue frag">この 2 種類の「つなぎ方」を数学的に整理したものが、圏論（<b>モノイダル圏</b>）の考え方につながる。<br>ゼミ名の「圏論的量子情報」の土台になる見方</div>
-  </div>
-  <div class="pageno"></div>
-</section>
 
 <!-- まとめ -->
 <section class="slide">
   <div class="chap">Summary ／ 1.2</div>
   <h2>1.2 のまとめ<small>Introducing space and time</small></h2>
   <div class="body sumlist">
-    <div class="sl pop" style="--d:0.00s;--c:var(--accent)"><span class="sl-n">1</span><div>箱と線の図は、いつでも <b class="k">空間と時間の中で起きていること</b> として読める</div></div>
+    <div class="sl pop" style="--d:0.00s;--c:var(--accent)"><span class="sl-n">1</span><div>箱と線の図はいつでも <b class="k">時空の中の出来事</b> として読める</div></div>
     <div class="sl pop" style="--d:0.07s;--c:var(--accent)"><span class="sl-n">2</span><div><b>縦に積む ＝ 時間</b>：下の箱が先、上の箱はその出力に作用する（図は <b>下から上へ</b>）</div></div>
     <div class="sl pop" style="--d:0.14s;--c:var(--accent)"><span class="sl-n">3</span><div><b>順番は大事</b>：パンのレシピで「混ぜる」と「焼く」を入れ替えると泥になる</div></div>
-    <div class="sl pop" style="--d:0.21s;--c:var(--blue)"><span class="sl-n">4</span><div><b>横に並べる ＝ 空間</b>：同じ時刻に、別々の場所で作用する（Andrea・Blaise・Chi）</div></div>
-    <div class="sl pop" style="--d:0.28s;--c:var(--purple)"><span class="sl-n">5</span><div>縦と横を組み合わせる（家族の 1 日）。<b>点線</b> で「誰が・どこで」をグループ分けする</div></div>
-    <div class="sl pop" style="--d:0.35s;--c:var(--pink)"><span class="sl-n">6</span><div><b class="k">カップ ⋃</b> ＝ 昔 Chi が 2 人に送った 2 つの粒子。どれだけ離れても <b>線でつながったまま</b> → 量子の不思議へ</div></div>
+    <div class="sl pop" style="--d:0.21s;--c:var(--blue)"><span class="sl-n">4</span><div><b>横に並べる ＝ 空間</b>：別々の場所で作用する（Andrea・Blaise・Chi）</div></div>
+    <div class="sl pop" style="--d:0.28s;--c:var(--ink)"><span class="sl-n">5</span><div><b class="k">カップ ⋃</b> ＝ 昔 Chi が 2 つの粒子を送り出した発射台。どれだけ離れても <b>線でつながったまま</b> → 量子の不思議へ</div></div>
   </div>
   <div class="pageno"></div>
 </section>
 
-<!-- 復習問題 -->
-<section class="slide" data-id="quiz">
-  <div class="chap">Practice ／ 1.2</div>
-  <h2>復習問題<small>クリックで答え</small><button class="b qz-all" data-quiz-all>答えをぜんぶ表示</button></h2>
-  <div class="body quiz q6">
-    <div class="qz pop" style="--d:0.00s"><div class="qz-q"><span class="qz-no">Q1</span><span>箱 <b class="suit">◇</b> の上に箱 <b class="suit">♡</b> を積んで線でつないだ。先に作用するのはどっち？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b class="suit">◇</b>（下の箱）。<b class="suit">♡</b> は ◇ の出力に作用する。図は下から上へ読む</span></div></div>
-    <div class="qz pop" style="--d:0.05s"><div class="qz-q"><span class="qz-no">Q2</span><span>横に並べた 2 つの箱 <b class="suit">♠</b>・<b class="suit">♣</b> は、時間と空間の中でどう考えられる？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>同じ時刻</b> に、<b>別々の場所</b> で作用している</span></div></div>
-    <div class="qz pop" style="--d:0.10s"><div class="qz-q"><span class="qz-no">Q3</span><span>パンのレシピで「混ぜる」と「焼く」の上下を入れ替えると？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">パンではなく <b>べちゃべちゃの泥</b>。上下の順番 ＝ 時間の順番なので結果が変わる</span></div></div>
-    <div class="qz pop" style="--d:0.15s"><div class="qz-q"><span class="qz-no">Q4</span><span>家族の図で、子どもと親が同じ箱に入るのはどこ？ それはいつ？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>家</b>（夕食）。学校・会社より <b>上</b> にあるので、<b>後</b> の出来事</span></div></div>
-    <div class="qz pop" style="--d:0.20s"><div class="qz-q"><span class="qz-no">Q5</span><span>Andrea と Blaise の図にある <b>縦の点線</b> は何を表す？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans"><b>同じ人がかける箱</b> をまとめるグループ分け（場所の区切り）</span></div></div>
-    <div class="qz pop" style="--d:0.25s"><div class="qz-q"><span class="qz-no">Q6</span><span>下で 2 本の線をつなぐ <b>カップ ⋃</b> は、時間と空間の中でどう解釈できる？</span></div><div class="qz-a"><span class="qz-hide">👆 クリックで答え</span><span class="qz-ans">昔 <b>Chi</b> が 2 つの粒子をロケットで Andrea と Blaise に送った。離れても <b>つながったまま</b></span></div></div>
-  </div>
-  <div class="pageno"></div>
-</section>
 
 </div></div>
 <div id="ui">
@@ -690,7 +778,8 @@ ul.plain li .ico{flex:none;width:34px;height:34px;border-radius:10px;border:2.5p
 </div>
 <div id="progress"></div>
 <div id="penbar" aria-label="ペンの道具">
-  <button data-tool="laser" class="on" title="レーザーポインター（書き込みは残らない）">🔴 レーザー</button>
+  <button data-tool="none" class="on" title="普通のカーソル（文字の選択・コピーができる）">🖱️ カーソル</button>
+  <button data-tool="laser" title="レーザーポインター（書き込みは残らない）">🔴 レーザー</button>
   <button data-tool="pen" title="黒ペンで書き込む (P)">✏️ 黒ペン</button>
   <button data-tool="eraser" title="消しゴム（なぞった線を消す）">🧽 消す</button>
   <button data-tool="lasso" title="投げ縄：書き込みを囲んで選択・移動・複製 (L)">➰ 投げ縄</button>
@@ -795,14 +884,14 @@ function moveTok(e, t) {
   if (from !== t) e._raf = requestAnimationFrame(f);
 }
 
-/* ステップ再生：カードの下に説明文と ▶ 自動再生・◀ ▶ ボタンをつける */
-function stepper(card, caps, { interval = 1900, hold = 3000 } = {}) {
+/* ステップ再生：カードの下に ▶ 自動再生・◀ ▶ ボタンをつける（図の下の説明文は既定でつけない。cap: true で表示） */
+function stepper(card, caps, { interval = 1900, hold = 3000, cap: showCap = false } = {}) {
   const n = caps.length;
   const cap = document.createElement('div'); cap.className = 'cap';
   const ctl = document.createElement('div'); ctl.className = 'stp-ctl';
   ctl.innerHTML = `<button class="b" data-autoplay>▶ 自動再生</button><button class="b sm" data-a="-1">◀</button>`
     + `<span class="dots">${'<span></span>'.repeat(n)}</span><button class="b sm" data-a="1">▶</button>`;
-  card.append(cap, ctl);
+  if (showCap) card.append(cap); card.append(ctl);
   const play = ctl.querySelector('[data-autoplay]'), dots = [...ctl.querySelectorAll('.dots span')];
   let k = 0, timer = null;
   function set(s) {
@@ -811,8 +900,7 @@ function stepper(card, caps, { interval = 1900, hold = 3000 } = {}) {
     card.querySelectorAll('[data-only]').forEach(e => e.classList.toggle('hide', !e.dataset.only.split(',').includes(String(k))));
     card.querySelectorAll('[data-y]').forEach(e => { const ys = e.dataset.y.split('|'); e.style.transform = `translate(0px,${ys[Math.min(k, ys.length - 1)]}px)`; });
     card.querySelectorAll('[data-t]').forEach(e => { const ts = e.dataset.t.split('|'); moveTok(e, +ts[Math.min(k, ts.length - 1)]); });
-    cap.innerHTML = `<span>${caps[k]}</span>`;
-    cap.classList.remove('go'); void cap.offsetWidth; cap.classList.add('go');
+    if (showCap) { cap.innerHTML = `<span>${caps[k]}</span>`; cap.classList.remove('go'); void cap.offsetWidth; cap.classList.add('go'); }
     dots.forEach((d, i) => d.classList.toggle('on', i <= k));
   }
   function stop() { clearTimeout(timer); timer = null; play.textContent = '▶ 自動再生'; play.classList.remove('playing'); }
@@ -830,6 +918,12 @@ function stepper(card, caps, { interval = 1900, hold = 3000 } = {}) {
   dots.forEach((d, i) => d.addEventListener('click', e => { e.stopPropagation(); stop(); set(i); }));
   stoppers.push(stop);
   set(0);
+}
+
+/* 動かさない図：ステップ k までに出る文字（途中の線の名前・結果）をすべて表示する。線・箱は色をつけず墨色のまま。再生ボタン・説明文はつけない */
+function staticFig(card, k, all = false) {
+  card.querySelectorAll(all ? '[data-on]' : '.appear[data-on]').forEach(e => e.classList.toggle('on', k >= +e.dataset.on));
+  card.querySelectorAll('[data-only]').forEach(e => e.classList.toggle('hide', !e.dataset.only.split(',').includes(String(k))));
 }
 
 /* ---------- タイトル：時空の中の図（「いま」の線が下から上へ動き続ける） ---------- */
@@ -875,9 +969,9 @@ function stepper(card, caps, { interval = 1900, hold = 3000 } = {}) {
   label(s, 210, 26, '出力', { a: 'start' });
   stepper(card, [
     '下から入力がやってくる（図は <b class="k">下から上へ</b> 読む）',
-    'まず <b class="k suit">◇</b> が作用する',
-    '◇ の <b>出力</b> が、線を通って上へ進む',
-    '次に <b class="k suit">♡</b> が、◇ の出力に作用する',
+    'まず <b class="suit">◇</b> が作用する',
+    '<span class="suit">◇</span> の <b>出力</b> が、線を通って上へ進む',
+    '次に <b class="suit">♡</b> が、<span class="suit">◇</span> の出力に作用する',
     '<b>下 → 上</b> の並び ＝ <b class="k">時間の順番</b>',
   ]);
 }
@@ -903,50 +997,35 @@ function recipe(s, { ox = 0, oy = 0, id, bad = false, finalOn = 4 }) {
   label(g, B, 428, m3[0], { c: 'wl big' });
   label(g, X - 12, (Y[0] + Y[1]) / 2, '小麦粉', { a: 'end', cls: 'appear', on: 1 });
   label(g, X - 12, (Y[1] + Y[2]) / 2, bad ? '焼いた小麦粉' : '生地', { a: 'end', cls: 'appear', on: 2 });
-  label(g, X - 12, 52, bad ? '🟫 泥…' : '🍞 パン', { c: 'res', a: 'end', cls: 'appear', on: 3 });
+  const res = label(g, X - 12, 52, bad ? '🟫 泥' : '🍞 パン', { c: 'res', a: 'end', cls: 'appear', on: 3 });
+  if (bad) res.style.fill = 'var(--blue)';
   return g;
 }
 {
   const card = $('#dgRecipe'), s = svgIn(card, 360, 445);
   recipe(s, { ox: 10, finalOn: 4 });
-  stepper(card, [
-    '材料：🌾 小麦・💧 水・🔥 熱（<b>線 ＝ もの</b>、<b>箱 ＝ 作業</b>）',
-    '① 小麦を <b class="k">砕く</b> → 小麦粉',
-    '② 小麦粉と水を <b class="k">混ぜる</b> → 生地',
-    '③ 生地をオーブンの熱で <b class="k">焼く</b> → パン',
-    'できあがり 🍞　<b>下から上へ</b> ＝ 作業の順番',
-  ]);
+  staticFig(card, 4);
 }
 {
   const card = $('#dgOrder'), s = svgIn(card, 760, 480);
-  label(s, 185, 14, '✅ 正しい順番', { c: 'head' });
-  label(s, 575, 14, '❌ 先に焼いてから混ぜる', { c: 'head' });
+  label(s, 185, 14, '✓ 正しい順番', { c: 'head' }).style.fill = 'var(--accent-d)';
+  label(s, 575, 14, '✗ 先に焼いてから混ぜる', { c: 'head' }).style.fill = 'var(--blue)';
   el('line', { x1: 385, y1: 0, x2: 385, y2: 470, class: 'sep' }, s);
   recipe(s, { ox: 15, oy: 34, finalOn: 3 });
   recipe(s, { ox: 405, oy: 34, bad: true, finalOn: 3 });
-  stepper(card, [
-    '同じ材料・同じ 3 つの作業。違うのは <b>順番</b> だけ',
-    'どちらも、まず小麦を <b>砕いて</b> 小麦粉にする',
-    '左：小麦粉に水を <b>混ぜる</b> ／ 右：小麦粉を先に <b>焼いてしまう</b>',
-    '左は <b class="k">パン</b> 🍞、右は <b class="k">べちゃべちゃの泥</b>！ 上下の順番 ＝ 時間の順番',
-  ]);
+  staticFig(card, 3);
 }
 
-/* ---------- 横に並べた箱：同時・別の場所 ---------- */
+/* ---------- 横に並べた箱：別々の場所 ---------- */
 {
   const card = $('#dgSide'), s = svgIn(card, 470, 380);
-  timeAxis(s, 30, 330, 25);
-  spaceAxis(s, 352, 30, 455);
+  s.setAttribute('viewBox', '75 20 395 360');
+  spaceAxis(s, 352, 85, 455);
   wire(s, 'M170,315 V204', { on: 1 }); wire(s, 'M170,156 V40', { on: 2 });
   wire(s, 'M330,315 V204', { on: 1 }); wire(s, 'M330,156 V40', { on: 2 });
   box(s, 170, 180, '♠', { on: 1 }); box(s, 330, 180, '♣', { on: 1 });
   label(s, 170, 332, '場所 A', { c: 'axl' }); label(s, 330, 332, '場所 B', { c: 'axl' });
-  nowLine(s, 50, 455, [290, 180, 60]);
-  stepper(card, [
-    '2 本の線それぞれに、入力が届く',
-    '<b class="k">同じ瞬間</b> に <span class="suit">♠</span> と <span class="suit">♣</span> が作用する（<b class="kb">別々の場所</b> で）',
-    '横に並ぶ ＝ <b class="k">同時</b>・<b class="kb">別の場所</b>',
-  ]);
+  staticFig(card, 2);
 }
 
 /* ---------- 3 人の友人：メキシコ・ブルキナファソ・ベトナム ---------- */
@@ -966,12 +1045,7 @@ function recipe(s, { ox = 0, oy = 0, id, bad = false, finalOn = 4 }) {
     box(s, x + 20, 175, sym, { on: 1 });
     label(s, x, 318, `${who}（${where}）`, { c: 'wl big' });
   });
-  nowLine(s, 40, 935, [258, 175, 70]);
-  stepper(card, [
-    'Andrea は <b>メキシコ</b>、Blaise は <b>ブルキナファソ</b>、Chi は <b>ベトナム</b> にいる',
-    '3 人が <b class="k">同じ瞬間</b> に、それぞれの場所で箱（<span class="suit">♠ ♣ ◇</span>）を作用させる',
-    '横の位置 ＝ <b class="kb">場所（空間）</b> の違い',
-  ]);
+  staticFig(card, 2);
 }
 
 /* ---------- 家族の 1 日 ---------- */
@@ -987,6 +1061,7 @@ function recipe(s, { ox = 0, oy = 0, id, bad = false, finalOn = 4 }) {
   box(s, 310, 120, '家（夕食）', { icon: '🏠', w: 190, h: 90, on: 3 });
   label(s, 178, 420, '子ども', { a: 'end' }); label(s, 442, 420, '親', { a: 'start' });
   label(s, 258, 30, '子ども', { a: 'end' }); label(s, 362, 30, '親', { a: 'start' });
+  label(s, 214, 222, '子ども', { a: 'end' }); label(s, 406, 222, '親', { a: 'start' });
   const nl = nowLine(s, 45, 590, [405, 320, 215, 120], '');
   ['🕗 朝', '🕛 昼', '🕔 夕方', '🕖 夜'].forEach((t, i) => {
     const e = el('text', { x: 590, y: -9, 'text-anchor': 'end', 'data-only': i }, nl); e.textContent = t;
@@ -994,7 +1069,7 @@ function recipe(s, { ox = 0, oy = 0, id, bad = false, finalOn = 4 }) {
   stepper(card, [
     '🕗 朝：子どもと親が出かける',
     '🕛 昼：子どもは <b class="k">学校</b>、親は <b class="k">会社</b>（<b class="kb">同時・別の場所</b>）',
-    '🕔 夕方：みんな家に向かう（線 ＝ 人の移動）',
+    '🕔 夕方：みんな家に向かう（線が学校・会社から家へつながる）',
     '🕖 夜：<b class="k">家</b> でいっしょに夕食（同じ場所に集まる）',
   ]);
 }
@@ -1067,21 +1142,45 @@ function solar(s, idp) {
   el('path', { d: full, class: 'flowl', 'data-on': 2 }, s);
   box(s, 100, 118, '♡', { on: 1 }); box(s, 560, 118, '◇', { on: 1 });
   el('line', { x1: 118, y1: 268, x2: 542, y2: 268, stroke: 'var(--pink)', 'stroke-width': 3, 'data-on': 2, class: 'appear' }, s);
-  label(s, 330, 286, '↔ どれだけ離れていても', { c: 'wl appear', on: 2 }).setAttribute('style', 'fill:var(--pink);font-weight:900');
-  stepper(card, [
-    '粒子を受け取った。2 人はこれを <b>どう使ってもよい</b>',
-    'たとえば Andrea は <b class="k suit">♡</b>、Blaise は <b class="k suit">◇</b> をかける',
-    'どれだけ離れていても、2 つの粒子は <b class="k">線でつながったまま</b>！',
-  ]);
+  label(s, 330, 286, '↔ どれだけ離れていても繋がっている', { c: 'wl appear', on: 2 }).setAttribute('style', 'fill:var(--pink);font-weight:900');
+  staticFig(card, 2, true);
+  card.classList.add('frozen');
 }
 
-/* ---------- 補足：順次合成と並列合成の小さな図 ---------- */
-{
-  const s = svgIn($('#ntSeq'), 150, 200); s.style.setProperty('--h', '170px');
-  wire(s, 'M75,195 V5'); box(s, 75, 140, '◇'); box(s, 75, 60, '♡');
-  const t = svgIn($('#ntPar'), 220, 200); t.style.setProperty('--h', '170px');
-  wire(t, 'M60,195 V5'); wire(t, 'M160,195 V5'); box(t, 60, 100, '♠'); box(t, 160, 100, '♣');
+
+/* ---------- 図と枠のすき間をなくす ----------
+   1) 図の中で何も描いていない部分を viewBox から切り落とす（描いたものの外側に少しだけ余白を残す）
+   2) 本文の高さ・幅に収まる最大の大きさで図を描き、枠（カード）は図の大きさにぴったり合わせる
+      （図と文章が左右に並ぶページでは、図の列の幅を図に合わせ、残りを文章に使う） */
+function fitFigures() {
+  document.querySelectorAll('.body.cols, .body.wide-fig').forEach(body => {
+    const card = body.querySelector(':scope > .card'), svg = card && card.querySelector('svg.dg');
+    if (!svg) return;
+    if (!svg.dataset.cropped) {
+      const bb = svg.getBBox(), m = 14;
+      svg.setAttribute('viewBox', `${bb.x - m} ${bb.y - m} ${bb.width + 2 * m} ${bb.height + 2 * m}`);
+      svg.dataset.cropped = 1;
+    }
+    const vb = svg.viewBox.baseVal, r = vb.width / vb.height;
+    const cs = getComputedStyle(card), px = v => parseFloat(cs[v]) || 0;
+    const padX = px('paddingLeft') + px('paddingRight') + px('borderLeftWidth') + px('borderRightWidth');
+    const padY = px('paddingTop') + px('paddingBottom') + px('borderTopWidth') + px('borderBottomWidth');
+    const ctl = card.querySelector('.stp-ctl'), ctlH = ctl ? ctl.offsetHeight + 8 : 0;
+    const cols = body.classList.contains('cols');
+    let otherH = 0;
+    if (!cols) [...body.children].forEach(c => { if (c !== card) otherH += c.offsetHeight + 12; });
+    const minText = cols ? +(body.dataset.minText || 420) + 28 : 0;
+    const h = Math.min(body.clientHeight - padY - ctlH - otherH, (body.clientWidth - padX - minText) / r), w = h * r;
+    // 再生ボタンの列が折り返さない幅は確保する（ボタンの幅の合計 ＋ すき間）
+    const minW = ctl ? [...ctl.children].reduce((s, c) => s + c.offsetWidth, 0) + 10 * (ctl.children.length - 1) : 0;
+    if (svg.parentElement !== card) svg.parentElement.style.flex = 'none';
+    Object.assign(svg.style, { width: w + 'px', height: h + 'px', flex: 'none' });
+    Object.assign(card.style, { alignSelf: 'center', flex: 'none', width: Math.ceil(Math.max(w, minW) + padX) + 'px', height: 'auto' });
+    if (cols) body.style.gridTemplateColumns = `${Math.ceil(Math.max(w, minW) + padX)}px 1fr`;
+  });
 }
+fitFigures();
+if (document.fonts) document.fonts.ready.then(fitFigures);
 
 /* ---------- 復習問題：カードをクリックすると答えが出る（もう一度押すと隠れる） ---------- */
 {
@@ -1184,6 +1283,8 @@ slides.forEach((s, i) => s.addEventListener('click', () => {
 }));
 addEventListener('resize', () => { if (overview) layoutOverview(); });
 addEventListener('keydown', e => {
+  // 動画を操作しているときの Space・矢印キーは動画に任せる
+  if (e.target.tagName === 'VIDEO' && [' ', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
   if (overview) {
     if (['o', 'O', 'Escape'].includes(e.key)) toggleOverview(false);
     else if (e.key === 'Enter') { e.preventDefault(); toggleOverview(false); }
@@ -1194,8 +1295,9 @@ addEventListener('keydown', e => {
     }
     return;
   }
-  if (e.target.tagName === 'SUMMARY' || e.target.tagName === 'INPUT') return;
-  if (e.key === 'p' || e.key === 'P') return ink.setTool(ink.tool() === 'pen' ? 'laser' : 'pen');
+  if(e.target.closest('.slide-resource-links'))return;
+  if (e.target.closest('#qcWebSearch, .qc-walkthrough, #quantumLab, #qcSign, #qcAccount, #qcCloudLogin, #qcCloudHome, #qcInstances, #qcInstanceWizard, #qcViz, .cv-modal, .qj-page, .qj-notice, .qj-data-modal, .qpd-overlay') || ['SUMMARY','INPUT','SELECT','TEXTAREA','BUTTON'].includes(e.target.tagName)) return;
+  if (e.key === 'p' || e.key === 'P') return ink.setTool(ink.tool() === 'pen' ? 'none' : 'pen');
   if (e.key === 'z' || e.key === 'Z') return ink.undo();
   if (e.key === 'o' || e.key === 'O') return toggleOverview(true);
   if (['ArrowRight', 'PageDown', ' ', 'Enter', 'ArrowDown'].includes(e.key)) { e.preventDefault(); next(); }
@@ -1206,7 +1308,7 @@ addEventListener('keydown', e => {
 });
 let tx = null;
 // スライダー操作や Apple Pencil のタッチはスワイプのページ送りに使わない
-addEventListener('touchstart', e => tx = laser.blocksSwipe(e.touches[0]) || e.target.closest('input') ? null : e.touches[0].clientX, { passive: true });
+addEventListener('touchstart', e => tx = laser.blocksSwipe(e.touches[0]) || e.target.closest('input,select,textarea,.qj-page,.qj-data-modal,#qcViz,.qpd-overlay') ? null : e.touches[0].clientX, { passive: true });
 addEventListener('touchend', e => {
   if (tx === null || overview) return;
   const dx = e.changedTouches[0].clientX - tx; tx = null;
@@ -1261,7 +1363,8 @@ const ink = (() => {
   const ctx = canvas.getContext('2d');
   const bar = $('#penbar');
   const pages = slides.map(() => ({ strokes: [], undo: [] }));
-  let tool = 'laser', active = null;
+  let tool = 'none', active = null;
+  document.body.classList.add('tool-none');
   // 投げ縄の選択（sel.items は選択中の線そのもの）とクリップボード（ページをまたいで使う）
   let sel = null, clip = null, lassoPts = null;
 
@@ -1430,7 +1533,7 @@ body.overview #lassoBar,body.overview #inkToast{display:none!important}`;
   }));
 
   stage.addEventListener('pointerdown', e => {
-    if (overview || active || tool === 'laser' || e.target.closest('input') || e.target.closest('#lassoBar')) return;
+    if (overview || active || tool === 'laser' || tool === 'none' || e.target.closest('input') || e.target.closest('#lassoBar')) return;
     if (!(e.pointerType === 'pen' || (e.pointerType === 'mouse' && e.button === 0))) return;
     e.preventDefault();
     const q = toStage(e);
@@ -1493,11 +1596,13 @@ body.overview #lassoBar,body.overview #inkToast{display:none!important}`;
 
   function setTool(t) {
     tool = t;
+    document.body.classList.toggle('tool-none', t === 'none');
+    if (t !== 'none') { const s = getSelection(); if (s) s.removeAllRanges(); }
     if (t !== 'lasso') setSel(null);
     bar.querySelectorAll('[data-tool]').forEach(b => b.classList.toggle('on', b.dataset.tool === t));
   }
   function undo() { const pg = pages[cur]; if (pg.undo.length) { pg.strokes = pg.undo.pop(); setSel(null, false); render(); } }
-  bar.querySelectorAll('[data-tool]').forEach(b => b.onclick = () => { b.blur(); setTool(b.dataset.tool); });
+  bar.querySelectorAll('[data-tool]').forEach(b => b.onclick = () => { b.blur(); setTool(tool === b.dataset.tool ? 'none' : b.dataset.tool); });
   $('#inkUndo').onclick = e => { e.currentTarget.blur(); undo(); };
   $('#inkPaste').onclick = e => { e.currentTarget.blur(); paste(); };
   $('#inkClear').onclick = e => {
@@ -1508,8 +1613,9 @@ body.overview #lassoBar,body.overview #inkToast{display:none!important}`;
   addEventListener('keydown', e => {
     if (overview || e.target.tagName === 'INPUT') return;
     const k = e.key.toLowerCase(), mod = e.ctrlKey || e.metaKey;
+    if (mod && String(getSelection())) return;
     let f = null;
-    if (k === 'l' && !mod) f = () => setTool(tool === 'lasso' ? 'laser' : 'lasso');
+    if (k === 'l' && !mod) f = () => setTool(tool === 'lasso' ? 'none' : 'lasso');
     else if (sel && (k === 'delete' || k === 'backspace')) f = del;
     else if (sel && k === 'escape') f = () => setSel(null);
     else if (sel && k === 'd') f = duplicate;
@@ -1586,7 +1692,8 @@ const laser = (() => {
   const clickable = t => !!t.closest('button,input,select,textarea,a,label,summary,#lassoBar') || ['pointer', 'grab', 'grabbing'].includes(getComputedStyle(t).cursor);
 
   stage.addEventListener('pointerdown', e => {
-    if (overview || down || e.target.closest('input') || ink.tool() !== 'laser') return;
+    if (overview || down || e.target.closest('input')) return;
+    if (!(ink.tool() === 'laser' || (ink.tool() === 'none' && e.pointerType === 'pen'))) return;
     const mouse = e.pointerType === 'mouse';
     if (!(e.pointerType === 'pen' || (mouse && e.button === 0 && !clickable(e.target)))) return;
     e.preventDefault();
