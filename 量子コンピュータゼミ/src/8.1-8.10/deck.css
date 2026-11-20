@@ -323,3 +323,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .slide[data-id="fr"] .big8 .vec.m8{font-size:18px}
 .slide[data-id="tf"] ul.plain li{font-size:19px;margin:3px 0}
 .slide[data-id="tf"] .big8 .vec.m8{font-size:15px;line-height:1.1}
+/* 説明文を左にしたあとの調整 */
+.slide[data-id="bd"] ul.plain li{font-size:30px}
+.slide[data-id="pm1"] .point{font-size:26px !important}
+.slide[data-id="mt"] ul.plain li{font-size:21px}

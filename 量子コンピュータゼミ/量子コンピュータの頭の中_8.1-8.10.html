@@ -940,6 +940,10 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .slide[data-id="fr"] .big8 .vec.m8{font-size:18px}
 .slide[data-id="tf"] ul.plain li{font-size:19px;margin:3px 0}
 .slide[data-id="tf"] .big8 .vec.m8{font-size:15px;line-height:1.1}
+/* 説明文を左にしたあとの調整 */
+.slide[data-id="bd"] ul.plain li{font-size:30px}
+.slide[data-id="pm1"] .point{font-size:26px !important}
+.slide[data-id="mt"] ul.plain li{font-size:21px}
 
 </style>
 </head>
@@ -1050,7 +1054,13 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="kt">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.2 量子ビットを一般化する</div>
   <h2>|0⟩ ⊗ |0⟩ ⊗ ⋯ ⊗ |0⟩ は |0⟩<sup>⊗n</sup> とまとめて書ける<small>8.2（p.194）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)">
+  <div class="body cols" style="grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)">
+    <div class="col">
+      <ul class="plain pop" style="--d:.1s">
+        <li>どれも <b class="k">同じ量子状態</b>（n 個の |0⟩ のテンソル積）を表す</li>
+        <li>文脈に応じて <b class="kb">使いやすい表し方</b> を使う</li>
+      </ul>
+    </div>
     <div class="card pop kt-card">
       <div class="kt-s"><span class="math">|0⟩ ⊗ |0⟩ ⊗ ⋯ ⊗ |0⟩</span></div>
       <div class="kt-a">⊗ を省略する</div>
@@ -1060,12 +1070,6 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
       <div class="kt-a">量子ビットの個数を右上に書く</div>
       <div class="kt-s"><span class="math">= |0⟩<sup>⊗n</sup></span></div>
     </div>
-    <div class="col">
-      <ul class="plain pop" style="--d:.1s">
-        <li>どれも <b class="k">同じ量子状態</b>（n 個の |0⟩ のテンソル積）を表す</li>
-        <li>文脈に応じて <b class="kb">使いやすい表し方</b> を使う</li>
-      </ul>
-    </div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -1074,16 +1078,16 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="bd">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.2 量子ビットを一般化する</div>
   <h2>ビット列を 10 進法で書くと |100⟩ = |4⟩<small>8.2（p.194）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
-    <div class="card pop bd-card">
-      <div class="bd-in" id="bdIn"></div>
-      <div class="eqtx bd-eq" id="bdEq"></div>
-      <div class="bd-vec" id="bdVec"></div>
-    </div>
+  <div class="body cols" style="grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)">
     <div class="col">
       <ul class="plain pop" style="--d:.1s">
         <li>ビット列を <b class="k">10 進法</b> でケットの中に書くこともある（100 は 10 進法で 4 なので <span class="math nw">|100⟩ = |4⟩</span>）</li>
       </ul>
+    </div>
+    <div class="card pop bd-card">
+      <div class="bd-in" id="bdIn"></div>
+      <div class="eqtx bd-eq" id="bdEq"></div>
+      <div class="bd-vec" id="bdVec"></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1093,11 +1097,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="st">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.2 量子ビットを一般化する</div>
   <h2>量子状態は 2ⁿ 個の基底状態の重ね合わせ<small>8.2・8.3（pp.192–197）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
-    <div class="card pop sv-card st-eq">
-      <div class="eqrow" style="justify-content:center;font-size:26px"><span class="vec"><span>a<sub>0</sub></span><span>a<sub>1</sub></span><span>⋮</span><span>a<sub>2ⁿ−1</sub></span></span><span>= a<sub>0</sub></span><span class="vec"><span>1</span><span>0</span><span>⋮</span><span>0</span></span><span>+ a<sub>1</sub></span><span class="vec"><span>0</span><span>1</span><span>⋮</span><span>0</span></span><span>+ ⋯ + a<sub>2ⁿ−1</sub></span><span class="vec"><span>0</span><span>0</span><span>⋮</span><span>1</span></span></div>
-      <div class="eqtx" style="font-size:28px">= a<sub>0</sub>|00⋯0⟩ + a<sub>1</sub>|00⋯1⟩ + ⋯ + a<sub>2ⁿ−1</sub>|11⋯1⟩<br>= a<sub>0</sub>|0⟩ + a<sub>1</sub>|1⟩ + ⋯ + a<sub>2ⁿ−1</sub>|2ⁿ − 1⟩</div>
-    </div>
+  <div class="body cols" style="grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)">
     <div class="col">
       <div class="defbox pop" style="--d:.1s">次の集合 Q の要素を <b class="k">量子状態</b> という
         <div class="eqtx" style="font-size:19px">Q := { <span class="eq inline"><span class="vec"><span>a<sub>0</sub></span><span>⋮</span><span>a<sub>2ⁿ−1</sub></span></span></span> ∈ ℂ<sup>2ⁿ</sup> | |a<sub>0</sub>|² + ⋯ + |a<sub>2ⁿ−1</sub>|² = 1 }</div>
@@ -1107,6 +1107,10 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
         <li><span class="math nw"><b>|a<sub>k</sub>|²</b></span> が、測定で基底状態 <span class="math nw">|k⟩</span> を得る <b class="kb">確率</b>（だから和が 1）</li>
       </ul>
     </div>
+    <div class="card pop sv-card st-eq">
+      <div class="eqrow" style="justify-content:center;font-size:26px"><span class="vec"><span>a<sub>0</sub></span><span>a<sub>1</sub></span><span>⋮</span><span>a<sub>2ⁿ−1</sub></span></span><span>= a<sub>0</sub></span><span class="vec"><span>1</span><span>0</span><span>⋮</span><span>0</span></span><span>+ a<sub>1</sub></span><span class="vec"><span>0</span><span>1</span><span>⋮</span><span>0</span></span><span>+ ⋯ + a<sub>2ⁿ−1</sub></span><span class="vec"><span>0</span><span>0</span><span>⋮</span><span>1</span></span></div>
+      <div class="eqtx" style="font-size:28px">= a<sub>0</sub>|00⋯0⟩ + a<sub>1</sub>|00⋯1⟩ + ⋯ + a<sub>2ⁿ−1</sub>|11⋯1⟩<br>= a<sub>0</sub>|0⟩ + a<sub>1</sub>|1⟩ + ⋯ + a<sub>2ⁿ−1</sub>|2ⁿ − 1⟩</div>
+    </div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -1115,15 +1119,15 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="ip">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.2 量子ビットを一般化する</div>
   <h2>内積を使うと Q を短く書ける<small>8.2（pp.195–196）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)">
-    <div class="card pop ip-card">
-      <div class="eqrow" style="justify-content:center;font-size:24px"><span>⟨φ|φ⟩ =</span><span class="vec row ip-row"><span>a<sub>0</sub>*</span><span>a<sub>1</sub>*</span><span>⋯</span><span>a<sub>2ⁿ−1</sub>*</span></span><span class="vec ip-col"><span>a<sub>0</sub></span><span>a<sub>1</sub></span><span>⋮</span><span>a<sub>2ⁿ−1</sub></span></span></div>
-      <div class="eqtx" style="font-size:24px">= <span class="ip0">a<sub>0</sub>*a<sub>0</sub></span> + <span class="ip1">a<sub>1</sub>*a<sub>1</sub></span> + ⋯ + <span class="ip2">a<sub>2ⁿ−1</sub>*a<sub>2ⁿ−1</sub></span><br>= |a<sub>0</sub>|² + |a<sub>1</sub>|² + ⋯ + |a<sub>2ⁿ−1</sub>|² <b>= 1</b></div>
-    </div>
+  <div class="body cols" style="grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)">
     <div class="col ip-r">
       <div class="ipc pop" style="--d:.1s;--c:#9a93bd"><div class="ch">成分で書くと（8.2 の定義）</div><div class="eqtx">Q := { <span class="eq inline"><span class="vec"><span>a<sub>0</sub></span><span>⋮</span><span>a<sub>2ⁿ−1</sub></span></span></span> ∈ ℂ<sup>2ⁿ</sup> | |a<sub>0</sub>|² + ⋯ + |a<sub>2ⁿ−1</sub>|² = 1 }</div></div>
       <div class="ipc pop" style="--d:.2s;--c:var(--accent)"><div class="ch">内積で書くと</div><div class="eqtx big">Q = { |φ⟩ ∈ ℂ<sup>2ⁿ</sup> | <b>⟨φ|φ⟩ = 1</b> }</div></div>
       <div class="point blue pop" style="--d:.3s">成分を並べなくても、<b class="kb">⟨φ|φ⟩ = 1</b> の一言で同じことが言える</div>
+    </div>
+    <div class="card pop ip-card">
+      <div class="eqrow" style="justify-content:center;font-size:24px"><span>⟨φ|φ⟩ =</span><span class="vec row ip-row"><span>a<sub>0</sub>*</span><span>a<sub>1</sub>*</span><span>⋯</span><span>a<sub>2ⁿ−1</sub>*</span></span><span class="vec ip-col"><span>a<sub>0</sub></span><span>a<sub>1</sub></span><span>⋮</span><span>a<sub>2ⁿ−1</sub></span></span></div>
+      <div class="eqtx" style="font-size:24px">= <span class="ip0">a<sub>0</sub>*a<sub>0</sub></span> + <span class="ip1">a<sub>1</sub>*a<sub>1</sub></span> + ⋯ + <span class="ip2">a<sub>2ⁿ−1</sub>*a<sub>2ⁿ−1</sub></span><br>= |a<sub>0</sub>|² + |a<sub>1</sub>|² + ⋯ + |a<sub>2ⁿ−1</sub>|² <b>= 1</b></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1148,13 +1152,13 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="pm1">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.5 一部の量子ビットの測定</div>
   <h2>左の 1 量子ビットだけを測定する<small>8.5.1（pp.199–201・例を簡単にした）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr)">
+  <div class="body cols" style="grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr)">
+    <div class="col">
+      <div class="point blue pop" style="--d:.2s;font-size:20px">残った項の確率の和は <span class="math nw"><span class="eq inline"><span class="frac"><span>3</span><span>4</span></span></span> ≠ 1</span> なので、<span class="math nw">√<span class="eq inline"><span class="frac"><span>3</span><span>4</span></span></span></span> で割ったものが測定後の量子状態</div>
+    </div>
     <div class="card pop pm-card">
       <div class="eqrow pm-st" id="pm1St"></div>
       <div class="pm-groups" id="pm1G"></div>
-    </div>
-    <div class="col">
-      <div class="point blue pop" style="--d:.2s;font-size:20px">残った項の確率の和は <span class="math nw"><span class="eq inline"><span class="frac"><span>3</span><span>4</span></span></span> ≠ 1</span> なので、<span class="math nw">√<span class="eq inline"><span class="frac"><span>3</span><span>4</span></span></span></span> で割ったものが測定後の量子状態</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1188,17 +1192,17 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="pm2">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.5 一部の量子ビットの測定</div>
   <h2>左の 2 量子ビットを測定する<small>8.5.3（pp.202–204・例を簡単にした）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr)">
-    <div class="card pop pm-card">
-      <div class="eqrow pm-st" id="pm2St"></div>
-      <div class="pm-groups four" id="pm2G"></div>
-    </div>
+  <div class="body cols" style="grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr)">
     <div class="col">
       <ul class="plain pop" style="--d:.1s">
         <li>左 2 量子ビットは <span class="math nw">|00⟩, |01⟩, |10⟩, |11⟩</span> の 4 種類でまとめる</li>
         <li><span class="math">|10⟩</span> の項はないので、確率は <b class="k">0</b></li>
       </ul>
       <div class="point blue pop" style="--d:.2s;font-size:20px"><span class="math">|010⟩</span> のように項が 1 個のときは、係数で割るので係数は（実質的に）<b class="kb">1</b></div>
+    </div>
+    <div class="card pop pm-card">
+      <div class="eqrow pm-st" id="pm2St"></div>
+      <div class="pm-groups four" id="pm2G"></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1223,7 +1227,12 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="tp">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.6 1 量子ビットのテンソル積を用いた計算</div>
   <h2>2 × 2 のテンソル積に分ければ計算が楽<small>8.6.1・定理 8.1（pp.204–206）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)">
+  <div class="body cols" style="grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)">
+    <div class="col">
+      <div class="thm6 pop" style="--d:.15s"><span class="thm-t">定理 8.1</span><span class="math">U<sub>1</sub>, …, U<sub>n</sub></span> を 2 × 2 のユニタリ行列、<span class="math nw">|φ<sub>1</sub>⟩, …, |φ<sub>n</sub>⟩</span> を 1 量子ビットの量子状態とすると
+        <div class="math" style="font-size:19px;margin-top:4px">(U<sub>1</sub> ⊗ ⋯ ⊗ U<sub>n</sub>)(|φ<sub>1</sub>⟩ ⊗ ⋯ ⊗ |φ<sub>n</sub>⟩)<br>= (U<sub>1</sub>|φ<sub>1</sub>⟩) ⊗ ⋯ ⊗ (U<sub>n</sub>|φ<sub>n</sub>⟩)</div>
+      </div>
+    </div>
     <div class="col tp-l">
       <div class="tpc pop" style="--c:var(--pink)">
         <div class="ch">そのまま：8 × 8 行列の積</div>
@@ -1232,11 +1241,6 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
       <div class="tpc pop" style="--d:.1s;--c:var(--green)">
         <div class="ch">分けて：2 × 2 行列の積のテンソル積</div>
         <div class="eqtx" style="text-align:left;font-size:21px">(X ⊗ X ⊗ Z)(|1⟩ ⊗ |0⟩ ⊗ |1⟩)<br>= X|1⟩ ⊗ X|0⟩ ⊗ Z|1⟩ = |0⟩ ⊗ |1⟩ ⊗ (−|1⟩)<br>= <span class="res">−|0⟩ ⊗ |1⟩ ⊗ |1⟩</span></div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="thm6 pop" style="--d:.15s"><span class="thm-t">定理 8.1</span><span class="math">U<sub>1</sub>, …, U<sub>n</sub></span> を 2 × 2 のユニタリ行列、<span class="math nw">|φ<sub>1</sub>⟩, …, |φ<sub>n</sub>⟩</span> を 1 量子ビットの量子状態とすると
-        <div class="math" style="font-size:19px;margin-top:4px">(U<sub>1</sub> ⊗ ⋯ ⊗ U<sub>n</sub>)(|φ<sub>1</sub>⟩ ⊗ ⋯ ⊗ |φ<sub>n</sub>⟩)<br>= (U<sub>1</sub>|φ<sub>1</sub>⟩) ⊗ ⋯ ⊗ (U<sub>n</sub>|φ<sub>n</sub>⟩)</div>
       </div>
     </div>
   </div>
@@ -1346,18 +1350,18 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="sp2">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.8 重ね合わせ状態を利用した計算</div>
   <h2>でも測定で得られる結果は 1 個だけ<small>8.8（p.214）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
-    <div class="card pop sp-card">
-      <div class="eqrow sp-eq" style="font-size:21px"><span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>(|000⟩ + |010⟩ + |100⟩ + |111⟩) を測定</div>
-      <div class="amp8" id="sp2Amp"></div>
-      <div class="ms-res" id="sp2Res"></div>
-      <div class="btns" style="justify-content:center"><button class="b" id="sp2Go">🎲 測定する</button><button class="b" id="sp2Back">↺ 測定前に戻す</button></div>
-    </div>
+  <div class="body cols" style="grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)">
     <div class="col">
       <ul class="plain pop" style="--d:.1s">
         <li>測定で得られるのは <b class="k">1 個だけ</b>。どれも同じ確率なので、ランダムに 1 つ選ぶのと変わらない</li>
         <li>目的の結果を得る確率が <b class="kb">高くなるように</b> ユニタリ発展を工夫したときだけ、高速に計算できる</li>
       </ul>
+    </div>
+    <div class="card pop sp-card">
+      <div class="eqrow sp-eq" style="font-size:21px"><span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>(|000⟩ + |010⟩ + |100⟩ + |111⟩) を測定</div>
+      <div class="amp8" id="sp2Amp"></div>
+      <div class="ms-res" id="sp2Res"></div>
+      <div class="btns" style="justify-content:center"><button class="b" id="sp2Go">🎲 測定する</button><button class="b" id="sp2Back">↺ 測定前に戻す</button></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1367,12 +1371,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="cx">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.8 重ね合わせ状態を利用した計算</div>
   <h2>古典で真似すると O(2²ⁿ) の計算時間<small>8.8（p.214）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
-    <div class="card pop cx-card">
-      <div class="cx-chart" id="cxChart"></div>
-      <div class="cx-num" id="cxNum"></div>
-      <div id="cxStp"></div>
-    </div>
+  <div class="body cols" style="grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)">
     <div class="col">
       <ul class="plain pop" style="--d:.1s">
         <li>n が大きいときの計算ステップ数のおおよその数を <span class="math nw">O(f(n))</span> で表し、<b class="k">計算量</b> という</li>
@@ -1380,6 +1379,11 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
         <li>量子コンピュータなら、ユニタリ発展は <b class="kb">一定時間以内</b> に実行できる</li>
       </ul>
       <div class="tiny pop" style="--d:.2s">※ 計算量の正確な定義ではなく、標準的な表現。疎行列ならもっと速いが、指数関数的なのは変わらない</div>
+    </div>
+    <div class="card pop cx-card">
+      <div class="cx-chart" id="cxChart"></div>
+      <div class="cx-num" id="cxNum"></div>
+      <div id="cxStp"></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1405,7 +1409,6 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.9 排他的論理和とオラクル</div>
   <h2>中身は分からないが実行できる ＝ オラクル<small>8.9・図 8.6（p.216）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
-    <div class="card pop or-card"><svg class="gsim" id="orSvg" viewBox="0 0 540 250"></svg><div class="or-cap"><b>一般的な書き方</b>：<span class="math nw">U<sub>f</sub>|x⟩|y⟩ = |x⟩|y ⊕ f(x)⟩</span>（<span class="math nw">f : {0,1}ⁿ → {0,1}ᵐ</span>）<br>⊕ はビットごとの排他的論理和（例：<span class="math nw">101 ⊕ 011 = 110</span>）<br>教科書の図 8.6 は <span class="math nw">n = m = 1</span> の場合（n, m への一般化は補足）</div></div>
     <div class="col">
       <ul class="plain pop" style="--d:.1s">
         <li>具体的な形は分からないけど実行することはできる関数 ＝ <b class="k">ブラックボックス関数</b>。関数 f に対応するものを <b class="kb">オラクル</b> <span class="math">U<sub>f</sub></span> という</li>
@@ -1413,6 +1416,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
         <li>出力が 1 ビットなら、y に <span class="math nw">|−⟩</span> を入れると <span class="math nw">(−1)<sup>f(x)</sup>|x⟩</span> と位相を変える形にもなる（この形から作れる）</li>
       </ul>
     </div>
+    <div class="card pop or-card"><svg class="gsim" id="orSvg" viewBox="0 0 540 250"></svg><div class="or-cap"><b>一般的な書き方</b>：<span class="math nw">U<sub>f</sub>|x⟩|y⟩ = |x⟩|y ⊕ f(x)⟩</span>（<span class="math nw">f : {0,1}ⁿ → {0,1}ᵐ</span>）<br>⊕ はビットごとの排他的論理和（例：<span class="math nw">101 ⊕ 011 = 110</span>）<br>教科書の図 8.6 は <span class="math nw">n = m = 1</span> の場合（n, m への一般化は補足）</div></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -1421,13 +1425,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="oi">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.9 排他的論理和とオラクル ／ 【補足・教科書外】</div>
   <h2>1 ビットの関数なら、オラクルの中身は 4 通り<small>補足（教科書外）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr)">
-    <div class="oi-g">
-      <div class="card pop oi-c"><div class="ch">f(x) = 0</div><div id="oi0"></div><div class="oi-t">f(0) = 0, f(1) = 0</div></div>
-      <div class="card pop oi-c" style="--d:.05s"><div class="ch">f(x) = 1</div><div id="oi1"></div><div class="oi-t">f(0) = 1, f(1) = 1</div></div>
-      <div class="card pop oi-c" style="--d:.1s"><div class="ch">f(x) = x</div><div id="oi2"></div><div class="oi-t">f(0) = 0, f(1) = 1</div></div>
-      <div class="card pop oi-c" style="--d:.15s"><div class="ch">f(x) = NOT x</div><div id="oi3"></div><div class="oi-t">f(0) = 1, f(1) = 0</div></div>
-    </div>
+  <div class="body cols" style="grid-template-columns:minmax(0,.65fr) minmax(0,1.35fr)">
     <div class="col">
       <ul class="plain pop" style="--d:.2s">
         <li>どれも図 8.6 と同じ <span class="math nw">|x⟩|y⟩ → |x⟩|y ⊕ f(x)⟩</span></li>
@@ -1436,6 +1434,12 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
         <li><span class="math nw">f(x) = NOT x</span>：x を <b class="k">X</b> で反転してから CNOT し、もう一度 X で x を元に戻す</li>
         <li>アルゴリズムでは、中身を見ずに U<sub>f</sub> を使う</li>
       </ul>
+    </div>
+    <div class="oi-g">
+      <div class="card pop oi-c"><div class="ch">f(x) = 0</div><div id="oi0"></div><div class="oi-t">f(0) = 0, f(1) = 0</div></div>
+      <div class="card pop oi-c" style="--d:.05s"><div class="ch">f(x) = 1</div><div id="oi1"></div><div class="oi-t">f(0) = 1, f(1) = 1</div></div>
+      <div class="card pop oi-c" style="--d:.1s"><div class="ch">f(x) = x</div><div id="oi2"></div><div class="oi-t">f(0) = 0, f(1) = 1</div></div>
+      <div class="card pop oi-c" style="--d:.15s"><div class="ch">f(x) = NOT x</div><div id="oi3"></div><div class="oi-t">f(0) = 1, f(1) = 0</div></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1460,17 +1464,17 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="mt">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展：量子コンピュータを使って任意の 2ⁿ 次正方行列のかけ算を計算する</div>
   <h2>ユニタリでない A でも A|φ⟩ を求めたい<small>8.10（pp.216–217）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)">
-    <div class="col mt-fig">
-      <div class="mtc pop" style="--c:var(--green)"><span class="mt-ic">✓</span><div><b>ユニタリ行列 U</b><div class="math">|φ⟩ → U|φ⟩</div></div><span class="mt-who">量子コンピュータで計算できる</span></div>
-      <div class="mtc pop" style="--d:.1s;--c:var(--red)"><span class="mt-ic">?</span><div><b>ユニタリでない行列 A</b><div class="math">|φ⟩ → A|φ⟩</div></div><span class="mt-who">そのままでは計算できない</span></div>
-      <div class="mtc pop" style="--d:.2s;--c:var(--blue)"><span class="mt-ic">＋</span><div><b>古典コンピュータ</b><div>数をかける・行列の和</div></div><span class="mt-who">手伝ってもらう</span></div>
-    </div>
+  <div class="body cols" style="grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)">
     <div class="col">
       <ul class="plain pop" style="--d:.15s">
         <li>例：物理学のハミルトニアン <span class="math">Ĥ</span>（エルミート行列。ユニタリ行列とは限らない）</li>
         <li>古典コンピュータで、行列に実数や複素数をかけたり、行列の和を計算したりしてよい（行列どうしの積やテンソル積は計算しない）とすれば、<b class="k">任意の 2ⁿ 次正方行列 A</b> で <span class="math nw">A|φ⟩</span> を計算できる</li>
       </ul>
+    </div>
+    <div class="col mt-fig">
+      <div class="mtc pop" style="--c:var(--green)"><span class="mt-ic">✓</span><div><b>ユニタリ行列 U</b><div class="math">|φ⟩ → U|φ⟩</div></div><span class="mt-who">量子コンピュータで計算できる</span></div>
+      <div class="mtc pop" style="--d:.1s;--c:var(--red)"><span class="mt-ic">?</span><div><b>ユニタリでない行列 A</b><div class="math">|φ⟩ → A|φ⟩</div></div><span class="mt-who">そのままでは計算できない</span></div>
+      <div class="mtc pop" style="--d:.2s;--c:var(--blue)"><span class="mt-ic">＋</span><div><b>古典コンピュータ</b><div>数をかける・行列の和</div></div><span class="mt-who">手伝ってもらう</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1480,15 +1484,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="pa">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展：量子コンピュータを使って任意の 2ⁿ 次正方行列のかけ算を計算する</div>
   <h2>2 × 2 行列は I・X・Y・Z の和で書ける<small>8.10.1（pp.217–219）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)">
-    <div class="card pop pa-card">
-      <div class="eqtx pa-r">A<sub>1</sub> = <span class="eq inline"><span class="vec m2"><span>a</span><span>b</span><span>c</span><span>d</span></span></span> = a<span class="eq inline"><span class="vec m2"><span>1</span><span>0</span><span>0</span><span>0</span></span></span> + b<span class="eq inline"><span class="vec m2"><span>0</span><span>1</span><span>0</span><span>0</span></span></span> + c<span class="eq inline"><span class="vec m2"><span>0</span><span>0</span><span>1</span><span>0</span></span></span> + d<span class="eq inline"><span class="vec m2"><span>0</span><span>0</span><span>0</span><span>1</span></span></span></div>
-      <div class="pa-g">
-        <div class="eqtx"><span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>(I + Z) = <span class="eq inline"><span class="vec m2"><span>1</span><span>0</span><span>0</span><span>0</span></span></span></div><div class="eqtx"><span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>(X + iY) = <span class="eq inline"><span class="vec m2"><span>0</span><span>1</span><span>0</span><span>0</span></span></span></div>
-        <div class="eqtx"><span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>(X − iY) = <span class="eq inline"><span class="vec m2"><span>0</span><span>0</span><span>1</span><span>0</span></span></span></div><div class="eqtx"><span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>(I − Z) = <span class="eq inline"><span class="vec m2"><span>0</span><span>0</span><span>0</span><span>1</span></span></span></div>
-      </div>
-      <div class="eqtx pa-r">A<sub>1</sub> = <span class="eq inline"><span class="frac"><span>a</span><span>2</span></span></span>(I + Z) + <span class="eq inline"><span class="frac"><span>b</span><span>2</span></span></span>(X + iY) + <span class="eq inline"><span class="frac"><span>c</span><span>2</span></span></span>(X − iY) + <span class="eq inline"><span class="frac"><span>d</span><span>2</span></span></span>(I − Z)<br>= <b><span class="eq inline"><span class="frac"><span>a + d</span><span>2</span></span></span>I + <span class="eq inline"><span class="frac"><span>b + c</span><span>2</span></span></span>X + <span class="eq inline"><span class="frac"><span>b − c</span><span>2</span></span></span>iY + <span class="eq inline"><span class="frac"><span>a − d</span><span>2</span></span></span>Z</b></div>
-    </div>
+  <div class="body cols" style="grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)">
     <div class="col">
       <div class="eqrow pop" style="--d:.1s;font-size:19px;justify-content:center;gap:6px">
         <span>Y =</span><span class="vec m2"><span>0</span><span>−i</span><span>i</span><span>0</span></span>
@@ -1498,6 +1494,14 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
         <li><span class="math">α<sub>k</sub></span> は複素数で、<span class="math">A<sub>1</sub></span> の成分から求められる</li>
       </ul>
     </div>
+    <div class="card pop pa-card">
+      <div class="eqtx pa-r">A<sub>1</sub> = <span class="eq inline"><span class="vec m2"><span>a</span><span>b</span><span>c</span><span>d</span></span></span> = a<span class="eq inline"><span class="vec m2"><span>1</span><span>0</span><span>0</span><span>0</span></span></span> + b<span class="eq inline"><span class="vec m2"><span>0</span><span>1</span><span>0</span><span>0</span></span></span> + c<span class="eq inline"><span class="vec m2"><span>0</span><span>0</span><span>1</span><span>0</span></span></span> + d<span class="eq inline"><span class="vec m2"><span>0</span><span>0</span><span>0</span><span>1</span></span></span></div>
+      <div class="pa-g">
+        <div class="eqtx"><span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>(I + Z) = <span class="eq inline"><span class="vec m2"><span>1</span><span>0</span><span>0</span><span>0</span></span></span></div><div class="eqtx"><span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>(X + iY) = <span class="eq inline"><span class="vec m2"><span>0</span><span>1</span><span>0</span><span>0</span></span></span></div>
+        <div class="eqtx"><span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>(X − iY) = <span class="eq inline"><span class="vec m2"><span>0</span><span>0</span><span>1</span><span>0</span></span></span></div><div class="eqtx"><span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>(I − Z) = <span class="eq inline"><span class="vec m2"><span>0</span><span>0</span><span>0</span><span>1</span></span></span></div>
+      </div>
+      <div class="eqtx pa-r">A<sub>1</sub> = <span class="eq inline"><span class="frac"><span>a</span><span>2</span></span></span>(I + Z) + <span class="eq inline"><span class="frac"><span>b</span><span>2</span></span></span>(X + iY) + <span class="eq inline"><span class="frac"><span>c</span><span>2</span></span></span>(X − iY) + <span class="eq inline"><span class="frac"><span>d</span><span>2</span></span></span>(I − Z)<br>= <b><span class="eq inline"><span class="frac"><span>a + d</span><span>2</span></span></span>I + <span class="eq inline"><span class="frac"><span>b + c</span><span>2</span></span></span>X + <span class="eq inline"><span class="frac"><span>b − c</span><span>2</span></span></span>iY + <span class="eq inline"><span class="frac"><span>a − d</span><span>2</span></span></span>Z</b></div>
+    </div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -1506,8 +1510,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="qc4">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展：量子コンピュータを使って任意の 2ⁿ 次正方行列のかけ算を計算する</div>
   <h2>量子で 4 回計算し、古典で足し合わせる<small>8.10.1（p.219）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)">
-    <div class="card pop"><svg class="gsim" id="q4Svg" viewBox="0 0 600 400"></svg></div>
+  <div class="body cols" style="grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)">
     <div class="col">
       <div class="eqtx pop" style="--d:.1s;font-size:21px;text-align:left">A<sub>1</sub>|φ⟩ = <span class="eq inline"><span class="frac"><span>a + d</span><span>2</span></span></span><u class="wv">I|φ⟩</u> + <span class="eq inline"><span class="frac"><span>b + c</span><span>2</span></span></span><u class="wv">X|φ⟩</u><br>　+ <span class="eq inline"><span class="frac"><span>b − c</span><span>2</span></span></span>i<u class="wv">Y|φ⟩</u> + <span class="eq inline"><span class="frac"><span>a − d</span><span>2</span></span></span><u class="wv">Z|φ⟩</u></div>
       <ul class="plain pop" style="--d:.2s">
@@ -1516,6 +1519,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
         <li>波線が 4 か所なので、量子コンピュータで <b class="k">4 回</b> 計算する</li>
       </ul>
     </div>
+    <div class="card pop"><svg class="gsim" id="q4Svg" viewBox="0 0 600 400"></svg></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -1524,8 +1528,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="a2">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展：量子コンピュータを使って任意の 2ⁿ 次正方行列のかけ算を計算する</div>
   <h2>4 次正方行列は σ ⊗ σ の 16 通りで表す<small>8.10.2・8.10.3（pp.220–221）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)">
-    <div class="card pop"><div class="mp-lbl">σ<sub>k₁</sub> ⊗ σ<sub>k₂</sub>（どれもユニタリ行列）</div><div class="a2g" id="a2G"></div></div>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)">
     <div class="col">
       <div class="thm6 pop" style="--d:.1s;font-size:18px;padding-top:18px"><span class="thm-t">定理 8.2</span><span class="math">U<sub>i</sub>, V<sub>i</sub></span>：2 × 2 のユニタリ行列、<span class="math">|φ⟩</span>：n 量子ビットの量子状態
         <div class="math" style="font-size:18px">(1) (U<sub>1</sub> ⊗ V<sub>1</sub> + U<sub>2</sub> ⊗ V<sub>2</sub>)|φ⟩ = U<sub>1</sub> ⊗ V<sub>1</sub>|φ⟩ + U<sub>2</sub> ⊗ V<sub>2</sub>|φ⟩<br>(2) (U<sub>1</sub> ⊗ V<sub>1</sub> + ⋯ + U<sub>n</sub> ⊗ V<sub>n</sub>)|φ⟩ = U<sub>1</sub> ⊗ V<sub>1</sub>|φ⟩ + ⋯ + U<sub>n</sub> ⊗ V<sub>n</sub>|φ⟩</div>
@@ -1533,6 +1536,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
       <div class="eqtx pop" style="--d:.2s;font-size:21px">A<sub>2</sub>|φ⟩ = <span class="sig"><sup>3</sup>Σ<sub>k₁=0</sub></span><span class="sig"><sup>3</sup>Σ<sub>k₂=0</sub></span> α<sub>k₁,k₂</sub> <u class="wv">(σ<sub>k₁</sub> ⊗ σ<sub>k₂</sub>|φ⟩)</u></div>
       <div class="point blue pop" style="--d:.3s;font-size:20px">σ が 4 種類、Σ が 2 個あるので、量子コンピュータで <b class="kb">4² = 16 回</b> 計算する</div>
     </div>
+    <div class="card pop"><div class="mp-lbl">σ<sub>k₁</sub> ⊗ σ<sub>k₂</sub>（どれもユニタリ行列）</div><div class="a2g" id="a2G"></div></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -1542,11 +1546,6 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展：量子コンピュータを使って任意の 2ⁿ 次正方行列のかけ算を計算する</div>
   <h2>n 量子ビットでは 4ⁿ 回の計算が必要<small>8.10.4（pp.221–222）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
-    <div class="card pop an-card">
-      <div class="ue-lbl" id="anLbl"></div>
-      <div class="an-dots" id="anDots"></div>
-      <div id="anStp"></div>
-    </div>
     <div class="col">
       <div class="eqtx pop" style="--d:.1s;font-size:20px">A<sub>n</sub> = <span class="sig"><sup>3</sup>Σ<sub>k₁=0</sub></span> ⋯ <span class="sig"><sup>3</sup>Σ<sub>kₙ=0</sub></span> α<sub>k₁,…,kₙ</sub> σ<sub>k₁</sub> ⊗ ⋯ ⊗ σ<sub>kₙ</sub></div>
       <ul class="plain pop" style="--d:.2s">
@@ -1554,6 +1553,11 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
         <li>現実的な時間で計算するには「<span class="math">A<sub>n</sub></span> を <b class="kb">少ない個数の和</b> で表せる」などの前提が必要</li>
         <li>ハミルトニアンを使う量子アルゴリズム：<b>VQE</b>（変分量子固有値法）、<b>QAOA</b>（量子近似最適化アルゴリズム）</li>
       </ul>
+    </div>
+    <div class="card pop an-card">
+      <div class="ue-lbl" id="anLbl"></div>
+      <div class="an-dots" id="anDots"></div>
+      <div id="anStp"></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1563,8 +1567,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="vqe">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展 ／ 【補足・教科書外】</div>
   <h2>VQE：くり返して最小のエネルギーを探す<small>補足（教科書外）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)">
-    <div class="card pop"><svg class="gsim" id="vqSvg" viewBox="0 0 560 420"></svg></div>
+  <div class="body cols" style="grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)">
     <div class="col">
       <ul class="plain pop" style="--d:.1s">
         <li><b>VQE</b>（変分量子固有値法）：ハミルトニアン <span class="math">Ĥ</span> の <b class="k">いちばん小さい固有値</b>（分子のいちばん低いエネルギーなど）を求める</li>
@@ -1572,6 +1575,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
         <li><span class="math">Ĥ</span> が <b class="kb">少ない個数のパウリ行列の和</b> で書ければ、量子での計算回数が少なくて済む（8.10.4）</li>
       </ul>
     </div>
+    <div class="card pop"><svg class="gsim" id="vqSvg" viewBox="0 0 560 420"></svg></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -1580,8 +1584,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="qaoa">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展 ／ 【補足・教科書外】</div>
   <h2>QAOA：組合せ最適化のよい答えを探す<small>補足（教科書外）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
-    <div class="card pop"><svg class="gsim" id="qaSvg" viewBox="0 0 600 380"></svg></div>
+  <div class="body cols" style="grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)">
     <div class="col">
       <ul class="plain pop" style="--d:.1s">
         <li><b>QAOA</b>（量子近似最適化アルゴリズム）：たくさんの組合せの中から、よい組合せ（ビット列）を探す問題の <b class="k">近似解</b> を求める</li>
@@ -1589,6 +1592,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
         <li>2 つを交互に p 回かけて測定し、古典コンピュータで <b class="kb">γ, β を調整</b> する。VQE と同じく量子と古典の分担</li>
       </ul>
     </div>
+    <div class="card pop"><svg class="gsim" id="qaSvg" viewBox="0 0 600 380"></svg></div>
   </div>
   <div class="pageno"></div>
 </section>
