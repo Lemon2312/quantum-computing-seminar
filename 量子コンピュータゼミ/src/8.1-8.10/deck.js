@@ -155,20 +155,6 @@ oracleBox($('#orSvg'), { ys: [70, 180], ins: ['|x⟩', '|y⟩'], outs: ['|x⟩',
   }, 1500);
 }
 
-/* ---------- 8.2 ビット列 ↔ 10 進法 ↔ 状態ベクトル ---------- */
-{
-  const b = [1, 0, 0];
-  const render = () => {
-    const s = b.join(''), k = parseInt(s, 2);
-    $('#bdIn').querySelectorAll('button').forEach((x, i) => { x.textContent = b[i]; x.classList.toggle('one', b[i] === 1); });
-    $('#bdEq').innerHTML = `<b>|${s}⟩</b> = <b class="k">|${k}⟩</b>`;
-    $('#bdVec').innerHTML = [...Array(8)].map((_, i) => `<div class="${i === k ? 'on' : ''}"><span class="ix">a<sub>${i}</sub></span><span class="v">${i === k ? 1 : 0}</span><span class="kt">|${bits(i, 3)}⟩ = |${i}⟩</span></div>`).join('');
-  };
-  $('#bdIn').innerHTML = '<span class="tiny">クリックで 0 / 1</span>' + [0, 1, 2].map(i => `<button data-i="${i}"></button>`).join('');
-  $('#bdIn').querySelectorAll('button').forEach(x => x.addEventListener('click', () => { x.blur(); b[+x.dataset.i] ^= 1; render(); }));
-  render();
-}
-
 /* ---------- 復習：1 量子ビット・2 量子ビットの量子回路 ---------- */
 drawQC('#rvC1', { n: 1, init: true, noNames: true, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'M', q: 0, col: 1 }], colW: 56 });
 drawQC('#rvC2', { n: 2, noNames: true, ops: [{ g: 'CX', c: 0, t: 1, col: 0 }], colW: 56, rowH: 44 });
@@ -186,7 +172,7 @@ drawQC('#rvC3', { n: 2, noNames: true, ops: [{ g: 'SW', a: 0, b: 1, col: 0 }], c
   const Y = [52, 112];
   const xg = (svg, x, q) => { el('rect', { x: x - 17, y: Y[q] - 17, width: 34, height: 34, rx: 6, style: 'fill:var(--accent);stroke:var(--ink);stroke-width:2.5' }, svg); el('text', { x, y: Y[q] + 7, 'text-anchor': 'middle', style: 'fill:#fff;font:700 20px "Cambria Math",serif' }, svg).textContent = 'X'; };
   const cx = (svg, x) => { el('line', { x1: x, y1: Y[0], x2: x, y2: Y[1], class: 'gl' }, svg); el('circle', { cx: x, cy: Y[0], r: 7, class: 'gd' }, svg); el('circle', { cx: x, cy: Y[1], r: 15, class: 'gt' }, svg); el('path', { d: `M${x - 15},${Y[1]}H${x + 15}M${x},${Y[1] - 15}V${Y[1] + 15}`, class: 'gl' }, svg); };
-  const parts = [svg => {}, svg => xg(svg, 180, 1), svg => cx(svg, 180), svg => { xg(svg, 130, 0); cx(svg, 180); xg(svg, 230, 0); }];
+  const parts = [svg => {}, svg => xg(svg, 180, 1), svg => cx(svg, 180)];
   parts.forEach((draw, k) => {
     const svg = el('svg', { viewBox: '0 0 420 160', class: 'gsim' }, $('#oi' + k));
     Y.forEach((y, q) => {
@@ -278,4 +264,64 @@ drawQC('#rvC3', { n: 2, noNames: true, ops: [{ g: 'SW', a: 0, b: 1, col: 0 }], c
     el('text', { x: 110, y: y + 7, 'text-anchor': 'middle', style: 'fill:#fff;font:700 20px "Cambria Math",serif' }, svg).textContent = G[k];
     el('text', { x: 182, y: y + 7, style: 'font-size:20px' }, svg).textContent = outs[k];
   });
+}
+
+/* ---------- 一部の測定の回路：|φ⟩ をつくって、0 ビット目（と 1 ビット目）だけ測定 ---------- */
+function measCircuit(id, meas) {
+  const svg = el('svg', { viewBox: '0 0 250 160', class: 'gsim' }, $(id)), ys = [30, 80, 130];
+  ys.forEach((y, q) => {
+    rich(el('text', { x: 2, y: y + 7, class: 'nm', style: 'font-size:19px' }, svg), `q_{${q}}`);
+    el('line', { x1: 34, y1: y, x2: meas.includes(q) ? 172 : 236, y2: y, class: 'w' }, svg);
+    if (meas.includes(q)) {
+      el('rect', { x: 150, y: y - 17, width: 34, height: 34, rx: 6, style: 'fill:#1f1a3d;stroke:var(--ink);stroke-width:2.5' }, svg);
+      el('path', { d: `M${155},${y + 8}A12,12 0 0 1 ${179},${y + 8}M167,${y + 8}L175,${y - 6}`, style: 'fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round' }, svg);
+      el('line', { x1: 184, y1: y - 2.5, x2: 236, y2: y - 2.5, style: 'stroke:var(--ink);stroke-width:2' }, svg);
+      el('line', { x1: 184, y1: y + 2.5, x2: 236, y2: y + 2.5, style: 'stroke:var(--ink);stroke-width:2' }, svg);
+    }
+  });
+  el('rect', { x: 52, y: 8, width: 64, height: 144, rx: 10, style: 'fill:#fff1c2;stroke:var(--ink);stroke-width:2.5' }, svg);
+  el('text', { x: 84, y: 82, 'text-anchor': 'middle', style: 'font-size:22px' }, svg).textContent = '|φ⟩';
+  el('text', { x: 84, y: 102, 'text-anchor': 'middle', class: 'lbl', style: 'font-size:12px' }, svg).textContent = 'をつくる';
+}
+measCircuit('#pmC1', [0]);
+measCircuit('#pmC2', [0, 1]);
+
+/* ---------- 定理 8.1 の一般形の回路：U_k が 1 本ずつ ---------- */
+{
+  const svg = el('svg', { viewBox: '0 0 360 180', class: 'gsim' }, $('#tpGen')), ys = [26, 72, 118, 160], L = ['1', '2', '', 'n'];
+  ys.forEach((y, k) => {
+    if (k === 2) { el('text', { x: 180, y: 128, 'text-anchor': 'middle', style: 'font-size:24px' }, svg).textContent = '⋮'; return; }
+    rich(el('text', { x: 46, y: y + 7, 'text-anchor': 'end', style: 'font-size:18px' }, svg), `|φ_{${L[k]}}⟩`);
+    el('line', { x1: 52, y1: y, x2: 236, y2: y, class: 'w' }, svg);
+    el('rect', { x: 124, y: y - 17, width: 40, height: 34, rx: 6, style: 'fill:#9a93bd;stroke:var(--ink);stroke-width:2.5' }, svg);
+    rich(el('text', { x: 144, y: y + 7, 'text-anchor': 'middle', style: 'fill:#fff;font:700 18px "Cambria Math",serif' }, svg), `U_{${L[k]}}`);
+    rich(el('text', { x: 242, y: y + 7, style: 'font-size:18px' }, svg), `U_{${L[k]}}|φ_{${L[k]}}⟩`);
+  });
+}
+
+/* ---------- 古典回路の AND ---------- */
+{
+  const svg = $('#clSvg');
+  el('path', { d: 'M48,14 H88 A36,36 0 0 1 88,86 H48 Z', style: 'fill:#fff;stroke:var(--ink);stroke-width:3' }, svg);
+  [32, 68].forEach((y, k) => { el('line', { x1: 8, y1: y, x2: 48, y2: y, class: 'w' }, svg); el('text', { x: 4, y: y - 6, style: 'font-size:15px' }, svg).textContent = k ? 'b' : 'a'; });
+  el('line', { x1: 124, y1: 50, x2: 164, y2: 50, class: 'w' }, svg);
+  el('text', { x: 72, y: 56, 'text-anchor': 'middle', style: 'font:800 15px sans-serif' }, svg).textContent = 'AND';
+}
+
+/* ---------- 【補足】ハミルトニアン：長さ 1 → 長さ √2 ---------- */
+{
+  const svg = $('#hmSvg'), O = [170, 200], R = 120;
+  el('line', { x1: 10, y1: O[1], x2: 410, y2: O[1], style: 'stroke:#b9b5d0;stroke-width:2' }, svg);
+  el('line', { x1: O[0], y1: 320, x2: O[0], y2: 10, style: 'stroke:#b9b5d0;stroke-width:2' }, svg);
+  el('circle', { cx: O[0], cy: O[1], r: R, style: 'fill:none;stroke:var(--green);stroke-width:2.5;stroke-dasharray:7 5' }, svg);
+  el('text', { x: 4, y: O[1] - R + 4, style: 'font:800 14px sans-serif;fill:var(--green)' }, svg).textContent = '長さ 1（量子状態）';
+  const arrow = (x, y, col, lab, lx, ly) => {
+    el('line', { x1: O[0], y1: O[1], x2: O[0] + x * R, y2: O[1] - y * R, style: `stroke:${col};stroke-width:4;stroke-linecap:round` }, svg);
+    el('circle', { cx: O[0] + x * R, cy: O[1] - y * R, r: 6, style: `fill:${col}` }, svg);
+    const t = el('text', { x: O[0] + x * R + lx, y: O[1] - y * R + ly, style: `font-size:20px;fill:${col}` }, svg); t.textContent = lab;
+  };
+  arrow(1, 0, 'var(--ink)', '|0⟩', 8, 24);
+  arrow(1, 1, 'var(--red)', 'Ĥ|0⟩ = |0⟩ + |1⟩', -70, -14);
+  arrow(Math.SQRT1_2, Math.SQRT1_2, 'var(--blue)', 'H|0⟩（ユニタリ）', -200, 30);
+  el('text', { x: O[0] + .62 * R, y: O[1] - .36 * R, style: 'font:800 15px sans-serif;fill:var(--red)' }, svg).textContent = '長さ √2';
 }

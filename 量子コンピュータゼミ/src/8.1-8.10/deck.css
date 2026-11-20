@@ -412,3 +412,58 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .slide[data-id="rv2"] .rvc8:last-child .rv-g2{padding-top:10px;padding-bottom:2px}
 .slide[data-id="rv2"] .rvc8{gap:7px}
 .slide[data-id="rv2"] .rv-maps{line-height:1.2}
+
+/* 14 回目 */
+.st3{display:flex;flex-direction:column;gap:14px;justify-content:center}
+.stc{display:grid;grid-template-columns:200px 1fr;align-items:center;background:#fff;border:3px solid var(--ink);border-left:14px solid var(--c);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:10px 18px}
+.st-h{font-weight:900;font-size:22px;display:flex;align-items:center;gap:10px}
+.st-n{width:34px;height:34px;border-radius:50%;background:var(--c);color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid var(--ink);font-size:18px}
+.st-b{display:flex;flex-direction:column;gap:4px}
+.st-b.row2{flex-direction:row;align-items:center;gap:30px;flex-wrap:wrap}
+.st-b .eqtx{font-size:24px;text-align:left}
+.st-b .eqtx.big{font-size:28px}
+.st-b .eqrow{font-size:24px}
+.st-t{font-size:20px}
+.bd-card{padding:14px 20px}
+.bd-t{font-size:24px}
+.bd-t td{font-family:"Cambria Math","Times New Roman",serif;padding:3px 22px}
+.bd-t tr.hit td{background:var(--yellow)}
+.pm-top{display:flex;align-items:center;justify-content:center;gap:18px}
+.pm-qc{width:200px;flex:none}
+.slide[data-id="pm2"] .pm-qc{width:170px}
+.tp-gen{width:100%;max-width:330px;margin:6px auto 0}
+.cl-card{padding:10px 14px}
+.cl-h{font-weight:900;font-size:18px;color:var(--muted);margin-bottom:4px}
+.cl-h.q{text-align:center;color:var(--blue)}
+.cl-row{display:flex;align-items:center;gap:12px}
+.cl-row svg{width:140px;flex:none}
+.cl-t td{font-size:17px !important;padding:1px 10px !important}
+.slide[data-id="sp"] ul.plain li{font-size:20px;margin:8px 0}
+.slide[data-id="or"] ul.plain li{font-size:21px}
+.oi-g{grid-template-columns:1fr !important;gap:10px}
+.slide[data-id="oi"] .oi-c{display:grid;grid-template-columns:130px 1fr 170px;align-items:center;padding:4px 12px}
+.slide[data-id="oi"] .oi-c svg{max-height:120px}
+.hm-card{display:flex;flex-direction:column;gap:6px;padding:14px 16px}
+.slide[data-id="hm"] ul.plain li{font-size:21px}
+.pa-l{justify-content:center}
+.pa-m{display:grid;grid-template-columns:auto auto;gap:18px 12px;align-items:center;justify-content:center;font:28px "Cambria Math","Times New Roman",serif}
+.pa-m .vec{font-size:26px}
+.q4-eq{font-size:20px;text-align:left;line-height:1.9}
+.q4-why{font:700 15px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:var(--muted)}
+.slide[data-id="qc4"] ul.plain li{font-size:19px;margin:5px 0}
+.slide[data-id="tf"] h2,.slide[data-id="fr"] h2{font-size:29px}
+.slide[data-id="sp"] #spQC{width:270px !important}
+.slide[data-id="sp"] .amp8{height:118px}
+.slide[data-id="sp"] .sp-card{gap:4px;padding:10px 16px}
+.slide[data-id="oi"] .oi-c{grid-template-columns:110px 1fr 180px}
+.slide[data-id="oi"] .oi-c svg{max-height:150px}
+.stc{grid-template-columns:220px 1fr;padding:14px 20px}
+.st-h{font-size:21px}
+.st-b .eqtx{font-size:26px}
+.st-b .eqtx.big{font-size:31px}
+.st-b .eqrow{font-size:26px}
+.st-t{font-size:21px}
+.q4-eq{font-size:22px}
+.q4-why{font-size:16px}
+.slide[data-id="qc4"] ul.plain li{font-size:21px}
+.slide[data-id="mt"] ul.plain li{font-size:22px}

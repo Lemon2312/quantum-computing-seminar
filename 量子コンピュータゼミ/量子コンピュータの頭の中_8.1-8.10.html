@@ -1030,6 +1030,61 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .slide[data-id="rv2"] .rvc8{gap:7px}
 .slide[data-id="rv2"] .rv-maps{line-height:1.2}
 
+/* 14 回目 */
+.st3{display:flex;flex-direction:column;gap:14px;justify-content:center}
+.stc{display:grid;grid-template-columns:200px 1fr;align-items:center;background:#fff;border:3px solid var(--ink);border-left:14px solid var(--c);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:10px 18px}
+.st-h{font-weight:900;font-size:22px;display:flex;align-items:center;gap:10px}
+.st-n{width:34px;height:34px;border-radius:50%;background:var(--c);color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid var(--ink);font-size:18px}
+.st-b{display:flex;flex-direction:column;gap:4px}
+.st-b.row2{flex-direction:row;align-items:center;gap:30px;flex-wrap:wrap}
+.st-b .eqtx{font-size:24px;text-align:left}
+.st-b .eqtx.big{font-size:28px}
+.st-b .eqrow{font-size:24px}
+.st-t{font-size:20px}
+.bd-card{padding:14px 20px}
+.bd-t{font-size:24px}
+.bd-t td{font-family:"Cambria Math","Times New Roman",serif;padding:3px 22px}
+.bd-t tr.hit td{background:var(--yellow)}
+.pm-top{display:flex;align-items:center;justify-content:center;gap:18px}
+.pm-qc{width:200px;flex:none}
+.slide[data-id="pm2"] .pm-qc{width:170px}
+.tp-gen{width:100%;max-width:330px;margin:6px auto 0}
+.cl-card{padding:10px 14px}
+.cl-h{font-weight:900;font-size:18px;color:var(--muted);margin-bottom:4px}
+.cl-h.q{text-align:center;color:var(--blue)}
+.cl-row{display:flex;align-items:center;gap:12px}
+.cl-row svg{width:140px;flex:none}
+.cl-t td{font-size:17px !important;padding:1px 10px !important}
+.slide[data-id="sp"] ul.plain li{font-size:20px;margin:8px 0}
+.slide[data-id="or"] ul.plain li{font-size:21px}
+.oi-g{grid-template-columns:1fr !important;gap:10px}
+.slide[data-id="oi"] .oi-c{display:grid;grid-template-columns:130px 1fr 170px;align-items:center;padding:4px 12px}
+.slide[data-id="oi"] .oi-c svg{max-height:120px}
+.hm-card{display:flex;flex-direction:column;gap:6px;padding:14px 16px}
+.slide[data-id="hm"] ul.plain li{font-size:21px}
+.pa-l{justify-content:center}
+.pa-m{display:grid;grid-template-columns:auto auto;gap:18px 12px;align-items:center;justify-content:center;font:28px "Cambria Math","Times New Roman",serif}
+.pa-m .vec{font-size:26px}
+.q4-eq{font-size:20px;text-align:left;line-height:1.9}
+.q4-why{font:700 15px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:var(--muted)}
+.slide[data-id="qc4"] ul.plain li{font-size:19px;margin:5px 0}
+.slide[data-id="tf"] h2,.slide[data-id="fr"] h2{font-size:29px}
+.slide[data-id="sp"] #spQC{width:270px !important}
+.slide[data-id="sp"] .amp8{height:118px}
+.slide[data-id="sp"] .sp-card{gap:4px;padding:10px 16px}
+.slide[data-id="oi"] .oi-c{grid-template-columns:110px 1fr 180px}
+.slide[data-id="oi"] .oi-c svg{max-height:150px}
+.stc{grid-template-columns:220px 1fr;padding:14px 20px}
+.st-h{font-size:21px}
+.st-b .eqtx{font-size:26px}
+.st-b .eqtx.big{font-size:31px}
+.st-b .eqrow{font-size:26px}
+.st-t{font-size:21px}
+.q4-eq{font-size:22px}
+.q4-why{font-size:16px}
+.slide[data-id="qc4"] ul.plain li{font-size:21px}
+.slide[data-id="mt"] ul.plain li{font-size:22px}
+
 </style>
 </head>
 <body>
@@ -1129,7 +1184,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
       <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 1</div>
       <h1 class="pop" style="--d:.1s">n 量子ビットの量子状態</h1>
       <p class="door-lead pop" style="--d:.2s">1-2 量子ビットの延長線で n 量子ビットへ（8.1・8.2）</p>
-      <div class="door-topics pop" style="--d:.3s"><span>|0⟩<sup>⊗n</sup></span><span>|100⟩ = |4⟩</span><span>2ⁿ 個の基底状態の重ね合わせ</span><span>内積で表す</span></div>
+      <div class="door-topics pop" style="--d:.3s"><span>2ⁿ 個の基底状態の重ね合わせ</span><span>ベクトル・内積で表す</span><span>|0⟩<sup>⊗n</sup></span><span>|100⟩ = |4⟩</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1139,38 +1194,16 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="st">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.2 量子ビットを一般化する</div>
   <h2>量子状態は 2ⁿ 個の基底状態の重ね合わせ<small>8.2・8.3（pp.192–197）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)">
-    <div class="col">
-      <div class="defbox pop" style="--d:.1s">次の集合 Q の要素を <b class="k">量子状態</b> という
-        <div class="eqtx" style="font-size:19px">Q := { <span class="eq inline"><span class="vec"><span>a<sub>0</sub></span><span>⋮</span><span>a<sub>2ⁿ−1</sub></span></span></span> ∈ ℂ<sup>2ⁿ</sup> | |a<sub>0</sub>|² + ⋯ + |a<sub>2ⁿ−1</sub>|² = 1 }</div>
-      </div>
-      <ul class="plain pop" style="--d:.2s">
-        <li><b class="k">2ⁿ 個の複素数</b> を並べたベクトル（3 量子ビットなら 8 個、10 量子ビットなら 1024 個）</li>
-        <li><span class="math nw"><b>|a<sub>k</sub>|²</b></span> が、測定で基底状態 <span class="math nw">|k⟩</span> を得る <b class="kb">確率</b>（だから和が 1）</li>
-      </ul>
-    </div>
-    <div class="card pop sv-card st-eq">
-      <div class="eqrow" style="justify-content:center;font-size:26px"><span class="vec"><span>a<sub>0</sub></span><span>a<sub>1</sub></span><span>⋮</span><span>a<sub>2ⁿ−1</sub></span></span><span>= a<sub>0</sub></span><span class="vec"><span>1</span><span>0</span><span>⋮</span><span>0</span></span><span>+ a<sub>1</sub></span><span class="vec"><span>0</span><span>1</span><span>⋮</span><span>0</span></span><span>+ ⋯ + a<sub>2ⁿ−1</sub></span><span class="vec"><span>0</span><span>0</span><span>⋮</span><span>1</span></span></div>
-      <div class="eqtx" style="font-size:28px">= a<sub>0</sub>|00⋯0⟩ + a<sub>1</sub>|00⋯1⟩ + ⋯ + a<sub>2ⁿ−1</sub>|11⋯1⟩<br>= a<sub>0</sub>|0⟩ + a<sub>1</sub>|1⟩ + ⋯ + a<sub>2ⁿ−1</sub>|2ⁿ − 1⟩</div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 8.2 内積 -->
-<section class="slide" data-id="ip">
-  <div class="chap">第8章 n 量子ビットの世界 ／ 8.2 量子ビットを一般化する</div>
-  <h2>内積を使うと Q を短く書ける<small>8.2（pp.195–196）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)">
-    <div class="col ip-r">
-      <div class="ipc pop" style="--d:.1s;--c:#9a93bd"><div class="ch">成分で書くと（8.2 の定義）</div><div class="eqtx">Q := { <span class="eq inline"><span class="vec"><span>a<sub>0</sub></span><span>⋮</span><span>a<sub>2ⁿ−1</sub></span></span></span> ∈ ℂ<sup>2ⁿ</sup> | |a<sub>0</sub>|² + ⋯ + |a<sub>2ⁿ−1</sub>|² = 1 }</div></div>
-      <div class="ipc pop" style="--d:.2s;--c:var(--accent)"><div class="ch">内積で書くと</div><div class="eqtx big">Q = { |φ⟩ ∈ ℂ<sup>2ⁿ</sup> | <b>⟨φ|φ⟩ = 1</b> }</div></div>
-      <div class="point blue pop" style="--d:.3s">成分を並べなくても、<b class="kb">⟨φ|φ⟩ = 1</b> の一言で同じことが言える</div>
-    </div>
-    <div class="card pop ip-card">
-      <div class="eqrow" style="justify-content:center;font-size:24px"><span>⟨φ|φ⟩ =</span><span class="vec row ip-row"><span>a<sub>0</sub>*</span><span>a<sub>1</sub>*</span><span>⋯</span><span>a<sub>2ⁿ−1</sub>*</span></span><span class="vec ip-col"><span>a<sub>0</sub></span><span>a<sub>1</sub></span><span>⋮</span><span>a<sub>2ⁿ−1</sub></span></span></div>
-      <div class="eqtx" style="font-size:24px">= <span class="ip0">a<sub>0</sub>*a<sub>0</sub></span> + <span class="ip1">a<sub>1</sub>*a<sub>1</sub></span> + ⋯ + <span class="ip2">a<sub>2ⁿ−1</sub>*a<sub>2ⁿ−1</sub></span><br>= |a<sub>0</sub>|² + |a<sub>1</sub>|² + ⋯ + |a<sub>2ⁿ−1</sub>|² <b>= 1</b></div>
-    </div>
+  <div class="body st3">
+    <div class="stc pop" style="--c:var(--accent)"><div class="st-h"><span class="st-n">1</span>量子状態</div>
+      <div class="st-b"><div class="eqtx big">|φ⟩ = a<sub>0</sub>|00⋯0⟩ + a<sub>1</sub>|00⋯1⟩ + ⋯ + a<sub>2ⁿ−1</sub>|11⋯1⟩</div>
+      <div class="st-t">2ⁿ 個の基底状態の <b class="k">重ね合わせ</b>。<span class="math nw"><b>|a<sub>k</sub>|²</b></span> が、測定でその基底状態を得る <b class="kb">確率</b>（だから合計が 1）</div></div></div>
+    <div class="stc pop" style="--d:.1s;--c:var(--blue)"><div class="st-h"><span class="st-n">2</span>ベクトルで書くと</div>
+      <div class="st-b row2"><div class="eqrow"><span>|φ⟩ =</span><span class="eq inline"><span class="vec"><span>a<sub>0</sub></span><span>a<sub>1</sub></span><span>⋮</span><span>a<sub>2ⁿ−1</sub></span></span></span><span>∈ ℂ<sup>2ⁿ</sup></span></div>
+      <div class="eqtx">Q := { <span class="eq inline"><span class="vec"><span>a<sub>0</sub></span><span>⋮</span><span>a<sub>2ⁿ−1</sub></span></span></span> ∈ ℂ<sup>2ⁿ</sup> | |a<sub>0</sub>|² + ⋯ + |a<sub>2ⁿ−1</sub>|² = 1 }</div></div></div>
+    <div class="stc pop" style="--d:.2s;--c:var(--green)"><div class="st-h"><span class="st-n">3</span>内積で書くと</div>
+      <div class="st-b row2"><div class="eqtx">⟨φ|φ⟩ = |a<sub>0</sub>|² + |a<sub>1</sub>|² + ⋯ + |a<sub>2ⁿ−1</sub>|² = 1</div>
+      <div class="eqtx">Q = { |φ⟩ ∈ ℂ<sup>2ⁿ</sup> | <b>⟨φ|φ⟩ = 1</b> }</div></div></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -1212,11 +1245,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
         <li>ビット列を <b class="k">10 進法</b> でケットの中に書くこともある（100 は 10 進法で 4 なので <span class="math nw">|100⟩ = |4⟩</span>）</li>
       </ul>
     </div>
-    <div class="card pop bd-card">
-      <div class="bd-in" id="bdIn"></div>
-      <div class="eqtx bd-eq" id="bdEq"></div>
-      <div class="bd-vec" id="bdVec"></div>
-    </div>
+    <div class="card pop bd-card"><table class="tt bd-t"><thead><tr><th>ビット列</th><th class="out">10 進法</th><th>1 になる成分</th></tr></thead><tbody><tr class=""><td>|000⟩</td><td>|0⟩</td><td>a<sub>0</sub></td></tr><tr class=""><td>|001⟩</td><td>|1⟩</td><td>a<sub>1</sub></td></tr><tr class=""><td>|010⟩</td><td>|2⟩</td><td>a<sub>2</sub></td></tr><tr class=""><td>|011⟩</td><td>|3⟩</td><td>a<sub>3</sub></td></tr><tr class="hit"><td>|100⟩</td><td>|4⟩</td><td>a<sub>4</sub></td></tr><tr class=""><td>|101⟩</td><td>|5⟩</td><td>a<sub>5</sub></td></tr><tr class=""><td>|110⟩</td><td>|6⟩</td><td>a<sub>6</sub></td></tr><tr class=""><td>|111⟩</td><td>|7⟩</td><td>a<sub>7</sub></td></tr></tbody></table></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -1242,7 +1271,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
   <h2>左の 1 量子ビットだけを測定する<small>8.5.1（pp.199–201・例を簡単にした）</small></h2>
   <div class="body center">
     <div class="card pop pm-card pm-wide">
-      <div class="eqrow pm-st" id="pm1St"></div>
+      <div class="pm-top"><div class="pm-qc" id="pmC1"></div><div class="eqrow pm-st" id="pm1St"></div></div>
       <div class="pm-groups" id="pm1G"></div>
     </div>
   </div>
@@ -1308,7 +1337,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
       <div class="point blue pop" style="--d:.2s;font-size:20px"><span class="math">|010⟩</span> のように項が 1 個のときは、係数で割るので係数は（実質的に）<b class="kb">1</b></div>
     </div>
     <div class="card pop pm-card">
-      <div class="eqrow pm-st" id="pm2St"></div>
+      <div class="pm-top"><div class="pm-qc" id="pmC2"></div><div class="eqrow pm-st" id="pm2St"></div></div>
       <div class="pm-groups four" id="pm2G"></div>
     </div>
   </div>
@@ -1338,6 +1367,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
     <div class="col">
       <div class="thm6 pop" style="--d:.15s"><span class="thm-t">定理 8.1</span><span class="math">U<sub>1</sub>, …, U<sub>n</sub></span> を 2 × 2 のユニタリ行列、<span class="math nw">|φ<sub>1</sub>⟩, …, |φ<sub>n</sub>⟩</span> を 1 量子ビットの量子状態とすると
         <div class="math" style="font-size:19px;margin-top:4px">(U<sub>1</sub> ⊗ ⋯ ⊗ U<sub>n</sub>)(|φ<sub>1</sub>⟩ ⊗ ⋯ ⊗ |φ<sub>n</sub>⟩)<br>= (U<sub>1</sub>|φ<sub>1</sub>⟩) ⊗ ⋯ ⊗ (U<sub>n</sub>|φ<sub>n</sub>⟩)</div>
+        <div id="tpGen" class="tp-gen"></div>
       </div>
     </div>
     <div class="col tp-l">
@@ -1372,21 +1402,22 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <!-- 8.7.1 トフォリ -->
 <section class="slide" data-id="tf">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.7 代表的な n 量子ビットの量子ゲート</div>
-  <h2>トフォリゲートは制御ビットがすべて 1 のとき標的ビットを反転<small>8.7.1・図 8.1（pp.207–209）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)">
-    <div class="col">
-      <div class="eqrow pop" style="--d:.1s;justify-content:center"><span>CCNOT :=</span><span id="tfMat" class="big8"></span></div>
-      <ul class="plain pop" style="--d:.2s">
-        <li>0・1 番目が <b class="k">制御ビット</b>、2 番目が <b class="kb">標的ビット</b>（<span class="math nw">CCNOT<sub>0,1,2</sub></span>）</li>
-      </ul>
-      <div class="point blue pop" style="--d:.2s;font-size:20px">
-        <div class="row" style="gap:16px"><div id="anN" style="width:120px;flex:none"></div><div>制御ビットを n−1 個に拡張したもの ＝ <b class="kb">n 量子ビット・トフォリゲート</b>。量子誤り訂正（第10章）やグローバーのアルゴリズム（第12章）で使う</div></div>
-      </div>
-    </div>
+  <h2>トフォリゲート：制御ビットがすべて |1⟩ のとき標的ビットを反転<small>8.7.1・図 8.1（pp.207–209）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
     <div class="card pop g3c">
       <svg class="gsim" id="tfSvg"></svg>
       <div class="maptbl two" id="tfTbl"></div>
       <div class="btns" style="justify-content:center;margin-top:6px"><button class="b" id="tfAuto" data-autoplay>▶ 自動再生</button></div>
+    </div>
+    <div class="col">
+      <ul class="plain pop" style="--d:.1s">
+        <li>左の回路が <b class="k">トフォリゲート</b>（CCNOT）。0・1 番目が制御ビット、2 番目が標的ビット</li>
+        <li>制御ビットが <b class="k">すべて |1⟩</b> のとき、標的ビットを <b class="kb">反転</b> する</li>
+      </ul>
+      <div class="eqrow pop" style="--d:.2s;justify-content:center"><span>CCNOT :=</span><span id="tfMat" class="big8"></span></div>
+      <div class="point blue pop" style="--d:.3s;font-size:20px">
+        <div class="row" style="gap:16px"><div id="anN" style="width:120px;flex:none"></div><div>制御ビットを n−1 個に拡張したもの ＝ <b class="kb">n 量子ビット・トフォリゲート</b>。量子誤り訂正（第10章）やグローバーのアルゴリズム（第12章）で使う</div></div>
+      </div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1395,19 +1426,19 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <!-- 8.7.2 フレドキン -->
 <section class="slide" data-id="fr">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.7 代表的な n 量子ビットの量子ゲート</div>
-  <h2>フレドキン：制御が |1⟩ なら 2 つを入れ替え<small>8.7.2・図 8.3（pp.210–212）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)">
-    <div class="col">
-      <div class="eqrow pop" style="--d:.1s;justify-content:center"><span>CSWAP :=</span><span id="frMat" class="big8"></span></div>
-      <ul class="plain pop" style="--d:.2s">
-        <li>0 番目が <b class="k">制御ビット</b>、1・2 番目が <b class="kb">標的ビット</b>（<span class="math nw">SWAP<sub>0,1,2</sub> = SWAP<sub>0,2,1</sub></span>）</li>
-        <li>制御ビットが <b class="k">|1⟩</b> のときだけ、2 つの標的ビットを <b class="k">入れ替える</b></li>
-      </ul>
-    </div>
+  <h2>フレドキンゲート：制御ビットが |1⟩ のとき標的ビットを入れ替え<small>8.7.2・図 8.3（pp.210–212）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
     <div class="card pop g3c">
       <svg class="gsim" id="frSvg"></svg>
       <div class="maptbl two" id="frTbl"></div>
       <div class="btns" style="justify-content:center;margin-top:6px"><button class="b" id="frAuto" data-autoplay>▶ 自動再生</button></div>
+    </div>
+    <div class="col">
+      <ul class="plain pop" style="--d:.1s">
+        <li>左の回路が <b class="k">フレドキンゲート</b>（CSWAP）。0 番目が制御ビット、1・2 番目が標的ビット</li>
+        <li>制御ビットが <b class="k">|1⟩</b> のとき、2 つの標的ビットを <b class="kb">入れ替える</b></li>
+      </ul>
+      <div class="eqrow pop" style="--d:.2s;justify-content:center"><span>CSWAP :=</span><span id="frMat" class="big8"></span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1434,14 +1465,13 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
   <h2>4 つの状態に一度に CCNOT をかけられる<small>8.8・図 8.4（pp.212–213）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)">
     <div class="col">
+      <div class="card pop cl-card"><div class="ch cl-h">古典回路：1 回に 1 通りだけ</div><div class="cl-row"><svg class="gsim" id="clSvg" viewBox="0 0 170 100"></svg><table class="tt small cl-t"><thead><tr><th></th><th>入力</th><th class="out">AND</th></tr></thead><tbody><tr><td>1 回目</td><td>0, 0</td><td class="out">0</td></tr><tr><td>2 回目</td><td>0, 1</td><td class="out">0</td></tr><tr><td>3 回目</td><td>1, 0</td><td class="out">0</td></tr><tr><td>4 回目</td><td>1, 1</td><td class="out one">1</td></tr></tbody></table></div></div>
       <ul class="plain pop" style="--d:.1s">
-        <li><span class="math nw">H ⊗ H ⊗ I</span> で、左 2 量子ビットを <b class="k">重ね合わせ</b> にする</li>
-        <li>CCNOT は 4 つの状態すべてに <b class="k">一度に</b> かかる</li>
-        <li>n 量子ビットなら <b class="kb">2ⁿ 個</b> の状態に一度にユニタリ発展できる</li>
+        <li>古典回路で 4 通りを調べるには <b class="k">4 回</b> 計算する</li>
+        <li>量子回路は <span class="math nw">H ⊗ H ⊗ I</span> で重ね合わせにすれば、CCNOT <b class="kb">1 回</b> で 4 つの状態すべてにかかる（n 量子ビットなら 2ⁿ 個）</li>
       </ul>
-      <div class="point blue pop" style="--d:.2s;font-size:20px">古典コンピュータには重ね合わせ状態がなく、1 個の状態にしか演算できない</div>
     </div>
-    <div class="card pop sp-card">
+    <div class="card pop sp-card"><div class="ch cl-h q">量子回路：1 回で 4 通り</div>
       <div id="spQC" style="width:330px;margin:0 auto"></div>
       <div class="amp8" id="spAmp"></div>
       <div class="eqrow sp-eq" id="spEq"></div>
@@ -1512,16 +1542,16 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <!-- 8.9 オラクル -->
 <section class="slide" data-id="or">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.9 排他的論理和とオラクル</div>
-  <h2>中身は分からないが実行できる ＝ オラクル<small>8.9・図 8.6（p.216）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+  <h2>中身は分からないが実行できる回路：オラクル<small>8.9・図 8.6（p.216）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)">
+    <div class="card pop or-card"><svg class="gsim" id="orSvg" viewBox="0 0 540 250"></svg><div class="or-cap"><b>一般的な書き方</b>：<span class="math nw">U<sub>f</sub>|x⟩|y⟩ = |x⟩|y ⊕ f(x)⟩</span>（<span class="math nw">f : {0,1}ⁿ → {0,1}ᵐ</span>）<br>⊕ はビットごとの排他的論理和（例：<span class="math nw">101 ⊕ 011 = 110</span>）<br>教科書の図 8.6 は <span class="math nw">n = m = 1</span> の場合（n, m への一般化は補足）</div></div>
     <div class="col">
       <ul class="plain pop" style="--d:.1s">
-        <li>具体的な形は分からないけど実行することはできる関数 ＝ <b class="k">ブラックボックス関数</b>。関数 f に対応するものを <b class="kb">オラクル</b> <span class="math">U<sub>f</sub></span> という</li>
+        <li>左の回路が <b class="k">オラクル</b> <span class="math">U<sub>f</sub></span>。具体的な形は分からないけど実行することはできる（<b class="kb">ブラックボックス関数</b>）</li>
         <li><b class="k">排他的論理和</b> を使うのは、f が元に戻せない関数でも <span class="math">U<sub>f</sub></span> を <b class="kb">ユニタリ（元に戻せる）</b> にするため。もう一度かけると <span class="math nw">y ⊕ f(x) ⊕ f(x) = y</span> に戻る</li>
         <li>出力が 1 ビットなら、y に <span class="math nw">|−⟩</span> を入れると <span class="math nw">(−1)<sup>f(x)</sup>|x⟩</span> と位相を変える形にもなる（この形から作れる）</li>
       </ul>
     </div>
-    <div class="card pop or-card"><svg class="gsim" id="orSvg" viewBox="0 0 540 250"></svg><div class="or-cap"><b>一般的な書き方</b>：<span class="math nw">U<sub>f</sub>|x⟩|y⟩ = |x⟩|y ⊕ f(x)⟩</span>（<span class="math nw">f : {0,1}ⁿ → {0,1}ᵐ</span>）<br>⊕ はビットごとの排他的論理和（例：<span class="math nw">101 ⊕ 011 = 110</span>）<br>教科書の図 8.6 は <span class="math nw">n = m = 1</span> の場合（n, m への一般化は補足）</div></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -1529,14 +1559,13 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <!-- 【補足・教科書外】オラクルの中身 -->
 <section class="slide" data-id="oi">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.9 排他的論理和とオラクル ／ 【補足・教科書外】</div>
-  <h2>1 ビットの関数なら、オラクルの中身は 4 通り<small>補足（教科書外）</small></h2>
+  <h2>オラクルの具体例<small>補足（教科書外）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,.65fr) minmax(0,1.35fr)">
     <div class="col">
       <ul class="plain pop" style="--d:.2s">
         <li>どれも図 8.6 と同じ <span class="math nw">|x⟩|y⟩ → |x⟩|y ⊕ f(x)⟩</span></li>
         <li><span class="math nw">f(x) = 1</span>：y を必ず反転するので <b class="k">X</b></li>
         <li><span class="math nw">f(x) = x</span>：<b class="k">CNOT</b> そのもの</li>
-        <li><span class="math nw">f(x) = NOT x</span>：x を <b class="k">X</b> で反転してから CNOT し、もう一度 X で x を元に戻す</li>
         <li>アルゴリズムでは、中身を見ずに U<sub>f</sub> を使う</li>
       </ul>
     </div>
@@ -1544,7 +1573,6 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
       <div class="card pop oi-c"><div class="ch">f(x) = 0</div><div id="oi0"></div><div class="oi-t">f(0) = 0, f(1) = 0</div></div>
       <div class="card pop oi-c" style="--d:.05s"><div class="ch">f(x) = 1</div><div id="oi1"></div><div class="oi-t">f(0) = 1, f(1) = 1</div></div>
       <div class="card pop oi-c" style="--d:.1s"><div class="ch">f(x) = x</div><div id="oi2"></div><div class="oi-t">f(0) = 0, f(1) = 1</div></div>
-      <div class="card pop oi-c" style="--d:.15s"><div class="ch">f(x) = NOT x</div><div id="oi3"></div><div class="oi-t">f(0) = 1, f(1) = 0</div></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1572,7 +1600,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
   <div class="body cols" style="grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)">
     <div class="col">
       <ul class="plain pop" style="--d:.15s">
-        <li>例：物理学のハミルトニアン <span class="math">Ĥ</span>（エルミート行列。ユニタリ行列とは限らない）</li>
+        <li>例：物理学の <b class="k">ハミルトニアン</b> <span class="math">Ĥ</span>（エネルギーを表す行列。ユニタリ行列とは限らない。次のページ）</li>
         <li>古典コンピュータで、行列に実数や複素数をかけたり、行列の和を計算したりしてよい（行列どうしの積やテンソル積は計算しない）とすれば、<b class="k">任意の 2ⁿ 次正方行列 A</b> で <span class="math nw">A|φ⟩</span> を計算できる</li>
       </ul>
     </div>
@@ -1585,19 +1613,33 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
   <div class="pageno"></div>
 </section>
 
+<!-- 【補足】ハミルトニアン -->
+<section class="slide" data-id="hm">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展 ／ 【補足・教科書外】</div>
+  <h2>ハミルトニアンはユニタリとは限らない<small>8.10（p.217）・補足</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)">
+    <div class="col">
+      <ul class="plain pop" style="--d:.1s">
+        <li><b class="k">ハミルトニアン</b> <span class="math">Ĥ</span>：系の <b class="k">エネルギー</b> を表す行列。<span class="math nw">Ĥ<sup>†</sup> = Ĥ</span>（エルミート行列）</li>
+        <li><span class="math nw">⟨φ|Ĥ|φ⟩</span> が、状態 |φ⟩ のエネルギーの期待値。これを求めるのに <span class="math nw">Ĥ|φ⟩</span> が必要（VQE で使う）</li>
+        <li>例 <span class="math nw">Ĥ = X + Z</span>：<span class="math nw">Ĥ<sup>†</sup>Ĥ = 2I ≠ I</span> なので <b class="kb">ユニタリではない</b>。右の図のように、長さ 1 のベクトルが長さ √2 になり、量子状態でなくなる</li>
+      </ul>
+    </div>
+    <div class="card pop hm-card">
+      <div class="eqrow" style="justify-content:center;font-size:22px"><span>Ĥ = X + Z =</span><span class="eq inline"><span class="vec m2"><span>1</span><span>1</span><span>1</span><span>−1</span></span></span></div>
+      <svg class="gsim" id="hmSvg" viewBox="0 0 440 330"></svg>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
 <!-- 8.10.1 パウリ行列で 2 次正方行列 -->
 <section class="slide" data-id="pa">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展：量子コンピュータを使って任意の 2ⁿ 次正方行列のかけ算を計算する</div>
-  <h2>2 × 2 行列は I・X・Y・Z の和で書ける<small>8.10.1（pp.217–219）</small></h2>
+  <h2>任意の 2 × 2 行列は I・X・Y・Z の和で書ける<small>8.10.1（pp.217–219）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)">
-    <div class="col">
-      <div class="eqrow pop" style="--d:.1s;font-size:19px;justify-content:center;gap:6px">
-        <span>Y =</span><span class="vec m2"><span>0</span><span>−i</span><span>i</span><span>0</span></span>
-      </div>
-      <ul class="plain pop" style="--d:.2s">
-        <li><span class="math nw">σ<sub>0</sub> := I, σ<sub>1</sub> := X, σ<sub>2</sub> := Y, σ<sub>3</sub> := Z</span> とすると <span class="math nw"><b>A<sub>1</sub> = <span class="sig"><sup>3</sup>Σ<sub>k=0</sub></span> α<sub>k</sub>σ<sub>k</sub></b></span></li>
-        <li><span class="math">α<sub>k</sub></span> は複素数で、<span class="math">A<sub>1</sub></span> の成分から求められる</li>
-      </ul>
+    <div class="col pa-l">
+      <div class="pa-m pop" style="--d:.1s"><span>I =</span><span class="eq inline"><span class="vec m2"><span>1</span><span>0</span><span>0</span><span>1</span></span></span><span>X =</span><span class="eq inline"><span class="vec m2"><span>0</span><span>1</span><span>1</span><span>0</span></span></span><span>Y =</span><span class="eq inline"><span class="vec m2"><span>0</span><span>−i</span><span>i</span><span>0</span></span></span><span>Z =</span><span class="eq inline"><span class="vec m2"><span>1</span><span>0</span><span>0</span><span>−1</span></span></span></div>
     </div>
     <div class="card pop pa-card">
       <div class="eqtx pa-r">A<sub>1</sub> = <span class="eq inline"><span class="vec m2"><span>a</span><span>b</span><span>c</span><span>d</span></span></span> = a<span class="eq inline"><span class="vec m2"><span>1</span><span>0</span><span>0</span><span>0</span></span></span> + b<span class="eq inline"><span class="vec m2"><span>0</span><span>1</span><span>0</span><span>0</span></span></span> + c<span class="eq inline"><span class="vec m2"><span>0</span><span>0</span><span>1</span><span>0</span></span></span> + d<span class="eq inline"><span class="vec m2"><span>0</span><span>0</span><span>0</span><span>1</span></span></span></div>
@@ -1617,7 +1659,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
   <h2>量子で 4 回計算し、古典で足し合わせる<small>8.10.1（p.219）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)">
     <div class="col">
-      <div class="eqtx pop" style="--d:.1s;font-size:21px;text-align:left">A<sub>1</sub>|φ⟩ = <span class="eq inline"><span class="frac"><span>a + d</span><span>2</span></span></span><u class="wv">I|φ⟩</u> + <span class="eq inline"><span class="frac"><span>b + c</span><span>2</span></span></span><u class="wv">X|φ⟩</u><br>　+ <span class="eq inline"><span class="frac"><span>b − c</span><span>2</span></span></span>i<u class="wv">Y|φ⟩</u> + <span class="eq inline"><span class="frac"><span>a − d</span><span>2</span></span></span><u class="wv">Z|φ⟩</u></div>
+      <div class="eqtx pop q4-eq" style="--d:.1s">A<sub>1</sub>|φ⟩ = ( <span class="eq inline"><span class="frac"><span>a + d</span><span>2</span></span></span>I + <span class="eq inline"><span class="frac"><span>b + c</span><span>2</span></span></span>X + <span class="eq inline"><span class="frac"><span>b − c</span><span>2</span></span></span>iY + <span class="eq inline"><span class="frac"><span>a − d</span><span>2</span></span></span>Z ) |φ⟩<br><span class="q4-why">↓ 行列の和に |φ⟩ をかけると、項ごとにかけたものの和になる</span><br>= <span class="eq inline"><span class="frac"><span>a + d</span><span>2</span></span></span><u class="wv">I|φ⟩</u> + <span class="eq inline"><span class="frac"><span>b + c</span><span>2</span></span></span><u class="wv">X|φ⟩</u> + <span class="eq inline"><span class="frac"><span>b − c</span><span>2</span></span></span>i<u class="wv">Y|φ⟩</u> + <span class="eq inline"><span class="frac"><span>a − d</span><span>2</span></span></span><u class="wv">Z|φ⟩</u></div>
       <ul class="plain pop" style="--d:.2s">
         <li>波線の部分は <b class="k">量子コンピュータ</b> で計算できる</li>
         <li>その結果に数をかけて足すのは <b class="kb">古典コンピュータ</b></li>
@@ -2267,20 +2309,6 @@ oracleBox($('#orSvg'), { ys: [70, 180], ins: ['|x⟩', '|y⟩'], outs: ['|x⟩',
   }, 1500);
 }
 
-/* ---------- 8.2 ビット列 ↔ 10 進法 ↔ 状態ベクトル ---------- */
-{
-  const b = [1, 0, 0];
-  const render = () => {
-    const s = b.join(''), k = parseInt(s, 2);
-    $('#bdIn').querySelectorAll('button').forEach((x, i) => { x.textContent = b[i]; x.classList.toggle('one', b[i] === 1); });
-    $('#bdEq').innerHTML = `<b>|${s}⟩</b> = <b class="k">|${k}⟩</b>`;
-    $('#bdVec').innerHTML = [...Array(8)].map((_, i) => `<div class="${i === k ? 'on' : ''}"><span class="ix">a<sub>${i}</sub></span><span class="v">${i === k ? 1 : 0}</span><span class="kt">|${bits(i, 3)}⟩ = |${i}⟩</span></div>`).join('');
-  };
-  $('#bdIn').innerHTML = '<span class="tiny">クリックで 0 / 1</span>' + [0, 1, 2].map(i => `<button data-i="${i}"></button>`).join('');
-  $('#bdIn').querySelectorAll('button').forEach(x => x.addEventListener('click', () => { x.blur(); b[+x.dataset.i] ^= 1; render(); }));
-  render();
-}
-
 /* ---------- 復習：1 量子ビット・2 量子ビットの量子回路 ---------- */
 drawQC('#rvC1', { n: 1, init: true, noNames: true, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'M', q: 0, col: 1 }], colW: 56 });
 drawQC('#rvC2', { n: 2, noNames: true, ops: [{ g: 'CX', c: 0, t: 1, col: 0 }], colW: 56, rowH: 44 });
@@ -2298,7 +2326,7 @@ drawQC('#rvC3', { n: 2, noNames: true, ops: [{ g: 'SW', a: 0, b: 1, col: 0 }], c
   const Y = [52, 112];
   const xg = (svg, x, q) => { el('rect', { x: x - 17, y: Y[q] - 17, width: 34, height: 34, rx: 6, style: 'fill:var(--accent);stroke:var(--ink);stroke-width:2.5' }, svg); el('text', { x, y: Y[q] + 7, 'text-anchor': 'middle', style: 'fill:#fff;font:700 20px "Cambria Math",serif' }, svg).textContent = 'X'; };
   const cx = (svg, x) => { el('line', { x1: x, y1: Y[0], x2: x, y2: Y[1], class: 'gl' }, svg); el('circle', { cx: x, cy: Y[0], r: 7, class: 'gd' }, svg); el('circle', { cx: x, cy: Y[1], r: 15, class: 'gt' }, svg); el('path', { d: `M${x - 15},${Y[1]}H${x + 15}M${x},${Y[1] - 15}V${Y[1] + 15}`, class: 'gl' }, svg); };
-  const parts = [svg => {}, svg => xg(svg, 180, 1), svg => cx(svg, 180), svg => { xg(svg, 130, 0); cx(svg, 180); xg(svg, 230, 0); }];
+  const parts = [svg => {}, svg => xg(svg, 180, 1), svg => cx(svg, 180)];
   parts.forEach((draw, k) => {
     const svg = el('svg', { viewBox: '0 0 420 160', class: 'gsim' }, $('#oi' + k));
     Y.forEach((y, q) => {
@@ -2390,6 +2418,66 @@ drawQC('#rvC3', { n: 2, noNames: true, ops: [{ g: 'SW', a: 0, b: 1, col: 0 }], c
     el('text', { x: 110, y: y + 7, 'text-anchor': 'middle', style: 'fill:#fff;font:700 20px "Cambria Math",serif' }, svg).textContent = G[k];
     el('text', { x: 182, y: y + 7, style: 'font-size:20px' }, svg).textContent = outs[k];
   });
+}
+
+/* ---------- 一部の測定の回路：|φ⟩ をつくって、0 ビット目（と 1 ビット目）だけ測定 ---------- */
+function measCircuit(id, meas) {
+  const svg = el('svg', { viewBox: '0 0 250 160', class: 'gsim' }, $(id)), ys = [30, 80, 130];
+  ys.forEach((y, q) => {
+    rich(el('text', { x: 2, y: y + 7, class: 'nm', style: 'font-size:19px' }, svg), `q_{${q}}`);
+    el('line', { x1: 34, y1: y, x2: meas.includes(q) ? 172 : 236, y2: y, class: 'w' }, svg);
+    if (meas.includes(q)) {
+      el('rect', { x: 150, y: y - 17, width: 34, height: 34, rx: 6, style: 'fill:#1f1a3d;stroke:var(--ink);stroke-width:2.5' }, svg);
+      el('path', { d: `M${155},${y + 8}A12,12 0 0 1 ${179},${y + 8}M167,${y + 8}L175,${y - 6}`, style: 'fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round' }, svg);
+      el('line', { x1: 184, y1: y - 2.5, x2: 236, y2: y - 2.5, style: 'stroke:var(--ink);stroke-width:2' }, svg);
+      el('line', { x1: 184, y1: y + 2.5, x2: 236, y2: y + 2.5, style: 'stroke:var(--ink);stroke-width:2' }, svg);
+    }
+  });
+  el('rect', { x: 52, y: 8, width: 64, height: 144, rx: 10, style: 'fill:#fff1c2;stroke:var(--ink);stroke-width:2.5' }, svg);
+  el('text', { x: 84, y: 82, 'text-anchor': 'middle', style: 'font-size:22px' }, svg).textContent = '|φ⟩';
+  el('text', { x: 84, y: 102, 'text-anchor': 'middle', class: 'lbl', style: 'font-size:12px' }, svg).textContent = 'をつくる';
+}
+measCircuit('#pmC1', [0]);
+measCircuit('#pmC2', [0, 1]);
+
+/* ---------- 定理 8.1 の一般形の回路：U_k が 1 本ずつ ---------- */
+{
+  const svg = el('svg', { viewBox: '0 0 360 180', class: 'gsim' }, $('#tpGen')), ys = [26, 72, 118, 160], L = ['1', '2', '', 'n'];
+  ys.forEach((y, k) => {
+    if (k === 2) { el('text', { x: 180, y: 128, 'text-anchor': 'middle', style: 'font-size:24px' }, svg).textContent = '⋮'; return; }
+    rich(el('text', { x: 46, y: y + 7, 'text-anchor': 'end', style: 'font-size:18px' }, svg), `|φ_{${L[k]}}⟩`);
+    el('line', { x1: 52, y1: y, x2: 236, y2: y, class: 'w' }, svg);
+    el('rect', { x: 124, y: y - 17, width: 40, height: 34, rx: 6, style: 'fill:#9a93bd;stroke:var(--ink);stroke-width:2.5' }, svg);
+    rich(el('text', { x: 144, y: y + 7, 'text-anchor': 'middle', style: 'fill:#fff;font:700 18px "Cambria Math",serif' }, svg), `U_{${L[k]}}`);
+    rich(el('text', { x: 242, y: y + 7, style: 'font-size:18px' }, svg), `U_{${L[k]}}|φ_{${L[k]}}⟩`);
+  });
+}
+
+/* ---------- 古典回路の AND ---------- */
+{
+  const svg = $('#clSvg');
+  el('path', { d: 'M48,14 H88 A36,36 0 0 1 88,86 H48 Z', style: 'fill:#fff;stroke:var(--ink);stroke-width:3' }, svg);
+  [32, 68].forEach((y, k) => { el('line', { x1: 8, y1: y, x2: 48, y2: y, class: 'w' }, svg); el('text', { x: 4, y: y - 6, style: 'font-size:15px' }, svg).textContent = k ? 'b' : 'a'; });
+  el('line', { x1: 124, y1: 50, x2: 164, y2: 50, class: 'w' }, svg);
+  el('text', { x: 72, y: 56, 'text-anchor': 'middle', style: 'font:800 15px sans-serif' }, svg).textContent = 'AND';
+}
+
+/* ---------- 【補足】ハミルトニアン：長さ 1 → 長さ √2 ---------- */
+{
+  const svg = $('#hmSvg'), O = [170, 200], R = 120;
+  el('line', { x1: 10, y1: O[1], x2: 410, y2: O[1], style: 'stroke:#b9b5d0;stroke-width:2' }, svg);
+  el('line', { x1: O[0], y1: 320, x2: O[0], y2: 10, style: 'stroke:#b9b5d0;stroke-width:2' }, svg);
+  el('circle', { cx: O[0], cy: O[1], r: R, style: 'fill:none;stroke:var(--green);stroke-width:2.5;stroke-dasharray:7 5' }, svg);
+  el('text', { x: 4, y: O[1] - R + 4, style: 'font:800 14px sans-serif;fill:var(--green)' }, svg).textContent = '長さ 1（量子状態）';
+  const arrow = (x, y, col, lab, lx, ly) => {
+    el('line', { x1: O[0], y1: O[1], x2: O[0] + x * R, y2: O[1] - y * R, style: `stroke:${col};stroke-width:4;stroke-linecap:round` }, svg);
+    el('circle', { cx: O[0] + x * R, cy: O[1] - y * R, r: 6, style: `fill:${col}` }, svg);
+    const t = el('text', { x: O[0] + x * R + lx, y: O[1] - y * R + ly, style: `font-size:20px;fill:${col}` }, svg); t.textContent = lab;
+  };
+  arrow(1, 0, 'var(--ink)', '|0⟩', 8, 24);
+  arrow(1, 1, 'var(--red)', 'Ĥ|0⟩ = |0⟩ + |1⟩', -70, -14);
+  arrow(Math.SQRT1_2, Math.SQRT1_2, 'var(--blue)', 'H|0⟩（ユニタリ）', -200, 30);
+  el('text', { x: O[0] + .62 * R, y: O[1] - .36 * R, style: 'font:800 15px sans-serif;fill:var(--red)' }, svg).textContent = '長さ √2';
 }
 
 /* 共通部品（後半）：復習問題・スライド制御・一覧・黒ペン・レーザー。スライド固有のスクリプトより後に置く */
