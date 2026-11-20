@@ -377,6 +377,8 @@ h2 .qz-all{font-size:14px;padding:4px 14px;margin-left:16px;vertical-align:middl
 
 /* ---------- レーザーポインター（Apple Pencil） ---------- */
 #stage{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+/* 「カーソル」モード（道具を何も選んでいないとき）：普通のカーソルで文字を選択・コピーできる */
+body.tool-none #stage{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default;cursor:auto}
 body:not(.overview) #stage{touch-action:none}
 #laser{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none;z-index:5}
 body.overview #laser{display:none}
