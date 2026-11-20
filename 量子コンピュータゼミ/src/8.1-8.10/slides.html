@@ -412,7 +412,7 @@
       <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 6</div>
       <h1 class="pop" style="--d:.1s">重ね合わせ・オラクル</h1>
       <p class="door-lead pop" style="--d:.2s">たくさんの状態を一度に計算する（8.8・8.9）</p>
-      <div class="door-topics pop" style="--d:.3s"><span>重ね合わせに CCNOT</span><span>計算量 O(2²ⁿ)</span><span>ブラックボックス関数</span><span>オラクルの中身・位相型（補足）</span></div>
+      <div class="door-topics pop" style="--d:.3s"><span>重ね合わせに CCNOT</span><span>計算量 O(2²ⁿ)</span><span>ブラックボックス関数</span><span>オラクルの中身（補足）</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -489,12 +489,12 @@
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.9 排他的論理和とオラクル</div>
   <h2>中身は分からないが実行できる ＝ オラクル<small>8.9・図 8.6（p.216）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
-    <div class="card pop or-card"><svg class="gsim" id="orSvg" viewBox="0 0 540 250"></svg><div class="or-cap"><span class="math nw">f : {0,1}ⁿ → {0,1}ᵐ</span>。教科書の図 8.6 は <span class="math nw">n = m = 1</span> の場合（n, m への一般化は補足）</div></div>
+    <div class="card pop or-card"><svg class="gsim" id="orSvg" viewBox="0 0 540 250"></svg><div class="or-cap"><b>一般的な書き方</b>：<span class="math nw">U<sub>f</sub>|x⟩|y⟩ = |x⟩|y ⊕ f(x)⟩</span>（<span class="math nw">f : {0,1}ⁿ → {0,1}ᵐ</span>）<br>⊕ はビットごとの排他的論理和（例：<span class="math nw">101 ⊕ 011 = 110</span>）<br>教科書の図 8.6 は <span class="math nw">n = m = 1</span> の場合（n, m への一般化は補足）</div></div>
     <div class="col">
       <ul class="plain pop" style="--d:.1s">
         <li>具体的な形は分からないけど実行することはできる関数 ＝ <b class="k">ブラックボックス関数</b>。関数 f に対応するものを <b class="kb">オラクル</b> <span class="math">U<sub>f</sub></span> という</li>
         <li><b class="k">排他的論理和</b> を使うのは、f が元に戻せない関数でも <span class="math">U<sub>f</sub></span> を <b class="kb">ユニタリ（元に戻せる）</b> にするため。もう一度かけると <span class="math nw">y ⊕ f(x) ⊕ f(x) = y</span> に戻る</li>
-        <li>この形のほかに、位相を変える形もある（次の次のページ）</li>
+        <li>出力が 1 ビットなら、y に <span class="math nw">|−⟩</span> を入れると <span class="math nw">(−1)<sup>f(x)</sup>|x⟩</span> と位相を変える形にもなる（この形から作れる）</li>
       </ul>
     </div>
   </div>
@@ -519,26 +519,6 @@
         <li><span class="math nw">f(x) = x</span>：<b class="k">CNOT</b> そのもの</li>
         <li><span class="math nw">f(x) = NOT x</span>：x を <b class="k">X</b> で反転してから CNOT し、もう一度 X で x を元に戻す</li>
         <li>アルゴリズムでは、中身を見ずに U<sub>f</sub> を使う</li>
-      </ul>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 【補足・教科書外】位相型のオラクル -->
-<section class="slide" data-id="op">
-  <div class="chap">第8章 n 量子ビットの世界 ／ 8.9 排他的論理和とオラクル ／ 【補足・教科書外】</div>
-  <h2>オラクルには、位相を変える形もある<small>補足（教科書外）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)">
-    <div class="col op-l">
-      <div class="card pop"><div class="mp-lbl">位相型：f(x) = 1 の x だけ符号を反転</div><svg class="gsim" id="opSvg1" viewBox="0 0 540 120"></svg></div>
-      <div class="card pop" style="--d:.1s"><div class="mp-lbl">排他的論理和の形で y に |−⟩ を入れると、位相型になる</div><svg class="gsim" id="opSvg2" viewBox="0 0 540 170"></svg></div>
-    </div>
-    <div class="col">
-      <ul class="plain pop" style="--d:.15s">
-        <li><span class="math nw">|x⟩ → (−1)<sup>f(x)</sup>|x⟩</span>：<span class="math nw">f(x) = 1</span> の x だけ、係数の <b class="k">符号（位相）を反転</b> する</li>
-        <li>グローバーのアルゴリズム（第12章）などで使う</li>
-        <li><span class="math nw">|−⟩ = {{1/√2}}(|0⟩ − |1⟩)</span> を y に入れると <span class="math nw">U<sub>f</sub>|x⟩|−⟩ = (−1)<sup>f(x)</sup>|x⟩|−⟩</span>。排他的論理和の形から <b class="kb">位相型を作れる</b></li>
       </ul>
     </div>
   </div>

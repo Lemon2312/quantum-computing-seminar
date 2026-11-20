@@ -123,13 +123,6 @@ function oracleBox(svg, o) {
   if (o.q) el('text', { x: (o.x0 + o.x1) / 2, y: top + h / 2 + 26, class: 'q', style: 'font-size:30px' }, svg).textContent = '?';
 }
 oracleBox($('#orSvg'), { ys: [70, 180], ins: ['|x⟩', '|y⟩'], outs: ['|x⟩', '|y ⊕ f(x)⟩'], slash: ['n', 'm'], x0: 190, x1: 330, label: 'U_{f}', q: true });
-oracleBox($('#opSvg1'), { ys: [60], ins: ['|x⟩'], outs: ['(−1)^f(x)|x⟩'], slash: ['n'], x0: 200, x1: 320, x2: 400, label: 'O_{f}' });
-oracleBox($('#opSvg2'), { ys: [50, 120], ins: ['|x⟩', '|−⟩'], outs: ['(−1)^f(x)|x⟩', '|−⟩'], slash: ['n', ''], x0: 200, x1: 320, x2: 400, label: 'U_{f}' });
-// (−1)^f(x) の指数を上付きにする
-['#opSvg1', '#opSvg2'].forEach(id => $(id).querySelectorAll('text').forEach(t => {
-  if (!t.textContent.startsWith('(−1)^')) return;
-  t.textContent = ''; el('tspan', {}, t).textContent = '(−1)'; el('tspan', { dy: -10, 'font-size': '15px' }, t).textContent = 'f(x)'; el('tspan', { dy: 10 }, t).textContent = '|x⟩';
-}));
 
 /* ---------- 8.10.1 量子で 4 回、古典で足す ---------- */
 {
