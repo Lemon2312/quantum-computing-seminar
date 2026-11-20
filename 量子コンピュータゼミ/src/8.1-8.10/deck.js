@@ -209,8 +209,8 @@ const S0 = [1, 0, 0, 0, 0, 0, 0, 0], S1 = [.5, 0, .5, 0, .5, 0, .5, 0], S2 = [.5
 {
   const v = $('#gqVec');
   stepper('#gqStp', 5, k => {
-    const n = k + 1, m = 2 ** n, h = Math.min(38, Math.floor(330 / m));
-    v.innerHTML = [...Array(m)].map((_, i) => `<i style="height:${h}px">${h >= 18 ? `a<sub>${i}</sub>` : ''}</i>`).join('');
+    const n = k + 1, m = 2 ** n, h = Math.min(40, Math.floor(330 / m));
+    v.innerHTML = [...Array(m)].map((_, i) => `<i style="height:${h}px;font-size:${Math.min(24, h - 6)}px">${h >= 20 ? `a<sub>${i}</sub>` : ''}</i>`).join('');
     $('#gqLbl').innerHTML = `${n} 量子ビットのとき：<br>2<sup>${n}</sup> = <b>${m}</b> 個の複素数`;
   }, 1500);
 }
@@ -221,7 +221,7 @@ const S0 = [1, 0, 0, 0, 0, 0, 0, 0], S1 = [.5, 0, .5, 0, .5, 0, .5, 0], S2 = [.5
   const render = () => {
     const s = b.join(''), k = parseInt(s, 2);
     $('#bdIn').querySelectorAll('button').forEach((x, i) => { x.textContent = b[i]; x.classList.toggle('one', b[i] === 1); });
-    $('#bdEq').innerHTML = `|${b[0]}⟩ ⊗ |${b[1]}⟩ ⊗ |${b[2]}⟩ = |${b[0]}⟩|${b[1]}⟩|${b[2]}⟩ = <b>|${s}⟩</b> = <b class="k">|${k}⟩</b>`;
+    $('#bdEq').innerHTML = `<b>|${s}⟩</b> = <b class="k">|${k}⟩</b>`;
     $('#bdVec').innerHTML = [...Array(8)].map((_, i) => `<div class="${i === k ? 'on' : ''}"><span class="ix">a<sub>${i}</sub></span><span class="v">${i === k ? 1 : 0}</span><span class="kt">|${bits(i, 3)}⟩ = |${i}⟩</span></div>`).join('');
   };
   $('#bdIn').innerHTML = '<span class="tiny">クリックで 0 / 1</span>' + [0, 1, 2].map(i => `<button data-i="${i}"></button>`).join('');

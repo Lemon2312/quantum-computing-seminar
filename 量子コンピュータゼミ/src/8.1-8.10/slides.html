@@ -25,31 +25,53 @@
   </div>
 </section>
 
-<!-- 復習 -->
-<section class="slide" data-id="rv">
-  <div class="chap">復習 ／ 第3章〜第6章</div>
-  <h2>これまでの復習<small>第3章〜第6章</small></h2>
-  <div class="body rv4">
+<!-- 復習 1 量子ビット -->
+<section class="slide" data-id="rv1">
+  <div class="chap">復習 ／ 第3章・第4章</div>
+  <h2>復習：1 量子ビット<small>第3章（pp.84–88）・第4章（pp.104–118）</small></h2>
+  <div class="body rv2c">
     <div class="rvc8 pop" style="--c:var(--accent)">
       <div class="rh">① 1 量子ビットの量子状態<small>第3章</small></div>
-      <div class="eqrow" style="justify-content:center"><span>|φ⟩ = a|0⟩ + b|1⟩ =</span><span class="vec"><span>a</span><span>b</span></span><span class="nw">（|a|² + |b|² = 1）</span></div>
+      <div class="eqrow" style="justify-content:center;gap:10px"><span>|0⟩ :=</span><span class="vec"><span>1</span><span>0</span></span><span style="width:16px"></span><span>|1⟩ :=</span><span class="vec"><span>0</span><span>1</span></span></div>
+      <div class="eqrow" style="justify-content:center"><span>|φ⟩ = a|0⟩ + b|1⟩ =</span><span class="vec"><span>a</span><span>b</span></span></div>
+      <div class="ctr">（a, b は複素数、<span class="math nw"><b>|a|² + |b|² = 1</b></span>）</div>
       <div><b>測定</b> すると確率 <span class="math nw"><b>|a|²</b></span> で |0⟩、<span class="math nw"><b>|b|²</b></span> で |1⟩。状態は得られた値に <b class="k">変化する</b></div>
     </div>
-    <div class="rvc8 pop" style="--d:.08s;--c:var(--blue)">
+    <div class="rvc8 pop" style="--d:.1s;--c:var(--blue)">
       <div class="rh">② 1 量子ビットの量子回路<small>第4章</small></div>
       <div class="rv-row"><div id="rvC1" class="rv-qc"></div><div>量子ゲート ＝ 2 × 2 の <b class="k">ユニタリ行列</b>（<span class="math nw">U<sup>†</sup>U = I</span>）</div></div>
-      <div class="rv-gl"><span><b>X</b>：|0⟩ ↔ |1⟩</span><span><b>Z</b>：|1⟩ → −|1⟩</span><span><b>H</b>：|0⟩ → {{1/√2}}(|0⟩ + |1⟩)</span></div>
+      <div class="rv-gt">
+        <span class="gn" style="background:var(--accent)">X</span><span class="eqrow">X =<span class="vec m2"><span>0</span><span>1</span><span>1</span><span>0</span></span></span><span class="rv-mp">X|0⟩ = |1⟩<br>X|1⟩ = |0⟩</span>
+        <span class="gn" style="background:var(--green)">Z</span><span class="eqrow">Z =<span class="vec m2"><span>1</span><span>0</span><span>0</span><span>−1</span></span></span><span class="rv-mp">Z|0⟩ = |0⟩<br>Z|1⟩ = −|1⟩</span>
+        <span class="gn" style="background:var(--blue)">H</span><span class="eqrow">H = <span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span><span class="vec m2"><span>1</span><span>1</span><span>1</span><span>−1</span></span></span><span class="rv-mp">H|0⟩ = <span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩ + |1⟩)<br>H|1⟩ = <span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩ − |1⟩)</span>
+      </div>
     </div>
-    <div class="rvc8 pop" style="--d:.16s;--c:var(--green)">
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 復習 2 量子ビット -->
+<section class="slide" data-id="rv2">
+  <div class="chap">復習 ／ 第5章・第6章</div>
+  <h2>復習：2 量子ビット<small>第5章（pp.122–131）・6.3（pp.142–144）・6.4（pp.148–150）</small></h2>
+  <div class="body rv2c">
+    <div class="rvc8 pop" style="--c:var(--green)">
       <div class="rh">③ 2 量子ビットの量子状態<small>第5章</small></div>
       <div class="eqrow" style="justify-content:center"><span>|0⟩ ⊗ |1⟩ =</span><span class="vec"><span>1</span><span>0</span></span><span>⊗</span><span class="vec"><span>0</span><span>1</span></span><span>=</span><span class="vec"><span>0</span><span>1</span><span>0</span><span>0</span></span><span>= |01⟩</span></div>
-      <div><span class="math nw">a|00⟩ + b|01⟩ + c|10⟩ + d|11⟩</span>（<span class="math nw">|a|² + |b|² + |c|² + |d|² = 1</span>）</div>
+      <div class="eqrow" style="justify-content:center;gap:6px;font-size:19px"><span>|00⟩ =</span><span class="vec"><span>1</span><span>0</span><span>0</span><span>0</span></span><span>|01⟩ =</span><span class="vec"><span>0</span><span>1</span><span>0</span><span>0</span></span><span>|10⟩ =</span><span class="vec"><span>0</span><span>0</span><span>1</span><span>0</span></span><span>|11⟩ =</span><span class="vec"><span>0</span><span>0</span><span>0</span><span>1</span></span></div>
+      <div class="ctr"><span class="math nw">a|00⟩ + b|01⟩ + c|10⟩ + d|11⟩</span><br>（<span class="math nw"><b>|a|² + |b|² + |c|² + |d|² = 1</b></span>）</div>
     </div>
-    <div class="rvc8 pop" style="--d:.24s;--c:var(--pink)">
+    <div class="rvc8 pop" style="--d:.1s;--c:var(--pink)">
       <div class="rh">④ 2 量子ビットの量子ゲート<small>第6章</small></div>
-      <div class="rv-2g">
-        <div class="rv-g"><div id="rvC2" class="rv-qc2"></div><div><b class="k">CNOT</b>：制御ビットが |1⟩ のときだけ標的ビットを反転<br><span class="math nw">CNOT|10⟩ = |11⟩</span></div></div>
-        <div class="rv-g"><div id="rvC3" class="rv-qc2"></div><div><b class="k">SWAP</b>：2 つの量子ビットを入れ替える<br><span class="math nw">SWAP|01⟩ = |10⟩</span></div></div>
+      <div class="rv-g2">
+        <div id="rvC2" class="rv-qc2"></div>
+        <div><b class="k">CNOT</b>：制御ビットが |1⟩ のときだけ標的ビットを反転<div class="eqrow">CNOT =<span class="vec m4"><span>1</span><span>0</span><span>0</span><span>0</span><span>0</span><span>1</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>1</span><span>0</span><span>0</span><span>1</span><span>0</span></span></div></div>
+        <div class="rv-maps"><span>CNOT|00⟩ = <b class="">|00⟩</b></span><span>CNOT|01⟩ = <b class="">|01⟩</b></span><span>CNOT|10⟩ = <b class="chg">|11⟩</b></span><span>CNOT|11⟩ = <b class="chg">|10⟩</b></span></div>
+      </div>
+      <div class="rv-g2">
+        <div id="rvC3" class="rv-qc2"></div>
+        <div><b class="k">SWAP</b>：2 つの量子ビットを入れ替える<div class="eqrow">SWAP =<span class="vec m4"><span>1</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>1</span><span>0</span><span>0</span><span>1</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>1</span></span></div></div>
+        <div class="rv-maps"><span>SWAP|00⟩ = <b class="">|00⟩</b></span><span>SWAP|01⟩ = <b class="chg">|10⟩</b></span><span>SWAP|10⟩ = <b class="chg">|01⟩</b></span><span>SWAP|11⟩ = <b class="">|11⟩</b></span></div>
       </div>
     </div>
   </div>
@@ -94,7 +116,31 @@
   <div class="pageno"></div>
 </section>
 
-<!-- 8.2 記法 -->
+<!-- 8.2 記法（まとめた書き方） -->
+<section class="slide" data-id="kt">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.2 量子ビットを一般化する</div>
+  <h2>|0⟩ ⊗ |0⟩ ⊗ ⋯ ⊗ |0⟩ は |00⋯0⟩ とまとめて書ける<small>8.2（p.194）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)">
+    <div class="card pop kt-card">
+      <div class="kt-s"><span class="math">|0⟩ ⊗ |0⟩ ⊗ ⋯ ⊗ |0⟩</span></div>
+      <div class="kt-a">⊗ を省略する</div>
+      <div class="kt-s"><span class="math">= |0⟩|0⟩⋯|0⟩</span></div>
+      <div class="kt-a">ケット記号をひとつにまとめる</div>
+      <div class="kt-s"><span class="math">= |00⋯0⟩</span></div>
+      <div class="kt-a">量子ビットの個数を右上に書く</div>
+      <div class="kt-s"><span class="math">= |0⟩<sup>⊗n</sup></span></div>
+    </div>
+    <div class="col">
+      <ul class="plain pop" style="--d:.1s">
+        <li>どれも <b class="k">同じ量子状態</b>（n 個の |0⟩ のテンソル積）を表す</li>
+        <li>文脈に応じて <b class="kb">使いやすい表し方</b> を使う</li>
+      </ul>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 8.2 10 進法 -->
 <section class="slide" data-id="bd">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.2 量子ビットを一般化する</div>
   <h2>ビット列を 10 進法で書くと |100⟩ = |4⟩<small>8.2（p.194）</small></h2>
@@ -106,8 +152,7 @@
     </div>
     <div class="col">
       <ul class="plain pop" style="--d:.1s">
-        <li>⊗ を省略して <span class="math nw">|0⟩|0⟩⋯|0⟩</span>、まとめて <span class="math nw">|00⋯0⟩</span>、個数を右上に書いて <span class="math nw"><b>|0⟩<sup>⊗n</sup></b></span></li>
-        <li>ビット列を <b class="k">10 進法</b> でケットの中に書くこともある（<span class="math nw">|100⟩ = |4⟩</span>）</li>
+        <li>ビット列を <b class="k">10 進法</b> でケットの中に書くこともある（100 は 10 進法で 4 なので <span class="math nw">|100⟩ = |4⟩</span>）</li>
         <li>添え字を 0 から始めたのは、<b class="kb">ケットの中の数字と揃える</b> ため</li>
       </ul>
     </div>
@@ -119,20 +164,10 @@
 <section class="slide" data-id="sv">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.2 量子ビットを一般化する</div>
   <h2>n 量子ビットは 2ⁿ 種類の重ね合わせを表せる<small>8.2（pp.194–195）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
-    <div class="col sv-l">
-      <div class="svc pop ok"><div class="math">|00⋯0⟩</div><div class="sv-s">|1|² = 1</div><span class="verd ok">量子状態</span></div>
-      <div class="svc pop ok" style="--d:.05s"><div class="math">{{1/√2}}(|00⋯0⟩ + |11⋯1⟩)</div><div class="sv-s">|1/√2|² + |1/√2|² = 1</div><span class="verd ok">量子状態</span></div>
-      <div class="svc pop ok" style="--d:.1s"><div class="math">{{1/√2ⁿ}}(|0⟩ + |1⟩ + ⋯ + |2ⁿ − 1⟩)</div><div class="sv-s">2ⁿ × |1/√2ⁿ|² = 1</div><span class="verd ok">量子状態</span></div>
-      <div class="svc pop ng" style="--d:.15s"><div class="math">|00⋯0⟩ + |11⋯1⟩</div><div class="sv-s">|1|² + |1|² = 2 ≠ 1</div><span class="verd ng">量子状態ではない</span></div>
-    </div>
-    <div class="col">
-      <div class="eqtx pop" style="--d:.1s;font-size:20px;text-align:left">a<sub>0</sub>|00⋯0⟩ + a<sub>1</sub>|00⋯1⟩ + ⋯ + a<sub>2ⁿ−1</sub>|11⋯1⟩<br>= a<sub>0</sub>|0⟩ + a<sub>1</sub>|1⟩ + ⋯ + a<sub>2ⁿ−1</sub>|2ⁿ − 1⟩</div>
-      <ul class="plain pop" style="--d:.2s">
-        <li>量子状態をベクトルの形で表したもの ＝ <b class="k">状態ベクトル</b></li>
-        <li>複数の和で表される量子状態 ＝ <b class="k">重ね合わせ状態</b></li>
-        <li>n 古典ビットが同時に表せるのは 0, 1, …, 2ⁿ − 1 のうち <b class="kb">1 種類だけ</b></li>
-      </ul>
+  <div class="body center">
+    <div class="card pop sv-card">
+      <div class="eqrow" style="justify-content:center;font-size:26px"><span class="vec"><span>a<sub>0</sub></span><span>a<sub>1</sub></span><span>⋮</span><span>a<sub>2ⁿ−1</sub></span></span><span>= a<sub>0</sub></span><span class="vec"><span>1</span><span>0</span><span>⋮</span><span>0</span></span><span>+ a<sub>1</sub></span><span class="vec"><span>0</span><span>1</span><span>⋮</span><span>0</span></span><span>+ ⋯ + a<sub>2ⁿ−1</sub></span><span class="vec"><span>0</span><span>0</span><span>⋮</span><span>1</span></span></div>
+      <div class="eqtx" style="font-size:28px">= a<sub>0</sub>|00⋯0⟩ + a<sub>1</sub>|00⋯1⟩ + ⋯ + a<sub>2ⁿ−1</sub>|11⋯1⟩<br>= a<sub>0</sub>|0⟩ + a<sub>1</sub>|1⟩ + ⋯ + a<sub>2ⁿ−1</sub>|2ⁿ − 1⟩</div>
     </div>
   </div>
   <div class="pageno"></div>
