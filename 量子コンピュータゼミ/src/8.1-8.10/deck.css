@@ -299,3 +299,6 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .slide[data-id="rv2"] .rv-g2{padding-top:6px}
 .slide[data-id="rv2"] .rv-g2 .vec.m4{font-size:15px;line-height:1.1}
 .slide[data-id="rv2"] .rq{font-size:16px;padding-top:6px}
+
+.slide[data-id="oi"] ul.plain li{font-size:22px;margin:8px 0}
+.slide[data-id="oi"] .oi-c{padding:8px 10px}

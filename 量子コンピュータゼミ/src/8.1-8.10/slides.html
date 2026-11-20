@@ -515,9 +515,10 @@
     </div>
     <div class="col">
       <ul class="plain pop" style="--d:.2s">
-        <li>どれも <span class="math nw">|x⟩|y⟩ → |x⟩|y ⊕ f(x)⟩</span></li>
-        <li><span class="math nw">f(x) = 1</span> なら y を必ず反転するので <b class="k">X</b></li>
-        <li><span class="math nw">f(x) = x</span> なら <b class="k">CNOT</b> そのもの</li>
+        <li>どれも図 8.6 と同じ <span class="math nw">|x⟩|y⟩ → |x⟩|y ⊕ f(x)⟩</span></li>
+        <li><span class="math nw">f(x) = 1</span>：y を必ず反転するので <b class="k">X</b></li>
+        <li><span class="math nw">f(x) = x</span>：<b class="k">CNOT</b> そのもの</li>
+        <li><span class="math nw">f(x) = NOT x</span>：x を <b class="k">X</b> で反転してから CNOT し、もう一度 X で x を元に戻す</li>
         <li>アルゴリズムでは、中身を見ずに U<sub>f</sub> を使う</li>
       </ul>
     </div>

@@ -197,9 +197,24 @@ drawQC('#rvC3', { n: 2, noNames: true, ops: [{ g: 'SW', a: 0, b: 1, col: 0 }], c
   onEnter.rv2 = () => r2.forEach(f => f());
 }
 
-/* ---------- 【補足】オラクルの中身 4 通り ---------- */
-[[], [{ g: 'X', q: 1, col: 0 }], [{ g: 'CX', c: 0, t: 1, col: 0 }], [{ g: 'CX', c: 0, t: 1, col: 0 }, { g: 'X', q: 1, col: 1 }]]
-  .forEach((ops, k) => drawQC('#oi' + k, { n: 2, names: ['x', 'y'], ops, cols: 2, colW: 60, rowH: 50 }));
+/* ---------- 【補足】オラクルの中身 4 通り：図 8.6 と同じ形（入力 |x⟩|y⟩、出力 |x⟩|y ⊕ f(x)⟩、U_f の枠）で描く ---------- */
+{
+  const Y = [52, 112];
+  const xg = (svg, x, q) => { el('rect', { x: x - 17, y: Y[q] - 17, width: 34, height: 34, rx: 6, style: 'fill:var(--accent);stroke:var(--ink);stroke-width:2.5' }, svg); el('text', { x, y: Y[q] + 7, 'text-anchor': 'middle', style: 'fill:#fff;font:700 20px "Cambria Math",serif' }, svg).textContent = 'X'; };
+  const cx = (svg, x) => { el('line', { x1: x, y1: Y[0], x2: x, y2: Y[1], class: 'gl' }, svg); el('circle', { cx: x, cy: Y[0], r: 7, class: 'gd' }, svg); el('circle', { cx: x, cy: Y[1], r: 15, class: 'gt' }, svg); el('path', { d: `M${x - 15},${Y[1]}H${x + 15}M${x},${Y[1] - 15}V${Y[1] + 15}`, class: 'gl' }, svg); };
+  const parts = [svg => {}, svg => xg(svg, 180, 1), svg => cx(svg, 180), svg => { xg(svg, 130, 0); cx(svg, 180); xg(svg, 230, 0); }];
+  parts.forEach((draw, k) => {
+    const svg = el('svg', { viewBox: '0 0 420 160', class: 'gsim' }, $('#oi' + k));
+    Y.forEach((y, q) => {
+      el('line', { x1: 46, y1: y, x2: 316, y2: y, class: 'w' }, svg);
+      el('text', { x: 40, y: y + 7, 'text-anchor': 'end', style: 'font-size:20px' }, svg).textContent = q ? '|y⟩' : '|x⟩';
+      el('text', { x: 322, y: y + 7, style: 'font-size:20px' }, svg).textContent = q ? '|y ⊕ f(x)⟩' : '|x⟩';
+    });
+    el('rect', { x: 82, y: 14, width: 196, height: 136, rx: 8, style: 'fill:none;stroke:var(--ink);stroke-width:2;stroke-dasharray:6 4' }, svg);
+    rich(el('text', { x: 88, y: 34, style: 'font-size:16px;font-style:italic;fill:var(--muted)' }, svg), 'U_{f}');
+    draw(svg);
+  });
+}
 
 /* ---------- 【補足】VQE のくり返し ---------- */
 {
