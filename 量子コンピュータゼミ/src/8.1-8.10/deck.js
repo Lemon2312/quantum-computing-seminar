@@ -244,3 +244,17 @@ drawQC('#rvC3', { n: 2, noNames: true, ops: [{ g: 'SW', a: 0, b: 1, col: 0 }], c
   el('polygon', { points: '70,204 63,216 77,216', style: 'fill:var(--ink)' }, svg);
   el('polygon', { points: '510,305 522,298 522,312', style: 'fill:var(--ink)' }, svg);
 }
+
+/* ---------- |0⟩^⊗n：n 個の量子ビットがすべて |0⟩ の回路 ---------- */
+{
+  const svg = $('#ktSvg'), ys = [40, 105, 170, 255], names = ['q_{0}', 'q_{1}', '', 'q_{n−1}'];
+  ys.forEach((y, k) => {
+    if (k === 2) { el('text', { x: 130, y: 212, 'text-anchor': 'middle', style: 'font-size:30px' }, svg).textContent = '⋮'; return; }
+    rich(el('text', { x: 4, y: y + 8, class: 'nm' }, svg), names[k]);
+    el('text', { x: 66, y: y + 8, style: 'font-size:24px' }, svg).textContent = '|0⟩';
+    el('line', { x1: 104, y1: y, x2: 210, y2: y, class: 'w' }, svg);
+  });
+  el('path', { d: 'M222,24 Q236,24 236,60 V130 Q236,148 250,148 Q236,148 236,166 V236 Q236,272 222,272', style: 'fill:none;stroke:var(--ink);stroke-width:2.5' }, svg);
+  const t = el('text', { x: 254, y: 156, style: 'font-size:22px' }, svg);
+  el('tspan', {}, t).textContent = '|0⟩'; el('tspan', { dy: -10, 'font-size': '15px' }, t).textContent = '⊗n';
+}

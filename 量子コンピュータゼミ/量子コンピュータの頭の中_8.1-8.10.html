@@ -945,6 +945,45 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .slide[data-id="pm1"] .point{font-size:26px !important}
 .slide[data-id="mt"] ul.plain li{font-size:21px}
 
+/* 12 回目：|0⟩^⊗n の回路、復習の余白 */
+.kt-wrap{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:16px;align-items:center;padding:18px}
+.kt-wrap .kt-card{padding:0}
+.slide[data-id="kt"] .kt-s{font-size:32px}
+.slide[data-id="kt"] .kt-a{font-size:17px}
+.slide[data-id="kt"] ul.plain li{font-size:25px}
+.slide[data-id="rv1"] .rvc8{font-size:21px;gap:14px}
+.slide[data-id="rv1"] .rvc8 .rh{font-size:24px}
+.slide[data-id="rv1"] .rvc8 .eqrow{font-size:26px}
+.slide[data-id="rv1"] .rv-gt{gap:14px 18px}
+.slide[data-id="rv1"] .rv-gt .eqrow{font-size:26px !important}
+.slide[data-id="rv1"] .rv-gt .gn{font-size:26px}
+.slide[data-id="rv1"] .rv-mp{font-size:23px}
+.slide[data-id="rv1"] .rv-qc{width:210px}
+.slide[data-id="rv2"] .rvc8{font-size:20px;gap:12px}
+.slide[data-id="rv2"] .rvc8 .rh{font-size:24px}
+.slide[data-id="rv2"] .rvc8 .eqrow{font-size:25px}
+.slide[data-id="rv2"] .rvc8 .eqrow[style*="font-size:19px"]{font-size:20px !important}
+.slide[data-id="rv2"] .rv-g2{grid-template-columns:100px minmax(0,1fr) auto;padding-top:10px}
+.slide[data-id="rv2"] .rv-g2 .vec.m4{font-size:18px;line-height:1.15}
+.slide[data-id="rv2"] .rv-g2 .eqrow{font-size:20px !important}
+.slide[data-id="rv2"] .rv-maps{font-size:21px;line-height:1.3}
+.slide[data-id="rv2"] .rv-qc2{width:100px}
+.slide[data-id="rv1"] .rvc8{font-size:20px;gap:10px}
+.slide[data-id="rv1"] .rvc8 .eqrow{font-size:24px}
+.slide[data-id="rv1"] .rv-gt{gap:8px 16px}
+.slide[data-id="rv1"] .rv-gt .eqrow{font-size:24px !important}
+.slide[data-id="rv1"] .rv-gt .gn{font-size:24px}
+.slide[data-id="rv1"] .rv-mp{font-size:21px;line-height:1.45}
+.slide[data-id="rv1"] .rv-qc{width:190px}
+.slide[data-id="rv2"] .rvc8{font-size:19px;gap:9px}
+.slide[data-id="rv2"] .rvc8 .eqrow{font-size:23px}
+.slide[data-id="rv2"] .rv-g2{padding-top:7px}
+.slide[data-id="rv2"] .rv-g2 .vec.m4{font-size:17px;line-height:1.1}
+.slide[data-id="rv2"] .rv-maps{font-size:20px;line-height:1.25}
+.slide[data-id="rv1"] .rvc8:first-child{font-size:22px;gap:16px}
+.slide[data-id="rv1"] .rvc8:first-child .eqrow{font-size:28px}
+.slide[data-id="rv2"] .rvc8:last-child .rv-g2{padding-top:14px;padding-bottom:6px}
+
 </style>
 </head>
 <body>
@@ -965,7 +1004,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
         <li class="agroup pop" style="--d:.25s">復習</li>
         <li class="pop" style="--d:.27s"><span class="num" style="background:#9a93bd">0</span>1・2 量子ビットの基本ルール<em>第3〜6章</em></li>
         <li class="agroup pop" style="--d:.29s">第8章 n 量子ビットの世界</li>
-        <li class="pop" style="--d:0.30s"><span class="num" style="background:var(--teal)">1</span>量子ビットを一般化する<em>8.1・8.2</em></li>
+        <li class="pop" style="--d:0.30s"><span class="num" style="background:var(--teal)">1</span>n 量子ビットの量子状態<em>8.1・8.2</em></li>
         <li class="pop" style="--d:0.32s"><span class="num" style="background:var(--pink)">2</span>一部の量子ビットの測定<em>8.5</em></li>
         <li class="pop" style="--d:0.34s"><span class="num" style="background:var(--green)">3</span>n 量子ビットゲートの計算<em>8.6</em></li>
         <li class="pop" style="--d:0.36s"><span class="num" style="background:var(--accent)">4</span>代表的な n 量子ビットの量子ゲート<em>8.7</em></li>
@@ -1042,7 +1081,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
     <div class="door-num">1</div>
     <div>
       <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 1</div>
-      <h1 class="pop" style="--d:.1s">量子ビットを一般化する</h1>
+      <h1 class="pop" style="--d:.1s">n 量子ビットの量子状態</h1>
       <p class="door-lead pop" style="--d:.2s">1-2 量子ビットの延長線で n 量子ビットへ（8.1・8.2）</p>
       <div class="door-topics pop" style="--d:.3s"><span>|0⟩<sup>⊗n</sup></span><span>|100⟩ = |4⟩</span><span>2ⁿ 個の基底状態の重ね合わせ</span><span>内積で表す</span></div>
     </div>
@@ -1054,14 +1093,16 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="kt">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.2 量子ビットを一般化する</div>
   <h2>|0⟩ ⊗ |0⟩ ⊗ ⋯ ⊗ |0⟩ は |0⟩<sup>⊗n</sup> とまとめて書ける<small>8.2（p.194）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)">
+  <div class="body cols" style="grid-template-columns:minmax(0,.55fr) minmax(0,1.45fr)">
     <div class="col">
       <ul class="plain pop" style="--d:.1s">
         <li>どれも <b class="k">同じ量子状態</b>（n 個の |0⟩ のテンソル積）を表す</li>
         <li>文脈に応じて <b class="kb">使いやすい表し方</b> を使う</li>
       </ul>
     </div>
-    <div class="card pop kt-card">
+    <div class="card pop kt-wrap">
+      <div class="kt-qc"><div class="mp-lbl">量子回路</div><svg class="gsim" id="ktSvg" viewBox="0 0 300 300"></svg></div>
+      <div class="kt-card">
       <div class="kt-s"><span class="math">|0⟩ ⊗ |0⟩ ⊗ ⋯ ⊗ |0⟩</span></div>
       <div class="kt-a">⊗ を省略する</div>
       <div class="kt-s"><span class="math">= |0⟩|0⟩⋯|0⟩</span></div>
@@ -1069,6 +1110,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
       <div class="kt-s"><span class="math">= |00⋯0⟩</span></div>
       <div class="kt-a">量子ビットの個数を右上に書く</div>
       <div class="kt-s"><span class="math">= |0⟩<sup>⊗n</sup></span></div>
+      </div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -2250,6 +2292,20 @@ drawQC('#rvC3', { n: 2, noNames: true, ops: [{ g: 'SW', a: 0, b: 1, col: 0 }], c
   el('path', { d: 'M90,305 H70 V214', style: 'fill:none;stroke:var(--ink);stroke-width:3' }, svg);
   el('polygon', { points: '70,204 63,216 77,216', style: 'fill:var(--ink)' }, svg);
   el('polygon', { points: '510,305 522,298 522,312', style: 'fill:var(--ink)' }, svg);
+}
+
+/* ---------- |0⟩^⊗n：n 個の量子ビットがすべて |0⟩ の回路 ---------- */
+{
+  const svg = $('#ktSvg'), ys = [40, 105, 170, 255], names = ['q_{0}', 'q_{1}', '', 'q_{n−1}'];
+  ys.forEach((y, k) => {
+    if (k === 2) { el('text', { x: 130, y: 212, 'text-anchor': 'middle', style: 'font-size:30px' }, svg).textContent = '⋮'; return; }
+    rich(el('text', { x: 4, y: y + 8, class: 'nm' }, svg), names[k]);
+    el('text', { x: 66, y: y + 8, style: 'font-size:24px' }, svg).textContent = '|0⟩';
+    el('line', { x1: 104, y1: y, x2: 210, y2: y, class: 'w' }, svg);
+  });
+  el('path', { d: 'M222,24 Q236,24 236,60 V130 Q236,148 250,148 Q236,148 236,166 V236 Q236,272 222,272', style: 'fill:none;stroke:var(--ink);stroke-width:2.5' }, svg);
+  const t = el('text', { x: 254, y: 156, style: 'font-size:22px' }, svg);
+  el('tspan', {}, t).textContent = '|0⟩'; el('tspan', { dy: -10, 'font-size': '15px' }, t).textContent = '⊗n';
 }
 
 /* 共通部品（後半）：復習問題・スライド制御・一覧・黒ペン・レーザー。スライド固有のスクリプトより後に置く */

@@ -12,7 +12,7 @@
         <li class="agroup pop" style="--d:.25s">復習</li>
         <li class="pop" style="--d:.27s"><span class="num" style="background:#9a93bd">0</span>1・2 量子ビットの基本ルール<em>第3〜6章</em></li>
         <li class="agroup pop" style="--d:.29s">第8章 n 量子ビットの世界</li>
-        <li class="pop" style="--d:0.30s"><span class="num" style="background:var(--teal)">1</span>量子ビットを一般化する<em>8.1・8.2</em></li>
+        <li class="pop" style="--d:0.30s"><span class="num" style="background:var(--teal)">1</span>n 量子ビットの量子状態<em>8.1・8.2</em></li>
         <li class="pop" style="--d:0.32s"><span class="num" style="background:var(--pink)">2</span>一部の量子ビットの測定<em>8.5</em></li>
         <li class="pop" style="--d:0.34s"><span class="num" style="background:var(--green)">3</span>n 量子ビットゲートの計算<em>8.6</em></li>
         <li class="pop" style="--d:0.36s"><span class="num" style="background:var(--accent)">4</span>代表的な n 量子ビットの量子ゲート<em>8.7</em></li>
@@ -89,7 +89,7 @@
     <div class="door-num">1</div>
     <div>
       <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 1</div>
-      <h1 class="pop" style="--d:.1s">量子ビットを一般化する</h1>
+      <h1 class="pop" style="--d:.1s">n 量子ビットの量子状態</h1>
       <p class="door-lead pop" style="--d:.2s">1-2 量子ビットの延長線で n 量子ビットへ（8.1・8.2）</p>
       <div class="door-topics pop" style="--d:.3s"><span>|0⟩<sup>⊗n</sup></span><span>|100⟩ = |4⟩</span><span>2ⁿ 個の基底状態の重ね合わせ</span><span>内積で表す</span></div>
     </div>
@@ -101,14 +101,16 @@
 <section class="slide" data-id="kt">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.2 量子ビットを一般化する</div>
   <h2>|0⟩ ⊗ |0⟩ ⊗ ⋯ ⊗ |0⟩ は |0⟩<sup>⊗n</sup> とまとめて書ける<small>8.2（p.194）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)">
+  <div class="body cols" style="grid-template-columns:minmax(0,.55fr) minmax(0,1.45fr)">
     <div class="col">
       <ul class="plain pop" style="--d:.1s">
         <li>どれも <b class="k">同じ量子状態</b>（n 個の |0⟩ のテンソル積）を表す</li>
         <li>文脈に応じて <b class="kb">使いやすい表し方</b> を使う</li>
       </ul>
     </div>
-    <div class="card pop kt-card">
+    <div class="card pop kt-wrap">
+      <div class="kt-qc"><div class="mp-lbl">量子回路</div><svg class="gsim" id="ktSvg" viewBox="0 0 300 300"></svg></div>
+      <div class="kt-card">
       <div class="kt-s"><span class="math">|0⟩ ⊗ |0⟩ ⊗ ⋯ ⊗ |0⟩</span></div>
       <div class="kt-a">⊗ を省略する</div>
       <div class="kt-s"><span class="math">= |0⟩|0⟩⋯|0⟩</span></div>
@@ -116,6 +118,7 @@
       <div class="kt-s"><span class="math">= |00⋯0⟩</span></div>
       <div class="kt-a">量子ビットの個数を右上に書く</div>
       <div class="kt-s"><span class="math">= |0⟩<sup>⊗n</sup></span></div>
+      </div>
     </div>
   </div>
   <div class="pageno"></div>
