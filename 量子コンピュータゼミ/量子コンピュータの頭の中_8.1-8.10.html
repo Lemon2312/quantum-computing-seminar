@@ -925,6 +925,21 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .or-cap{font-size:17px;color:var(--muted);text-align:center;line-height:1.5}
 .slide[data-id="or"] ul.plain li{font-size:21px;margin:8px 0}
 .or-cap{font-size:18px;color:var(--ink)}
+/* 量子状態を 1 枚にまとめたスライド */
+.slide[data-id="st"] .st-eq{padding:24px 22px;gap:18px}
+.slide[data-id="st"] .st-eq .eqrow{font-size:26px !important}
+.slide[data-id="st"] .st-eq .eqtx{font-size:27px !important}
+.slide[data-id="st"] .defbox{font-size:21px}
+.slide[data-id="st"] .defbox .eqtx{font-size:20px !important}
+.slide[data-id="st"] ul.plain li{font-size:23px}
+/* 左右を入れ替えたトフォリ：文字を少し大きく */
+.slide[data-id="tf"] ul.plain li{font-size:21px}
+.slide[data-id="tf"] .big8 .vec.m8{font-size:16px;column-gap:7px}
+.slide[data-id="tf"] .point{font-size:17px !important}
+.slide[data-id="fr"] ul.plain li{font-size:23px}
+.slide[data-id="fr"] .big8 .vec.m8{font-size:18px}
+.slide[data-id="tf"] ul.plain li{font-size:19px;margin:3px 0}
+.slide[data-id="tf"] .big8 .vec.m8{font-size:15px;line-height:1.1}
 
 </style>
 </head>
@@ -946,13 +961,13 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
         <li class="agroup pop" style="--d:.25s">復習</li>
         <li class="pop" style="--d:.27s"><span class="num" style="background:#9a93bd">0</span>1・2 量子ビットの基本ルール<em>第3〜6章</em></li>
         <li class="agroup pop" style="--d:.29s">第8章 n 量子ビットの世界</li>
-        <li class="pop" style="--d:.3s"><span class="num" style="background:var(--teal)">1</span>量子ビットを一般化する<em>8.1・8.2</em></li>
-        <li class="pop" style="--d:.31s"><span class="num" style="background:var(--blue)">2</span>ユニタリ発展<em>8.4</em></li>
-        <li class="pop" style="--d:.33s"><span class="num" style="background:var(--pink)">3</span>一部の量子ビットの測定<em>8.5</em></li>
-        <li class="pop" style="--d:.35s"><span class="num" style="background:var(--green)">4</span>テンソル積を用いた計算<em>8.6</em></li>
-        <li class="pop" style="--d:.37s"><span class="num" style="background:var(--accent)">5</span>代表的な n 量子ビットの量子ゲート<em>8.7</em></li>
-        <li class="pop" style="--d:.39s"><span class="num" style="background:var(--purple)">6</span>重ね合わせ・オラクル<em>8.8・8.9</em></li>
-        <li class="pop" style="--d:.41s"><span class="num" style="background:var(--gold)">7</span>発展：任意の 2ⁿ 次正方行列のかけ算<em>8.10</em></li>
+        <li class="pop" style="--d:0.30s"><span class="num" style="background:var(--teal)">1</span>量子ビットを一般化する<em>8.1・8.2</em></li>
+        <li class="pop" style="--d:0.32s"><span class="num" style="background:var(--pink)">2</span>一部の量子ビットの測定<em>8.5</em></li>
+        <li class="pop" style="--d:0.34s"><span class="num" style="background:var(--green)">3</span>n 量子ビットゲートの計算<em>8.6</em></li>
+        <li class="pop" style="--d:0.36s"><span class="num" style="background:var(--accent)">4</span>代表的な n 量子ビットの量子ゲート<em>8.7</em></li>
+        <li class="pop" style="--d:0.38s"><span class="num" style="background:var(--purple)">5</span>重ね合わせ状態を利用した計算<em>8.8</em></li>
+        <li class="pop" style="--d:0.40s"><span class="num" style="background:var(--blue)">6</span>オラクル<em>8.9</em></li>
+        <li class="pop" style="--d:0.42s"><span class="num" style="background:var(--gold)">7</span>発展：非ユニタリ行列のかけ算を計算する<em>8.10</em></li>
         <li class="pop" style="--d:.43s"><span class="num" style="background:var(--ink)">✓</span>まとめ と 復習問題</li>
       </ul>
     </div>
@@ -1025,31 +1040,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
       <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 1</div>
       <h1 class="pop" style="--d:.1s">量子ビットを一般化する</h1>
       <p class="door-lead pop" style="--d:.2s">1-2 量子ビットの延長線で n 量子ビットへ（8.1・8.2）</p>
-      <div class="door-topics pop" style="--d:.3s"><span>2ⁿ 個の複素数</span><span>|100⟩ = |4⟩</span><span>重ね合わせ状態</span><span>内積で表す</span></div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 8.2 定義 -->
-<section class="slide" data-id="gq">
-  <div class="chap">第8章 n 量子ビットの世界 ／ 8.2 量子ビットを一般化する</div>
-  <h2>n 量子ビットは 2ⁿ 個の複素数を並べたベクトル<small>8.2・8.3（pp.192–197）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)">
-    <div class="card pop gq-card">
-      <div class="ue-lbl" id="gqLbl"></div>
-      <div class="gq-vec" id="gqVec"></div>
-      <div id="gqStp"></div>
-    </div>
-    <div class="col">
-      <div class="defbox pop" style="--d:.1s">次の集合 Q の要素を <b class="k">量子状態</b> という
-        <div class="eqtx" style="font-size:20px">Q := { <span class="eq inline"><span class="vec"><span>a<sub>0</sub></span><span>a<sub>1</sub></span><span>⋮</span><span>a<sub>2ⁿ−1</sub></span></span></span> ∈ ℂ<sup>2ⁿ</sup> | |a<sub>0</sub>|² + |a<sub>1</sub>|² + ⋯ + |a<sub>2ⁿ−1</sub>|² = 1 }</div>
-      </div>
-      <ul class="plain pop" style="--d:.2s">
-        <li>3 量子ビットなら 2³ = 8 個、10 量子ビットなら 2¹⁰ = <b class="k">1024 個</b></li>
-        <li>n が増えると、ベクトルの次元が <b class="k">急速（指数関数的）</b> に増える</li>
-        <li>成分の絶対値の 2 乗 <span class="math nw"><b>|a<sub>k</sub>|²</b></span> が、測定で基底状態 <span class="math nw">|k⟩</span> を得る <b class="kb">確率</b>（だから和が 1）</li>
-      </ul>
+      <div class="door-topics pop" style="--d:.3s"><span>|0⟩<sup>⊗n</sup></span><span>|100⟩ = |4⟩</span><span>2ⁿ 個の基底状態の重ね合わせ</span><span>内積で表す</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1058,7 +1049,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <!-- 8.2 記法（まとめた書き方） -->
 <section class="slide" data-id="kt">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.2 量子ビットを一般化する</div>
-  <h2>|0⟩ ⊗ |0⟩ ⊗ ⋯ ⊗ |0⟩ は |00⋯0⟩ とまとめて書ける<small>8.2（p.194）</small></h2>
+  <h2>|0⟩ ⊗ |0⟩ ⊗ ⋯ ⊗ |0⟩ は |0⟩<sup>⊗n</sup> とまとめて書ける<small>8.2（p.194）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)">
     <div class="card pop kt-card">
       <div class="kt-s"><span class="math">|0⟩ ⊗ |0⟩ ⊗ ⋯ ⊗ |0⟩</span></div>
@@ -1098,14 +1089,23 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
   <div class="pageno"></div>
 </section>
 
-<!-- 8.2 重ね合わせ状態 -->
-<section class="slide" data-id="sv">
+<!-- 8.2 n 量子ビットの量子状態 -->
+<section class="slide" data-id="st">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.2 量子ビットを一般化する</div>
-  <h2>n 量子ビットは 2ⁿ 種類の重ね合わせを表せる<small>8.2（pp.194–195）</small></h2>
-  <div class="body center">
-    <div class="card pop sv-card">
+  <h2>量子状態は 2ⁿ 個の基底状態の重ね合わせ<small>8.2・8.3（pp.192–197）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
+    <div class="card pop sv-card st-eq">
       <div class="eqrow" style="justify-content:center;font-size:26px"><span class="vec"><span>a<sub>0</sub></span><span>a<sub>1</sub></span><span>⋮</span><span>a<sub>2ⁿ−1</sub></span></span><span>= a<sub>0</sub></span><span class="vec"><span>1</span><span>0</span><span>⋮</span><span>0</span></span><span>+ a<sub>1</sub></span><span class="vec"><span>0</span><span>1</span><span>⋮</span><span>0</span></span><span>+ ⋯ + a<sub>2ⁿ−1</sub></span><span class="vec"><span>0</span><span>0</span><span>⋮</span><span>1</span></span></div>
       <div class="eqtx" style="font-size:28px">= a<sub>0</sub>|00⋯0⟩ + a<sub>1</sub>|00⋯1⟩ + ⋯ + a<sub>2ⁿ−1</sub>|11⋯1⟩<br>= a<sub>0</sub>|0⟩ + a<sub>1</sub>|1⟩ + ⋯ + a<sub>2ⁿ−1</sub>|2ⁿ − 1⟩</div>
+    </div>
+    <div class="col">
+      <div class="defbox pop" style="--d:.1s">次の集合 Q の要素を <b class="k">量子状態</b> という
+        <div class="eqtx" style="font-size:19px">Q := { <span class="eq inline"><span class="vec"><span>a<sub>0</sub></span><span>⋮</span><span>a<sub>2ⁿ−1</sub></span></span></span> ∈ ℂ<sup>2ⁿ</sup> | |a<sub>0</sub>|² + ⋯ + |a<sub>2ⁿ−1</sub>|² = 1 }</div>
+      </div>
+      <ul class="plain pop" style="--d:.2s">
+        <li><b class="k">2ⁿ 個の複素数</b> を並べたベクトル（3 量子ビットなら 8 個、10 量子ビットなら 1024 個）</li>
+        <li><span class="math nw"><b>|a<sub>k</sub>|²</b></span> が、測定で基底状態 <span class="math nw">|k⟩</span> を得る <b class="kb">確率</b>（だから和が 1）</li>
+      </ul>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1130,45 +1130,12 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 </section>
 
 <!-- SECTION 2 -->
-<section class="slide door" style="--c:var(--blue)">
+<section class="slide door" style="--c:var(--pink)">
   <div class="door-bg">2</div>
   <div class="door-wrap">
     <div class="door-num">2</div>
     <div>
       <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 2</div>
-      <h1 class="pop" style="--d:.1s">ユニタリ発展</h1>
-      <p class="door-lead pop" style="--d:.2s">行列の世界（8.4）</p>
-      <div class="door-topics pop" style="--d:.3s"><span>2ⁿ × 2ⁿ のユニタリ行列</span></div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 8.4 ユニタリ発展 -->
-<section class="slide" data-id="ue">
-  <div class="chap">第8章 n 量子ビットの世界 ／ 8.4 ユニタリ発展（行列の世界）</div>
-  <h2>量子ビットが 1 個増えると行列は縦横 2 倍<small>8.4（p.198）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
-    <div class="card pop ue-card">
-      <div class="ue-lbl" id="ueLbl"></div>
-      <div class="ue-grid" id="ueGrid"></div>
-      <div id="ueStp"></div>
-    </div>
-    <div class="col">
-      <div class="defbox pop" style="--d:.1s">量子状態 <span class="math">|φ⟩</span> は、<b class="k nw">2ⁿ × 2ⁿ のユニタリ行列</b> <span class="math">U</span> を使って <span class="math nw">U|φ⟩</span> に写すことができる。これを <b>ユニタリ発展</b> という</div>
-      <div class="point pop" style="--d:.3s">量子ビットが増えると、行列のサイズは <b class="k">指数関数的</b> に大きくなる</div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- SECTION 3 -->
-<section class="slide door" style="--c:var(--pink)">
-  <div class="door-bg">3</div>
-  <div class="door-wrap">
-    <div class="door-num">3</div>
-    <div>
-      <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 3</div>
       <h1 class="pop" style="--d:.1s">一部の量子ビットの<br>測定</h1>
       <p class="door-lead pop" style="--d:.2s">3 量子ビットのうち、左側だけを測る（8.5）</p>
       <div class="door-topics pop" style="--d:.3s"><span>具体例 1：左 1 量子ビット</span><span>一般的なルール</span><span>具体例 2：左 2 量子ビット</span></div>
@@ -1180,14 +1147,14 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <!-- 8.5.1 具体例 1 -->
 <section class="slide" data-id="pm1">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.5 一部の量子ビットの測定</div>
-  <h2>左の 1 量子ビットだけを測定する<small>8.5.1（pp.199–201）</small></h2>
+  <h2>左の 1 量子ビットだけを測定する<small>8.5.1（pp.199–201・例を簡単にした）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr)">
     <div class="card pop pm-card">
       <div class="eqrow pm-st" id="pm1St"></div>
       <div class="pm-groups" id="pm1G"></div>
     </div>
     <div class="col">
-      <div class="point blue pop" style="--d:.2s;font-size:20px"><span class="math nw"><span class="eq inline"><span class="frac"><span>14</span><span>55</span></span></span> ≠ 1</span> なので、<span class="math nw">√<span class="eq inline"><span class="frac"><span>14</span><span>55</span></span></span></span> で割ったものが測定後の量子状態</div>
+      <div class="point blue pop" style="--d:.2s;font-size:20px">残った項の確率の和は <span class="math nw"><span class="eq inline"><span class="frac"><span>3</span><span>4</span></span></span> ≠ 1</span> なので、<span class="math nw">√<span class="eq inline"><span class="frac"><span>3</span><span>4</span></span></span></span> で割ったものが測定後の量子状態</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1201,17 +1168,17 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
     <div class="pmr-c pop" style="--c:var(--accent)">
       <div class="pmr-n">ステップ 1</div>
       <div class="pmr-t">測定する量子ビットの <b class="k">種類ごとに項をまとめる</b></div>
-      <div class="pmr-ex"><span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>√55</span></span></span>{ <u class="g0">|0⟩</u>(|00⟩ + 2|01⟩ + 3|10⟩)<br>　+ <u class="g1">|1⟩</u>(4|10⟩ + 5|11⟩) }</span></div>
+      <div class="pmr-ex"><span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>{ <u class="g0">|0⟩</u>(|00⟩ + |01⟩ + |10⟩)<br>　+ <u class="g1">|1⟩</u>|11⟩ }</span></div>
     </div>
     <div class="pmr-c pop" style="--d:.1s;--c:var(--pink)">
       <div class="pmr-n">ステップ 2</div>
       <div class="pmr-t">まとめた項の <b class="k">係数の絶対値 2 乗和</b> が、その測定値を得る <b class="k">確率</b></div>
-      <div class="pmr-ex"><span class="math">|0⟩：<span class="eq inline"><span class="frac"><span>1² + 2² + 3²</span><span>55</span></span></span> = <span class="eq inline"><span class="frac"><span>14</span><span>55</span></span></span><br>|1⟩：<span class="eq inline"><span class="frac"><span>4² + 5²</span><span>55</span></span></span> = <span class="eq inline"><span class="frac"><span>41</span><span>55</span></span></span></span></div>
+      <div class="pmr-ex"><span class="math">|0⟩：<span class="eq inline"><span class="frac"><span>1² + 1² + 1²</span><span>4</span></span></span> = <span class="eq inline"><span class="frac"><span>3</span><span>4</span></span></span><br>|1⟩：<span class="eq inline"><span class="frac"><span>1²</span><span>4</span></span></span> = <span class="eq inline"><span class="frac"><span>1</span><span>4</span></span></span></span></div>
     </div>
     <div class="pmr-c pop" style="--d:.2s;--c:var(--blue)">
       <div class="pmr-n">ステップ 3</div>
       <div class="pmr-t">測定した値の項だけ残し、<b class="kb">確率の平方根で割った</b> ものが測定後の状態</div>
-      <div class="pmr-ex"><span class="math">|0⟩ のとき：<span class="eq inline"><span class="frac"><span>1</span><span>√14</span></span></span>(|000⟩ + 2|001⟩ + 3|010⟩)<br>|1⟩ のとき：<span class="eq inline"><span class="frac"><span>1</span><span>√41</span></span></span>(4|110⟩ + 5|111⟩)</span></div>
+      <div class="pmr-ex"><span class="math">|0⟩ のとき：<span class="eq inline"><span class="frac"><span>1</span><span>√3</span></span></span>(|000⟩ + |001⟩ + |010⟩)<br>|1⟩ のとき：|111⟩</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1220,7 +1187,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <!-- 8.5.3 具体例 2 -->
 <section class="slide" data-id="pm2">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.5 一部の量子ビットの測定</div>
-  <h2>左の 2 量子ビットを測定する<small>8.5.3（pp.202–204）</small></h2>
+  <h2>左の 2 量子ビットを測定する<small>8.5.3（pp.202–204・例を簡単にした）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr)">
     <div class="card pop pm-card">
       <div class="eqrow pm-st" id="pm2St"></div>
@@ -1237,14 +1204,14 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
   <div class="pageno"></div>
 </section>
 
-<!-- SECTION 4 -->
+<!-- SECTION 3 -->
 <section class="slide door" style="--c:var(--green)">
-  <div class="door-bg">4</div>
+  <div class="door-bg">3</div>
   <div class="door-wrap">
-    <div class="door-num">4</div>
+    <div class="door-num">3</div>
     <div>
-      <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 4</div>
-      <h1 class="pop" style="--d:.1s">テンソル積を用いた<br>計算</h1>
+      <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 3</div>
+      <h1 class="pop" style="--d:.1s">n 量子ビットゲートの<br>計算</h1>
       <p class="door-lead pop" style="--d:.2s">1 量子ビットのテンソル積で計算を簡単に（8.6）</p>
       <div class="door-topics pop" style="--d:.3s"><span>定理 8.1</span><span>8 × 8 行列 と 2 × 2 行列</span></div>
     </div>
@@ -1276,13 +1243,13 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
   <div class="pageno"></div>
 </section>
 
-<!-- SECTION 5 -->
+<!-- SECTION 4 -->
 <section class="slide door" style="--c:var(--accent)">
-  <div class="door-bg">5</div>
+  <div class="door-bg">4</div>
   <div class="door-wrap">
-    <div class="door-num">5</div>
+    <div class="door-num">4</div>
     <div>
-      <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 5</div>
+      <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 4</div>
       <h1 class="pop" style="--d:.1s">代表的な<br>n 量子ビットの量子ゲート</h1>
       <p class="door-lead pop" style="--d:.2s">3 量子ビットの CCNOT と CSWAP（8.7）</p>
       <div class="door-topics pop" style="--d:.3s"><span>トフォリゲート</span><span>n 量子ビット・トフォリゲート</span><span>フレドキンゲート</span></div>
@@ -1295,12 +1262,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="tf">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.7 代表的な n 量子ビットの量子ゲート</div>
   <h2>トフォリゲートの行列は 8 × 8<small>8.7.1・図 8.1（pp.207–209）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
-    <div class="card pop g3c">
-      <svg class="gsim" id="tfSvg"></svg>
-      <div class="maptbl two" id="tfTbl"></div>
-      <div class="btns" style="justify-content:center;margin-top:6px"><button class="b" id="tfAuto" data-autoplay>▶ 自動再生</button></div>
-    </div>
+  <div class="body cols" style="grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)">
     <div class="col">
       <div class="eqrow pop" style="--d:.1s;justify-content:center"><span>CCNOT :=</span><span id="tfMat" class="big8"></span></div>
       <ul class="plain pop" style="--d:.2s">
@@ -1312,6 +1274,11 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
         <div class="row" style="gap:16px"><div id="anN" style="width:120px;flex:none"></div><div>制御ビットを n−1 個に拡張したもの ＝ <b class="kb">n 量子ビット・トフォリゲート</b>。量子誤り訂正（第10章）やグローバーのアルゴリズム（第12章）で使う</div></div>
       </div>
     </div>
+    <div class="card pop g3c">
+      <svg class="gsim" id="tfSvg"></svg>
+      <div class="maptbl two" id="tfTbl"></div>
+      <div class="btns" style="justify-content:center;margin-top:6px"><button class="b" id="tfAuto" data-autoplay>▶ 自動再生</button></div>
+    </div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -1320,12 +1287,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="fr">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.7 代表的な n 量子ビットの量子ゲート</div>
   <h2>フレドキン：制御が |1⟩ なら 2 つを入れ替え<small>8.7.2・図 8.3（pp.210–212）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
-    <div class="card pop g3c">
-      <svg class="gsim" id="frSvg"></svg>
-      <div class="maptbl two" id="frTbl"></div>
-      <div class="btns" style="justify-content:center;margin-top:6px"><button class="b" id="frAuto" data-autoplay>▶ 自動再生</button></div>
-    </div>
+  <div class="body cols" style="grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)">
     <div class="col">
       <div class="eqrow pop" style="--d:.1s;justify-content:center"><span>CSWAP :=</span><span id="frMat" class="big8"></span></div>
       <ul class="plain pop" style="--d:.2s">
@@ -1333,20 +1295,25 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
         <li>制御ビットが <b class="k">|1⟩</b> のときだけ、2 つの標的ビットを <b class="k">入れ替える</b></li>
       </ul>
     </div>
+    <div class="card pop g3c">
+      <svg class="gsim" id="frSvg"></svg>
+      <div class="maptbl two" id="frTbl"></div>
+      <div class="btns" style="justify-content:center;margin-top:6px"><button class="b" id="frAuto" data-autoplay>▶ 自動再生</button></div>
+    </div>
   </div>
   <div class="pageno"></div>
 </section>
 
-<!-- SECTION 6 -->
+<!-- SECTION 5 -->
 <section class="slide door" style="--c:var(--purple)">
-  <div class="door-bg">6</div>
+  <div class="door-bg">5</div>
   <div class="door-wrap">
-    <div class="door-num">6</div>
+    <div class="door-num">5</div>
     <div>
-      <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 6</div>
-      <h1 class="pop" style="--d:.1s">重ね合わせ・オラクル</h1>
-      <p class="door-lead pop" style="--d:.2s">たくさんの状態を一度に計算する（8.8・8.9）</p>
-      <div class="door-topics pop" style="--d:.3s"><span>重ね合わせに CCNOT</span><span>計算量 O(2²ⁿ)</span><span>ブラックボックス関数</span><span>オラクルの中身（補足）</span></div>
+      <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 5</div>
+      <h1 class="pop" style="--d:.1s">重ね合わせ状態を<br>利用した計算</h1>
+      <p class="door-lead pop" style="--d:.2s">たくさんの状態を一度に計算する（8.8）</p>
+      <div class="door-topics pop" style="--d:.3s"><span>重ね合わせに CCNOT</span><span>測定で得られるのは 1 個</span><span>計算量 O(2²ⁿ)</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1356,13 +1323,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="sp">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.8 重ね合わせ状態を利用した計算</div>
   <h2>4 つの状態に一度に CCNOT をかけられる<small>8.8・図 8.4（pp.212–213）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)">
-    <div class="card pop sp-card">
-      <div id="spQC" style="width:330px;margin:0 auto"></div>
-      <div class="amp8" id="spAmp"></div>
-      <div class="eqrow sp-eq" id="spEq"></div>
-      <div id="spStp"></div>
-    </div>
+  <div class="body cols" style="grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)">
     <div class="col">
       <ul class="plain pop" style="--d:.1s">
         <li><span class="math nw">H ⊗ H ⊗ I</span> で、左 2 量子ビットを <b class="k">重ね合わせ</b> にする</li>
@@ -1370,6 +1331,12 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
         <li>n 量子ビットなら <b class="kb">2ⁿ 個</b> の状態に一度にユニタリ発展できる</li>
       </ul>
       <div class="point blue pop" style="--d:.2s;font-size:20px">古典コンピュータには重ね合わせ状態がなく、1 個の状態にしか演算できない</div>
+    </div>
+    <div class="card pop sp-card">
+      <div id="spQC" style="width:330px;margin:0 auto"></div>
+      <div class="amp8" id="spAmp"></div>
+      <div class="eqrow sp-eq" id="spEq"></div>
+      <div id="spStp"></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1413,6 +1380,21 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
         <li>量子コンピュータなら、ユニタリ発展は <b class="kb">一定時間以内</b> に実行できる</li>
       </ul>
       <div class="tiny pop" style="--d:.2s">※ 計算量の正確な定義ではなく、標準的な表現。疎行列ならもっと速いが、指数関数的なのは変わらない</div>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- SECTION 6 -->
+<section class="slide door" style="--c:var(--blue)">
+  <div class="door-bg">6</div>
+  <div class="door-wrap">
+    <div class="door-num">6</div>
+    <div>
+      <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 6</div>
+      <h1 class="pop" style="--d:.1s">オラクル</h1>
+      <p class="door-lead pop" style="--d:.2s">中身は分からないが実行できる関数（8.9）</p>
+      <div class="door-topics pop" style="--d:.3s"><span>ブラックボックス関数</span><span>一般的な書き方</span><span>オラクルの中身（補足）</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1466,9 +1448,9 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
     <div class="door-num">7</div>
     <div>
       <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 7 ／ 発展</div>
-      <h1 class="pop" style="--d:.1s">任意の 2ⁿ 次正方行列の<br>かけ算を計算する</h1>
+      <h1 class="pop" style="--d:.1s">非ユニタリ行列の<br>かけ算を計算する</h1>
       <p class="door-lead pop" style="--d:.2s">パウリ行列で分解して、量子と古典で分担（8.10）</p>
-      <div class="door-topics pop" style="--d:.3s"><span>パウリ行列 X・Y・Z</span><span>A<sub>1</sub> = Σ α<sub>k</sub>σ<sub>k</sub></span><span>定理 8.2</span><span>4ⁿ 回の計算</span></div>
+      <div class="door-topics pop" style="--d:.3s"><span>パウリ行列 X・Y・Z</span><span>A<sub>1</sub> = Σ α<sub>k</sub>σ<sub>k</sub></span><span>定理 8.2</span><span>4ⁿ 回の計算</span><span>VQE・QAOA（補足）</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1617,12 +1599,11 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
   <h2>第8章のまとめ<small>8.1〜8.10（pp.192–222）</small></h2>
   <div class="body sumlist">
     <div class="sl pop" style="--d:0s;--c:var(--teal)"><span class="sl-n">1</span><div>n 量子ビットは <b class="k">2ⁿ 個の複素数</b> を並べたベクトル。<span class="math">|100⟩ = |4⟩</span> とも書き、2ⁿ 種類の重ね合わせを表せる</div></div>
-    <div class="sl pop" style="--d:.03s;--c:var(--blue)"><span class="sl-n">2</span><div>ユニタリ発展は <b class="k">2ⁿ × 2ⁿ</b> のユニタリ行列</div></div>
-    <div class="sl pop" style="--d:.05s;--c:var(--pink)"><span class="sl-n">3</span><div>一部の測定は 3 ステップ：<b>項をまとめる → 係数の 2 乗和が確率 → 確率の平方根で割る</b></div></div>
-    <div class="sl pop" style="--d:.1s;--c:var(--green)"><span class="sl-n">4</span><div>2 × 2 のテンソル積に分ければ計算が楽（定理 8.1）</div></div>
-    <div class="sl pop" style="--d:.15s;--c:var(--accent)"><span class="sl-n">5</span><div><b class="k">トフォリ（CCNOT）</b>：8 × 8 のユニタリ行列。<b class="k">フレドキン（CSWAP）</b>：制御が |1⟩ なら入れ替え</div></div>
-    <div class="sl pop" style="--d:.2s;--c:var(--purple)"><span class="sl-n">6</span><div>重ね合わせなら 2ⁿ 個の状態に一度に計算できるが、測定で得られるのは 1 個だけ。中身が分からなくても実行できるオラクル <b>U<sub>f</sub></b></div></div>
-    <div class="sl pop" style="--d:.25s;--c:var(--gold)"><span class="sl-n">7</span><div>任意の行列もパウリ行列のテンソル積の和で表せば、量子と古典の分担で計算できる（<b>4ⁿ 回</b>）</div></div>
+    <div class="sl pop" style="--d:.05s;--c:var(--pink)"><span class="sl-n">2</span><div>一部の測定は 3 ステップ：<b>項をまとめる → 係数の 2 乗和が確率 → 確率の平方根で割る</b></div></div>
+    <div class="sl pop" style="--d:.1s;--c:var(--green)"><span class="sl-n">3</span><div>2 × 2 のテンソル積に分ければ計算が楽（定理 8.1）</div></div>
+    <div class="sl pop" style="--d:.15s;--c:var(--accent)"><span class="sl-n">4</span><div><b class="k">トフォリ（CCNOT）</b>：8 × 8 のユニタリ行列。<b class="k">フレドキン（CSWAP）</b>：制御が |1⟩ なら入れ替え</div></div>
+    <div class="sl pop" style="--d:.2s;--c:var(--purple)"><span class="sl-n">5</span><div>重ね合わせなら 2ⁿ 個の状態に一度に計算できるが、測定で得られるのは 1 個だけ。中身が分からなくても実行できるオラクル <b>U<sub>f</sub></b></div></div>
+    <div class="sl pop" style="--d:.25s;--c:var(--gold)"><span class="sl-n">6</span><div>任意の行列もパウリ行列のテンソル積の和で表せば、量子と古典の分担で計算できる（<b>4ⁿ 回</b>）</div></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -2024,29 +2005,20 @@ const RQ = (() => {
    第8章 n 量子ビットの世界 ― スライド固有のスクリプト
    ===================================================================== */
 
-/* ---------- 8.4 ユニタリ発展：2ⁿ × 2ⁿ のマス目 ---------- */
-{
-  const g = $('#ueGrid');
-  stepper('#ueStp', 5, k => {
-    const n = k + 1, s = 2 ** n;
-    g.style.gridTemplateColumns = `repeat(${s},1fr)`;
-    g.innerHTML = '<i></i>'.repeat(s * s);
-    $('#ueLbl').innerHTML = `${n} 量子ビットのとき：<b>${s} × ${s}</b> のユニタリ行列`;
-  }, 1500);
-}
-
 /* ---------- 8.5 一部の量子ビットの測定 ---------- */
 function partial(id, m) {
-  const T = [['000', 1], ['001', 2], ['010', 3], ['110', 4], ['111', 5]], N = 55;
+  // 教科書の例より簡単な例：1/2(|000⟩ + |001⟩ + |010⟩ + |111⟩)
+  const T = [['000', 1], ['001', 1], ['010', 1], ['111', 1]], N = 4, PRE = FI(1, 2);
+  const gcd = (a, b) => (b ? gcd(b, a % b) : a), FRr = (a, b) => { const g = gcd(a, b); return FI(a / g, b / g); };
   const GC8 = ['var(--accent)', 'var(--blue)', 'var(--green)', 'var(--purple)'];
   const term = ([k, c], col = true) => `${c === 1 ? '' : c}|${col ? `<u>${k.slice(0, m)}</u>` : k.slice(0, m)}${k.slice(m)}⟩`;
-  $(`#${id}St`).innerHTML = `<span>|φ⟩ = ${FI(1, '√55')}(${T.map(([k, c]) => `${c === 1 ? '' : c}|<span class="t" style="color:${GC8[parseInt(k.slice(0, m), 2)]};font-weight:900">${k.slice(0, m)}</span>${k.slice(m)}⟩`).join(' + ')})</span>`;
+  $(`#${id}St`).innerHTML = `<span>|φ⟩ = ${PRE}(${T.map(([k, c]) => `${c === 1 ? '' : c}|<span class="t" style="color:${GC8[parseInt(k.slice(0, m), 2)]};font-weight:900">${k.slice(0, m)}</span>${k.slice(m)}⟩`).join(' + ')})</span>`;
   const groups = [...Array(2 ** m)].map((_, p) => {
     const pre = bits(p, m), ts = T.filter(([k]) => k.startsWith(pre)), S = ts.reduce((s, [, c]) => s + c * c, 0);
     const state = !ts.length ? '—' : ts.length === 1 ? `|${ts[0][0]}⟩` : `${FI(1, '√' + S)}(${ts.map(t => term(t, false)).join(' + ')})`;
     return { pre, ts, S, html: `<div class="pmg" style="--gc:${GC8[p]}"><div class="gh">左側が |${pre}⟩</div>
       <div class="gt">${ts.length ? ts.map(t => `<span class="term">${term(t)}</span>`).join('') : '<span class="none">項がない</span>'}</div>
-      <div class="gp"><span class="lab">確率</span>${ts.length ? `${FI(ts.map(([, c]) => c + '²').join(' + '), N)} = <b>${FI(S, N)}</b>` : '<b>0</b>'}</div>
+      <div class="gp"><span class="lab">確率</span>${ts.length ? `${FI(ts.map(([, c]) => c + '²').join(' + '), N)} = <b>${FRr(S, N)}</b>` : '<b>0</b>'}</div>
       <div class="gs"><span class="lab">測定後の状態</span>${state}</div></div>` };
   });
   const box = $(`#${id}G`);
@@ -2183,16 +2155,6 @@ oracleBox($('#orSvg'), { ys: [70, 180], ins: ['|x⟩', '|y⟩'], outs: ['|x⟩',
     g.style.gridAutoRows = sz + 'px';
     g.innerHTML = '<i></i>'.repeat(s * s);
     $('#anLbl').innerHTML = `${n} 量子ビットのとき：4<sup>${n}</sup> = <b>${4 ** n}</b> 回の計算`;
-  }, 1500);
-}
-
-/* ---------- 8.2 2ⁿ 個の複素数を並べたベクトル ---------- */
-{
-  const v = $('#gqVec');
-  stepper('#gqStp', 5, k => {
-    const n = k + 1, m = 2 ** n, h = Math.min(40, Math.floor(330 / m));
-    v.innerHTML = [...Array(m)].map((_, i) => `<i style="height:${h}px;font-size:${Math.min(24, h - 6)}px">${h >= 20 ? `a<sub>${i}</sub>` : ''}</i>`).join('');
-    $('#gqLbl').innerHTML = `${n} 量子ビットのとき：<br>2<sup>${n}</sup> = <b>${m}</b> 個の複素数`;
   }, 1500);
 }
 

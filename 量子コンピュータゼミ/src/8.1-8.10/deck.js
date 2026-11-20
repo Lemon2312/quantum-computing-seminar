@@ -2,29 +2,20 @@
    第8章 n 量子ビットの世界 ― スライド固有のスクリプト
    ===================================================================== */
 
-/* ---------- 8.4 ユニタリ発展：2ⁿ × 2ⁿ のマス目 ---------- */
-{
-  const g = $('#ueGrid');
-  stepper('#ueStp', 5, k => {
-    const n = k + 1, s = 2 ** n;
-    g.style.gridTemplateColumns = `repeat(${s},1fr)`;
-    g.innerHTML = '<i></i>'.repeat(s * s);
-    $('#ueLbl').innerHTML = `${n} 量子ビットのとき：<b>${s} × ${s}</b> のユニタリ行列`;
-  }, 1500);
-}
-
 /* ---------- 8.5 一部の量子ビットの測定 ---------- */
 function partial(id, m) {
-  const T = [['000', 1], ['001', 2], ['010', 3], ['110', 4], ['111', 5]], N = 55;
+  // 教科書の例より簡単な例：1/2(|000⟩ + |001⟩ + |010⟩ + |111⟩)
+  const T = [['000', 1], ['001', 1], ['010', 1], ['111', 1]], N = 4, PRE = FI(1, 2);
+  const gcd = (a, b) => (b ? gcd(b, a % b) : a), FRr = (a, b) => { const g = gcd(a, b); return FI(a / g, b / g); };
   const GC8 = ['var(--accent)', 'var(--blue)', 'var(--green)', 'var(--purple)'];
   const term = ([k, c], col = true) => `${c === 1 ? '' : c}|${col ? `<u>${k.slice(0, m)}</u>` : k.slice(0, m)}${k.slice(m)}⟩`;
-  $(`#${id}St`).innerHTML = `<span>|φ⟩ = ${FI(1, '√55')}(${T.map(([k, c]) => `${c === 1 ? '' : c}|<span class="t" style="color:${GC8[parseInt(k.slice(0, m), 2)]};font-weight:900">${k.slice(0, m)}</span>${k.slice(m)}⟩`).join(' + ')})</span>`;
+  $(`#${id}St`).innerHTML = `<span>|φ⟩ = ${PRE}(${T.map(([k, c]) => `${c === 1 ? '' : c}|<span class="t" style="color:${GC8[parseInt(k.slice(0, m), 2)]};font-weight:900">${k.slice(0, m)}</span>${k.slice(m)}⟩`).join(' + ')})</span>`;
   const groups = [...Array(2 ** m)].map((_, p) => {
     const pre = bits(p, m), ts = T.filter(([k]) => k.startsWith(pre)), S = ts.reduce((s, [, c]) => s + c * c, 0);
     const state = !ts.length ? '—' : ts.length === 1 ? `|${ts[0][0]}⟩` : `${FI(1, '√' + S)}(${ts.map(t => term(t, false)).join(' + ')})`;
     return { pre, ts, S, html: `<div class="pmg" style="--gc:${GC8[p]}"><div class="gh">左側が |${pre}⟩</div>
       <div class="gt">${ts.length ? ts.map(t => `<span class="term">${term(t)}</span>`).join('') : '<span class="none">項がない</span>'}</div>
-      <div class="gp"><span class="lab">確率</span>${ts.length ? `${FI(ts.map(([, c]) => c + '²').join(' + '), N)} = <b>${FI(S, N)}</b>` : '<b>0</b>'}</div>
+      <div class="gp"><span class="lab">確率</span>${ts.length ? `${FI(ts.map(([, c]) => c + '²').join(' + '), N)} = <b>${FRr(S, N)}</b>` : '<b>0</b>'}</div>
       <div class="gs"><span class="lab">測定後の状態</span>${state}</div></div>` };
   });
   const box = $(`#${id}G`);
@@ -161,16 +152,6 @@ oracleBox($('#orSvg'), { ys: [70, 180], ins: ['|x⟩', '|y⟩'], outs: ['|x⟩',
     g.style.gridAutoRows = sz + 'px';
     g.innerHTML = '<i></i>'.repeat(s * s);
     $('#anLbl').innerHTML = `${n} 量子ビットのとき：4<sup>${n}</sup> = <b>${4 ** n}</b> 回の計算`;
-  }, 1500);
-}
-
-/* ---------- 8.2 2ⁿ 個の複素数を並べたベクトル ---------- */
-{
-  const v = $('#gqVec');
-  stepper('#gqStp', 5, k => {
-    const n = k + 1, m = 2 ** n, h = Math.min(40, Math.floor(330 / m));
-    v.innerHTML = [...Array(m)].map((_, i) => `<i style="height:${h}px;font-size:${Math.min(24, h - 6)}px">${h >= 20 ? `a<sub>${i}</sub>` : ''}</i>`).join('');
-    $('#gqLbl').innerHTML = `${n} 量子ビットのとき：<br>2<sup>${n}</sup> = <b>${m}</b> 個の複素数`;
   }, 1500);
 }
 
