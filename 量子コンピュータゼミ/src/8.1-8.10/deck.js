@@ -108,18 +108,28 @@ const S0 = [1, 0, 0, 0, 0, 0, 0, 0], S1 = [.5, 0, .5, 0, .5, 0, .5, 0], S2 = [.5
   }, 1200);
 }
 
-/* ---------- 8.9 オラクル（図 8.6） ---------- */
-{
-  const svg = $('#orSvg'), Y = [70, 160], x0 = 190, x1 = 330;
-  Y.forEach((y, q) => {
-    el('line', { x1: 80, y1: y, x2: 440, y2: y, class: 'w' }, svg);
-    el('text', { x: 70, y: y + 8, 'text-anchor': 'end', style: 'font-size:26px' }, svg).textContent = q ? '|y⟩' : '|x⟩';
-    el('text', { x: 450, y: y + 8, style: 'font-size:26px' }, svg).textContent = q ? '|y ⊕ f(x)⟩' : '|x⟩';
+/* ---------- 8.9 オラクル（一般的な形：n 量子ビットの x、m 量子ビットの y） ---------- */
+function oracleBox(svg, o) {
+  // o: {ys:[..], ins:[..], outs:[..], slash:[..], x0, x1, label, q}
+  o.ys.forEach((y, k) => {
+    el('line', { x1: 86, y1: y, x2: o.x2 || 430, y2: y, class: 'w' }, svg);
+    el('text', { x: 78, y: y + 8, 'text-anchor': 'end', style: 'font-size:24px' }, svg).textContent = o.ins[k];
+    el('text', { x: (o.x2 || 430) + 8, y: y + 8, style: 'font-size:24px' }, svg).textContent = o.outs[k];
+    if (o.slash && o.slash[k]) { el('line', { x1: 112, y1: y + 10, x2: 128, y2: y - 10, style: 'stroke:var(--ink);stroke-width:2.5' }, svg); el('text', { x: 124, y: y - 14, style: 'font-size:16px;font-style:italic' }, svg).textContent = o.slash[k]; }
   });
-  el('rect', { x: x0, y: 28, width: x1 - x0, height: 174, rx: 14, class: 'bx' }, svg);
-  rich(el('text', { x: (x0 + x1) / 2, y: 100, class: 'bxt' }, svg), 'U_{f}');
-  el('text', { x: (x0 + x1) / 2, y: 150, class: 'q' }, svg).textContent = '?';
+  const top = Math.min(...o.ys) - 34, h = Math.max(...o.ys) - Math.min(...o.ys) + 68;
+  el('rect', { x: o.x0, y: top, width: o.x1 - o.x0, height: h, rx: 14, class: 'bx' }, svg);
+  rich(el('text', { x: (o.x0 + o.x1) / 2, y: top + h / 2 - (o.q ? 12 : 0), class: 'bxt' }, svg), o.label);
+  if (o.q) el('text', { x: (o.x0 + o.x1) / 2, y: top + h / 2 + 26, class: 'q', style: 'font-size:30px' }, svg).textContent = '?';
 }
+oracleBox($('#orSvg'), { ys: [70, 180], ins: ['|x⟩', '|y⟩'], outs: ['|x⟩', '|y ⊕ f(x)⟩'], slash: ['n', 'm'], x0: 190, x1: 330, label: 'U_{f}', q: true });
+oracleBox($('#opSvg1'), { ys: [60], ins: ['|x⟩'], outs: ['(−1)^f(x)|x⟩'], slash: ['n'], x0: 200, x1: 320, x2: 400, label: 'O_{f}' });
+oracleBox($('#opSvg2'), { ys: [50, 120], ins: ['|x⟩', '|−⟩'], outs: ['(−1)^f(x)|x⟩', '|−⟩'], slash: ['n', ''], x0: 200, x1: 320, x2: 400, label: 'U_{f}' });
+// (−1)^f(x) の指数を上付きにする
+['#opSvg1', '#opSvg2'].forEach(id => $(id).querySelectorAll('text').forEach(t => {
+  if (!t.textContent.startsWith('(−1)^')) return;
+  t.textContent = ''; el('tspan', {}, t).textContent = '(−1)'; el('tspan', { dy: -10, 'font-size': '15px' }, t).textContent = 'f(x)'; el('tspan', { dy: 10 }, t).textContent = '|x⟩';
+}));
 
 /* ---------- 8.10.1 量子で 4 回、古典で足す ---------- */
 {
