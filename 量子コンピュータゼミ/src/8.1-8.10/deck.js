@@ -71,9 +71,6 @@ partial('pm2', 2);
   $('#tpBig').innerHTML = `<span>(X ⊗ X ⊗ Z)|101⟩ =</span>${matH(M, 'm8', (i, j, v) => (j === 5 ? (v ? 'hx' : 'hc') : ''))}${colH(e, (i, x) => (x ? 'hx' : ''))}<span>=</span>${colH(r, (i, x) => (x ? 'hx' : ''))}<span>= <span class="res">−|011⟩</span></span>`;
 }
 
-/* ---------- 8.6.2 記法 ---------- */
-drawQC('#ntA', { n: 4, ops: [{ g: 'H', q: 0, col: 0 }], colW: 70, maxW: '200px' });
-drawQC('#ntB', { n: 4, ops: [0, 1, 2, 3].map(q => ({ g: 'H', q, col: 0 })), colW: 70, maxW: '200px' });
 
 const all3 = [...Array(8)].map((_, i) => [i >> 2 & 1, i >> 1 & 1, i & 1]);
 const toffoli = (g, x, Y) => { el('line', { x1: x, y1: Y[0], x2: x, y2: Y[2], class: 'gl' }, g); drawCtl(g, x, Y[0]); drawCtl(g, x, Y[1]); drawTgt(g, x, Y[2]); };
@@ -81,11 +78,6 @@ const fCC = v => [v[0], v[1], v[2] ^ (v[0] & v[1])];
 const Y3 = [56, 136, 216];
 
 gsim({ svg: '#tfSvg', tbl: '#tfTbl', auto: '#tfAuto', n: 3, Y: Y3, cases: all3, start: 6, draw: toffoli, f: fCC, active: v => v[0] && v[1], table: pairTbl('CCNOT'), bottom: 30 });
-gsim({
-  svg: '#anSvg', tbl: '#anTbl', auto: '#anAuto', n: 3, Y: [50, 115, 180], cases: [[0, 0, 0], [0, 1, 0], [1, 0, 0], [1, 1, 0]], start: 3, fixed: { 2: 0 },
-  inLab: ['入力 1', '入力 2', '固定値'], outLab: ['', '', '出力'], draw: toffoli, f: fCC, active: v => v[0] && v[1], bottom: 30,
-  table: (cs, f) => `<table class="tt small"><thead><tr><th>入力 1（q<sub>0</sub>）</th><th>入力 2（q<sub>1</sub>）</th><th class="out">出力（q<sub>2</sub>）</th></tr></thead><tbody>${cs.map((c, i) => `<tr data-i="${i}"><td>|${c[0]}⟩</td><td>|${c[1]}⟩</td><td class="out ${f(c)[2] ? 'one' : ''}">|${f(c)[2]}⟩</td></tr>`).join('')}</tbody></table>`,
-});
 drawQC('#anN', { n: 4, ops: [{ g: 'CX', c: [0, 1, 2], t: 3, col: 0 }], colW: 60, rowH: 40 });
 gsim({
   svg: '#frSvg', tbl: '#frTbl', auto: '#frAuto', n: 3, Y: Y3, cases: all3, start: 5, bottom: 30,

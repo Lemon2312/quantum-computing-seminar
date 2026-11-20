@@ -804,6 +804,19 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .rv-g2 .vec.m4{font-size:19px}
 .rv-maps{font-size:22px}
 .rv-qc2{width:110px}
+/* 説明済みの内容を削ったページ：文字を大きくして余白を埋める */
+.slide[data-id="tf"] .big8 .vec.m8{font-size:16px;column-gap:7px}
+.slide[data-id="tf"] ul.plain li{font-size:21px;margin:6px 0}
+.slide[data-id="tf"] .point{font-size:18px !important;margin-top:8px}
+.slide[data-id="ms"] .defbox{font-size:23px}
+.slide[data-id="ms"] .defbox ul.plain.sm li{font-size:22px}
+.slide[data-id="ue"] .defbox,.slide[data-id="ue"] .point{font-size:24px}
+.slide[data-id="tp"] .thm6{font-size:23px}
+.slide[data-id="tp"] .thm6 .math{font-size:22px !important}
+.slide[data-id="xr"] ul.plain li{font-size:27px}
+.slide[data-id="pm1"] .point{font-size:24px !important}
+.slide[data-id="pa"] ul.plain li{font-size:25px}
+.slide[data-id="pa"] .eqrow{font-size:24px !important}
 
 </style>
 </head>
@@ -1039,7 +1052,6 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
           <li>測定後の状態は、<b class="k">得られた測定値に変化</b>する</li>
         </ul>
       </div>
-      <div class="point blue pop" style="--d:.2s">古典コンピュータと違うのは<br>(1) 測定値は <b class="kb">確率</b> で変わる<br>(2) 測定で <b class="kb">状態が変化</b> する</div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1057,10 +1069,6 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
     </div>
     <div class="col">
       <div class="defbox pop" style="--d:.1s">量子状態 <span class="math">|φ⟩</span> は、<b class="k nw">2ⁿ × 2ⁿ のユニタリ行列</b> <span class="math">U</span> を使って <span class="math nw">U|φ⟩</span> に写すことができる。これを <b>ユニタリ発展</b> という</div>
-      <table class="tt small pop ue-tbl" style="--d:.2s">
-        <thead><tr><th>量子ビット数</th><th class="out">行列のサイズ</th></tr></thead>
-        <tbody><tr><td>1</td><td>2 × 2</td></tr><tr><td>2</td><td>4 × 4</td></tr><tr><td>3</td><td>8 × 8</td></tr><tr><td>n</td><td><b>2ⁿ × 2ⁿ</b></td></tr></tbody>
-      </table>
       <div class="point pop" style="--d:.3s">量子ビットが増えると、行列のサイズは <b class="k">指数関数的</b> に大きくなる</div>
     </div>
   </div>
@@ -1093,11 +1101,6 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
       <div class="pm-ctl"><div id="pm1Stp"></div><button class="b" id="pm1Go">🎲 測定する</button></div>
     </div>
     <div class="col">
-      <ul class="plain pop" style="--d:.1s">
-        <li>左側の量子ビットで <b class="k">項をまとめる</b></li>
-        <li>まとめた項の係数の絶対値 2 乗和が <b class="k">確率</b></li>
-        <li>残った項は確率の和が 1 にならないので、<b class="kb nw">確率の平方根</b> で割る</li>
-      </ul>
       <div class="point blue pop" style="--d:.2s;font-size:20px"><span class="math nw"><span class="eq inline"><span class="frac"><span>14</span><span>55</span></span></span> ≠ 1</span> なので、<span class="math nw">√<span class="eq inline"><span class="frac"><span>14</span><span>55</span></span></span></span> で割ったものが測定後の量子状態</div>
     </div>
   </div>
@@ -1158,7 +1161,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
       <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 4</div>
       <h1 class="pop" style="--d:.1s">テンソル積を用いた計算</h1>
       <p class="door-lead pop" style="--d:.2s">1 量子ビットのテンソル積で計算を簡単に（8.6）</p>
-      <div class="door-topics pop" style="--d:.3s"><span>定理 8.1</span><span>8 × 8 行列 と 2 × 2 行列</span><span>H<sub>0</sub>・H<sup>⊗n</sup></span></div>
+      <div class="door-topics pop" style="--d:.3s"><span>定理 8.1</span><span>8 × 8 行列 と 2 × 2 行列</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1183,27 +1186,6 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
       <div class="thm6 pop" style="--d:.15s"><span class="thm-t">定理 8.1</span><span class="math">U<sub>1</sub>, …, U<sub>n</sub></span> を 2 × 2 のユニタリ行列、<span class="math nw">|φ<sub>1</sub>⟩, …, |φ<sub>n</sub>⟩</span> を 1 量子ビットの量子状態とすると
         <div class="math" style="font-size:19px;margin-top:4px">(U<sub>1</sub> ⊗ ⋯ ⊗ U<sub>n</sub>)(|φ<sub>1</sub>⟩ ⊗ ⋯ ⊗ |φ<sub>n</sub>⟩)<br>= (U<sub>1</sub>|φ<sub>1</sub>⟩) ⊗ ⋯ ⊗ (U<sub>n</sub>|φ<sub>n</sub>⟩)</div>
       </div>
-      <div class="point blue pop" style="--d:.25s;font-size:20px">エンタングルした状態は 1 量子ビットのテンソル積に <b class="kb">分解できない</b> ので、この方法は使えない</div>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 8.6.2 記法の工夫 -->
-<section class="slide" data-id="nt">
-  <div class="chap">第8章 n 量子ビットの世界 ／ 8.6 1 量子ビットのテンソル積を用いた計算</div>
-  <h2>1 個だけなら H<sub>0</sub>、全部なら H<sup>⊗n</sup><small>8.6.2（pp.206–207）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
-    <div class="g2">
-      <div class="card pop nt-c"><div class="mp-lbl">0 番目だけに H</div><div id="ntA"></div><div class="eqrow nt-eq">H ⊗ I ⊗ I ⊗ I = <b>H<sub>0</sub></b></div></div>
-      <div class="card pop nt-c" style="--d:.1s"><div class="mp-lbl">すべてに H</div><div id="ntB"></div><div class="eqrow nt-eq">H ⊗ H ⊗ H ⊗ H = <b>H<sup>⊗4</sup></b></div></div>
-    </div>
-    <div class="col">
-      <ul class="plain pop" style="--d:.15s">
-        <li>ほかの量子ビットは <b class="k">単位行列 I</b> でユニタリ発展する</li>
-        <li><span class="math nw">H ⊗ I ⊗ ⋯ ⊗ I</span> を <b class="k nw">H<sub>0</sub></b> と書く（右下の 0 は「0 番目の量子ビットに H」）</li>
-        <li><span class="math nw">H ⊗ H ⊗ ⋯ ⊗ H</span> を <b class="kb nw">H<sup>⊗n</sup></b> と書く（「n 個のテンソル積」）</li>
-      </ul>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1218,7 +1200,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
       <div class="door-label pop"><span class="door-book">第8章 n 量子ビットの世界</span>SECTION 5</div>
       <h1 class="pop" style="--d:.1s;font-size:58px">代表的な<br>n 量子ビットの量子ゲート</h1>
       <p class="door-lead pop" style="--d:.2s">3 量子ビットの CCNOT と CSWAP（8.7）</p>
-      <div class="door-topics pop" style="--d:.3s"><span>トフォリゲート</span><span>トフォリゲートで AND</span><span>n 量子ビット・トフォリゲート</span><span>フレドキンゲート</span></div>
+      <div class="door-topics pop" style="--d:.3s"><span>トフォリゲート</span><span>n 量子ビット・トフォリゲート</span><span>フレドキンゲート</span></div>
     </div>
   </div>
   <div class="pageno"></div>
@@ -1227,7 +1209,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <!-- 8.7.1 トフォリ -->
 <section class="slide" data-id="tf">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.7 代表的な n 量子ビットの量子ゲート</div>
-  <h2>トフォリ：制御 2 つが |1⟩ なら標的を反転<small>8.7.1・図 8.1（pp.207–209）</small></h2>
+  <h2>トフォリゲートの行列は 8 × 8<small>8.7.1・図 8.1（pp.207–209）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
     <div class="card pop g3c">
       <svg class="gsim" id="tfSvg"></svg>
@@ -1239,26 +1221,6 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
       <ul class="plain pop" style="--d:.2s">
         <li>0・1 番目が <b class="k">制御ビット</b>、2 番目が <b class="kb">標的ビット</b>（<span class="math nw">CCNOT<sub>0,1,2</sub></span>）</li>
         <li>CNOT の標的ビットに CNOT をかける：<b class="nw">Controlled Controlled NOT</b></li>
-      </ul>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- トフォリで AND -->
-<section class="slide" data-id="and">
-  <div class="chap">第8章 n 量子ビットの世界 ／ 8.7 代表的な n 量子ビットの量子ゲート</div>
-  <h2>q<sub>2</sub> に |0⟩ を入れたトフォリ ＝ AND<small>図 8.2・表 8.1（pp.209–210）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
-    <div class="card pop g3c">
-      <svg class="gsim" id="anSvg"></svg>
-      <div id="anTbl"></div>
-      <div class="btns" style="justify-content:center;margin-top:6px"><button class="b" id="anAuto" data-autoplay>▶ 自動再生</button></div>
-    </div>
-    <div class="col">
-      <ul class="plain pop" style="--d:.1s">
-        <li>q<sub>0</sub> を入力 1、q<sub>1</sub> を入力 2、q<sub>2</sub> に固定値 <span class="math">|0⟩</span></li>
-        <li>出力 q<sub>2</sub> は、古典回路の <b class="k">AND</b> と同じ真理値表</li>
       </ul>
       <div class="point blue pop" style="--d:.2s;font-size:20px">
         <div class="row" style="gap:16px"><div id="anN" style="width:120px;flex:none"></div><div>制御ビットを n−1 個に拡張したもの ＝ <b class="kb">n 量子ビット・トフォリゲート</b>。量子誤り訂正（第10章）やグローバーのアルゴリズム（第12章）で使う</div></div>
@@ -1382,7 +1344,6 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
     </div>
     <div class="col">
       <ul class="plain pop" style="--d:.1s">
-        <li><b class="k">排他的論理和</b>（XOR、⊕）：どちらか一方だけが <span class="math">|1⟩</span> なら <span class="math">|1⟩</span>、それ以外は <span class="math">|0⟩</span></li>
         <li>x が 0 でも 1 でも <span class="math nw"><b>|x ⊕ 0⟩ = |0 ⊕ x⟩ = |x⟩</b></span>（第11章・第12章で使う）</li>
       </ul>
     </div>
@@ -1458,9 +1419,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
     </div>
     <div class="col">
       <div class="eqrow pop" style="--d:.1s;font-size:19px;justify-content:center;gap:6px">
-        <span>X =</span><span class="vec m2"><span>0</span><span>1</span><span>1</span><span>0</span></span>
         <span>Y =</span><span class="vec m2"><span>0</span><span>−i</span><span>i</span><span>0</span></span>
-        <span>Z =</span><span class="vec m2"><span>1</span><span>0</span><span>0</span><span>−1</span></span>
       </div>
       <ul class="plain pop" style="--d:.2s">
         <li><span class="math nw">σ<sub>0</sub> := I, σ<sub>1</sub> := X, σ<sub>2</sub> := Y, σ<sub>3</sub> := Z</span> とすると <span class="math nw"><b>A<sub>1</sub> = <span class="sig"><sup>3</sup>Σ<sub>k=0</sub></span> α<sub>k</sub>σ<sub>k</sub></b></span></li>
@@ -1536,8 +1495,8 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
     <div class="sl pop" style="--d:0s;--c:var(--teal)"><span class="sl-n">1</span><div>n 量子ビットは <b class="k">2ⁿ 個の複素数</b> を並べたベクトル。<span class="math">|100⟩ = |4⟩</span> とも書き、2ⁿ 種類の重ね合わせを表せる</div></div>
     <div class="sl pop" style="--d:.03s;--c:var(--blue)"><span class="sl-n">2</span><div>測定値は確率で決まり、状態も変わる。ユニタリ発展は <b class="k">2ⁿ × 2ⁿ</b> のユニタリ行列</div></div>
     <div class="sl pop" style="--d:.05s;--c:var(--pink)"><span class="sl-n">3</span><div>一部の測定は 3 ステップ：<b>項をまとめる → 係数の 2 乗和が確率 → 確率の平方根で割る</b></div></div>
-    <div class="sl pop" style="--d:.1s;--c:var(--green)"><span class="sl-n">4</span><div>2 × 2 のテンソル積に分ければ計算が楽（定理 8.1）。<b>H<sub>0</sub></b>・<b>H<sup>⊗n</sup></b> と書く</div></div>
-    <div class="sl pop" style="--d:.15s;--c:var(--accent)"><span class="sl-n">5</span><div><b class="k">トフォリ（CCNOT）</b>：制御 2 つが |1⟩ なら反転（AND になる）。<b class="k">フレドキン（CSWAP）</b>：制御が |1⟩ なら入れ替え</div></div>
+    <div class="sl pop" style="--d:.1s;--c:var(--green)"><span class="sl-n">4</span><div>2 × 2 のテンソル積に分ければ計算が楽（定理 8.1）</div></div>
+    <div class="sl pop" style="--d:.15s;--c:var(--accent)"><span class="sl-n">5</span><div><b class="k">トフォリ（CCNOT）</b>：8 × 8 のユニタリ行列。<b class="k">フレドキン（CSWAP）</b>：制御が |1⟩ なら入れ替え</div></div>
     <div class="sl pop" style="--d:.2s;--c:var(--purple)"><span class="sl-n">6</span><div>重ね合わせなら 2ⁿ 個の状態に一度に計算できるが、測定で得られるのは 1 個だけ。CNOT で <b>x ⊕ y</b>、オラクル <b>U<sub>f</sub></b></div></div>
     <div class="sl pop" style="--d:.25s;--c:var(--gold)"><span class="sl-n">7</span><div>任意の行列もパウリ行列のテンソル積の和で表せば、量子と古典の分担で計算できる（<b>4ⁿ 回</b>）</div></div>
   </div>
@@ -1949,9 +1908,6 @@ partial('pm2', 2);
   $('#tpBig').innerHTML = `<span>(X ⊗ X ⊗ Z)|101⟩ =</span>${matH(M, 'm8', (i, j, v) => (j === 5 ? (v ? 'hx' : 'hc') : ''))}${colH(e, (i, x) => (x ? 'hx' : ''))}<span>=</span>${colH(r, (i, x) => (x ? 'hx' : ''))}<span>= <span class="res">−|011⟩</span></span>`;
 }
 
-/* ---------- 8.6.2 記法 ---------- */
-drawQC('#ntA', { n: 4, ops: [{ g: 'H', q: 0, col: 0 }], colW: 70, maxW: '200px' });
-drawQC('#ntB', { n: 4, ops: [0, 1, 2, 3].map(q => ({ g: 'H', q, col: 0 })), colW: 70, maxW: '200px' });
 
 const all3 = [...Array(8)].map((_, i) => [i >> 2 & 1, i >> 1 & 1, i & 1]);
 const toffoli = (g, x, Y) => { el('line', { x1: x, y1: Y[0], x2: x, y2: Y[2], class: 'gl' }, g); drawCtl(g, x, Y[0]); drawCtl(g, x, Y[1]); drawTgt(g, x, Y[2]); };
@@ -1959,11 +1915,6 @@ const fCC = v => [v[0], v[1], v[2] ^ (v[0] & v[1])];
 const Y3 = [56, 136, 216];
 
 gsim({ svg: '#tfSvg', tbl: '#tfTbl', auto: '#tfAuto', n: 3, Y: Y3, cases: all3, start: 6, draw: toffoli, f: fCC, active: v => v[0] && v[1], table: pairTbl('CCNOT'), bottom: 30 });
-gsim({
-  svg: '#anSvg', tbl: '#anTbl', auto: '#anAuto', n: 3, Y: [50, 115, 180], cases: [[0, 0, 0], [0, 1, 0], [1, 0, 0], [1, 1, 0]], start: 3, fixed: { 2: 0 },
-  inLab: ['入力 1', '入力 2', '固定値'], outLab: ['', '', '出力'], draw: toffoli, f: fCC, active: v => v[0] && v[1], bottom: 30,
-  table: (cs, f) => `<table class="tt small"><thead><tr><th>入力 1（q<sub>0</sub>）</th><th>入力 2（q<sub>1</sub>）</th><th class="out">出力（q<sub>2</sub>）</th></tr></thead><tbody>${cs.map((c, i) => `<tr data-i="${i}"><td>|${c[0]}⟩</td><td>|${c[1]}⟩</td><td class="out ${f(c)[2] ? 'one' : ''}">|${f(c)[2]}⟩</td></tr>`).join('')}</tbody></table>`,
-});
 drawQC('#anN', { n: 4, ops: [{ g: 'CX', c: [0, 1, 2], t: 3, col: 0 }], colW: 60, rowH: 40 });
 gsim({
   svg: '#frSvg', tbl: '#frTbl', auto: '#frAuto', n: 3, Y: Y3, cases: all3, start: 5, bottom: 30,

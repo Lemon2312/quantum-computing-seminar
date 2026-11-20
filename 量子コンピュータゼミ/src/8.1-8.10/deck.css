@@ -196,3 +196,16 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .rv-g2 .vec.m4{font-size:19px}
 .rv-maps{font-size:22px}
 .rv-qc2{width:110px}
+/* 説明済みの内容を削ったページ：文字を大きくして余白を埋める */
+.slide[data-id="tf"] .big8 .vec.m8{font-size:16px;column-gap:7px}
+.slide[data-id="tf"] ul.plain li{font-size:21px;margin:6px 0}
+.slide[data-id="tf"] .point{font-size:18px !important;margin-top:8px}
+.slide[data-id="ms"] .defbox{font-size:23px}
+.slide[data-id="ms"] .defbox ul.plain.sm li{font-size:22px}
+.slide[data-id="ue"] .defbox,.slide[data-id="ue"] .point{font-size:24px}
+.slide[data-id="tp"] .thm6{font-size:23px}
+.slide[data-id="tp"] .thm6 .math{font-size:22px !important}
+.slide[data-id="xr"] ul.plain li{font-size:27px}
+.slide[data-id="pm1"] .point{font-size:24px !important}
+.slide[data-id="pa"] ul.plain li{font-size:25px}
+.slide[data-id="pa"] .eqrow{font-size:24px !important}
