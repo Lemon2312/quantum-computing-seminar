@@ -13,7 +13,7 @@ function partial(id, m) {
   const groups = [...Array(2 ** m)].map((_, p) => {
     const pre = bits(p, m), ts = T.filter(([k]) => k.startsWith(pre)), S = ts.reduce((s, [, c]) => s + c * c, 0);
     const state = !ts.length ? '—' : ts.length === 1 ? `|${ts[0][0]}⟩` : `${FI(1, '√' + S)}(${ts.map(t => term(t, false)).join(' + ')})`;
-    return { pre, ts, S, html: `<div class="pmg" style="--gc:${GC8[p]}"><div class="gh">左側が |${pre}⟩</div>
+    return { pre, ts, S, html: `<div class="pmg" style="--gc:${GC8[p]}"><div class="gh">${m === 1 ? '0 ビット目' : '0・1 ビット目'}の測定結果が |${pre}⟩ の場合</div>
       <div class="gt">${ts.length ? ts.map(t => `<span class="term">${term(t)}</span>`).join('') : '<span class="none">項がない</span>'}</div>
       <div class="gp"><span class="lab">確率</span>${ts.length ? `${FI(ts.map(([, c]) => c + '²').join(' + '), N)} = <b>${FRr(S, N)}</b>` : '<b>0</b>'}</div>
       <div class="gs"><span class="lab">測定後の状態</span>${state}</div></div>` };
@@ -257,4 +257,25 @@ drawQC('#rvC3', { n: 2, noNames: true, ops: [{ g: 'SW', a: 0, b: 1, col: 0 }], c
   el('path', { d: 'M222,24 Q236,24 236,60 V130 Q236,148 250,148 Q236,148 236,166 V236 Q236,272 222,272', style: 'fill:none;stroke:var(--ink);stroke-width:2.5' }, svg);
   const t = el('text', { x: 254, y: 156, style: 'font-size:22px' }, svg);
   el('tspan', {}, t).textContent = '|0⟩'; el('tspan', { dy: -10, 'font-size': '15px' }, t).textContent = '⊗n';
+}
+
+/* ---------- 確率の平方根で割る理由：太枠の箱 ＝ 確率 1 ---------- */
+{
+  const fill = (id, ps, cls) => { $(id).innerHTML = ps.map(([k, p]) => `<i class="${cls}" style="width:${p * 100}%"><span>|${k}⟩</span><em>${p === .25 ? '¼' : '⅓'}</em></i>`).join(''); };
+  fill('#sqA', [['000', .25], ['001', .25], ['010', .25], ['111', .25]], '');
+  fill('#sqB', [['000', .25], ['001', .25], ['010', .25]], '');
+  fill('#sqC', [['000', 1 / 3], ['001', 1 / 3], ['010', 1 / 3]], 'up');
+  $('#sqA').lastElementChild.classList.add('gone');
+}
+
+/* ---------- 定理 8.1：X ⊗ X ⊗ Z を回路で ---------- */
+{
+  const svg = el('svg', { viewBox: '0 0 250 170', class: 'gsim' }, $('#tpQC')), ys = [30, 85, 140], G = ['X', 'X', 'Z'], ins = ['|1⟩', '|0⟩', '|1⟩'], outs = ['|0⟩', '|1⟩', '−|1⟩'];
+  ys.forEach((y, k) => {
+    el('text', { x: 38, y: y + 7, 'text-anchor': 'end', style: 'font-size:20px' }, svg).textContent = ins[k];
+    el('line', { x1: 44, y1: y, x2: 176, y2: y, class: 'w' }, svg);
+    el('rect', { x: 92, y: y - 18, width: 36, height: 36, rx: 6, style: `fill:${GC[G[k]]};stroke:var(--ink);stroke-width:2.5` }, svg);
+    el('text', { x: 110, y: y + 7, 'text-anchor': 'middle', style: 'fill:#fff;font:700 20px "Cambria Math",serif' }, svg).textContent = G[k];
+    el('text', { x: 182, y: y + 7, style: 'font-size:20px' }, svg).textContent = outs[k];
+  });
 }
