@@ -598,3 +598,12 @@ b.k,b.kb{white-space:nowrap}
 .quiz.q3c .qz-q{font-size:20px}
 .quiz.q3c .qz-a{font-size:19px;min-height:70px}
 h2 .qz-all{font-size:14px;padding:4px 14px;margin-left:16px;vertical-align:middle}
+/* 復習の問題を自動でつくる */
+.rq{margin-top:auto;border-top:2.5px dashed #d9d4ea;padding-top:8px;font-size:17px;line-height:1.6}
+.rq-bar{display:flex;gap:8px;justify-content:center}
+.rq .b{font-size:14px;padding:4px 14px}
+.rq .b.rq-ans{border-color:var(--accent-d);color:var(--accent-d)}
+.rq-q{margin-top:6px;min-height:0}
+.rq-q:empty{display:none}
+.rq-a{margin-top:6px;background:#fff1c2;border-radius:8px;padding:4px 10px}
+.rq .eq.inline .frac{font-size:.9em}

@@ -209,3 +209,93 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .slide[data-id="pm1"] .point{font-size:24px !important}
 .slide[data-id="pa"] ul.plain li{font-size:25px}
 .slide[data-id="pa"] .eqrow{font-size:24px !important}
+
+/* 4 ページのベクトルの成分：斜体にしない */
+.gq-vec i{font-style:normal}
+/* 復習：問題ボタンの分だけ文字を戻す */
+.rv2c .rvc8{font-size:19px;gap:10px;justify-content:flex-start}
+.rv2c .rvc8 .rh{font-size:22px}
+.rv2c .rvc8 .eqrow{font-size:22px}
+.rv-gt .eqrow{font-size:22px !important}
+.rv-gt .gn{font-size:22px}
+.rv-mp{font-size:20px}
+.rv-gt{gap:10px 16px}
+.rv2c .rv-qc{width:170px}
+.rv-g2{padding-top:8px;gap:12px;grid-template-columns:90px minmax(0,1fr) auto}
+.rv-g2 .vec.m4{font-size:16px}
+.rv-g2 .eqrow{font-size:18px !important}
+.rv-maps{font-size:19px;line-height:1.35}
+.rv-qc2{width:90px}
+.rv2c .rq{font-size:17px}
+/* 9 ページ：成分と内積の比較 */
+.ip-r{gap:14px}
+.ipc{background:#fff;border:3px solid var(--ink);border-left:12px solid var(--c);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:10px 16px}
+.ipc .ch{font-weight:900;font-size:17px;color:var(--muted);margin-bottom:4px}
+.ipc .eqtx{font-size:20px}
+.ipc .eqtx.big{font-size:26px}
+.slide[data-id="ip"] .point{font-size:22px}
+/* 7 ページ：箇条書きが 1 つなので大きく */
+.slide[data-id="bd"] ul.plain li{font-size:28px}
+/* オラクルの中身 */
+.oi-g{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.oi-c{padding:10px 14px}
+.oi-c .ch{font-weight:900;font-size:20px;text-align:center;font-family:"Cambria Math","Times New Roman",serif}
+.oi-t{text-align:center;font:18px "Cambria Math","Times New Roman",serif;color:var(--muted)}
+.slide[data-id="oi"] ul.plain li{font-size:22px}
+.slide[data-id="vqe"] ul.plain li,.slide[data-id="qaoa"] ul.plain li{font-size:21px}
+
+/* ===== 5 回目の改訂後の余白の調整 ===== */
+.door h1{font-size:68px}
+.slide[data-id="rv2"] .rvc8 .eqrow[style*="font-size:19px"]{font-size:18px !important}
+.slide[data-id="rv2"] .rv-maps{line-height:1.25}
+.slide[data-id="kt"] .kt-s{font-size:38px}
+.slide[data-id="kt"] .kt-a{font-size:19px}
+.slide[data-id="kt"] ul.plain li{font-size:27px}
+.slide[data-id="bd"] .bd-eq{font-size:30px}
+.slide[data-id="bd"] .bd-vec div{font-size:22px;padding:2px 8px}
+.slide[data-id="sv"] .eqrow{font-size:32px !important}
+.slide[data-id="sv"] .eqtx{font-size:34px !important}
+.slide[data-id="sv"] .sv-card{padding:30px 40px;gap:24px}
+.slide[data-id="pm1"] .pmg .term{font-size:28px}
+.slide[data-id="pm1"] .pmg .gp,.slide[data-id="pm1"] .pmg .gs{font-size:24px}
+.slide[data-id="pm1"] .pmg .gh{font-size:20px}
+.slide[data-id="pm1"] .pm-st{font-size:27px}
+.slide[data-id="pm1"] .pmg .lab{font-size:15px}
+.slide[data-id="pm1"] .pmg{gap:12px;padding:12px}
+.slide[data-id="pm2"] .pmg .term{font-size:22px}
+.slide[data-id="pm2"] .pmg .gp,.slide[data-id="pm2"] .pmg .gs{font-size:19px}
+.slide[data-id="pm2"] .pm-st{font-size:26px}
+.slide[data-id="pm2"] .pmg{gap:12px;padding:12px 8px}
+.slide[data-id="pm2"] ul.plain li{font-size:24px}
+.slide[data-id="tp"] .tpc .eqrow{font-size:21px}
+.slide[data-id="tp"] .tpc .vec.m8,.slide[data-id="tp"] .tpc .vec.col8{font-size:18px}
+.slide[data-id="tp"] .tpc .eqtx{font-size:24px !important}
+.slide[data-id="tp"] .tpc .ch{font-size:19px}
+.slide[data-id="tf"] .big8 .vec.m8{font-size:14px;column-gap:6px;line-height:1.1}
+.slide[data-id="tf"] ul.plain li{font-size:19px;margin:4px 0}
+.slide[data-id="tf"] .point{font-size:16px !important;margin-top:4px;padding:8px 12px}
+.slide[data-id="oi"] ul.plain li{font-size:25px}
+.slide[data-id="pa"] .pa-r{font-size:24px}
+.slide[data-id="pa"] .pa-g .eqtx{font-size:23px}
+.slide[data-id="pa"] .pa-card{padding:20px 22px}
+.slide[data-id="a2"] .eqtx{font-size:24px !important}
+.slide[data-id="a2"] .a2g{font-size:22px}
+.slide[data-id="tp"] .tpc .vec.m8,.slide[data-id="tp"] .tpc .vec.col8{font-size:23px;line-height:1.25}
+.slide[data-id="tp"] .tpc .eqrow{font-size:25px}
+.slide[data-id="tp"] .tpc .eqtx{font-size:28px !important}
+.slide[data-id="tp"] .thm6{font-size:26px}
+.slide[data-id="tp"] .thm6 .math{font-size:25px !important}
+.slide[data-id="pa"] .pa-r{font-size:28px}
+.slide[data-id="pa"] .pa-g .eqtx{font-size:26px}
+.slide[data-id="pa"] .pa-card{gap:20px}
+.slide[data-id="pa"] ul.plain li{font-size:27px}
+.slide[data-id="a2"] .a2g{font-size:26px;gap:10px}
+.slide[data-id="a2"] .a2g .t{padding:16px 4px}
+.slide[data-id="a2"] .thm6{font-size:21px}
+.slide[data-id="a2"] .thm6 .math{font-size:21px !important}
+.slide[data-id="tp"] .tpc .vec.m8,.slide[data-id="tp"] .tpc .vec.col8{font-size:20px;line-height:1.2}
+.slide[data-id="tp"] .tpc .eqtx{font-size:26px !important}
+.slide[data-id="rv2"] .rvc8{gap:8px}
+.slide[data-id="rv2"] .rv-g2{padding-top:6px}
+.slide[data-id="rv2"] .rv-g2 .vec.m4{font-size:15px;line-height:1.1}
+.slide[data-id="rv2"] .rq{font-size:16px;padding-top:6px}

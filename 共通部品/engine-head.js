@@ -294,3 +294,64 @@ const drawCtl = (g, x, y) => el('circle', { cx: x, cy: y, r: 9, class: 'gd' }, g
 const drawTgt = (g, x, y) => { el('circle', { cx: x, cy: y, r: 20, class: 'gt' }, g); el('path', { d: `M${x - 20},${y}H${x + 20}M${x},${y - 20}V${y + 20}`, class: 'gl' }, g); };
 const drawSw = (g, x, y) => el('path', { d: `M${x - 12},${y - 12}L${x + 12},${y + 12}M${x + 12},${y - 12}L${x - 12},${y + 12}`, class: 'gl', style: 'stroke-width:5;stroke-linecap:round' }, g);
 
+
+/* ---------- 共通：復習の問題を自動でつくる（🎲 問題をつくる → 答えを見る） ----------
+   HTML: <div class="rq" id="rq1"><div class="rq-bar"><button class="b rq-new">🎲 問題をつくる</button><button class="b rq-ans" style="display:none">答えを見る</button></div><div class="rq-q"></div><div class="rq-a" style="display:none"></div></div>
+   rqSetup('#rq1', RQ.q1) は、スライドを開き直したときに問題を消す関数を返す */
+function rqSetup(id, gen) {
+  const r = $(id), q = r.querySelector('.rq-q'), a = r.querySelector('.rq-a'), bA = r.querySelector('.rq-ans');
+  r.querySelector('.rq-new').addEventListener('click', e => { e.currentTarget.blur(); const [qq, aa] = gen(); q.innerHTML = qq; a.innerHTML = aa; a.style.display = 'none'; bA.style.display = ''; });
+  bA.addEventListener('click', e => { e.currentTarget.blur(); a.style.display = ''; bA.style.display = 'none'; });
+  return () => { q.innerHTML = ''; a.style.display = 'none'; bA.style.display = 'none'; };
+}
+/* 問題のつくり方：q1 1 量子ビットの測定確率 ／ q2 1 量子ビットゲートの作用 ／ q3 2 量子ビットの測定確率 ／ q4 CNOT・SWAP の作用 */
+const RQ = (() => {
+  const Fq = (n, d) => `<span class="eq inline">${FR(n, d)}</span>`;
+  const AMP = { '1/2': [Fq('1', '2'), '1/4'], '1/√2': [Fq('1', '√2'), '1/2'], '√3/2': [Fq('√3', '2'), '3/4'], '3/5': [Fq('3', '5'), '9/25'],
+    '4/5': [Fq('4', '5'), '16/25'], '1/√3': [Fq('1', '√3'), '1/3'], '√2/√3': [Fq('√2', '√3'), '2/3'] };
+  const PAIRS = [['1/√2', '1/√2'], ['√3/2', '1/2'], ['1/2', '√3/2'], ['3/5', '4/5'], ['4/5', '3/5'], ['1/√3', '√2/√3'], ['√2/√3', '1/√3']];
+  const PH = [['+', ''], ['−', ''], ['+', 'i'], ['−', 'i']];
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  const term = (k, [s, im], ket, first) => `${first ? (s === '−' ? '−' : '') : ` ${s} `}${im}${AMP[k][0]}${ket}`;
+  const absq = (k, [s, im]) => `|${s === '−' ? '−' : ''}${im}${AMP[k][0]}|² = <b>${AMP[k][1]}</b>`;
+  const q1 = () => {
+    const [a, b] = pick(PAIRS), pa = pick([PH[0], PH[0], PH[1]]), pb = pick(PH), t = Math.random() < .5 ? 0 : 1;
+    const st = term(a, pa, '|0⟩', true) + term(b, pb, '|1⟩');
+    return [`<span class="math">|φ⟩ = ${st}</span> を測定したとき、<b>|${t}⟩</b> を得る確率は？`, `確率は係数の絶対値の 2 乗：${t ? absq(b, pb) : absq(a, pa)}`];
+  };
+  const ST = { z0: '|0⟩', z1: '|1⟩', p: `${R2}(|0⟩ + |1⟩)`, m: `${R2}(|0⟩ − |1⟩)` };
+  const TBL = { X: { z0: '|1⟩', z1: '|0⟩', p: ST.p, m: `−${ST.m}` }, Z: { z0: '|0⟩', z1: '−|1⟩', p: ST.m, m: ST.p }, H: { z0: ST.p, z1: ST.m, p: '|0⟩', m: '|1⟩' } };
+  const q2 = () => {
+    if (Math.random() < .55) {
+      const g = pick(['X', 'Z', 'H']), s = pick(['z0', 'z1', 'p', 'm']), arg = s.startsWith('z') ? ST[s] : `{${ST[s]}}`;
+      return [`<span class="math">${ST[s]}</span> に <b>${g}</b> ゲートを作用させた状態は？`, `<span class="math">${g}${arg} = <b>${TBL[g][s]}</b></span>`];
+    }
+    const [a, b] = pick(PAIRS), pb = pick(PH), g = pick(['X', 'Z']);
+    const st = term(a, PH[0], '|0⟩', true) + term(b, pb, '|1⟩');
+    const res = g === 'X' ? term(b, pb, '|0⟩', true) + term(a, PH[0], '|1⟩') : term(a, PH[0], '|0⟩', true) + term(b, [pb[0] === '+' ? '−' : '+', pb[1]], '|1⟩');
+    return [`<span class="math">${st}</span> に <b>${g}</b> ゲートを作用させた状態は？`, `<span class="math"><b>${res}</b></span>（${g === 'X' ? 'X は |0⟩ と |1⟩ を入れ替える' : 'Z は |1⟩ の係数の符号を反転する'}）`];
+  };
+  const TEMPL = [['1/2', '1/2', '1/2', '1/2'], ['1/√2', '1/√2', '0', '0'], ['1/√2', '1/2', '1/2', '0'], ['1/√3', '1/√3', '1/√3', '0'], ['3/5', '4/5', '0', '0'], ['√3/2', '1/2', '0', '0'], ['1/2', '1/2', '1/√2', '0']];
+  const q3 = () => {
+    const mags = pick(TEMPL).slice().sort(() => Math.random() - .5), phs = mags.map(() => pick([PH[0], PH[0], PH[1], PH[2], PH[3]]));
+    let st = '', first = true;
+    mags.forEach((m, i) => { if (m === '0') return; st += term(m, phs[i], KETS[i], first); first = false; });
+    const nz = mags.map((m, i) => i).filter(i => mags[i] !== '0'), z = mags.map((m, i) => i).filter(i => mags[i] === '0');
+    const t = z.length && Math.random() < .15 ? pick(z) : pick(nz);
+    return [`<span class="math">|φ⟩ = ${st}</span> を測定したとき、<b>${KETS[t]}</b> を得る確率は？`,
+      mags[t] === '0' ? `${KETS[t]} の項がない（係数 0）ので確率は <b>0</b>` : `確率は係数の絶対値の 2 乗：${absq(mags[t], phs[t])}`];
+  };
+  const MAP = { CNOT: [0, 1, 3, 2], SWAP: [0, 2, 1, 3] };
+  const q4 = () => {
+    const g = pick(['CNOT', 'SWAP']), why = g === 'CNOT' ? '制御ビット（左）が |1⟩ の項だけ、右のビットを反転' : '左右の量子ビットを入れ替える';
+    if (Math.random() < .5) { const i = pick([0, 1, 2, 3]); return [`<span class="math">${g}${KETS[i]}</span> は？`, `<span class="math"><b>${KETS[MAP[g][i]]}</b></span>（${why}）`]; }
+    let i = pick([0, 1, 2, 3]), j;
+    do { j = pick([0, 1, 2, 3]); } while (j === i);
+    if (i > j) [i, j] = [j, i];
+    const [a, b] = pick(PAIRS), pb = pick([PH[0], PH[1]]);
+    const st = term(a, PH[0], KETS[i], true) + term(b, pb, KETS[j]);
+    const ts = [[MAP[g][i], a, PH[0]], [MAP[g][j], b, pb]].sort((x, y) => x[0] - y[0]);
+    return [`<span class="math">${g}(${st})</span> は？`, `<span class="math"><b>${term(ts[0][1], ts[0][2], KETS[ts[0][0]], true)}${term(ts[1][1], ts[1][2], KETS[ts[1][0]])}</b></span>（${why}。項ごとに作用させる）`];
+  };
+  return { q1, q2, q3, q4 };
+})();

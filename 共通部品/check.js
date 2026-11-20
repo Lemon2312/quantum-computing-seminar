@@ -1,6 +1,6 @@
 // スライドの確認：JS エラー・はみ出し（本文・カード）・本文下の余白を一覧にし、必要なスライドだけ撮影する。
 // 使い方:  node 共通部品/check.js <スライド.html> [撮影するページ番号（例 3,5-7 / all）] [出力フォルダ] [ipad]
-// 動く図は最後のステップ、復習問題は答えを全部開いた状態で確認する。問題のあるページだけ表示する。
+// 動く図は最後のステップ、復習問題は答えを全部開いた状態、自動でつくる問題は問題と答えを出した状態で確認する。問題のあるページだけ表示する。
 const { chromium, devices } = require('playwright');
 const path = require('path');
 (async () => {
@@ -19,6 +19,7 @@ const path = require('path');
       const s = slides[cur];
       s.querySelectorAll('.stpr').forEach(r => { const d = r.querySelectorAll('.dots i'); d[d.length - 1].click(); });
       s.querySelectorAll('[data-quiz-all]').forEach(x => x.click());
+      s.querySelectorAll('.rq-new').forEach(x => x.click()); s.querySelectorAll('.rq-ans').forEach(x => x.click());
       s.querySelectorAll('[data-autoplay].playing').forEach(x => !x.closest('.stpr') && x.click());
     });
     await p.waitForTimeout(800);

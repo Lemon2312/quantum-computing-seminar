@@ -2,25 +2,6 @@
    第8章 n 量子ビットの世界 ― スライド固有のスクリプト
    ===================================================================== */
 
-/* ---------- 8.3 測定 ---------- */
-{
-  const keys = ['|00⋯0⟩', '|11⋯1⟩'], P = [.2, .8];
-  $('#msState').innerHTML = `<span>|φ⟩ = ${FI(1, '√5')}|00⋯0⟩ + ${FI(2, '√5')}|11⋯1⟩</span>`;
-  $('#msBars').innerHTML = keys.map((k, i) => `<span class="k">${k}</span><span class="box"><i></i></span><span class="v"></span>`).join('');
-  const bars = [...$('#msBars').querySelectorAll('.box i')], vs = [...$('#msBars').querySelectorAll('.v')], ks = [...$('#msBars').querySelectorAll('.k')];
-  const draw = p => p.forEach((x, i) => { bars[i].style.width = x * 100 + '%'; vs[i].textContent = x.toFixed(1); });
-  const reset = () => { draw(P); ks.forEach(k => k.style.color = ''); $('#msRes').innerHTML = `確率 <span class="math">|1/√5|² = 0.2</span> と <span class="math">|2/√5|² = 0.8</span>`; };
-  $('#msGo').onclick = e => {
-    e.currentTarget.blur();
-    const r = Math.random() < P[0] ? 0 : 1;
-    draw(r ? [0, 1] : [1, 0]);
-    ks.forEach((k, i) => k.style.color = i === r ? 'var(--accent-d)' : '');
-  };
-  $('#msBack').onclick = e => { e.currentTarget.blur(); reset(); };
-  onEnter.ms = reset;
-  reset();
-}
-
 /* ---------- 8.4 ユニタリ発展：2ⁿ × 2ⁿ のマス目 ---------- */
 {
   const g = $('#ueGrid');
@@ -49,17 +30,7 @@ function partial(id, m) {
   const box = $(`#${id}G`);
   box.innerHTML = groups.map(g => g.html).join('');
   const els = [...box.children], card = box.closest('.pm-card');
-  const st = stepper(`#${id}Stp`, 3, k => {
-    card.classList.remove('s0', 's1', 's2'); card.classList.add('s' + k);
-    els.forEach(e => e.classList.remove('hit', 'miss'));
-  }, 1900);
-  $(`#${id}Go`).onclick = e => {
-    e.currentTarget.blur(); st.stop(); st.set(2);
-    let r = Math.random() * N, i = 0;
-    for (; i < groups.length - 1; i++) { r -= groups[i].S; if (r < 0) break; }
-    while (!groups[i].S) i--;
-    els.forEach((el, j) => { el.classList.toggle('hit', j === i); el.classList.toggle('miss', j !== i); });
-  };
+  box.closest('.pm-card').classList.add('s2');
 }
 partial('pm1', 1);
 partial('pm2', 2);
@@ -83,13 +54,6 @@ gsim({
   svg: '#frSvg', tbl: '#frTbl', auto: '#frAuto', n: 3, Y: Y3, cases: all3, start: 5, bottom: 30,
   draw: (g, x, Y) => { el('line', { x1: x, y1: Y[0], x2: x, y2: Y[2], class: 'gl' }, g); drawCtl(g, x, Y[0]); drawSw(g, x, Y[1]); drawSw(g, x, Y[2]); },
   f: v => (v[0] ? [v[0], v[2], v[1]] : v.slice()), active: v => v[0] === 1, table: pairTbl('CSWAP'),
-});
-gsim({
-  svg: '#xrSvg', tbl: '#xrTbl', auto: '#xrAuto', n: 2, Y: [60, 150], cases: [[0, 0], [0, 1], [1, 0], [1, 1]], start: 3, names: ['x', 'y'], bottom: 34,
-  outLab: ['|x⟩', '|x ⊕ y⟩'],
-  draw: (g, x, Y) => { el('line', { x1: x, y1: Y[0], x2: x, y2: Y[1], class: 'gl' }, g); drawCtl(g, x, Y[0]); drawTgt(g, x, Y[1]); },
-  f: v => [v[0], v[0] ^ v[1]], active: v => v[0] === 1,
-  table: (cs, f) => `<table class="tt small"><thead><tr><th>入力値 |x⟩</th><th>入力値 |y⟩</th><th class="out">出力値 |x ⊕ y⟩</th></tr></thead><tbody>${cs.map((c, i) => `<tr data-i="${i}"><td>|${c[0]}⟩</td><td>|${c[1]}⟩</td><td class="out ${f(c)[1] ? 'one' : ''}">|${f(c)[1]}⟩</td></tr>`).join('')}</tbody></table>`,
 });
 
 /* 8 × 8 の行列（CCNOT・CSWAP） */
@@ -225,3 +189,59 @@ const S0 = [1, 0, 0, 0, 0, 0, 0, 0], S1 = [.5, 0, .5, 0, .5, 0, .5, 0], S2 = [.5
 drawQC('#rvC1', { n: 1, init: true, noNames: true, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'M', q: 0, col: 1 }], colW: 56 });
 drawQC('#rvC2', { n: 2, noNames: true, ops: [{ g: 'CX', c: 0, t: 1, col: 0 }], colW: 56, rowH: 44 });
 drawQC('#rvC3', { n: 2, noNames: true, ops: [{ g: 'SW', a: 0, b: 1, col: 0 }], colW: 56, rowH: 44 });
+
+/* ---------- 復習：問題を自動でつくる ---------- */
+{
+  const r1 = [rqSetup('#rq1', RQ.q1), rqSetup('#rq2', RQ.q2)], r2 = [rqSetup('#rq3', RQ.q3), rqSetup('#rq4', RQ.q4)];
+  onEnter.rv1 = () => r1.forEach(f => f());
+  onEnter.rv2 = () => r2.forEach(f => f());
+}
+
+/* ---------- 【補足】オラクルの中身 4 通り ---------- */
+[[], [{ g: 'X', q: 1, col: 0 }], [{ g: 'CX', c: 0, t: 1, col: 0 }], [{ g: 'CX', c: 0, t: 1, col: 0 }, { g: 'X', q: 1, col: 1 }]]
+  .forEach((ops, k) => drawQC('#oi' + k, { n: 2, names: ['x', 'y'], ops, cols: 2, colW: 60, rowH: 50 }));
+
+/* ---------- 【補足】VQE のくり返し ---------- */
+{
+  const svg = $('#vqSvg');
+  const box = (x, y, w, h, fill, title, lines, who) => {
+    el('rect', { x, y, width: w, height: h, rx: 16, style: `fill:${fill};stroke:var(--ink);stroke-width:3` }, svg);
+    el('text', { x: x + 14, y: y + 24, class: 'lbl', style: 'font-size:15px' }, svg).textContent = who;
+    el('text', { x: x + w / 2, y: y + 52, 'text-anchor': 'middle', style: 'font:800 20px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--ink)' }, svg).textContent = title;
+    lines.forEach((t, i) => el('text', { x: x + w / 2, y: y + 82 + i * 26, 'text-anchor': 'middle', style: 'font-size:19px;fill:var(--ink)' }, svg).textContent = t);
+  };
+  const arrow = d => { el('path', { d, style: 'fill:none;stroke:var(--ink);stroke-width:3' }, svg); };
+  const head = (x, y, dir) => { const p = { r: `${x},${y} ${x - 12},${y - 7} ${x - 12},${y + 7}`, d: `${x},${y} ${x - 7},${y - 12} ${x + 7},${y - 12}`, l: `${x},${y} ${x + 12},${y - 7} ${x + 12},${y + 7}`, u: `${x},${y} ${x - 7},${y + 12} ${x + 7},${y + 12}` }[dir]; el('polygon', { points: p, style: 'fill:var(--ink)' }, svg); };
+  box(20, 20, 250, 150, '#dfe8ff', 'パラメータ θ を決める', ['（最初は適当に）'], '古典コンピュータ');
+  box(290, 20, 250, 150, '#fff1c2', '|ψ(θ)⟩ をつくって測定', ['パウリ行列の項ごとに', '⟨ψ(θ)|σ⋯|ψ(θ)⟩'], '量子コンピュータ');
+  box(155, 245, 250, 150, '#dfe8ff', 'E(θ) = Σ α × 測定値', ['E(θ) が小さくなるように', 'θ を更新'], '古典コンピュータ');
+  arrow('M270,95 H285'); head(290, 95, 'r');
+  arrow('M415,170 V320 H410'); head(405, 320, 'l');
+  arrow('M155,320 H145 V175'); head(145, 170, 'u');
+  el('text', { x: 280, y: 222, 'text-anchor': 'middle', style: 'font:800 16px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--accent-d)' }, svg).textContent = 'E(θ) が下がらなくなるまでくり返す';
+}
+
+/* ---------- 【補足】QAOA の回路の形 ---------- */
+{
+  const svg = $('#qaSvg'), ys = [70, 120, 170];
+  ys.forEach((y, q) => { rich(el('text', { x: 10, y: y + 7, class: 'nm' }, svg), `q_{${q}}`); el('line', { x1: 44, y1: y, x2: 580, y2: y, class: 'w' }, svg); });
+  el('text', { x: 66, y: 208, 'text-anchor': 'middle', style: 'font-size:18px' }, svg).textContent = '⋮';
+  const blk = (x, w, fill, sup, lab) => {
+    el('rect', { x, y: 40, width: w, height: 160, rx: 10, style: `fill:${fill};stroke:var(--ink);stroke-width:3` }, svg);
+    const t = el('text', { x: x + w / 2, y: 112, 'text-anchor': 'middle', style: 'font-size:22px;fill:var(--ink)' }, svg);
+    if (sup) { el('tspan', {}, t).textContent = 'e'; el('tspan', { dy: -10, 'font-size': '15px' }, t).textContent = sup; } else t.textContent = 'H';
+    if (lab) rich(el('text', { x: x + w / 2, y: 150, 'text-anchor': 'middle', class: 'lbl', style: 'font-size:15px' }, svg), lab);
+  };
+  blk(54, 50, '#fff', '', '');
+  blk(124, 110, '#ffd3e6', '−iγĤ', 'コスト Ĥ_{C}');
+  blk(254, 110, '#d6f3e2', '−iβĤ', '混ぜる Ĥ_{B}');
+  el('text', { x: 410, y: 128, 'text-anchor': 'middle', style: 'font:800 22px sans-serif' }, svg).textContent = '× p 回';
+  ys.forEach(y => { el('rect', { x: 490, y: y - 18, width: 36, height: 36, rx: 6, class: 'bx', style: 'fill:#2a2350' }, svg); el('path', { d: `M${496},${y + 8}A12,12 0 0 1 ${520},${y + 8}M508,${y + 8}L516,${y - 6}`, style: 'fill:none;stroke:#fff;stroke-width:2.5' }, svg); });
+  el('rect', { x: 90, y: 260, width: 420, height: 90, rx: 16, style: 'fill:#dfe8ff;stroke:var(--ink);stroke-width:3' }, svg);
+  el('text', { x: 300, y: 296, 'text-anchor': 'middle', style: 'font:800 18px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif' }, svg).textContent = '古典コンピュータ';
+  el('text', { x: 300, y: 326, 'text-anchor': 'middle', style: 'font-size:18px' }, svg).textContent = '測定したビット列のコストを見て γ, β を調整';
+  el('path', { d: 'M508,192 V240 H530 V305 H515', style: 'fill:none;stroke:var(--ink);stroke-width:3' }, svg);
+  el('path', { d: 'M90,305 H70 V214', style: 'fill:none;stroke:var(--ink);stroke-width:3' }, svg);
+  el('polygon', { points: '70,204 63,216 77,216', style: 'fill:var(--ink)' }, svg);
+  el('polygon', { points: '510,305 522,298 522,312', style: 'fill:var(--ink)' }, svg);
+}
