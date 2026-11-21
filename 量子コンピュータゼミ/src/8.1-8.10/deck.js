@@ -16,6 +16,7 @@ function partial(id, m) {
     return { pre, ts, S, html: `<div class="pmg" style="--gc:${GC8[p]}"><div class="gh">${m === 1 ? '0 ビット目' : '0・1 ビット目'}の測定結果が |${pre}⟩ の場合</div>
       <div class="gt">${ts.length ? ts.map(t => `<span class="term">${term(t)}</span>`).join('') : '<span class="none">項がない</span>'}</div>
       <div class="gp"><span class="lab">確率</span>${ts.length ? `${FI(ts.map(([, c]) => c + '²').join(' + '), N)} = <b>${FRr(S, N)}</b>` : '<b>0</b>'}</div>
+      ${ts.length ? `<div class="gg"><span class="lab">残った候補（合計 ${FRr(S, N)}）</span><div class="gz">${ts.map(() => `<i style="width:${100 / N}%"></i>`).join('')}</div><span class="lab">× ${FRr(N, S)} で長さ 1 に</span><div class="gz">${ts.map(() => `<i class="up" style="width:${100 / ts.length}%"></i>`).join('')}</div></div>` : ''}
       <div class="gs"><span class="lab">測定後の状態</span>${state}</div></div>` };
   });
   const box = $(`#${id}G`);
@@ -40,6 +41,12 @@ const fCC = v => [v[0], v[1], v[2] ^ (v[0] & v[1])];
 const Y3 = [56, 136, 216];
 
 gsim({ svg: '#tfSvg', tbl: '#tfTbl', auto: '#tfAuto', n: 3, Y: Y3, cases: all3, start: 6, draw: toffoli, f: fCC, active: v => v[0] && v[1], table: pairTbl('CCNOT'), bottom: 30 });
+// 図にゲートの名前と、制御ビット・標的ビットを書き込む
+[['#tfSvg', 'トフォリゲート（CCNOT）', ['制御ビット', '制御ビット', '標的ビット']], ['#frSvg', 'フレドキンゲート（CSWAP）', ['制御ビット', '標的ビット', '標的ビット']]].forEach(([id, name, labs]) => {
+  const svg = $(id);
+  el('text', { x: 270, y: 18, 'text-anchor': 'middle', style: 'font:900 17px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--ink)' }, svg).textContent = name;
+  Y3.forEach((y, q) => el('text', { x: 300, y: y - 12, style: `font:800 14px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:${labs[q] === '制御ビット' ? 'var(--accent-d)' : 'var(--blue)'}` }, svg).textContent = labs[q]);
+});
 drawQC('#anN', { n: 4, ops: [{ g: 'CX', c: [0, 1, 2], t: 3, col: 0 }], colW: 60, rowH: 40 });
 gsim({
   svg: '#frSvg', tbl: '#frTbl', auto: '#frAuto', n: 3, Y: Y3, cases: all3, start: 5, bottom: 30,
@@ -55,33 +62,31 @@ gsim({
   $('#frMat').innerHTML = mk(v => (v[0] ? [v[0], v[2], v[1]] : v));
 }
 
-/* ---------- 8.8 重ね合わせ状態に CCNOT ---------- */
-function amp8(root) {
+/* ---------- 8.8 重ね合わせ状態に CNOT（2 量子ビット） ---------- */
+function ampBars(root, N) {
   root = $(root);
-  root.innerHTML = [...Array(8)].map(() => '<div class="c"><span class="val"></span><div class="bar"></div></div>').join('');
-  root.insertAdjacentHTML('afterend', `<div class="amp8k">${[...Array(8)].map((_, i) => `<span>|${bits(i, 3)}⟩</span>`).join('')}</div>`);
+  const nb = Math.log2(N);
+  root.style.gridTemplateColumns = `repeat(${N},1fr)`;
+  root.innerHTML = [...Array(N)].map(() => '<div class="c"><span class="val"></span><div class="bar"></div></div>').join('');
+  root.insertAdjacentHTML('afterend', `<div class="amp8k" style="grid-template-columns:repeat(${N},1fr)">${[...Array(N)].map((_, i) => `<span>|${bits(i, nb)}⟩</span>`).join('')}</div>`);
   const cs = [...root.children];
   return (a, mv = -1, hit = -1) => cs.forEach((c, i) => {
     c.querySelector('.bar').style.height = a[i] * 118 + 'px';
     c.querySelector('.bar').style.borderWidth = a[i] ? '' : '0';
-    c.querySelector('.val').innerHTML = a[i] === 1 ? '1' : a[i] ? '½' : '';
+    c.querySelector('.val').innerHTML = a[i] === 1 ? '1' : a[i] ? FI(1, '√2') : '';
     c.classList.toggle('mv', i === mv); c.classList.toggle('hit', i === hit);
   });
 }
-const S0 = [1, 0, 0, 0, 0, 0, 0, 0], S1 = [.5, 0, .5, 0, .5, 0, .5, 0], S2 = [.5, 0, .5, 0, .5, 0, 0, .5];
+const s2a = Math.SQRT1_2, T0 = [1, 0, 0, 0], T1 = [s2a, 0, s2a, 0], T2 = [s2a, 0, 0, s2a];
 {
-  const qc = drawQC('#spQC', { n: 3, init: true, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'H', q: 1, col: 0 }, { g: 'CX', c: [0, 1], t: 2, col: 1 }], colW: 80 });
-  const draw = amp8('#spAmp'), h = FI(1, 2);
-  const eqs = ['|0⟩|0⟩|0⟩ = |000⟩', `(H ⊗ H ⊗ I)|000⟩ = ${h}(|000⟩ + |010⟩ + |100⟩ + |110⟩)`, `CCNOT → ${h}(|000⟩ + |010⟩ + |100⟩ + <b style="color:var(--purple)">|111⟩</b>)`];
-  stepper('#spStp', 3, k => { qc.set(k - 1); draw([S0, S1, S2][k], k === 2 ? 7 : -1); $('#spEq').innerHTML = `<span>${eqs[k]}</span>`; }, 1900);
+  const qc = drawQC('#spQC', { n: 2, init: true, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'CX', c: 0, t: 1, col: 1 }], colW: 90 });
+  const draw = ampBars('#spAmp', 4), h = FI(1, '√2');
+  const eqs = ['|0⟩|0⟩ = |00⟩', `(H ⊗ I)|00⟩ = ${h}(|00⟩ + |10⟩)　← x が 0 と 1 の重ね合わせ`, `CNOT → ${h}(|00⟩ + <b style="color:var(--purple)">|11⟩</b>)　← 2 通りを一度に計算`];
+  stepper('#spStp', 3, k => { qc.set(k - 1); draw([T0, T1, T2][k], k === 2 ? 3 : -1); $('#spEq').innerHTML = `<span>${eqs[k]}</span>`; }, 1900);
 }
 {
-  const draw = amp8('#sp2Amp'), reset = () => { draw(S2); $('#sp2Res').innerHTML = 'どれも確率 <span class="math">|1/2|² = 1/4</span>'; };
-  $('#sp2Go').onclick = e => {
-    e.currentTarget.blur();
-    const i = rnd([0, 2, 4, 7]), a = Array(8).fill(0); a[i] = 1;
-    draw(a, -1, i);
-  };
+  const draw = ampBars('#sp2Amp', 4), reset = () => { draw(T2); $('#sp2Res').innerHTML = 'どちらも確率 <span class="math">|1/√2|² = 1/2</span>'; };
+  $('#sp2Go').onclick = e => { e.currentTarget.blur(); const i = rnd([0, 3]), a = [0, 0, 0, 0]; a[i] = 1; draw(a, -1, i); };
   $('#sp2Back').onclick = e => { e.currentTarget.blur(); reset(); };
   onEnter.sp2 = reset;
   reset();
@@ -95,6 +100,7 @@ const S0 = [1, 0, 0, 0, 0, 0, 0, 0], S1 = [.5, 0, .5, 0, .5, 0, .5, 0], S2 = [.5
   stepper('#cxStp', N, k => {
     const n = k + 1;
     cs.forEach((c, i) => { c.querySelector('.bar').style.height = i <= k ? Math.max(4 ** (i + 1) / 4 ** n * 240, 1) + 'px' : '0'; c.classList.toggle('cur', i === k); });
+    const mx = 4 ** n; $('#cxY').innerHTML = [mx, mx / 2, 0].map(v => `<span>${v.toLocaleString()}</span>`).join('');
     $('#cxNum').innerHTML = `${n} 量子ビットのとき：(2<sup>${n}</sup>)² = <b>${(4 ** n).toLocaleString()}</b> 回の計算`;
   }, 1200);
 }
@@ -128,7 +134,7 @@ oracleBox($('#orSvg'), { ys: [70, 180], ins: ['|x⟩', '|y⟩'], outs: ['|x⟩',
     el('rect', { x: 140, y: y - 24, width: 140, height: 48, rx: 10, style: 'fill:#fff;stroke:var(--ink);stroke-width:3' }, svg);
     el('text', { x: 210, y: y + 8, 'text-anchor': 'middle', style: 'font-size:24px' }, svg).textContent = `${G[k]}|φ⟩`;
     el('line', { x1: 280, y1: y, x2: 395, y2: y, style: 'stroke:var(--ink);stroke-width:2.5' }, svg);
-    rich(el('text', { x: 365, y: y - 8, 'text-anchor': 'middle', style: 'font-size:19px' }, svg), `×α_{${k}}`);
+    el('text', { x: 372, y: y - 8, 'text-anchor': 'middle', style: 'font-size:15px;font-weight:700' }, svg).textContent = ['×(a+d)/2', '×(b+c)/2', '×i(b−c)/2', '×(a−d)/2'][k];
     el('path', { d: `M395,${y} C415,${y} 415,${yc} 430,${yc}`, style: 'fill:none;stroke:var(--ink);stroke-width:2.5' }, svg);
   });
   el('circle', { cx: 452, cy: yc, r: 22, style: 'fill:#fff;stroke:var(--ink);stroke-width:3' }, svg);
@@ -178,7 +184,7 @@ drawQC('#rvC3', { n: 2, noNames: true, ops: [{ g: 'SW', a: 0, b: 1, col: 0 }], c
     Y.forEach((y, q) => {
       el('line', { x1: 46, y1: y, x2: 316, y2: y, class: 'w' }, svg);
       el('text', { x: 40, y: y + 7, 'text-anchor': 'end', style: 'font-size:20px' }, svg).textContent = q ? '|y⟩' : '|x⟩';
-      el('text', { x: 322, y: y + 7, style: 'font-size:20px' }, svg).textContent = q ? '|y ⊕ f(x)⟩' : '|x⟩';
+      el('text', { x: 322, y: y + 7, style: 'font-size:20px' }, svg).textContent = q ? ['|y ⊕ 0⟩', '|y ⊕ 1⟩', '|y ⊕ x⟩'][k] : '|x⟩';
     });
     el('rect', { x: 82, y: 14, width: 196, height: 136, rx: 8, style: 'fill:none;stroke:var(--ink);stroke-width:2;stroke-dasharray:6 4' }, svg);
     rich(el('text', { x: 88, y: 34, style: 'font-size:16px;font-style:italic;fill:var(--muted)' }, svg), 'U_{f}');
@@ -302,26 +308,10 @@ measCircuit('#pmC2', [0, 1]);
 /* ---------- 古典回路の AND ---------- */
 {
   const svg = $('#clSvg');
-  el('path', { d: 'M48,14 H88 A36,36 0 0 1 88,86 H48 Z', style: 'fill:#fff;stroke:var(--ink);stroke-width:3' }, svg);
-  [32, 68].forEach((y, k) => { el('line', { x1: 8, y1: y, x2: 48, y2: y, class: 'w' }, svg); el('text', { x: 4, y: y - 6, style: 'font-size:15px' }, svg).textContent = k ? 'b' : 'a'; });
+  el('path', { d: 'M48,14 Q96,14 124,50 Q96,86 48,86 Q66,50 48,14 Z', style: 'fill:#fff;stroke:var(--ink);stroke-width:3' }, svg);
+  el('path', { d: 'M38,14 Q56,50 38,86', style: 'fill:none;stroke:var(--ink);stroke-width:3' }, svg);
+  [32, 68].forEach((y, k) => { el('line', { x1: 8, y1: y, x2: 46, y2: y, class: 'w' }, svg); el('text', { x: 4, y: y - 6, style: 'font-size:15px' }, svg).textContent = k ? 'y' : 'x'; });
   el('line', { x1: 124, y1: 50, x2: 164, y2: 50, class: 'w' }, svg);
-  el('text', { x: 72, y: 56, 'text-anchor': 'middle', style: 'font:800 15px sans-serif' }, svg).textContent = 'AND';
+  el('text', { x: 80, y: 56, 'text-anchor': 'middle', style: 'font:800 14px sans-serif' }, svg).textContent = 'XOR';
 }
 
-/* ---------- 【補足】ハミルトニアン：長さ 1 → 長さ √2 ---------- */
-{
-  const svg = $('#hmSvg'), O = [170, 200], R = 120;
-  el('line', { x1: 10, y1: O[1], x2: 410, y2: O[1], style: 'stroke:#b9b5d0;stroke-width:2' }, svg);
-  el('line', { x1: O[0], y1: 320, x2: O[0], y2: 10, style: 'stroke:#b9b5d0;stroke-width:2' }, svg);
-  el('circle', { cx: O[0], cy: O[1], r: R, style: 'fill:none;stroke:var(--green);stroke-width:2.5;stroke-dasharray:7 5' }, svg);
-  el('text', { x: 4, y: O[1] - R + 4, style: 'font:800 14px sans-serif;fill:var(--green)' }, svg).textContent = '長さ 1（量子状態）';
-  const arrow = (x, y, col, lab, lx, ly) => {
-    el('line', { x1: O[0], y1: O[1], x2: O[0] + x * R, y2: O[1] - y * R, style: `stroke:${col};stroke-width:4;stroke-linecap:round` }, svg);
-    el('circle', { cx: O[0] + x * R, cy: O[1] - y * R, r: 6, style: `fill:${col}` }, svg);
-    const t = el('text', { x: O[0] + x * R + lx, y: O[1] - y * R + ly, style: `font-size:20px;fill:${col}` }, svg); t.textContent = lab;
-  };
-  arrow(1, 0, 'var(--ink)', '|0⟩', 8, 24);
-  arrow(1, 1, 'var(--red)', 'Ĥ|0⟩ = |0⟩ + |1⟩', -70, -14);
-  arrow(Math.SQRT1_2, Math.SQRT1_2, 'var(--blue)', 'H|0⟩（ユニタリ）', -200, 30);
-  el('text', { x: O[0] + .62 * R, y: O[1] - .36 * R, style: 'font:800 15px sans-serif;fill:var(--red)' }, svg).textContent = '長さ √2';
-}
