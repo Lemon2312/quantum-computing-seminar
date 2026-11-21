@@ -10,6 +10,7 @@ function partial(id, m) {
   const GC8 = ['var(--accent)', 'var(--blue)', 'var(--green)', 'var(--purple)'];
   const term = ([k, c], col = true) => `${c === 1 ? '' : c}|${col ? `<u>${k.slice(0, m)}</u>` : k.slice(0, m)}${k.slice(m)}⟩`;
   $(`#${id}St`).innerHTML = `<span>|φ⟩ = ${PRE}(${T.map(([k, c]) => `${c === 1 ? '' : c}|<span class="t" style="color:${GC8[parseInt(k.slice(0, m), 2)]};font-weight:900">${k.slice(0, m)}</span>${k.slice(m)}⟩`).join(' + ')})</span>`;
+  $(`#${id}St`).insertAdjacentHTML('beforeend', `<div class="pm-pr">${T.map(([k]) => `<span>|${k}⟩：${FI(1, 4)}</span>`).join('')}<em>（どれも |${FI(1, 2)}|² = ${FI(1, 4)}）</em></div>`);
   const groups = [...Array(2 ** m)].map((_, p) => {
     const pre = bits(p, m), ts = T.filter(([k]) => k.startsWith(pre)), S = ts.reduce((s, [, c]) => s + c * c, 0);
     const state = !ts.length ? '—' : ts.length === 1 ? `|${ts[0][0]}⟩` : `${FI(1, '√' + S)}(${ts.map(t => term(t, false)).join(' + ')})`;
@@ -77,16 +78,25 @@ function ampBars(root, N) {
     c.classList.toggle('mv', i === mv); c.classList.toggle('hit', i === hit);
   });
 }
-const s2a = Math.SQRT1_2, T0 = [1, 0, 0, 0], T1 = [s2a, 0, s2a, 0], T2 = [s2a, 0, 0, s2a];
+const TC = ['var(--accent)', 'var(--blue)', 'var(--green)', 'var(--purple)'];
 {
-  const qc = drawQC('#spQC', { n: 2, init: true, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'CX', c: 0, t: 1, col: 1 }], colW: 90 });
-  const draw = ampBars('#spAmp', 4), h = FI(1, '√2');
-  const eqs = ['|0⟩|0⟩ = |00⟩', `(H ⊗ I)|00⟩ = ${h}(|00⟩ + |10⟩)　← x が 0 と 1 の重ね合わせ`, `CNOT → ${h}(|00⟩ + <b style="color:var(--purple)">|11⟩</b>)　← 2 通りを一度に計算`];
-  stepper('#spStp', 3, k => { qc.set(k - 1); draw([T0, T1, T2][k], k === 2 ? 3 : -1); $('#spEq').innerHTML = `<span>${eqs[k]}</span>`; }, 1900);
+  const qc = drawQC('#spQC', { n: 2, init: true, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'H', q: 1, col: 0 }, { g: 'X', q: 0, col: 1 }, { g: 'X', q: 1, col: 1 }], colW: 90 });
+  const draw = ampBars('#spAmp', 4), h = FI(1, 2), bars = [...$('#spAmp').children];
+  // 各項を色で追う：X ⊗ X の後は |00⟩ の色が |11⟩ に移る
+  const col = (k, i) => (k < 2 ? TC[i] : TC[3 - i]);
+  const K = ['|00⟩', '|01⟩', '|10⟩', '|11⟩'];
+  const eqs = ['|0⟩|0⟩ = |00⟩', `(H ⊗ H)|00⟩ = ${h}(${K.map((x, j) => `<b style="color:${TC[j]}">${x}</b>`).join(' + ')})`, `(X ⊗ X) → ${h}(${K.slice().reverse().map((x, j) => `<b style="color:${TC[j]}">${x}</b>`).join(' + ')})`];
+  stepper('#spStp', 3, k => {
+    qc.set(k - 1);
+    draw(k ? [.5, .5, .5, .5] : [1, 0, 0, 0]);
+    bars.forEach((c, i) => { c.querySelector('.bar').style.background = k ? col(k, i) : ''; c.querySelector('.val').innerHTML = k ? FI(1, 2) : (i ? '' : '1'); });
+    $('#spEq').innerHTML = `<span>${eqs[k]}</span>`;
+  }, 1900);
 }
 {
-  const draw = ampBars('#sp2Amp', 4), reset = () => { draw(T2); $('#sp2Res').innerHTML = 'どちらも確率 <span class="math">|1/√2|² = 1/2</span>'; };
-  $('#sp2Go').onclick = e => { e.currentTarget.blur(); const i = rnd([0, 3]), a = [0, 0, 0, 0]; a[i] = 1; draw(a, -1, i); };
+  const draw = ampBars('#sp2Amp', 4), q = [.5, .5, .5, .5];
+  const reset = () => { draw(q); $('#sp2Amp').querySelectorAll('.val').forEach(v => v.innerHTML = FI(1, 2)); $('#sp2Res').innerHTML = 'どれも確率 <span class="math">|1/2|² = 1/4</span>'; };
+  $('#sp2Go').onclick = e => { e.currentTarget.blur(); const i = rnd([0, 1, 2, 3]), a = [0, 0, 0, 0]; a[i] = 1; draw(a, -1, i); };
   $('#sp2Back').onclick = e => { e.currentTarget.blur(); reset(); };
   onEnter.sp2 = reset;
   reset();
@@ -305,13 +315,15 @@ measCircuit('#pmC2', [0, 1]);
   });
 }
 
-/* ---------- 古典回路の AND ---------- */
+/* ---------- 古典回路：2 ビットそれぞれに NOT ---------- */
 {
   const svg = $('#clSvg');
-  el('path', { d: 'M48,14 Q96,14 124,50 Q96,86 48,86 Q66,50 48,14 Z', style: 'fill:#fff;stroke:var(--ink);stroke-width:3' }, svg);
-  el('path', { d: 'M38,14 Q56,50 38,86', style: 'fill:none;stroke:var(--ink);stroke-width:3' }, svg);
-  [32, 68].forEach((y, k) => { el('line', { x1: 8, y1: y, x2: 46, y2: y, class: 'w' }, svg); el('text', { x: 4, y: y - 6, style: 'font-size:15px' }, svg).textContent = k ? 'y' : 'x'; });
-  el('line', { x1: 124, y1: 50, x2: 164, y2: 50, class: 'w' }, svg);
-  el('text', { x: 80, y: 56, 'text-anchor': 'middle', style: 'font:800 14px sans-serif' }, svg).textContent = 'XOR';
+  [28, 74].forEach((y, k) => {
+    el('text', { x: 2, y: y + 5, style: 'font-size:15px;font-style:italic' }, svg).textContent = k ? 'b' : 'a';
+    el('line', { x1: 14, y1: y, x2: 54, y2: y, class: 'w' }, svg);
+    el('path', { d: `M54,${y - 16} L90,${y} L54,${y + 16} Z`, style: 'fill:#fff;stroke:var(--ink);stroke-width:3' }, svg);
+    el('circle', { cx: 96, cy: y, r: 6, style: 'fill:#fff;stroke:var(--ink);stroke-width:3' }, svg);
+    el('line', { x1: 102, y1: y, x2: 150, y2: y, class: 'w' }, svg);
+    el('text', { x: 124, y: y - 8, 'text-anchor': 'middle', style: 'font:800 12px sans-serif' }, svg).textContent = 'NOT';
+  });
 }
-
