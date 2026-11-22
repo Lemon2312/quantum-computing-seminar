@@ -94,25 +94,28 @@ const TC = ['var(--accent)', 'var(--blue)', 'var(--green)', 'var(--purple)'];
   }, 1900);
 }
 {
-  const draw = ampBars('#sp2Amp', 4), q = [.5, .5, .5, .5];
-  const reset = () => { draw(q); $('#sp2Amp').querySelectorAll('.val').forEach(v => v.innerHTML = FI(1, 2)); $('#sp2Res').innerHTML = 'どれも確率 <span class="math">|1/2|² = 1/4</span>'; };
-  $('#sp2Go').onclick = e => { e.currentTarget.blur(); const i = rnd([0, 1, 2, 3]), a = [0, 0, 0, 0]; a[i] = 1; draw(a, -1, i); };
-  $('#sp2Back').onclick = e => { e.currentTarget.blur(); reset(); };
-  onEnter.sp2 = reset;
-  reset();
+  const before = ampBars('#sp2Amp', 4), after = ampBars('#sp2Amp2', 4), K = ['|00⟩', '|01⟩', '|10⟩', '|11⟩'];
+  before([.5, .5, .5, .5]); $('#sp2Amp').querySelectorAll('.val').forEach(v => v.innerHTML = FI(1, 2));
+  const meas = () => { const i = rnd([0, 1, 2, 3]), a = [0, 0, 0, 0]; a[i] = 1; after(a, -1, i); $('#sp2E').innerHTML = K[i]; };
+  $('#sp2Go').onclick = e => { e.currentTarget.blur(); meas(); };
+  onEnter.sp2 = meas;
+  meas();
 }
 
-/* ---------- 8.8 計算量 O(2²ⁿ) ---------- */
+/* ---------- 8.8 計算量 O(2²ⁿ)：縦軸が大きくなると、小さい目盛りは下へ移動する ---------- */
 {
-  const N = 10, ch = $('#cxChart');
+  const N = 10, H = 240, ch = $('#cxChart'), ya = $('#cxY');
   ch.innerHTML = [...Array(N)].map((_, i) => `<div class="c"><div class="bar"></div><span class="n">${i + 1}</span></div>`).join('');
-  const cs = [...ch.children];
+  ya.innerHTML = '<span class="tk z" style="bottom:0">0</span>' + [...Array(N)].map((_, i) => `<span class="tk" data-i="${i + 1}">${(4 ** (i + 1)).toLocaleString()}</span>`).join('');
+  const cs = [...ch.children], tks = [...ya.querySelectorAll('.tk[data-i]')];
   stepper('#cxStp', N, k => {
-    const n = k + 1;
-    cs.forEach((c, i) => { c.querySelector('.bar').style.height = i <= k ? Math.max(4 ** (i + 1) / 4 ** n * 240, 1) + 'px' : '0'; c.classList.toggle('cur', i === k); });
-    const mx = 4 ** n; $('#cxY').innerHTML = [mx, mx / 2, 0].map(v => `<span>${v.toLocaleString()}</span>`).join('');
-    $('#cxNum').innerHTML = `${n} 量子ビットのとき：(2<sup>${n}</sup>)² = <b>${(4 ** n).toLocaleString()}</b> 回の計算`;
+    const n = k + 1, mx = 4 ** n;
+    cs.forEach((c, i) => { c.querySelector('.bar').style.height = i <= k ? Math.max(4 ** (i + 1) / mx * H, 1) + 'px' : '0'; c.classList.toggle('cur', i === k); });
+    tks.forEach(t => { const m = +t.dataset.i, y = 4 ** m / mx * H; t.style.bottom = Math.min(y, H) + 'px'; t.style.opacity = m <= n && (m === n || y >= 22) ? 1 : 0; });
+    $('#cxNum').innerHTML = `${n} 量子ビットのとき：(2<sup>${n}</sup>)² = <b>${mx.toLocaleString()}</b> 回の計算`;
   }, 1200);
+  // 8 × 8 の行列とベクトルの積
+  $('#mvxM').innerHTML = '<i></i>'.repeat(64); $('#mvxV').innerHTML = '<i></i>'.repeat(8); $('#mvxR').innerHTML = '<i></i>'.repeat(8);
 }
 
 /* ---------- 8.9 オラクル（一般的な形：n 量子ビットの x、m 量子ビットの y） ---------- */
@@ -326,4 +329,31 @@ measCircuit('#pmC2', [0, 1]);
     el('line', { x1: 102, y1: y, x2: 150, y2: y, class: 'w' }, svg);
     el('text', { x: 124, y: y - 8, 'text-anchor': 'middle', style: 'font:800 12px sans-serif' }, svg).textContent = 'NOT';
   });
+}
+
+/* ---------- タイトル：量子ビットが 1 個増えるごとに、重ね合わせる基底状態が 2 倍になる ---------- */
+{
+  const svg = $('#ttSvg'); let n = 1, t = null;
+  const draw = () => {
+    svg.innerHTML = '';
+    const m = 2 ** n, gap = 30, y0 = 105 - (n - 1) * gap / 2;
+    for (let q = 0; q < n; q++) {
+      const y = y0 + q * gap;
+      rich(el('text', { x: 4, y: y + 6, style: 'font-size:17px;font-style:italic' }, svg), `q_{${q}}`);
+      el('line', { x1: 34, y1: y, x2: 170, y2: y, class: 'w' }, svg);
+      el('rect', { x: 84, y: y - 13, width: 26, height: 26, rx: 5, style: 'fill:var(--blue);stroke:var(--ink);stroke-width:2' }, svg);
+      el('text', { x: 97, y: y + 6, 'text-anchor': 'middle', style: 'fill:#fff;font:700 15px "Cambria Math",serif' }, svg).textContent = 'H';
+    }
+    el('text', { x: 196, y: 112, style: 'font-size:28px' }, svg).textContent = '→';
+    const cols = Math.min(m, 8), rows = Math.ceil(m / 8), sz = Math.min(34, 270 / cols - 4), x0 = 236, top = 105 - rows * (sz + 4) / 2;
+    for (let i = 0; i < m; i++) {
+      const r = Math.floor(i / 8), c = i % 8;
+      el('rect', { x: x0 + c * (sz + 4), y: top + r * (sz + 4), width: sz, height: sz, rx: 5, class: 'tt-c', style: `animation-delay:${i * 25}ms` }, svg);
+    }
+  };
+  const step = () => { n = n % 5 + 1; draw(); $('#ttLbl').innerHTML = `<b>${n}</b> 量子ビット → <b>2<sup>${n}</sup> = ${2 ** n}</b> 個の基底状態の重ね合わせ`; };
+  const stop = () => { clearInterval(t); t = null; };
+  stoppers.push(stop);
+  onEnter.title = () => { stop(); n = 0; step(); t = setInterval(step, 1600); };
+  n = 4; step();
 }
