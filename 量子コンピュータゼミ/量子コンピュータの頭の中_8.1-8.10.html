@@ -1243,6 +1243,22 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .a2-m sub{font-size:.62em;vertical-align:-.3em;position:static}
 .a2-m .eq.inline{vertical-align:middle}
 
+/* 18 回目 */
+.tt-dot{fill:var(--accent);animation:ttRun 2.6s linear infinite;opacity:.9}
+@keyframes ttRun{0%{transform:translateX(0);opacity:0}8%{opacity:.9}88%{opacity:.9}100%{transform:translateX(330px);opacity:0}}
+.sp2-card .amp8{height:150px}
+.slide[data-id="sp2"] .amp8 .bar{max-height:128px}
+.cx-wrap{align-items:stretch}
+.cx-yl{writing-mode:vertical-rl;font-size:14px;font-weight:800;color:var(--muted);text-align:center;height:260px}
+.mvx-c{font-size:14px;line-height:1.45}
+.slide[data-id="cx"] ul.plain li{font-size:19px}
+.slide[data-id="a2"] .thm6{padding-top:20px}
+.cx-yl{font-size:15px;margin-right:2px;letter-spacing:.05em}
+.cx-y{min-width:80px}
+.t-lbl{font-size:16px}
+.cx-yl{writing-mode:horizontal-tb !important;height:auto !important;text-align:left;font-size:15px;margin:0 0 4px}
+.slide[data-id="cx"] .cx-chart,.slide[data-id="cx"] .cx-y{height:240px}
+
 </style>
 </head>
 <body>
@@ -1627,12 +1643,12 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
       <ul class="plain pop" style="--d:.1s">
         <li>n が大きいときの計算ステップ数のおおよその数を <span class="math nw">O(f(n))</span> で表し、<b class="k">計算量</b> という</li>
         <li>2ⁿ × 2ⁿ 行列と 2ⁿ 次元ベクトルの積は <span class="math nw"><b>O((2ⁿ)²) = O(2²ⁿ)</b></span>
-          <div class="mvx"><div class="mvx-m" id="mvxM"></div><span>×</span><div class="mvx-v" id="mvxV"></div><span>=</span><div class="mvx-v" id="mvxR"></div></div><div class="mvx-c">例：3 量子ビットなら 8 × 8 = 64 回のかけ算（行ごとに 8 回 × 8 行）</div></li>
-        <li>量子コンピュータなら、ユニタリ発展は <b class="kb">一定時間以内</b> に実行できる</li>
+          <div class="mvx"><div class="mvx-m" id="mvxM"></div><span>×</span><div class="mvx-v" id="mvxV"></div><span>=</span><div class="mvx-v" id="mvxR"></div></div><div class="mvx-c">例：3 量子ビットなら、かけ算 8 × 8 = 64 回 ＋ 足し算 7 × 8 = 56 回。足し算も同じくらいの回数だが、合わせても約 2 倍なので O(2²ⁿ) は変わらない（O は定数倍を無視する）</div></li>
+        <li>量子コンピュータなら、H ⊗ H や CCNOT のように <b class="kb">少ないゲートで作れるユニタリ発展</b> は、2ⁿ 個の状態にまとめて短い時間で実行できる（どんなユニタリ発展でも速いわけではない）</li>
       </ul>
     </div>
     <div class="card pop cx-card">
-      <div class="cx-wrap"><div class="cx-y" id="cxY"></div><div class="cx-chart" id="cxChart"></div></div><div class="cx-xl">量子ビットの数 n</div>
+      <div class="cx-yl">縦軸：計算量（計算の回数）</div><div class="cx-wrap"><div class="cx-y" id="cxY"></div><div class="cx-chart" id="cxChart"></div></div><div class="cx-xl">量子ビットの数 n</div>
       <div class="cx-num" id="cxNum"></div>
       <div id="cxStp"></div>
     </div>
@@ -1747,13 +1763,13 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
   <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)">
     <div class="col">
       <div class="eqrow a2-m pop" style="--d:.05s">A<sub>2</sub> = <span class="eq inline"><span class="vec m4 e4"><span>a<sub>00</sub></span><span>a<sub>01</sub></span><span>a<sub>02</sub></span><span>a<sub>03</sub></span><span>a<sub>10</sub></span><span>a<sub>11</sub></span><span>a<sub>12</sub></span><span>a<sub>13</sub></span><span>a<sub>20</sub></span><span>a<sub>21</sub></span><span>a<sub>22</sub></span><span>a<sub>23</sub></span><span>a<sub>30</sub></span><span>a<sub>31</sub></span><span>a<sub>32</sub></span><span>a<sub>33</sub></span></span></span> = a<sub>00</sub><span class="eq inline"><span class="vec m4 e4"><span>1</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span></span></span> + a<sub>01</sub><span class="eq inline"><span class="vec m4 e4"><span>0</span><span>1</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span></span></span> + ⋯ + a<sub>33</sub><span class="eq inline"><span class="vec m4 e4"><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>1</span></span></span></div>
-      <div class="thm6 pop" style="--d:.1s;font-size:18px;padding-top:18px"><span class="thm-t">定理 8.2</span><span class="math">U<sub>i</sub>, V<sub>i</sub></span>：2 × 2 のユニタリ行列、<span class="math">|φ⟩</span>：n 量子ビットの量子状態
+      <div class="thm6 pop" style="--d:.1s;font-size:18px;padding-top:18px"><span class="thm-t">定理 8.2</span>
         <div class="math" style="font-size:18px">(U<sub>1</sub> ⊗ V<sub>1</sub> + ⋯ + U<sub>n</sub> ⊗ V<sub>n</sub>)|φ⟩ = U<sub>1</sub> ⊗ V<sub>1</sub>|φ⟩ + ⋯ + U<sub>n</sub> ⊗ V<sub>n</sub>|φ⟩</div>
       </div>
       <div class="eqtx pop a2-ex" style="--d:.2s">A<sub>2</sub>|φ⟩ = α<sub>00</sub>(<u class="wv">I ⊗ I|φ⟩</u>) + α<sub>01</sub>(<u class="wv">I ⊗ X|φ⟩</u>) + α<sub>02</sub>(<u class="wv">I ⊗ Y|φ⟩</u>) + α<sub>03</sub>(<u class="wv">I ⊗ Z|φ⟩</u>)<br>　+ α<sub>10</sub>(<u class="wv">X ⊗ I|φ⟩</u>) + α<sub>11</sub>(<u class="wv">X ⊗ X|φ⟩</u>) + α<sub>12</sub>(<u class="wv">X ⊗ Y|φ⟩</u>) + α<sub>13</sub>(<u class="wv">X ⊗ Z|φ⟩</u>)<br>　+ α<sub>20</sub>(<u class="wv">Y ⊗ I|φ⟩</u>) + α<sub>21</sub>(<u class="wv">Y ⊗ X|φ⟩</u>) + α<sub>22</sub>(<u class="wv">Y ⊗ Y|φ⟩</u>) + α<sub>23</sub>(<u class="wv">Y ⊗ Z|φ⟩</u>)<br>　+ α<sub>30</sub>(<u class="wv">Z ⊗ I|φ⟩</u>) + α<sub>31</sub>(<u class="wv">Z ⊗ X|φ⟩</u>) + α<sub>32</sub>(<u class="wv">Z ⊗ Y|φ⟩</u>) + α<sub>33</sub>(<u class="wv">Z ⊗ Z|φ⟩</u>)</div>
-      <div class="point blue pop" style="--d:.3s;font-size:20px">σ が 4 種類、Σ が 2 個あるので、量子コンピュータで <b class="kb">4² = 16 回</b> 計算する</div>
+      <div class="point blue pop" style="--d:.3s;font-size:20px">パウリ行列が 4 種類、Σ が 2 個あるので、量子コンピュータで <b class="kb">4² = 16 回</b> 計算する</div>
     </div>
-    <div class="card pop"><div class="mp-lbl">σ<sub>k₁</sub> ⊗ σ<sub>k₂</sub>（σ<sub>0</sub> = I, σ<sub>1</sub> = X, σ<sub>2</sub> = Y, σ<sub>3</sub> = Z。どれもユニタリ行列）</div><div class="a2g" id="a2G"></div></div>
+    <div class="card pop"><div class="a2g" id="a2G"></div></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -2555,31 +2571,26 @@ measCircuit('#pmC2', [0, 1]);
   });
 }
 
-/* ---------- タイトル：量子ビットが 1 個増えるごとに、重ね合わせる基底状態が 2 倍になる ---------- */
+/* ---------- タイトル：n 量子ビットの量子回路（|0⟩^⊗n → H → 2ⁿ × 2ⁿ のユニタリ U → 測定） ---------- */
 {
-  const svg = $('#ttSvg'); let n = 1, t = null;
-  const draw = () => {
-    svg.innerHTML = '';
-    const m = 2 ** n, gap = 30, y0 = 105 - (n - 1) * gap / 2;
-    for (let q = 0; q < n; q++) {
-      const y = y0 + q * gap;
-      rich(el('text', { x: 4, y: y + 6, style: 'font-size:17px;font-style:italic' }, svg), `q_{${q}}`);
-      el('line', { x1: 34, y1: y, x2: 170, y2: y, class: 'w' }, svg);
-      el('rect', { x: 84, y: y - 13, width: 26, height: 26, rx: 5, style: 'fill:var(--blue);stroke:var(--ink);stroke-width:2' }, svg);
-      el('text', { x: 97, y: y + 6, 'text-anchor': 'middle', style: 'fill:#fff;font:700 15px "Cambria Math",serif' }, svg).textContent = 'H';
-    }
-    el('text', { x: 196, y: 112, style: 'font-size:28px' }, svg).textContent = '→';
-    const cols = Math.min(m, 8), rows = Math.ceil(m / 8), sz = Math.min(34, 270 / cols - 4), x0 = 236, top = 105 - rows * (sz + 4) / 2;
-    for (let i = 0; i < m; i++) {
-      const r = Math.floor(i / 8), c = i % 8;
-      el('rect', { x: x0 + c * (sz + 4), y: top + r * (sz + 4), width: sz, height: sz, rx: 5, class: 'tt-c', style: `animation-delay:${i * 25}ms` }, svg);
-    }
-  };
-  const step = () => { n = n % 5 + 1; draw(); $('#ttLbl').innerHTML = `<b>${n}</b> 量子ビット → <b>2<sup>${n}</sup> = ${2 ** n}</b> 個の基底状態の重ね合わせ`; };
-  const stop = () => { clearInterval(t); t = null; };
-  stoppers.push(stop);
-  onEnter.title = () => { stop(); n = 0; step(); t = setInterval(step, 1600); };
-  n = 4; step();
+  const svg = $('#ttSvg'), ys = [30, 72, 114, 176], nm = ['q_{0}', 'q_{1}', 'q_{2}', 'q_{n−1}'];
+  ys.forEach((y, q) => {
+    rich(el('text', { x: 2, y: y + 6, style: 'font-size:17px;font-style:italic' }, svg), nm[q]);
+    el('text', { x: 50, y: y + 6, style: 'font-size:17px' }, svg).textContent = '|0⟩';
+    el('line', { x1: 80, y1: y, x2: 470, y2: y, class: 'w tt-w', style: `animation-delay:${q * .15}s` }, svg);
+    el('rect', { x: 110, y: y - 14, width: 28, height: 28, rx: 5, style: 'fill:var(--blue);stroke:var(--ink);stroke-width:2' }, svg);
+    el('text', { x: 124, y: y + 6, 'text-anchor': 'middle', style: 'fill:#fff;font:700 16px "Cambria Math",serif' }, svg).textContent = 'H';
+    el('rect', { x: 410, y: y - 14, width: 30, height: 28, rx: 5, style: 'fill:#1f1a3d;stroke:var(--ink);stroke-width:2' }, svg);
+    el('path', { d: `M415,${y + 7}A10,10 0 0 1 435,${y + 7}M425,${y + 7}L432,${y - 5}`, style: 'fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round' }, svg);
+  });
+  el('text', { x: 124, y: 150, 'text-anchor': 'middle', style: 'font-size:20px' }, svg).textContent = '⋮';
+  el('text', { x: 64, y: 150, 'text-anchor': 'middle', style: 'font-size:20px' }, svg).textContent = '⋮';
+  // 2ⁿ 個の状態がまとめて通っていく光
+  ys.forEach((y, q) => el('circle', { cx: 80, cy: y, r: 6, class: 'tt-dot', style: `animation-delay:${q * .12}s` }, svg));
+  el('rect', { x: 180, y: 12, width: 190, height: 182, rx: 12, style: 'fill:#fff1c2;stroke:var(--ink);stroke-width:3' }, svg);
+  el('text', { x: 275, y: 96, 'text-anchor': 'middle', style: 'font-size:30px;font-style:italic' }, svg).textContent = 'U';
+  el('text', { x: 275, y: 124, 'text-anchor': 'middle', class: 'lbl', style: 'font-size:14px' }, svg).textContent = '2ⁿ × 2ⁿ のユニタリ行列';
+  $('#ttLbl').innerHTML = '<b>n</b> 量子ビット → <b>2ⁿ</b> 個の基底状態の重ね合わせを、まとめてユニタリ発展';
 }
 
 /* 共通部品（後半）：復習問題・スライド制御・一覧・黒ペン・レーザー。スライド固有のスクリプトより後に置く */

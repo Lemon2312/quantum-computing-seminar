@@ -625,3 +625,19 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .a2-m{display:block !important;font-size:22px !important;margin-bottom:14px;white-space:nowrap}
 .a2-m sub{font-size:.62em;vertical-align:-.3em;position:static}
 .a2-m .eq.inline{vertical-align:middle}
+
+/* 18 回目 */
+.tt-dot{fill:var(--accent);animation:ttRun 2.6s linear infinite;opacity:.9}
+@keyframes ttRun{0%{transform:translateX(0);opacity:0}8%{opacity:.9}88%{opacity:.9}100%{transform:translateX(330px);opacity:0}}
+.sp2-card .amp8{height:150px}
+.slide[data-id="sp2"] .amp8 .bar{max-height:128px}
+.cx-wrap{align-items:stretch}
+.cx-yl{writing-mode:vertical-rl;font-size:14px;font-weight:800;color:var(--muted);text-align:center;height:260px}
+.mvx-c{font-size:14px;line-height:1.45}
+.slide[data-id="cx"] ul.plain li{font-size:19px}
+.slide[data-id="a2"] .thm6{padding-top:20px}
+.cx-yl{font-size:15px;margin-right:2px;letter-spacing:.05em}
+.cx-y{min-width:80px}
+.t-lbl{font-size:16px}
+.cx-yl{writing-mode:horizontal-tb !important;height:auto !important;text-align:left;font-size:15px;margin:0 0 4px}
+.slide[data-id="cx"] .cx-chart,.slide[data-id="cx"] .cx-y{height:240px}

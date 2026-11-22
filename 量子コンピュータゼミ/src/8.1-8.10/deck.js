@@ -331,29 +331,24 @@ measCircuit('#pmC2', [0, 1]);
   });
 }
 
-/* ---------- タイトル：量子ビットが 1 個増えるごとに、重ね合わせる基底状態が 2 倍になる ---------- */
+/* ---------- タイトル：n 量子ビットの量子回路（|0⟩^⊗n → H → 2ⁿ × 2ⁿ のユニタリ U → 測定） ---------- */
 {
-  const svg = $('#ttSvg'); let n = 1, t = null;
-  const draw = () => {
-    svg.innerHTML = '';
-    const m = 2 ** n, gap = 30, y0 = 105 - (n - 1) * gap / 2;
-    for (let q = 0; q < n; q++) {
-      const y = y0 + q * gap;
-      rich(el('text', { x: 4, y: y + 6, style: 'font-size:17px;font-style:italic' }, svg), `q_{${q}}`);
-      el('line', { x1: 34, y1: y, x2: 170, y2: y, class: 'w' }, svg);
-      el('rect', { x: 84, y: y - 13, width: 26, height: 26, rx: 5, style: 'fill:var(--blue);stroke:var(--ink);stroke-width:2' }, svg);
-      el('text', { x: 97, y: y + 6, 'text-anchor': 'middle', style: 'fill:#fff;font:700 15px "Cambria Math",serif' }, svg).textContent = 'H';
-    }
-    el('text', { x: 196, y: 112, style: 'font-size:28px' }, svg).textContent = '→';
-    const cols = Math.min(m, 8), rows = Math.ceil(m / 8), sz = Math.min(34, 270 / cols - 4), x0 = 236, top = 105 - rows * (sz + 4) / 2;
-    for (let i = 0; i < m; i++) {
-      const r = Math.floor(i / 8), c = i % 8;
-      el('rect', { x: x0 + c * (sz + 4), y: top + r * (sz + 4), width: sz, height: sz, rx: 5, class: 'tt-c', style: `animation-delay:${i * 25}ms` }, svg);
-    }
-  };
-  const step = () => { n = n % 5 + 1; draw(); $('#ttLbl').innerHTML = `<b>${n}</b> 量子ビット → <b>2<sup>${n}</sup> = ${2 ** n}</b> 個の基底状態の重ね合わせ`; };
-  const stop = () => { clearInterval(t); t = null; };
-  stoppers.push(stop);
-  onEnter.title = () => { stop(); n = 0; step(); t = setInterval(step, 1600); };
-  n = 4; step();
+  const svg = $('#ttSvg'), ys = [30, 72, 114, 176], nm = ['q_{0}', 'q_{1}', 'q_{2}', 'q_{n−1}'];
+  ys.forEach((y, q) => {
+    rich(el('text', { x: 2, y: y + 6, style: 'font-size:17px;font-style:italic' }, svg), nm[q]);
+    el('text', { x: 50, y: y + 6, style: 'font-size:17px' }, svg).textContent = '|0⟩';
+    el('line', { x1: 80, y1: y, x2: 470, y2: y, class: 'w tt-w', style: `animation-delay:${q * .15}s` }, svg);
+    el('rect', { x: 110, y: y - 14, width: 28, height: 28, rx: 5, style: 'fill:var(--blue);stroke:var(--ink);stroke-width:2' }, svg);
+    el('text', { x: 124, y: y + 6, 'text-anchor': 'middle', style: 'fill:#fff;font:700 16px "Cambria Math",serif' }, svg).textContent = 'H';
+    el('rect', { x: 410, y: y - 14, width: 30, height: 28, rx: 5, style: 'fill:#1f1a3d;stroke:var(--ink);stroke-width:2' }, svg);
+    el('path', { d: `M415,${y + 7}A10,10 0 0 1 435,${y + 7}M425,${y + 7}L432,${y - 5}`, style: 'fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round' }, svg);
+  });
+  el('text', { x: 124, y: 150, 'text-anchor': 'middle', style: 'font-size:20px' }, svg).textContent = '⋮';
+  el('text', { x: 64, y: 150, 'text-anchor': 'middle', style: 'font-size:20px' }, svg).textContent = '⋮';
+  // 2ⁿ 個の状態がまとめて通っていく光
+  ys.forEach((y, q) => el('circle', { cx: 80, cy: y, r: 6, class: 'tt-dot', style: `animation-delay:${q * .12}s` }, svg));
+  el('rect', { x: 180, y: 12, width: 190, height: 182, rx: 12, style: 'fill:#fff1c2;stroke:var(--ink);stroke-width:3' }, svg);
+  el('text', { x: 275, y: 96, 'text-anchor': 'middle', style: 'font-size:30px;font-style:italic' }, svg).textContent = 'U';
+  el('text', { x: 275, y: 124, 'text-anchor': 'middle', class: 'lbl', style: 'font-size:14px' }, svg).textContent = '2ⁿ × 2ⁿ のユニタリ行列';
+  $('#ttLbl').innerHTML = '<b>n</b> 量子ビット → <b>2ⁿ</b> 個の基底状態の重ね合わせを、まとめてユニタリ発展';
 }

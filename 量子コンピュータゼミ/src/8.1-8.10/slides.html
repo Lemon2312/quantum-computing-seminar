@@ -376,12 +376,12 @@
       <ul class="plain pop" style="--d:.1s">
         <li>n が大きいときの計算ステップ数のおおよその数を <span class="math nw">O(f(n))</span> で表し、<b class="k">計算量</b> という</li>
         <li>2ⁿ × 2ⁿ 行列と 2ⁿ 次元ベクトルの積は <span class="math nw"><b>O((2ⁿ)²) = O(2²ⁿ)</b></span>
-          <div class="mvx"><div class="mvx-m" id="mvxM"></div><span>×</span><div class="mvx-v" id="mvxV"></div><span>=</span><div class="mvx-v" id="mvxR"></div></div><div class="mvx-c">例：3 量子ビットなら 8 × 8 = 64 回のかけ算（行ごとに 8 回 × 8 行）</div></li>
-        <li>量子コンピュータなら、ユニタリ発展は <b class="kb">一定時間以内</b> に実行できる</li>
+          <div class="mvx"><div class="mvx-m" id="mvxM"></div><span>×</span><div class="mvx-v" id="mvxV"></div><span>=</span><div class="mvx-v" id="mvxR"></div></div><div class="mvx-c">例：3 量子ビットなら、かけ算 8 × 8 = 64 回 ＋ 足し算 7 × 8 = 56 回。足し算も同じくらいの回数だが、合わせても約 2 倍なので O(2²ⁿ) は変わらない（O は定数倍を無視する）</div></li>
+        <li>量子コンピュータなら、H ⊗ H や CCNOT のように <b class="kb">少ないゲートで作れるユニタリ発展</b> は、2ⁿ 個の状態にまとめて短い時間で実行できる（どんなユニタリ発展でも速いわけではない）</li>
       </ul>
     </div>
     <div class="card pop cx-card">
-      <div class="cx-wrap"><div class="cx-y" id="cxY"></div><div class="cx-chart" id="cxChart"></div></div><div class="cx-xl">量子ビットの数 n</div>
+      <div class="cx-yl">縦軸：計算量（計算の回数）</div><div class="cx-wrap"><div class="cx-y" id="cxY"></div><div class="cx-chart" id="cxChart"></div></div><div class="cx-xl">量子ビットの数 n</div>
       <div class="cx-num" id="cxNum"></div>
       <div id="cxStp"></div>
     </div>
@@ -496,13 +496,13 @@
   <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)">
     <div class="col">
       <div class="eqrow a2-m pop" style="--d:.05s">A<sub>2</sub> = <span class="eq inline"><span class="vec m4 e4"><span>a<sub>00</sub></span><span>a<sub>01</sub></span><span>a<sub>02</sub></span><span>a<sub>03</sub></span><span>a<sub>10</sub></span><span>a<sub>11</sub></span><span>a<sub>12</sub></span><span>a<sub>13</sub></span><span>a<sub>20</sub></span><span>a<sub>21</sub></span><span>a<sub>22</sub></span><span>a<sub>23</sub></span><span>a<sub>30</sub></span><span>a<sub>31</sub></span><span>a<sub>32</sub></span><span>a<sub>33</sub></span></span></span> = a<sub>00</sub><span class="eq inline"><span class="vec m4 e4"><span>1</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span></span></span> + a<sub>01</sub><span class="eq inline"><span class="vec m4 e4"><span>0</span><span>1</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span></span></span> + ⋯ + a<sub>33</sub><span class="eq inline"><span class="vec m4 e4"><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>1</span></span></span></div>
-      <div class="thm6 pop" style="--d:.1s;font-size:18px;padding-top:18px"><span class="thm-t">定理 8.2</span><span class="math">U<sub>i</sub>, V<sub>i</sub></span>：2 × 2 のユニタリ行列、<span class="math">|φ⟩</span>：n 量子ビットの量子状態
+      <div class="thm6 pop" style="--d:.1s;font-size:18px;padding-top:18px"><span class="thm-t">定理 8.2</span>
         <div class="math" style="font-size:18px">(U<sub>1</sub> ⊗ V<sub>1</sub> + ⋯ + U<sub>n</sub> ⊗ V<sub>n</sub>)|φ⟩ = U<sub>1</sub> ⊗ V<sub>1</sub>|φ⟩ + ⋯ + U<sub>n</sub> ⊗ V<sub>n</sub>|φ⟩</div>
       </div>
       <div class="eqtx pop a2-ex" style="--d:.2s">A<sub>2</sub>|φ⟩ = α<sub>00</sub>(<u class="wv">I ⊗ I|φ⟩</u>) + α<sub>01</sub>(<u class="wv">I ⊗ X|φ⟩</u>) + α<sub>02</sub>(<u class="wv">I ⊗ Y|φ⟩</u>) + α<sub>03</sub>(<u class="wv">I ⊗ Z|φ⟩</u>)<br>　+ α<sub>10</sub>(<u class="wv">X ⊗ I|φ⟩</u>) + α<sub>11</sub>(<u class="wv">X ⊗ X|φ⟩</u>) + α<sub>12</sub>(<u class="wv">X ⊗ Y|φ⟩</u>) + α<sub>13</sub>(<u class="wv">X ⊗ Z|φ⟩</u>)<br>　+ α<sub>20</sub>(<u class="wv">Y ⊗ I|φ⟩</u>) + α<sub>21</sub>(<u class="wv">Y ⊗ X|φ⟩</u>) + α<sub>22</sub>(<u class="wv">Y ⊗ Y|φ⟩</u>) + α<sub>23</sub>(<u class="wv">Y ⊗ Z|φ⟩</u>)<br>　+ α<sub>30</sub>(<u class="wv">Z ⊗ I|φ⟩</u>) + α<sub>31</sub>(<u class="wv">Z ⊗ X|φ⟩</u>) + α<sub>32</sub>(<u class="wv">Z ⊗ Y|φ⟩</u>) + α<sub>33</sub>(<u class="wv">Z ⊗ Z|φ⟩</u>)</div>
-      <div class="point blue pop" style="--d:.3s;font-size:20px">σ が 4 種類、Σ が 2 個あるので、量子コンピュータで <b class="kb">4² = 16 回</b> 計算する</div>
+      <div class="point blue pop" style="--d:.3s;font-size:20px">パウリ行列が 4 種類、Σ が 2 個あるので、量子コンピュータで <b class="kb">4² = 16 回</b> 計算する</div>
     </div>
-    <div class="card pop"><div class="mp-lbl">σ<sub>k₁</sub> ⊗ σ<sub>k₂</sub>（σ<sub>0</sub> = I, σ<sub>1</sub> = X, σ<sub>2</sub> = Y, σ<sub>3</sub> = Z。どれもユニタリ行列）</div><div class="a2g" id="a2G"></div></div>
+    <div class="card pop"><div class="a2g" id="a2G"></div></div>
   </div>
   <div class="pageno"></div>
 </section>
