@@ -115,7 +115,6 @@ const TC = ['var(--accent)', 'var(--blue)', 'var(--green)', 'var(--purple)'];
     $('#cxNum').innerHTML = `${n} 量子ビットのとき：(2<sup>${n}</sup>)² = <b>${mx.toLocaleString()}</b> 回の計算`;
   }, 1200);
   // 8 × 8 の行列とベクトルの積
-  $('#mvxM').innerHTML = '<i></i>'.repeat(64); $('#mvxV').innerHTML = '<i></i>'.repeat(8); $('#mvxR').innerHTML = '<i></i>'.repeat(8);
 }
 
 /* ---------- 8.9 オラクル（一般的な形：n 量子ビットの x、m 量子ビットの y） ---------- */
@@ -348,7 +347,5 @@ measCircuit('#pmC2', [0, 1]);
   // 2ⁿ 個の状態がまとめて通っていく光
   ys.forEach((y, q) => el('circle', { cx: 80, cy: y, r: 6, class: 'tt-dot', style: `animation-delay:${q * .12}s` }, svg));
   el('rect', { x: 180, y: 12, width: 190, height: 182, rx: 12, style: 'fill:#fff1c2;stroke:var(--ink);stroke-width:3' }, svg);
-  el('text', { x: 275, y: 96, 'text-anchor': 'middle', style: 'font-size:30px;font-style:italic' }, svg).textContent = 'U';
-  el('text', { x: 275, y: 124, 'text-anchor': 'middle', class: 'lbl', style: 'font-size:14px' }, svg).textContent = '2ⁿ × 2ⁿ のユニタリ行列';
-  $('#ttLbl').innerHTML = '<b>n</b> 量子ビット → <b>2ⁿ</b> 個の基底状態の重ね合わせを、まとめてユニタリ発展';
+  el('text', { x: 275, y: 114, 'text-anchor': 'middle', style: 'font-size:40px;font-style:italic' }, svg).textContent = 'U';
 }

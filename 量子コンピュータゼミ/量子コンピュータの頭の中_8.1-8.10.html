@@ -1259,6 +1259,23 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .cx-yl{writing-mode:horizontal-tb !important;height:auto !important;text-align:left;font-size:15px;margin:0 0 4px}
 .slide[data-id="cx"] .cx-chart,.slide[data-id="cx"] .cx-y{height:240px}
 
+/* 19 回目 */
+.mvx{font:16px "Cambria Math","Times New Roman",serif;gap:6px;flex-wrap:nowrap}
+.mvx .vec{font-size:15px;line-height:1.35}
+.vec.m3s{grid-template-columns:repeat(3,auto);column-gap:6px}
+.sumlist.s9{gap:6px}
+.sumlist.s9 .sl{font-size:18px;padding:5px 16px}
+.sumlist.s9 .sl-n{width:30px;height:30px;font-size:15px}
+.sl-t{display:inline-block;min-width:270px;margin-right:10px;color:var(--ink)}
+.t-anim{padding:10px 14px}
+.mvx{font-size:19px}
+.mvx .vec{font-size:17px}
+.sumlist.s9 .sl{font-size:20px;padding:7px 18px}
+.sumlist.s9 .sl-n{width:32px;height:32px}
+.sl-t{min-width:330px}
+.sl-t{min-width:330px;white-space:nowrap}
+.sumlist.s9 .sl{font-size:19px}
+
 </style>
 </head>
 <body>
@@ -1273,7 +1290,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
       <div class="t-no pop" style="--d:.05s">第 8 章</div>
       <h1 class="pop" style="--d:.1s;white-space:nowrap">n 量子ビットの世界</h1>
       <div class="sub pop" style="--d:.2s;white-space:normal">― 測定・ユニタリ発展から<br>トフォリゲート・オラクルまで ―</div>
-      <div class="t-anim pop" style="--d:.3s"><svg id="ttSvg" viewBox="0 0 520 210"></svg><div class="t-lbl" id="ttLbl"></div></div>
+      <div class="t-anim pop" style="--d:.3s"><svg id="ttSvg" viewBox="0 0 520 210"></svg></div>
     </div>
     <div>
       <ul class="agenda ag-t">
@@ -1454,9 +1471,9 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
     <div class="card pop sq-card">
       <div class="sq-row s0"><div class="sq-h"><b>元の量子状態</b></div><div class="eqtx sq-res">|φ⟩ = <span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>(|000⟩ + |001⟩ + |010⟩ + |111⟩)</div></div>
       <div class="sq-row"><div class="sq-h"><b>1. 確率に直す</b><span class="math">|<span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>|² = <span class="eq inline"><span class="frac"><span>1</span><span>4</span></span></span></span></div><div class="sq-box" id="sqA"></div><div class="sq-v">合計 1</div></div>
-      <div class="sq-row"><div class="sq-h"><b>2. 0 ビット目が |0⟩</b><span class="math">|111⟩ は候補から外れる</span></div><div class="sq-box" id="sqB"></div><div class="sq-v ng">合計 <span class="eq inline"><span class="frac"><span>3</span><span>4</span></span></span></div></div>
+      <div class="sq-row"><div class="sq-h"><b>2. 0 ビット目が |0⟩</b></div><div class="sq-box" id="sqB"></div><div class="sq-v ng">合計 <span class="eq inline"><span class="frac"><span>3</span><span>4</span></span></span></div></div>
       <div class="sq-row"><div class="sq-h"><b>3. 逆数 <span class="eq inline"><span class="frac"><span>4</span><span>3</span></span></span> をかける</b><span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>4</span></span></span> × <span class="eq inline"><span class="frac"><span>4</span><span>3</span></span></span> = <span class="eq inline"><span class="frac"><span>1</span><span>3</span></span></span></span></div><div class="sq-box" id="sqC"></div><div class="sq-v ok">合計 1</div></div>
-      <div class="sq-row s4"><div class="sq-h"><b>4. 確率振幅に戻す</b><span class="math">√<span class="eq inline"><span class="frac"><span>1</span><span>3</span></span></span> = <span class="eq inline"><span class="frac"><span>1</span><span>√3</span></span></span></span></div><div class="eqtx sq-res"><span class="eq inline"><span class="frac"><span>1</span><span>√3</span></span></span>(|000⟩ + |001⟩ + |010⟩)</div></div>
+      <div class="sq-row s4"><div class="sq-h"><b>4. 確率振幅に戻す</b><span>確率振幅 ＝ √確率</span></div><div class="eqtx sq-res"><span class="eq inline"><span class="frac"><span>1</span><span>√3</span></span></span>(|000⟩ + |001⟩ + |010⟩)</div></div>
       <div class="sq-note">太枠の箱 ＝ 確率 1</div>
     </div>
   </div>
@@ -1643,7 +1660,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
       <ul class="plain pop" style="--d:.1s">
         <li>n が大きいときの計算ステップ数のおおよその数を <span class="math nw">O(f(n))</span> で表し、<b class="k">計算量</b> という</li>
         <li>2ⁿ × 2ⁿ 行列と 2ⁿ 次元ベクトルの積は <span class="math nw"><b>O((2ⁿ)²) = O(2²ⁿ)</b></span>
-          <div class="mvx"><div class="mvx-m" id="mvxM"></div><span>×</span><div class="mvx-v" id="mvxV"></div><span>=</span><div class="mvx-v" id="mvxR"></div></div><div class="mvx-c">例：3 量子ビットなら、かけ算 8 × 8 = 64 回 ＋ 足し算 7 × 8 = 56 回。足し算も同じくらいの回数だが、合わせても約 2 倍なので O(2²ⁿ) は変わらない（O は定数倍を無視する）</div></li>
+          <div class="mvx"><span class="vec m3s"><span>a<sub>00</sub></span><span>⋯</span><span>a<sub>07</sub></span><span>⋮</span><span></span><span>⋮</span><span>a<sub>70</sub></span><span>⋯</span><span>a<sub>77</sub></span></span><span>×</span><span class="vec"><span>b<sub>0</sub></span><span>⋮</span><span>b<sub>7</sub></span></span><span>=</span><span class="vec"><span>a<sub>00</sub>b<sub>0</sub> + a<sub>01</sub>b<sub>1</sub> + ⋯ + a<sub>07</sub>b<sub>7</sub></span><span>⋮</span><span>a<sub>70</sub>b<sub>0</sub> + a<sub>71</sub>b<sub>1</sub> + ⋯ + a<sub>77</sub>b<sub>7</sub></span></span></div><div class="mvx-c">例：3 量子ビット（8 × 8）なら、各行でかけ算 8 回・足し算 7 回、それが 8 行で、かけ算 64 回 ＋ 足し算 56 回。足し算も同じくらいの回数だが、合わせても約 2 倍なので O(2²ⁿ) は変わらない（O は定数倍を無視する）</div></li>
         <li>量子コンピュータなら、H ⊗ H や CCNOT のように <b class="kb">少ないゲートで作れるユニタリ発展</b> は、2ⁿ 個の状態にまとめて短い時間で実行できる（どんなユニタリ発展でも速いわけではない）</li>
       </ul>
     </div>
@@ -1834,13 +1851,16 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <section class="slide" data-id="sum8">
   <div class="chap">Summary ／ 第8章</div>
   <h2>第8章のまとめ<small>8.1〜8.10（pp.192–222）</small></h2>
-  <div class="body sumlist">
-    <div class="sl pop" style="--d:0s;--c:var(--teal)"><span class="sl-n">1</span><div>n 量子ビットは <b class="k">2ⁿ 個の複素数</b> を並べたベクトル。<span class="math">|100⟩ = |4⟩</span> とも書き、2ⁿ 種類の重ね合わせを表せる</div></div>
-    <div class="sl pop" style="--d:.05s;--c:var(--pink)"><span class="sl-n">2</span><div>一部の測定の後は、<b>確率のゲージを長さ 1 に戻す</b>（残った候補の確率に逆数をかけてから確率振幅に戻す）</div></div>
-    <div class="sl pop" style="--d:.1s;--c:var(--green)"><span class="sl-n">3</span><div>2 × 2 のテンソル積に分ければ計算が楽（定理 8.1）</div></div>
-    <div class="sl pop" style="--d:.15s;--c:var(--accent)"><span class="sl-n">4</span><div><b class="k">トフォリ（CCNOT）</b>：8 × 8 のユニタリ行列。<b class="k">フレドキン（CSWAP）</b>：制御が |1⟩ なら入れ替え</div></div>
-    <div class="sl pop" style="--d:.2s;--c:var(--purple)"><span class="sl-n">5</span><div>重ね合わせなら 2ⁿ 個の状態に一度に計算できるが、測定で得られるのは 1 個だけ。中身が分からなくても実行できるオラクル <b>U<sub>f</sub></b></div></div>
-    <div class="sl pop" style="--d:.25s;--c:var(--gold)"><span class="sl-n">6</span><div>任意の行列もパウリ行列のテンソル積の和で表せば、量子と古典の分担で計算できる（<b>4ⁿ 回</b>）</div></div>
+  <div class="body sumlist s9">
+    <div class="sl pop" style="--d:0.00s;--c:var(--teal)"><span class="sl-n">1</span><div><b class="sl-t">n 量子ビットの量子状態</b>2ⁿ 個の基底状態の重ね合わせ。<span class="math nw">|a<sub>k</sub>|²</span> がその基底状態を得る確率</div></div>
+    <div class="sl pop" style="--d:0.04s;--c:var(--teal)"><span class="sl-n">2</span><div><b class="sl-t">複数ビットの省略表記</b><span class="math nw">|0⟩ ⊗ ⋯ ⊗ |0⟩ = |00⋯0⟩ = |0⟩<sup>⊗n</sup></span></div></div>
+    <div class="sl pop" style="--d:0.08s;--c:var(--teal)"><span class="sl-n">3</span><div><b class="sl-t">量子状態の 10 進数表記</b>ビット列を 10 進数で書く（<span class="math nw">|100⟩ = |4⟩</span>）</div></div>
+    <div class="sl pop" style="--d:0.12s;--c:var(--pink)"><span class="sl-n">4</span><div><b class="sl-t">一部の量子ビット測定後の量子状態</b>残った候補の確率に逆数をかけてゲージを長さ 1 に戻し、確率振幅に戻す</div></div>
+    <div class="sl pop" style="--d:0.16s;--c:var(--green)"><span class="sl-n">5</span><div><b class="sl-t">n 量子ビットゲートの計算方法</b>2 × 2 のテンソル積に分ければ計算が楽（定理 8.1）</div></div>
+    <div class="sl pop" style="--d:0.20s;--c:var(--accent)"><span class="sl-n">6</span><div><b class="sl-t">トフォリゲート</b>制御ビットがすべて <span class="math">|1⟩</span> のとき標的ビットを反転</div></div>
+    <div class="sl pop" style="--d:0.24s;--c:var(--accent)"><span class="sl-n">7</span><div><b class="sl-t">フレドキンゲート</b>制御ビットが <span class="math">|1⟩</span> のとき標的ビットを入れ替え</div></div>
+    <div class="sl pop" style="--d:0.28s;--c:var(--blue)"><span class="sl-n">8</span><div><b class="sl-t">オラクル</b>中身は分からないが実行できる回路 <span class="math nw">U<sub>f</sub>|x⟩|y⟩ = |x⟩|y ⊕ f(x)⟩</span></div></div>
+    <div class="sl pop" style="--d:0.32s;--c:var(--gold)"><span class="sl-n">9</span><div><b class="sl-t">非ユニタリ行列の計算</b>パウリ行列のテンソル積の和にし、量子で 4ⁿ 回計算して古典で足す</div></div>
   </div>
   <div class="pageno"></div>
 </section>
@@ -2355,7 +2375,6 @@ const TC = ['var(--accent)', 'var(--blue)', 'var(--green)', 'var(--purple)'];
     $('#cxNum').innerHTML = `${n} 量子ビットのとき：(2<sup>${n}</sup>)² = <b>${mx.toLocaleString()}</b> 回の計算`;
   }, 1200);
   // 8 × 8 の行列とベクトルの積
-  $('#mvxM').innerHTML = '<i></i>'.repeat(64); $('#mvxV').innerHTML = '<i></i>'.repeat(8); $('#mvxR').innerHTML = '<i></i>'.repeat(8);
 }
 
 /* ---------- 8.9 オラクル（一般的な形：n 量子ビットの x、m 量子ビットの y） ---------- */
@@ -2588,9 +2607,7 @@ measCircuit('#pmC2', [0, 1]);
   // 2ⁿ 個の状態がまとめて通っていく光
   ys.forEach((y, q) => el('circle', { cx: 80, cy: y, r: 6, class: 'tt-dot', style: `animation-delay:${q * .12}s` }, svg));
   el('rect', { x: 180, y: 12, width: 190, height: 182, rx: 12, style: 'fill:#fff1c2;stroke:var(--ink);stroke-width:3' }, svg);
-  el('text', { x: 275, y: 96, 'text-anchor': 'middle', style: 'font-size:30px;font-style:italic' }, svg).textContent = 'U';
-  el('text', { x: 275, y: 124, 'text-anchor': 'middle', class: 'lbl', style: 'font-size:14px' }, svg).textContent = '2ⁿ × 2ⁿ のユニタリ行列';
-  $('#ttLbl').innerHTML = '<b>n</b> 量子ビット → <b>2ⁿ</b> 個の基底状態の重ね合わせを、まとめてユニタリ発展';
+  el('text', { x: 275, y: 114, 'text-anchor': 'middle', style: 'font-size:40px;font-style:italic' }, svg).textContent = 'U';
 }
 
 /* 共通部品（後半）：復習問題・スライド制御・一覧・黒ペン・レーザー。スライド固有のスクリプトより後に置く */

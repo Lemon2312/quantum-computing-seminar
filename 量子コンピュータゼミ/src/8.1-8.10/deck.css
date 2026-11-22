@@ -641,3 +641,20 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .t-lbl{font-size:16px}
 .cx-yl{writing-mode:horizontal-tb !important;height:auto !important;text-align:left;font-size:15px;margin:0 0 4px}
 .slide[data-id="cx"] .cx-chart,.slide[data-id="cx"] .cx-y{height:240px}
+
+/* 19 回目 */
+.mvx{font:16px "Cambria Math","Times New Roman",serif;gap:6px;flex-wrap:nowrap}
+.mvx .vec{font-size:15px;line-height:1.35}
+.vec.m3s{grid-template-columns:repeat(3,auto);column-gap:6px}
+.sumlist.s9{gap:6px}
+.sumlist.s9 .sl{font-size:18px;padding:5px 16px}
+.sumlist.s9 .sl-n{width:30px;height:30px;font-size:15px}
+.sl-t{display:inline-block;min-width:270px;margin-right:10px;color:var(--ink)}
+.t-anim{padding:10px 14px}
+.mvx{font-size:19px}
+.mvx .vec{font-size:17px}
+.sumlist.s9 .sl{font-size:20px;padding:7px 18px}
+.sumlist.s9 .sl-n{width:32px;height:32px}
+.sl-t{min-width:330px}
+.sl-t{min-width:330px;white-space:nowrap}
+.sumlist.s9 .sl{font-size:19px}
