@@ -5,7 +5,6 @@
       <div class="chap pop">『量子コンピュータの頭の中』 ゼミ資料</div>
       <div class="t-no pop" style="--d:.05s">第 8 章</div>
       <h1 class="pop" style="--d:.1s;white-space:nowrap">n 量子ビットの世界</h1>
-      <div class="sub pop" style="--d:.2s;white-space:normal">― 測定・ユニタリ発展から<br>トフォリゲート・オラクルまで ―</div>
       <div class="t-anim pop" style="--d:.3s"><svg id="ttSvg" class="gsim" viewBox="0 0 520 210"></svg></div>
     </div>
     <div>
@@ -169,10 +168,10 @@
   <div class="body center solo">
     <div class="card pop sq-card">
       <div class="sq-row s0"><div class="sq-h"><b>元の量子状態</b><div class="pm-qc sq-qc" id="pmC1"></div></div><div class="eqtx sq-res">|φ⟩ = {{1/2}}(|000⟩ + |001⟩ + |010⟩ + |111⟩)<div class="sq-pr">どの基底状態も確率 |{{1/2}}|² = {{1/4}}。0 ビット目を測定したら |0⟩ だった場合</div></div></div>
-      <div class="sq-row"><div class="sq-h"><b>1. 確率に直す</b><span class="math">|{{1/2}}|² = {{1/4}}</span></div><div class="sq-box" id="sqA"></div><div class="sq-v">合計 1</div></div>
-      <div class="sq-row"><div class="sq-h"><b>2. 0 ビット目が |0⟩</b></div><div class="sq-box" id="sqB"></div><div class="sq-v ng">合計 {{3/4}}</div></div>
-      <div class="sq-row"><div class="sq-h"><b>3. 逆数 {{4/3}} をかける</b><span class="math">{{1/4}} × {{4/3}} = {{1/3}}</span></div><div class="sq-box" id="sqC"></div><div class="sq-v ok">合計 1</div></div>
-      <div class="sq-row s4"><div class="sq-h"><b>4. 確率振幅に戻す</b><span>確率振幅 ＝ √確率</span></div><div class="eqtx sq-res">{{1/√3}}(|000⟩ + |001⟩ + |010⟩)</div></div>
+      <div class="sq-row band"><div class="sq-h"><b><span class="sq-n">1</span>確率に直す</b><span class="math">|{{1/2}}|² = {{1/4}}</span></div><div class="sq-box" id="sqA"></div><div class="sq-v">合計 1</div></div>
+      <div class="sq-row band"><div class="sq-h"><b><span class="sq-n">2</span>0 ビット目が |0⟩</b></div><div class="sq-box" id="sqB"></div><div class="sq-v ng">合計 {{3/4}}</div></div>
+      <div class="sq-row band"><div class="sq-h"><b><span class="sq-n">3</span>逆数 {{4/3}} をかける</b><span class="math">{{1/4}} × {{4/3}} = {{1/3}}</span></div><div class="sq-box" id="sqC"></div><div class="sq-v ok">合計 1</div></div>
+      <div class="sq-row s4 band"><div class="sq-h"><b><span class="sq-n">4</span>確率振幅に戻す</b><span>確率振幅 ＝ √確率</span></div><div class="eqtx sq-res">{{1/√3}}(|000⟩ + |001⟩ + |010⟩)</div></div>
       <div class="sq-note">太枠の箱 ＝ 確率 1</div>
     </div>
   </div>
@@ -352,19 +351,18 @@
 <section class="slide" data-id="cx">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.8 重ね合わせ状態を利用した計算</div>
   <h2>古典で真似すると O(2²ⁿ) の計算時間<small>8.8（p.214）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)">
+  <div class="body cols" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
     <div class="col">
       <ul class="plain pop" style="--d:.1s">
         <li>n が大きいときの計算ステップ数のおおよその数を <span class="math nw">O(f(n))</span> で表し、<b class="k">計算量</b> という</li>
         <li>2ⁿ × 2ⁿ 行列と 2ⁿ 次元ベクトルの積は <span class="math nw"><b>O((2ⁿ)²) = O(2²ⁿ)</b></span>
-          <div class="mvx"><span class="vec m3s"><span>a<sub>00</sub></span><span>⋯</span><span>a<sub>07</sub></span><span>⋮</span><span></span><span>⋮</span><span>a<sub>70</sub></span><span>⋯</span><span>a<sub>77</sub></span></span><span>×</span><span class="vec"><span>b<sub>0</sub></span><span>⋮</span><span>b<sub>7</sub></span></span><span>=</span><span class="vec"><span>a<sub>00</sub>b<sub>0</sub> + a<sub>01</sub>b<sub>1</sub> + ⋯ + a<sub>07</sub>b<sub>7</sub></span><span>⋮</span><span>a<sub>70</sub>b<sub>0</sub> + a<sub>71</sub>b<sub>1</sub> + ⋯ + a<sub>77</sub>b<sub>7</sub></span></span></div><div class="mvx-c">例：3 量子ビット（8 × 8）なら、各行でかけ算 8 回・足し算 7 回、それが 8 行で、かけ算 64 回 ＋ 足し算 56 回。足し算も同じくらいの回数だが、合わせても約 2 倍なので O(2²ⁿ) は変わらない（O は定数倍を無視する）</div></li>
-        <li>量子コンピュータなら、H ⊗ H や CCNOT のように <b class="kb">少ないゲートで作れるユニタリ発展</b> は、2ⁿ 個の状態にまとめて短い時間で実行できる（どんなユニタリ発展でも速いわけではない）</li>
+          <div class="mvx"><span class="vec m3s"><span>a<sub>00</sub></span><span>⋯</span><span>a<sub>07</sub></span><span>a<sub>10</sub></span><span>⋯</span><span>a<sub>17</sub></span><span>a<sub>20</sub></span><span>⋯</span><span>a<sub>27</sub></span><span>a<sub>30</sub></span><span>⋯</span><span>a<sub>37</sub></span><span>a<sub>40</sub></span><span>⋯</span><span>a<sub>47</sub></span><span>a<sub>50</sub></span><span>⋯</span><span>a<sub>57</sub></span><span>a<sub>60</sub></span><span>⋯</span><span>a<sub>67</sub></span><span>a<sub>70</sub></span><span>⋯</span><span>a<sub>77</sub></span></span><span>×</span><span class="vec"><span>b<sub>0</sub></span><span>b<sub>1</sub></span><span>b<sub>2</sub></span><span>b<sub>3</sub></span><span>b<sub>4</sub></span><span>b<sub>5</sub></span><span>b<sub>6</sub></span><span>b<sub>7</sub></span></span><span>=</span><span class="vec"><span>a<sub>00</sub>b<sub>0</sub> + a<sub>01</sub>b<sub>1</sub> + ⋯ + a<sub>07</sub>b<sub>7</sub></span><span>a<sub>10</sub>b<sub>0</sub> + a<sub>11</sub>b<sub>1</sub> + ⋯ + a<sub>17</sub>b<sub>7</sub></span><span>a<sub>20</sub>b<sub>0</sub> + a<sub>21</sub>b<sub>1</sub> + ⋯ + a<sub>27</sub>b<sub>7</sub></span><span>a<sub>30</sub>b<sub>0</sub> + a<sub>31</sub>b<sub>1</sub> + ⋯ + a<sub>37</sub>b<sub>7</sub></span><span>a<sub>40</sub>b<sub>0</sub> + a<sub>41</sub>b<sub>1</sub> + ⋯ + a<sub>47</sub>b<sub>7</sub></span><span>a<sub>50</sub>b<sub>0</sub> + a<sub>51</sub>b<sub>1</sub> + ⋯ + a<sub>57</sub>b<sub>7</sub></span><span>a<sub>60</sub>b<sub>0</sub> + a<sub>61</sub>b<sub>1</sub> + ⋯ + a<sub>67</sub>b<sub>7</sub></span><span>a<sub>70</sub>b<sub>0</sub> + a<sub>71</sub>b<sub>1</sub> + ⋯ + a<sub>77</sub>b<sub>7</sub></span></span></div></li>
+        <li>量子コンピュータなら、<b class="kb">少ないゲートで作れるユニタリ発展</b> は、2ⁿ 個の状態にまとめて短い時間で実行できる（どんなユニタリ発展でも速いわけではない）</li>
       </ul>
     </div>
     <div class="card pop cx-card">
-      <div class="cx-yl">縦軸：計算量（計算の回数）</div><div class="cx-wrap"><div class="cx-y" id="cxY"></div><div class="cx-chart" id="cxChart"></div></div><div class="cx-xl">量子ビットの数 n</div>
-      <div class="cx-num" id="cxNum"></div>
-      <div id="cxStp"></div>
+      <div class="cx-num top" id="cxNum"></div><div class="cx-yl">縦軸：計算量（計算の回数）</div><div class="cx-wrap"><div class="cx-y" id="cxY"></div><div class="cx-chart" id="cxChart"></div></div><div class="cx-xl">量子ビットの数 n</div>
+            <div id="cxStp"></div>
     </div>
   </div>
   <div class="pageno"></div>
