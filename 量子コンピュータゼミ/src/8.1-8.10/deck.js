@@ -25,7 +25,6 @@ function partial(id, m) {
   const els = [...box.children], card = box.closest('.pm-card');
   box.closest('.pm-card').classList.add('s2');
 }
-partial('pm1', 1);
 partial('pm2', 2);
 
 /* ---------- 8.6.1 8 × 8 行列 と 2 × 2 行列 ---------- */
@@ -80,18 +79,12 @@ function ampBars(root, N) {
 }
 const TC = ['var(--accent)', 'var(--blue)', 'var(--green)', 'var(--purple)'];
 {
-  const qc = drawQC('#spQC', { n: 2, init: true, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'H', q: 1, col: 0 }, { g: 'X', q: 0, col: 1 }, { g: 'X', q: 1, col: 1 }], colW: 90 });
-  const draw = ampBars('#spAmp', 4), h = FI(1, 2), bars = [...$('#spAmp').children];
-  // 各項を色で追う：X ⊗ X の後は |00⟩ の色が |11⟩ に移る
-  const col = (k, i) => (k < 2 ? TC[i] : TC[3 - i]);
-  const K = ['|00⟩', '|01⟩', '|10⟩', '|11⟩'];
-  const eqs = ['|0⟩|0⟩ = |00⟩', `(H ⊗ H)|00⟩ = ${h}(${K.map((x, j) => `<b style="color:${TC[j]}">${x}</b>`).join(' + ')})`, `(X ⊗ X) → ${h}(${K.slice().reverse().map((x, j) => `<b style="color:${TC[j]}">${x}</b>`).join(' + ')})`];
-  stepper('#spStp', 3, k => {
-    qc.set(k - 1);
-    draw(k ? [.5, .5, .5, .5] : [1, 0, 0, 0]);
-    bars.forEach((c, i) => { c.querySelector('.bar').style.background = k ? col(k, i) : ''; c.querySelector('.val').innerHTML = k ? FI(1, 2) : (i ? '' : '1'); });
-    $('#spEq').innerHTML = `<span>${eqs[k]}</span>`;
-  }, 1900);
+  // 静止画：|00⟩ → H ⊗ H → X ⊗ X の流れを 3 つの棒グラフで並べる
+  drawQC('#spQC', { n: 2, init: true, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'H', q: 1, col: 0 }, { g: 'X', q: 0, col: 1 }, { g: 'X', q: 1, col: 1 }], colW: 90 });
+  const show = (id, a, cols) => { const f = ampBars(id, 4); f(a); [...$(id).children].forEach((c, i) => { if (cols) c.querySelector('.bar').style.background = cols[i]; c.querySelector('.val').innerHTML = a[i] === 1 ? '1' : a[i] ? FI(1, 2) : ''; }); };
+  show('#spA0', [1, 0, 0, 0]);
+  show('#spA1', [.5, .5, .5, .5], TC);
+  show('#spA2', [.5, .5, .5, .5], TC.slice().reverse());
 }
 {
   const before = ampBars('#sp2Amp', 4), after = ampBars('#sp2Amp2', 4), K = ['|00⟩', '|01⟩', '|10⟩', '|11⟩'];
@@ -174,7 +167,7 @@ oracleBox($('#orSvg'), { ys: [70, 180], ins: ['|x⟩', '|y⟩'], outs: ['|x⟩',
 }
 
 /* ---------- 復習：1 量子ビット・2 量子ビットの量子回路 ---------- */
-drawQC('#rvC1', { n: 1, init: true, noNames: true, ops: [{ g: 'H', q: 0, col: 0 }, { g: 'M', q: 0, col: 1 }], colW: 56 });
+drawQC('#rvC1', { n: 1, noNames: true, ops: [{ g: 'I', q: 0, col: 0, label: 'U' }], colW: 70 });
 drawQC('#rvC2', { n: 2, noNames: true, ops: [{ g: 'CX', c: 0, t: 1, col: 0 }], colW: 56, rowH: 44 });
 drawQC('#rvC3', { n: 2, noNames: true, ops: [{ g: 'SW', a: 0, b: 1, col: 0 }], colW: 56, rowH: 44 });
 
