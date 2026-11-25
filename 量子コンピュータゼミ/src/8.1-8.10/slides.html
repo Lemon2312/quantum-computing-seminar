@@ -32,9 +32,9 @@
   <div class="body rv2c">
     <div class="rvc8 pop" style="--c:var(--accent)">
       <div class="rh">① 1 量子ビットの量子状態<small>第3章</small></div>
-      <div class="eqrow" style="justify-content:center"><span>|φ⟩ = a|0⟩ + b|1⟩ =</span><span class="vec"><span>a</span><span>b</span></span></div>
-      <div class="eqrow" style="justify-content:center;gap:10px"><span>|0⟩ :=</span><span class="vec"><span>1</span><span>0</span></span><span style="width:16px"></span><span>|1⟩ :=</span><span class="vec"><span>0</span><span>1</span></span></div>
-      <div class="ctr">（a, b は複素数、<span class="math nw"><b>|a|² + |b|² = 1</b></span>）</div>
+      <div class="rv-bl"><div class="rv-blt"><div class="eqrow" style="justify-content:center"><span>|φ⟩ = a|0⟩ + b|1⟩ =</span><span class="vec"><span>a</span><span>b</span></span></div>
+<div class="eqrow" style="justify-content:center;gap:10px"><span>|0⟩ :=</span><span class="vec"><span>1</span><span>0</span></span><span style="width:16px"></span><span>|1⟩ :=</span><span class="vec"><span>0</span><span>1</span></span></div>
+<div class="ctr">（a, b は複素数、<span class="math nw"><b>|a|² + |b|² = 1</b></span>）</div></div><svg class="gsim rv-bs" id="rvBloch" viewBox="0 0 200 200"></svg></div>
       <div><b>測定</b> すると確率 <span class="math nw"><b>|a|²</b></span> で |0⟩、<span class="math nw"><b>|b|²</b></span> で |1⟩。状態は得られた値に <b class="k">変化する</b></div>
       <div class="rq" id="rq1"><div class="rq-bar"><button class="b rq-new">🎲 問題をつくる</button><button class="b rq-ans" style="display:none">答えを見る</button></div><div class="rq-q"></div><div class="rq-a" style="display:none"></div></div>
     </div>
@@ -59,9 +59,10 @@
   <div class="body rv2c">
     <div class="rvc8 pop" style="--c:var(--green)">
       <div class="rh">③ 2 量子ビットの量子状態<small>第5章</small></div>
-      <div class="eqrow" style="justify-content:center"><span>|0⟩ ⊗ |1⟩ =</span><span class="vec"><span>1</span><span>0</span></span><span>⊗</span><span class="vec"><span>0</span><span>1</span></span><span>=</span><span class="vec"><span>0</span><span>1</span><span>0</span><span>0</span></span><span>= |01⟩</span></div>
+      <div class="eqrow" style="justify-content:center"><span>|φ⟩ = a|00⟩ + b|01⟩ + c|10⟩ + d|11⟩ =</span><span class="vec"><span>a</span><span>b</span><span>c</span><span>d</span></span></div>
       <div class="eqrow" style="justify-content:center;gap:6px;font-size:19px"><span>|00⟩ =</span><span class="vec"><span>1</span><span>0</span><span>0</span><span>0</span></span><span>|01⟩ =</span><span class="vec"><span>0</span><span>1</span><span>0</span><span>0</span></span><span>|10⟩ =</span><span class="vec"><span>0</span><span>0</span><span>1</span><span>0</span></span><span>|11⟩ =</span><span class="vec"><span>0</span><span>0</span><span>0</span><span>1</span></span></div>
-      <div class="ctr"><span class="math nw">a|00⟩ + b|01⟩ + c|10⟩ + d|11⟩</span><br>（<span class="math nw"><b>|a|² + |b|² + |c|² + |d|² = 1</b></span>）</div>
+      <div class="ctr">（a, b, c, d は複素数、<span class="math nw"><b>|a|² + |b|² + |c|² + |d|² = 1</b></span>）</div>
+      <div><b>測定</b> すると確率 <span class="math nw"><b>|a|²</b></span> で |00⟩、<span class="math nw"><b>|b|²</b></span> で |01⟩、<span class="math nw"><b>|c|²</b></span> で |10⟩、<span class="math nw"><b>|d|²</b></span> で |11⟩</div>
       <div class="rq" id="rq3"><div class="rq-bar"><button class="b rq-new">🎲 問題をつくる</button><button class="b rq-ans" style="display:none">答えを見る</button></div><div class="rq-q"></div><div class="rq-a" style="display:none"></div></div>
     </div>
     <div class="rvc8 pop" style="--d:.1s;--c:var(--pink)">
@@ -356,7 +357,9 @@
       <ul class="plain pop" style="--d:.1s">
         <li>n が大きいときの計算ステップ数のおおよその数を <span class="math nw">O(f(n))</span> で表し、<b class="k">計算量</b> という</li>
         <li>2ⁿ × 2ⁿ 行列と 2ⁿ 次元ベクトルの積は <span class="math nw"><b>O((2ⁿ)²) = O(2²ⁿ)</b></span>
-          <div class="mvx"><div class="mvx-i"><span class="vec m3s"><span>a<sub>00</sub></span><span>⋯</span><span>a<sub>07</sub></span><span>⋮</span><span></span><span>⋮</span><span>a<sub>70</sub></span><span>⋯</span><span>a<sub>77</sub></span></span><span class="mvx-l">2ⁿ 行 × 2ⁿ 列</span></div><span>×</span><div class="mvx-i"><span class="vec"><span>b<sub>0</sub></span><span>⋮</span><span>b<sub>7</sub></span></span><span class="mvx-l">2ⁿ 次元<br>列ベクトル</span></div><span>=</span><div class="mvx-i"><span class="vec"><span>a<sub>00</sub>b<sub>0</sub> + a<sub>01</sub>b<sub>1</sub> + ⋯ + a<sub>07</sub>b<sub>7</sub></span><span>⋮</span><span>a<sub>70</sub>b<sub>0</sub> + a<sub>71</sub>b<sub>1</sub> + ⋯ + a<sub>77</sub>b<sub>7</sub></span></span><span class="mvx-l">2ⁿ 次元列ベクトル</span></div></div><div class="mvx-c">（n = 3 のとき 2ⁿ = 8）</div><div class="mvx-note"><b>正確な回数</b>：1 行につき かけ算 2ⁿ 回・足し算 2ⁿ − 1 回、それが 2ⁿ 行<br>→ かけ算 4ⁿ 回 ＋ 足し算 (4ⁿ − 2ⁿ) 回 ＝ <b>2·4ⁿ − 2ⁿ 回</b>（n = 3 なら 64 ＋ 56 ＝ 120 回）<br><b>なぜ O(2²ⁿ)？</b>：O( ) は n が大きいときの増え方だけを見るので、定数倍（2 倍）と、より小さく増える項（2ⁿ）を無視する → O(4ⁿ) = O(2²ⁿ)</div></li>
+          <div class="mvx"><div class="mvx-i"><span class="vec m3s"><span>a<sub>00</sub></span><span>⋯</span><span>a<sub>07</sub></span><span>⋮</span><span></span><span>⋮</span><span>a<sub>70</sub></span><span>⋯</span><span>a<sub>77</sub></span></span><span class="mvx-l">2ⁿ 行 × 2ⁿ 列</span></div><span>×</span><div class="mvx-i"><span class="vec"><span>b<sub>0</sub></span><span>⋮</span><span>b<sub>7</sub></span></span><span class="mvx-l">2ⁿ 次元<br>列ベクトル</span></div><span>=</span><div class="mvx-i"><span class="vec"><span>a<sub>00</sub>b<sub>0</sub> + a<sub>01</sub>b<sub>1</sub> + ⋯ + a<sub>07</sub>b<sub>7</sub></span><span>⋮</span><span>a<sub>70</sub>b<sub>0</sub> + a<sub>71</sub>b<sub>1</sub> + ⋯ + a<sub>77</sub>b<sub>7</sub></span></span><span class="mvx-l">2ⁿ 次元列ベクトル</span></div></div><div class="mvx-note"><b>正確な回数</b>：
+<div class="mvx-eq">（1 行につき かけ算 2ⁿ 回 ＋ 足し算 (2ⁿ − 1) 回）× 2ⁿ 行<br>= 2ⁿ × 2ⁿ ＋ (2ⁿ − 1) × 2ⁿ<br>= 4ⁿ ＋ (4ⁿ − 2ⁿ)<br>= <b>2·4ⁿ − 2ⁿ 回</b>　（n = 3 なら 64 ＋ 56 = 120 回）</div>
+<b>なぜ O(2²ⁿ)？</b>：O( ) は n が大きいときの増え方だけを見るので、定数倍（2 倍）と、より小さく増える項（2ⁿ）を無視する → O(4ⁿ) = O(2²ⁿ)</div></li>
         <li>量子コンピュータなら、<b class="kb">少ないゲートで作れるユニタリ発展</b> は、2ⁿ 個の状態にまとめて短い時間で実行できる（どんなユニタリ発展でも速いわけではない）</li>
       </ul>
     </div>

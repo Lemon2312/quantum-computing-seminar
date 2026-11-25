@@ -168,7 +168,10 @@ oracleBox($('#orSvg'), { ys: [70, 180], ins: ['|x⟩', '|y⟩'], outs: ['|x⟩',
 
 /* ---------- 復習：1 量子ビット・2 量子ビットの量子回路 ---------- */
 drawQC('#rvC1', { n: 1, noNames: true, ops: [{ g: 'I', q: 0, col: 0, label: 'U' }], colW: 70 });
-drawQC('#rvC2', { n: 2, noNames: true, ops: [{ g: 'CX', c: 0, t: 1, col: 0 }], colW: 56, rowH: 44 });
+{
+  const c = drawQC('#rvC2', { n: 2, noNames: true, ops: [{ g: 'CX', c: 0, t: 1, col: 0 }], colW: 56, rowH: 44, top: 34, bottom: 22 });
+  [['制御ビット', 'var(--accent-d)', -14], ['標的ビット', 'var(--blue)', 34]].forEach(([t, col, dy], q) => el('text', { x: c.X(0), y: c.Y(q) + dy, 'text-anchor': 'middle', style: `font:800 13px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:${col}` }, c.svg).textContent = t);
+}
 drawQC('#rvC3', { n: 2, noNames: true, ops: [{ g: 'SW', a: 0, b: 1, col: 0 }], colW: 56, rowH: 44 });
 
 /* ---------- 復習：問題を自動でつくる ---------- */
@@ -360,4 +363,20 @@ measCircuit('#pmC2', [0, 1]);
   oracleBox($('#smF'), { ys: [70, 180], ins: ['|x⟩', '|y⟩'], outs: ['|x⟩', '|y ⊕ f(x)⟩'], x0: 190, x1: 330, label: 'U_{f}', q: true });
   // 非ユニタリ：量子 4 回 → 古典で足す（8.10.1 の図を小さく）
   const g = $('#smG'), q4 = $('#q4Svg'); g.innerHTML = q4.innerHTML;
+}
+
+/* ---------- 復習：ブロッホ球 ---------- */
+{
+  const svg = $('#rvBloch'), O = [100, 104], R = 74;
+  el('circle', { cx: O[0], cy: O[1], r: R, style: 'fill:#eef3ff;stroke:var(--ink);stroke-width:2' }, svg);
+  el('ellipse', { cx: O[0], cy: O[1], rx: R, ry: 20, style: 'fill:none;stroke:#8f8aa8;stroke-width:1.5;stroke-dasharray:4 3' }, svg);
+  el('line', { x1: O[0], y1: O[1] - R, x2: O[0], y2: O[1] + R, style: 'stroke:#8f8aa8;stroke-width:1.5' }, svg);
+  el('text', { x: O[0], y: O[1] - R - 6, 'text-anchor': 'middle', style: 'font-size:16px' }, svg).textContent = '|0⟩';
+  el('text', { x: O[0], y: O[1] + R + 18, 'text-anchor': 'middle', style: 'font-size:16px' }, svg).textContent = '|1⟩';
+  const th = 0.9, ph = -0.6, px = O[0] + R * Math.sin(th) * Math.cos(ph) * 1, py = O[1] - R * Math.cos(th) + 20 * Math.sin(th) * Math.sin(-ph) * .9;
+  el('line', { x1: O[0], y1: O[1], x2: px, y2: py, style: 'stroke:var(--accent);stroke-width:3.5;stroke-linecap:round' }, svg);
+  el('circle', { cx: px, cy: py, r: 5, style: 'fill:var(--accent)' }, svg);
+  el('text', { x: px + 6, y: py - 6, style: 'font-size:16px;fill:var(--accent-d)' }, svg).textContent = '|φ⟩';
+  el('path', { d: `M${O[0]},${O[1] - 30} A30,30 0 0 1 ${O[0] + 30 * Math.sin(th)},${O[1] - 30 * Math.cos(th)}`, style: 'fill:none;stroke:var(--ink);stroke-width:1.5' }, svg);
+  el('text', { x: O[0] + 8, y: O[1] - 36, style: 'font-size:13px;font-style:italic' }, svg).textContent = 'θ';
 }
