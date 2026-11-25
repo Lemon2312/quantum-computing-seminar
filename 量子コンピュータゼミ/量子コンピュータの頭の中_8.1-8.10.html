@@ -1449,6 +1449,18 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .rv-tg{display:flex;align-items:center;gap:12px;line-height:1.5}
 .rv-qc4{width:110px;flex:none}
 
+/* 31 回目：ブロッホ球を ② へ */
+.rv-gb{display:flex;align-items:center;gap:10px}
+.rv-gb .rv-gt{flex:1;min-width:0}
+.slide[data-id="rv1"] .rvc8:first-child .eqrow{font-size:26px}
+.slide[data-id="rv1"] .rvc8:first-child{gap:16px}
+.slide[data-id="rv1"] .rv-gt .eqrow{font-size:21px !important}
+.slide[data-id="rv1"] .rv-mp{font-size:18px}
+.slide[data-id="rv1"] .rv-gt{gap:8px 10px}
+.rv-gb .rv-bw{width:230px}
+.rv-gb .rv-bw svg.rv-bs{width:200px}
+.rv-gb .rv-bv{font-size:13px}
+
 </style>
 </head>
 <body>
@@ -1489,20 +1501,20 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
   <div class="body rv2c">
     <div class="rvc8 pop" style="--c:var(--accent)">
       <div class="rh">① 1 量子ビットの量子状態<small>第3章</small></div>
-      <div class="rv-bl"><div class="rv-blt"><div class="eqrow" style="justify-content:center"><span>|φ⟩ = a|0⟩ + b|1⟩ =</span><span class="vec"><span>a</span><span>b</span></span></div>
-<div class="eqrow" style="justify-content:center;gap:10px"><span>|0⟩ :=</span><span class="vec"><span>1</span><span>0</span></span><span style="width:16px"></span><span>|1⟩ :=</span><span class="vec"><span>0</span><span>1</span></span></div>
-<div class="ctr">（a, b は複素数、<span class="math nw"><b>|a|² + |b|² = 1</b></span>）</div></div><div class="rv-bw"><svg class="gsim rv-bs" id="rvBloch" viewBox="0 0 200 200"></svg><label class="rv-sl">θ<input type="range" id="blTh" min="0" max="180" value="60"></label><label class="rv-sl">φ<input type="range" id="blPh" min="0" max="360" value="45"></label><div class="rv-bv" id="blV"></div></div></div>
+      <div class="eqrow" style="justify-content:center"><span>|φ⟩ = a|0⟩ + b|1⟩ =</span><span class="vec"><span>a</span><span>b</span></span></div>
+      <div class="eqrow" style="justify-content:center;gap:10px"><span>|0⟩ :=</span><span class="vec"><span>1</span><span>0</span></span><span style="width:16px"></span><span>|1⟩ :=</span><span class="vec"><span>0</span><span>1</span></span></div>
+      <div class="ctr">（a, b は複素数、<span class="math nw"><b>|a|² + |b|² = 1</b></span>）</div>
       <div><b>測定</b> すると確率 <span class="math nw"><b>|a|²</b></span> で |0⟩、<span class="math nw"><b>|b|²</b></span> で |1⟩。状態は得られた値に <b class="k">変化する</b></div>
       <div class="rq" id="rq1"><div class="rq-bar"><button class="b rq-new">🎲 問題をつくる</button><button class="b rq-ans" style="display:none">答えを見る</button></div><div class="rq-q"></div><div class="rq-a" style="display:none"></div></div>
     </div>
     <div class="rvc8 pop" style="--d:.1s;--c:var(--blue)">
       <div class="rh">② 1 量子ビットの量子ゲート<small>第4章</small></div>
       <div class="rv-row"><div id="rvC1" class="rv-qc"></div><div>量子ゲート ＝ 2 × 2 の <b class="k">ユニタリ行列</b>（<span class="math nw">U<sup>†</sup>U = I</span>）</div></div>
-      <div class="rv-gt">
+      <div class="rv-gb"><div class="rv-gt">
         <span class="gn" style="background:var(--accent)">X</span><span class="eqrow">X =<span class="vec m2"><span>0</span><span>1</span><span>1</span><span>0</span></span></span><span class="rv-mp">X|0⟩ = |1⟩<br>X|1⟩ = |0⟩</span>
         <span class="gn" style="background:var(--green)">Z</span><span class="eqrow">Z =<span class="vec m2"><span>1</span><span>0</span><span>0</span><span>−1</span></span></span><span class="rv-mp">Z|0⟩ = |0⟩<br>Z|1⟩ = −|1⟩</span>
         <span class="gn" style="background:var(--blue)">H</span><span class="eqrow">H = <span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span><span class="vec m2"><span>1</span><span>1</span><span>1</span><span>−1</span></span></span><span class="rv-mp">H|0⟩ = <span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩ + |1⟩)<br>H|1⟩ = <span class="eq inline"><span class="frac"><span>1</span><span>√2</span></span></span>(|0⟩ − |1⟩)</span>
-      </div>
+      </div><div class="rv-bw"><svg class="gsim rv-bs" id="rvBloch" viewBox="0 0 200 200"></svg><label class="rv-sl">θ<input type="range" id="blTh" min="0" max="180" value="60"></label><label class="rv-sl">φ<input type="range" id="blPh" min="0" max="360" value="45"></label><div class="rv-bv" id="blV"></div></div></div>
       <div class="rq" id="rq2"><div class="rq-bar"><button class="b rq-new">🎲 問題をつくる</button><button class="b rq-ans" style="display:none">答えを見る</button></div><div class="rq-q"></div><div class="rq-a" style="display:none"></div></div>
     </div>
   </div>
