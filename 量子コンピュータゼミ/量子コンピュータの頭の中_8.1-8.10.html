@@ -2752,8 +2752,9 @@ measCircuit('#pmC2', [0, 1]);
 
 /* ---------- 復習：ブロッホ球（θ ＝ 確率の方向、φ ＝ 位相の方向に動かせる。球をドラッグしても動く） ---------- */
 {
-  const svg = $('#rvBloch'), O = [100, 100], R = 70, ex = [-.55, .5];
-  const P = (X, Y, Z) => [O[0] + R * (X * ex[0] + Y), O[1] + R * (X * ex[1] - Z)];
+  // 正射影（方位角 az・仰角 el から見た図）：赤道は球にぴったり内接する横長のだ円になる
+  const svg = $('#rvBloch'), O = [100, 100], R = 70, az = 35 * Math.PI / 180, elv = 20 * Math.PI / 180;
+  const P = (X, Y, Z) => [O[0] + R * (-X * Math.sin(az) + Y * Math.cos(az)), O[1] - R * (Z * Math.cos(elv) - (X * Math.cos(az) + Y * Math.sin(az)) * Math.sin(elv))];
   const g0 = el('g', {}, svg), g1 = el('g', {}, svg);
   el('circle', { cx: O[0], cy: O[1], r: R, style: 'fill:#eef3ff;stroke:var(--ink);stroke-width:2' }, g0);
   let eq = ''; for (let k = 0; k <= 60; k++) { const a = k / 60 * 2 * Math.PI, [x, y] = P(Math.cos(a), Math.sin(a), 0); eq += (k ? 'L' : 'M') + x + ',' + y; }
