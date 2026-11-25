@@ -389,4 +389,4 @@ measCircuit('#pmC2', [0, 1]);
 }
 
 /* ---------- 復習 ④：1 量子ビットゲートを 2 量子ビットに ---------- */
-drawQC('#rvC4', { n: 2, init: true, noNames: true, ops: [{ g: 'X', q: 0, col: 0 }], colW: 56, rowH: 36, top: 22 });
+drawQC('#rvC4', { n: 2, init: true, noNames: true, ops: [{ g: 'X', q: 0, col: 0 }, { g: 'X', q: 1, col: 0 }], colW: 56, rowH: 44, top: 24 });

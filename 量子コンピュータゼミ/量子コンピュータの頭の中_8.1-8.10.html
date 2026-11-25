@@ -1461,6 +1461,9 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .rv-gb .rv-bw svg.rv-bs{width:200px}
 .rv-gb .rv-bv{font-size:13px}
 
+.an-eq{font-size:30px !important;margin-bottom:10px}
+.an-eq .sig{font-size:1.25em}
+
 </style>
 </head>
 <body>
@@ -1537,7 +1540,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
     </div>
     <div class="rvc8 pop" style="--d:.1s;--c:var(--pink)">
       <div class="rh">④ 2 量子ビットの量子ゲート<small>第6章</small></div>
-      <div class="rv-tg"><div id="rvC4" class="rv-qc4"></div><div>1 量子ビットゲートを 2 量子ビットにかけるときも <b class="k">テンソル積</b><br><span class="math nw">X|0⟩ ⊗ |0⟩ = |1⟩ ⊗ |0⟩ = |10⟩</span></div></div>
+      <div class="rv-tg"><div id="rvC4" class="rv-qc4"></div><div>1 量子ビットゲートを 2 量子ビットにかけるときも <b class="k">テンソル積</b><br><span class="math nw">(X ⊗ X)|00⟩ = X|0⟩ ⊗ X|0⟩ = |1⟩ ⊗ |1⟩ = |11⟩</span></div></div>
       <div class="rv-g2">
         <div id="rvC2" class="rv-qc2"></div>
         <div><b class="k">CNOT</b>：制御ビットが |1⟩ のときだけ標的ビットを反転<div class="eqrow">CNOT =<span class="vec m4"><span>1</span><span>0</span><span>0</span><span>0</span><span>0</span><span>1</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>1</span><span>0</span><span>0</span><span>1</span><span>0</span></span></div></div>
@@ -1962,7 +1965,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
   <h2>n 量子ビットでは 4ⁿ 回の計算が必要<small>8.10.4（pp.221–222）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
     <div class="col">
-      <div class="eqtx pop" style="--d:.1s;font-size:20px">A<sub>n</sub> = <span class="sig"><sup>3</sup>Σ<sub>k₁=0</sub></span> ⋯ <span class="sig"><sup>3</sup>Σ<sub>kₙ=0</sub></span> α<sub>k₁,…,kₙ</sub> σ<sub>k₁</sub> ⊗ ⋯ ⊗ σ<sub>kₙ</sub></div>
+      <div class="eqtx pop an-eq" style="--d:.1s">A<sub>n</sub> = <span class="sig"><sup>3</sup>Σ<sub>k₁=0</sub></span> ⋯ <span class="sig"><sup>3</sup>Σ<sub>kₙ=0</sub></span> α<sub>k₁,…,kₙ</sub> σ<sub>k₁</sub> ⊗ ⋯ ⊗ σ<sub>kₙ</sub></div>
       <ul class="plain pop" style="--d:.2s">
         <li>Σ が n 個あるので、量子コンピュータで <b class="k">4ⁿ 回</b>（指数関数的）の計算が必要</li>
         <li>現実的な時間で計算するには「<span class="math">A<sub>n</sub></span> を <b class="kb">少ない個数の和</b> で表せる、もしくは近似できる」などの前提が必要</li>
@@ -2796,7 +2799,7 @@ measCircuit('#pmC2', [0, 1]);
 }
 
 /* ---------- 復習 ④：1 量子ビットゲートを 2 量子ビットに ---------- */
-drawQC('#rvC4', { n: 2, init: true, noNames: true, ops: [{ g: 'X', q: 0, col: 0 }], colW: 56, rowH: 36, top: 22 });
+drawQC('#rvC4', { n: 2, init: true, noNames: true, ops: [{ g: 'X', q: 0, col: 0 }, { g: 'X', q: 1, col: 0 }], colW: 56, rowH: 44, top: 24 });
 
 /* 共通部品（後半）：復習問題・スライド制御・一覧・黒ペン・レーザー。スライド固有のスクリプトより後に置く */
 /* ---------- 復習問題：カードをクリックすると答えが出る（もう一度押すと隠れる） ---------- */
