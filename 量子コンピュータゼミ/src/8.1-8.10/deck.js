@@ -200,49 +200,100 @@ drawQC('#rvC3', { n: 2, noNames: true, ops: [{ g: 'SW', a: 0, b: 1, col: 0 }], c
   });
 }
 
-/* ---------- 【補足】VQE のくり返し ---------- */
+/* ---------- 【補足】VQE・QAOA の回路をかく道具 ---------- */
+function wc(svg, ys, items, x0 = 60, x1) {
+  const X1 = x1 || +svg.getAttribute('viewBox').split(' ')[2] - 20;
+  ys.forEach((y, q) => { el('text', { x: 6, y: y + 6, style: 'font-size:17px' }, svg).textContent = '|0⟩'; el('line', { x1: x0 - 16, y1: y, x2: X1, y2: y, class: 'w' }, svg); });
+  items.forEach(it => {
+    if (it.t === 'box') {
+      const y0 = ys[it.q] - 18, y1 = ys[it.q2 ?? it.q] + 18;
+      el('rect', { x: it.x, y: y0, width: it.w || 44, height: y1 - y0, rx: 6, style: `fill:${it.fill || '#9a93bd'};stroke:var(--ink);stroke-width:2.5` }, svg);
+      const t = rich(el('text', { x: it.x + (it.w || 44) / 2, y: (y0 + y1) / 2 + 6, 'text-anchor': 'middle', style: `fill:${it.tc || '#fff'};font:700 ${it.fs || 15}px "Cambria Math",serif` }, svg), it.label);
+    } else if (it.t === 'cx') {
+      el('line', { x1: it.x, y1: ys[it.c], x2: it.x, y2: ys[it.tg], class: 'gl' }, svg);
+      el('circle', { cx: it.x, cy: ys[it.c], r: 6, class: 'gd' }, svg);
+      el('circle', { cx: it.x, cy: ys[it.tg], r: 13, class: 'gt' }, svg);
+      el('path', { d: `M${it.x - 13},${ys[it.tg]}H${it.x + 13}M${it.x},${ys[it.tg] - 13}V${ys[it.tg] + 13}`, class: 'gl' }, svg);
+    } else if (it.t === 'zz') {
+      el('line', { x1: it.x + 18, y1: ys[it.a], x2: it.x + 18, y2: ys[it.b], style: 'stroke:var(--pink);stroke-width:3' }, svg);
+      [it.a, it.b].forEach(q => { el('rect', { x: it.x, y: ys[q] - 15, width: 36, height: 30, rx: 6, style: 'fill:#ffd3e6;stroke:var(--ink);stroke-width:2' }, svg); el('text', { x: it.x + 18, y: ys[q] + 6, 'text-anchor': 'middle', style: 'font:700 14px "Cambria Math",serif' }, svg).textContent = 'Z'; });
+    } else if (it.t === 'm') {
+      ys.forEach(y => { el('rect', { x: it.x, y: y - 16, width: 32, height: 32, rx: 6, style: 'fill:#1f1a3d;stroke:var(--ink);stroke-width:2' }, svg); el('path', { d: `M${it.x + 5},${y + 8}A11,11 0 0 1 ${it.x + 27},${y + 8}M${it.x + 16},${y + 8}L${it.x + 24},${y - 6}`, style: 'fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round' }, svg); });
+    } else if (it.t === 'txt') {
+      const t = el('text', { x: it.x, y: it.y, 'text-anchor': it.a || 'middle', style: it.s || 'font:800 14px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--muted)' }, svg); rich(t, it.s2 || it.label);
+    } else if (it.t === 'dash') {
+      el('rect', { x: it.x, y: it.y, width: it.w, height: it.h, rx: 10, style: `fill:none;stroke:${it.c || 'var(--muted)'};stroke-width:2;stroke-dasharray:6 4` }, svg);
+    }
+  });
+}
+const loopBox = (svg, x, y, w, h, t1, t2, back) => {
+  el('rect', { x, y, width: w, height: h, rx: 14, style: 'fill:#dfe8ff;stroke:var(--ink);stroke-width:2.5' }, svg);
+  el('text', { x: x + w / 2, y: y + 26, 'text-anchor': 'middle', style: 'font:800 16px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--blue)' }, svg).textContent = t1;
+  el('text', { x: x + w / 2, y: y + 52, 'text-anchor': 'middle', style: 'font-size:17px' }, svg).textContent = t2;
+  const [mx, my, tx, ty] = back;
+  el('path', { d: `M${mx},${my} V${y + h / 2} H${x + w}`, style: 'fill:none;stroke:var(--ink);stroke-width:2.5' }, svg);
+  el('path', { d: `M${x},${y + h / 2} H${tx} V${ty}`, style: 'fill:none;stroke:var(--ink);stroke-width:2.5' }, svg);
+  el('polygon', { points: `${tx},${ty - 10} ${tx - 7},${ty + 2} ${tx + 7},${ty + 2}`, style: 'fill:var(--ink)' }, svg);
+};
+
+/* VQE 1：E(θ) のグラフを下っていく */
 {
-  const svg = $('#vqSvg');
-  const box = (x, y, w, h, fill, title, lines, who) => {
-    el('rect', { x, y, width: w, height: h, rx: 16, style: `fill:${fill};stroke:var(--ink);stroke-width:3` }, svg);
-    el('text', { x: x + 14, y: y + 24, class: 'lbl', style: 'font-size:15px' }, svg).textContent = who;
-    el('text', { x: x + w / 2, y: y + 52, 'text-anchor': 'middle', style: 'font:800 20px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--ink)' }, svg).textContent = title;
-    lines.forEach((t, i) => el('text', { x: x + w / 2, y: y + 82 + i * 26, 'text-anchor': 'middle', style: 'font-size:19px;fill:var(--ink)' }, svg).textContent = t);
-  };
-  const arrow = d => { el('path', { d, style: 'fill:none;stroke:var(--ink);stroke-width:3' }, svg); };
-  const head = (x, y, dir) => { const p = { r: `${x},${y} ${x - 12},${y - 7} ${x - 12},${y + 7}`, d: `${x},${y} ${x - 7},${y - 12} ${x + 7},${y - 12}`, l: `${x},${y} ${x + 12},${y - 7} ${x + 12},${y + 7}`, u: `${x},${y} ${x - 7},${y + 12} ${x + 7},${y + 12}` }[dir]; el('polygon', { points: p, style: 'fill:var(--ink)' }, svg); };
-  box(20, 20, 250, 150, '#dfe8ff', 'パラメータ θ を決める', ['（最初は適当に）'], '古典コンピュータ');
-  box(290, 20, 250, 150, '#fff1c2', '|ψ(θ)⟩ をつくって測定', ['パウリ行列の項ごとに', '⟨ψ(θ)|σ⋯|ψ(θ)⟩'], '量子コンピュータ');
-  box(155, 245, 250, 150, '#dfe8ff', 'E(θ) = Σ α × 測定値', ['E(θ) が小さくなるように', 'θ を更新'], '古典コンピュータ');
-  arrow('M270,95 H285'); head(290, 95, 'r');
-  arrow('M415,170 V320 H410'); head(405, 320, 'l');
-  arrow('M155,320 H145 V175'); head(145, 170, 'u');
-  el('text', { x: 280, y: 222, 'text-anchor': 'middle', style: 'font:800 16px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--accent-d)' }, svg).textContent = 'E(θ) が下がらなくなるまでくり返す';
+  const svg = $('#veSvg'), X = t => 60 + t * 420, Y = e => 300 - e * 230, E = t => .55 + .38 * Math.cos(2 * Math.PI * (t + .05)) * Math.exp(-.2 * t) - .25 * t * (1 - t);
+  el('line', { x1: 50, y1: 310, x2: 500, y2: 310, style: 'stroke:var(--ink);stroke-width:2' }, svg);
+  el('line', { x1: 50, y1: 310, x2: 50, y2: 30, style: 'stroke:var(--ink);stroke-width:2' }, svg);
+  el('text', { x: 500, y: 334, 'text-anchor': 'end', style: 'font-size:18px' }, svg).textContent = 'θ';
+  el('text', { x: 56, y: 26, style: 'font:800 15px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif' }, svg).textContent = 'エネルギー E(θ)';
+  let p = ''; for (let i = 0; i <= 100; i++) { const t = i / 100; p += (i ? 'L' : 'M') + X(t) + ',' + Y(E(t)); }
+  el('path', { d: p, style: 'fill:none;stroke:var(--purple);stroke-width:4' }, svg);
+  let tm = 0, em = 9; for (let i = 0; i <= 200; i++) { const t = i / 200; if (E(t) < em) { em = E(t); tm = t; } }
+  el('line', { x1: 50, y1: Y(em), x2: 500, y2: Y(em), style: 'stroke:var(--green);stroke-width:2;stroke-dasharray:6 4' }, svg);
+  el('text', { x: 498, y: Y(em) + 22, 'text-anchor': 'end', style: 'font:800 14px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--green)' }, svg).textContent = 'いちばん小さい固有値';
+  const ts = [.12, .2, .28, .34, .38, tm];
+  ts.forEach((t, k) => {
+    if (k) el('line', { x1: X(ts[k - 1]), y1: Y(E(ts[k - 1])), x2: X(t), y2: Y(E(t)), style: 'stroke:var(--accent);stroke-width:2;stroke-dasharray:4 3' }, svg);
+    el('circle', { cx: X(t), cy: Y(E(t)), r: 7, style: `fill:${k === ts.length - 1 ? 'var(--green)' : 'var(--accent)'};stroke:var(--ink);stroke-width:1.5` }, svg);
+  });
+  el('text', { x: X(ts[0]) + 10, y: Y(E(ts[0])) - 10, style: 'font:800 14px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--accent-d)' }, svg).textContent = '最初の θ';
 }
 
-/* ---------- 【補足】QAOA の回路の形 ---------- */
+/* VQE 2：回路とくり返し */
 {
-  const svg = $('#qaSvg'), ys = [70, 120, 170];
-  ys.forEach((y, q) => { rich(el('text', { x: 10, y: y + 7, class: 'nm' }, svg), `q_{${q}}`); el('line', { x1: 44, y1: y, x2: 580, y2: y, class: 'w' }, svg); });
-  el('text', { x: 66, y: 208, 'text-anchor': 'middle', style: 'font-size:18px' }, svg).textContent = '⋮';
-  const blk = (x, w, fill, sup, lab) => {
-    el('rect', { x, y: 40, width: w, height: 160, rx: 10, style: `fill:${fill};stroke:var(--ink);stroke-width:3` }, svg);
-    const t = el('text', { x: x + w / 2, y: 112, 'text-anchor': 'middle', style: 'font-size:22px;fill:var(--ink)' }, svg);
-    if (sup) { el('tspan', {}, t).textContent = 'e'; el('tspan', { dy: -10, 'font-size': '15px' }, t).textContent = sup; } else t.textContent = 'H';
-    if (lab) rich(el('text', { x: x + w / 2, y: 150, 'text-anchor': 'middle', class: 'lbl', style: 'font-size:15px' }, svg), lab);
-  };
-  blk(54, 50, '#fff', '', '');
-  blk(124, 110, '#ffd3e6', '−iγĤ', 'コスト Ĥ_{C}');
-  blk(254, 110, '#d6f3e2', '−iβĤ', '混ぜる Ĥ_{B}');
-  el('text', { x: 410, y: 128, 'text-anchor': 'middle', style: 'font:800 22px sans-serif' }, svg).textContent = '× p 回';
-  ys.forEach(y => { el('rect', { x: 490, y: y - 18, width: 36, height: 36, rx: 6, class: 'bx', style: 'fill:#2a2350' }, svg); el('path', { d: `M${496},${y + 8}A12,12 0 0 1 ${520},${y + 8}M508,${y + 8}L516,${y - 6}`, style: 'fill:none;stroke:#fff;stroke-width:2.5' }, svg); });
-  el('rect', { x: 90, y: 260, width: 420, height: 90, rx: 16, style: 'fill:#dfe8ff;stroke:var(--ink);stroke-width:3' }, svg);
-  el('text', { x: 300, y: 296, 'text-anchor': 'middle', style: 'font:800 18px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif' }, svg).textContent = '古典コンピュータ';
-  el('text', { x: 300, y: 326, 'text-anchor': 'middle', style: 'font-size:18px' }, svg).textContent = '測定したビット列のコストを見て γ, β を調整';
-  el('path', { d: 'M508,192 V240 H530 V305 H515', style: 'fill:none;stroke:var(--ink);stroke-width:3' }, svg);
-  el('path', { d: 'M90,305 H70 V214', style: 'fill:none;stroke:var(--ink);stroke-width:3' }, svg);
-  el('polygon', { points: '70,204 63,216 77,216', style: 'fill:var(--ink)' }, svg);
-  el('polygon', { points: '510,305 522,298 522,312', style: 'fill:var(--ink)' }, svg);
+  const svg = $('#vcSvg'), ys = [70, 150];
+  wc(svg, ys, [
+    { t: 'dash', x: 64, y: 30, w: 190, h: 160, c: 'var(--accent)' }, { t: 'txt', x: 159, y: 24, label: '|ψ(θ)⟩ をつくる', s: 'font:800 14px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--accent-d)' },
+    { t: 'box', q: 0, x: 76, w: 76, label: 'R_{Y}(θ_{1})', fill: 'var(--purple)' }, { t: 'box', q: 1, x: 76, w: 76, label: 'R_{Y}(θ_{2})', fill: 'var(--purple)' },
+    { t: 'cx', c: 0, tg: 1, x: 210 },
+    { t: 'dash', x: 272, y: 30, w: 120, h: 160, c: 'var(--blue)' }, { t: 'txt', x: 332, y: 24, label: '向きを変える', s: 'font:800 14px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--blue)' },
+    { t: 'box', q: 0, x: 288, w: 40, label: 'H', fill: 'var(--blue)' }, 
+    { t: 'm', x: 420 },
+  ], 60, 470);
+  loopBox(svg, 130, 260, 340, 80, '古典コンピュータ', 'E(θ) = Σ α × 測定値 → θ を更新', [436, 166, 114, 190]);
+  el('text', { x: 478, y: 110, style: 'font-size:14px;fill:var(--muted)' }, svg).textContent = '測定値';
+}
+
+/* QAOA 1：三角形のグラフ（001 の分け方） */
+{
+  const svg = $('#qgSvg'), P = [[120, 40], [40, 200], [200, 200]], g = [0, 0, 1];
+  [[0, 1], [1, 2], [0, 2]].forEach(([a, b]) => { const cut = g[a] !== g[b]; el('line', { x1: P[a][0], y1: P[a][1], x2: P[b][0], y2: P[b][1], style: `stroke:${cut ? 'var(--pink)' : 'var(--ink)'};stroke-width:${cut ? 5 : 3};${cut ? 'stroke-dasharray:9 5' : ''}` }, svg); });
+  P.forEach(([x, y], k) => { el('circle', { cx: x, cy: y, r: 26, style: `fill:${g[k] ? 'var(--blue)' : 'var(--accent)'};stroke:var(--ink);stroke-width:3` }, svg); rich(el('text', { x, y: y + 7, 'text-anchor': 'middle', style: 'fill:#fff;font:700 20px "Cambria Math",serif' }, svg), `q_{${k}}`); });
+  el('text', { x: 250, y: 90, style: 'font-size:22px' }, svg).textContent = '例：|001⟩';
+  el('text', { x: 250, y: 124, style: 'font:15px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif' }, svg).textContent = 'q₀, q₁ がグループ 0、q₂ が 1';
+  el('text', { x: 250, y: 156, style: 'font:800 15px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--pink)' }, svg).textContent = '点線＝またぐ辺 → 2 本';
+}
+
+/* QAOA 2：回路 */
+{
+  const svg = $('#qcSvg'), ys = [50, 115, 180];
+  wc(svg, ys, [
+    { t: 'box', q: 0, x: 60, w: 36, label: 'H', fill: 'var(--blue)' }, { t: 'box', q: 1, x: 60, w: 36, label: 'H', fill: 'var(--blue)' }, { t: 'box', q: 2, x: 60, w: 36, label: 'H', fill: 'var(--blue)' },
+    { t: 'dash', x: 112, y: 16, w: 196, h: 200, c: 'var(--pink)' }, { t: 'txt', x: 210, y: 12, label: 'コスト（辺ごとに ZZ(γ)）', s: 'font:800 13px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--pink)' },
+    { t: 'zz', a: 0, b: 1, x: 124 }, { t: 'zz', a: 1, b: 2, x: 186 }, { t: 'zz', a: 0, b: 2, x: 248 },
+    { t: 'dash', x: 322, y: 16, w: 104, h: 200, c: 'var(--green)' }, { t: 'txt', x: 374, y: 12, label: '混ぜる', s: 'font:800 13px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--green)' },
+    { t: 'box', q: 0, x: 334, w: 80, label: 'R_{X}(2β)', fill: 'var(--green)', fs: 14 }, { t: 'box', q: 1, x: 334, w: 80, label: 'R_{X}(2β)', fill: 'var(--green)', fs: 14 }, { t: 'box', q: 2, x: 334, w: 80, label: 'R_{X}(2β)', fill: 'var(--green)', fs: 14 },
+    { t: 'txt', x: 470, y: 120, label: '× p 回', s: 'font:900 20px sans-serif;fill:var(--ink)' },
+    { t: 'm', x: 530 },
+  ], 52, 590);
+  loopBox(svg, 150, 280, 340, 80, '古典コンピュータ', 'またぐ辺の平均 → γ, β を調整', [546, 196, 130, 216]);
 }
 
 /* ---------- |0⟩^⊗n：n 個の量子ビットがすべて |0⟩ の回路 ---------- */

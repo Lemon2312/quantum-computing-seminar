@@ -387,7 +387,7 @@
 <!-- 8.9 オラクル -->
 <section class="slide" data-id="or">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.9 排他的論理和とオラクル</div>
-  <h2>中身は分からないが実行できる回路：オラクル<small>8.9・図 8.6（p.216）</small></h2>
+  <h2>オラクル：中身は分からないが実行できる回路<small>8.9・図 8.6（p.216）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)">
     <div class="card pop or-card"><svg class="gsim" id="orSvg" viewBox="0 0 540 250"></svg></div>
     <div class="col">
@@ -507,36 +507,77 @@
   <div class="pageno"></div>
 </section>
 
-<!-- 【補足・教科書外】VQE -->
+<!-- 【補足・教科書外】VQE 1 -->
 <section class="slide" data-id="vqe">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展 ／ 【補足・教科書外】</div>
-  <h2>VQE：くり返して最小のエネルギーを探す<small>補足（教科書外）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)">
+  <h2>VQE：エネルギーがいちばん小さくなる状態を探す<small>補足（教科書外）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
     <div class="col">
       <ul class="plain pop" style="--d:.1s">
-        <li><b>VQE</b>（変分量子固有値法）：ハミルトニアン <span class="math">Ĥ</span> の <b class="k">いちばん小さい固有値</b>（分子のいちばん低いエネルギーなど）を求める</li>
-        <li>どんな |ψ(θ)⟩ でも <span class="math nw">⟨ψ(θ)|Ĥ|ψ(θ)⟩</span> は最小の固有値以上なので、これを <b class="k">小さくする θ</b> を探せばよい</li>
-        <li><span class="math">Ĥ</span> が <b class="kb">少ない個数のパウリ行列の和</b> で書ければ、量子での計算回数が少なくて済む（8.10.4）</li>
+        <li><b>VQE</b>（変分量子固有値法）の目的：ハミルトニアン <span class="math">Ĥ</span> の <b class="k">いちばん小さい固有値</b>（分子のいちばん低いエネルギー）を求める</li>
+        <li>パラメータ θ で形が変わる状態 <span class="math nw">|ψ(θ)⟩</span> を量子回路でつくり、そのエネルギー <span class="math nw">E(θ) = ⟨ψ(θ)|Ĥ|ψ(θ)⟩</span> を測る</li>
+        <li>E(θ) はどんな θ でも本当の最小値以上なので、<b class="kb">E(θ) が下がる向きに θ を少しずつ変えて</b> いけば、最小値に近づく（右の図）</li>
       </ul>
     </div>
-    <div class="card pop"><svg class="gsim" id="vqSvg" viewBox="0 0 560 420"></svg></div>
+    <div class="card pop"><svg class="gsim" id="veSvg" viewBox="0 0 520 380"></svg></div>
   </div>
   <div class="pageno"></div>
 </section>
 
-<!-- 【補足・教科書外】QAOA -->
+<!-- 【補足・教科書外】VQE 2 -->
+<section class="slide" data-id="vqe2">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展 ／ 【補足・教科書外】</div>
+  <h2>VQE の回路：θ でつくり、項ごとに測る<small>補足（教科書外）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)">
+    <div class="col">
+      <ol class="gsteps vq-steps pop" style="--d:.1s">
+        <li><b>状態をつくる</b>：R<sub>Y</sub>(θ) と CNOT の回路で <span class="math nw">|ψ(θ)⟩</span></li>
+        <li><b>測る</b>：<span class="math nw">Ĥ = Σ α σ ⊗ σ</span>（8.10）の項ごとに測定。X や Y の項は、H などで向きを変えてから測る</li>
+        <li><b>足す</b>：古典コンピュータで <span class="math nw">E(θ) = Σ α × 測定値</span></li>
+        <li><b>更新</b>：E(θ) が下がるように θ を変えて、1 に戻る</li>
+      </ol>
+      <div class="point blue pop" style="--d:.2s;font-size:19px">Ĥ が <b class="kb">少ない個数のパウリ行列の和</b> なら、測る回数が少なくて済む（8.10.4）</div>
+    </div>
+    <div class="card pop"><svg class="gsim" id="vcSvg" viewBox="0 0 600 400"></svg></div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 【補足・教科書外】QAOA 1 -->
 <section class="slide" data-id="qaoa">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展 ／ 【補足・教科書外】</div>
-  <h2>QAOA：組合せ最適化のよい答えを探す<small>補足（教科書外）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)">
+  <h2>QAOA：よい組合せを探す（例：最大カット）<small>補足（教科書外）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)">
     <div class="col">
       <ul class="plain pop" style="--d:.1s">
-        <li><b>QAOA</b>（量子近似最適化アルゴリズム）：たくさんの組合せの中から、よい組合せ（ビット列）を探す問題の <b class="k">近似解</b> を求める</li>
-        <li><span class="math">Ĥ<sub>C</sub></span>：答えの良し悪し（コスト）を表すハミルトニアン。<span class="math nw">Ĥ<sub>B</sub> = X<sub>0</sub> + X<sub>1</sub> + ⋯ + X<sub>n−1</sub></span>：答えを混ぜる</li>
-        <li>2 つを交互に p 回かけて測定し、古典コンピュータで <b class="kb">γ, β を調整</b> する。VQE と同じく量子と古典の分担</li>
+        <li><b>QAOA</b>（量子近似最適化アルゴリズム）：たくさんの組合せの中から <b class="k">よい組合せ（ビット列）</b> を探す</li>
+        <li>例：頂点を 2 つのグループ（0 と 1）に分け、<b class="k">グループをまたぐ辺</b> をできるだけ多くする</li>
+        <li>頂点 1 つを 1 量子ビットにすると、答えは 3 ビットのビット列。またぐ辺の数を表すのが <span class="math">Ĥ<sub>C</sub></span>（コスト）</li>
+        <li>8 通りを全部調べる代わりに、<b class="kb">よい答えが高い確率で出る状態</b> を量子回路でつくる</li>
       </ul>
     </div>
-    <div class="card pop"><svg class="gsim" id="qaSvg" viewBox="0 0 600 380"></svg></div>
+    <div class="card pop qa-card"><svg class="gsim" id="qgSvg" viewBox="0 0 460 250"></svg>
+      <table class="tt small qa-t"><thead><tr><th>ビット列</th><th class="out">またぐ辺</th></tr></thead><tbody>
+        <tr><td>000, 111</td><td>0 本</td></tr><tr class="hit"><td>001, 010, 100, 011, 101, 110</td><td><b>2 本（いちばん多い）</b></td></tr></tbody></table>
+    </div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<!-- 【補足・教科書外】QAOA 2 -->
+<section class="slide" data-id="qaoa2">
+  <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展 ／ 【補足・教科書外】</div>
+  <h2>QAOA の回路：コストと混ぜるを交互にかける<small>補足（教科書外）</small></h2>
+  <div class="body cols" style="grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)">
+    <div class="col">
+      <ol class="gsteps vq-steps pop" style="--d:.1s">
+        <li><b>H</b> で 8 通りすべての重ね合わせにする</li>
+        <li><b>コスト</b>：辺ごとに ZZ(γ)。よい答えほど位相が回る</li>
+        <li><b>混ぜる</b>：各量子ビットに R<sub>X</sub>(2β)。位相の差を確率の差に変える</li>
+        <li>2・3 を p 回くり返して <b>測定</b>。古典コンピュータで、またぐ辺の平均が大きくなるように <b class="k">γ, β を調整</b></li>
+      </ol>
+    </div>
+    <div class="card pop"><svg class="gsim" id="qcSvg" viewBox="0 0 640 400"></svg></div>
   </div>
   <div class="pageno"></div>
 </section>

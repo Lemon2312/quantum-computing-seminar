@@ -786,3 +786,11 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .slide[data-id="rv2"] .rvc8 .eqrow{font-size:21px}
 .slide[data-id="rv2"] .rvc8:first-child .vec{font-size:17px;line-height:1.15}
 .slide[data-id="rv2"] .rv-g2{padding-top:4px;gap:10px}
+
+/* 26 回目：VQE・QAOA */
+.slide[data-id="vqe"] ul.plain li,.slide[data-id="qaoa"] ul.plain li{font-size:21px}
+.vq-steps{font-size:20px !important}
+.vq-steps li{margin:8px 0}
+.qa-card{display:flex;flex-direction:column;gap:10px}
+.qa-t td{font-size:17px !important;font-family:inherit !important}
+.qa-t tr.hit td{background:#fff6cf}
