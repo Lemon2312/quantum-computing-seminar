@@ -1477,6 +1477,20 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .slide[data-id="sq"] .sq-row.band{padding:3px 12px}
 .slide[data-id="sq"] .sq-qc{width:120px}
 .slide[data-id="sq"] .sq-note{display:none}
+/* 復習：長い問題が出てもはみ出さないように */
+.slide[data-id="rv1"] .rq,.slide[data-id="rv2"] .rq{font-size:14px;padding-top:4px}
+.slide[data-id="rv1"] .rq-a,.slide[data-id="rv2"] .rq-a{padding:2px 8px}
+.slide[data-id="rv1"] .rvc8:first-child{gap:12px}
+.rv-gb .rv-bw svg.rv-bs{width:180px}
+.slide[data-id="rv2"] .rvc8:first-child{gap:3px}
+.rv-qc4{width:90px}
+.slide[data-id="rv2"] .rv-tg{font-size:15px;padding:2px 8px;line-height:1.35}
+.slide[data-id="rv2"] .rv-g2 .vec.m4{font-size:14px;line-height:1}
+.slide[data-id="rv2"] .rv-maps{font-size:17px;line-height:1.1}
+.slide[data-id="rv2"] .rv-qc2{width:90px}
+.slide[data-id="rv2"] .rvc8 .eqrow{font-size:18px}
+.slide[data-id="rv2"] .rvc8{padding:8px 14px}
+.rv-qc4{width:78px}
 
 </style>
 </head>
@@ -2813,7 +2827,7 @@ measCircuit('#pmC2', [0, 1]);
 }
 
 /* ---------- 復習 ④：1 量子ビットゲートを 2 量子ビットに ---------- */
-drawQC('#rvC4', { n: 2, init: true, noNames: true, ops: [{ g: 'X', q: 0, col: 0 }, { g: 'X', q: 1, col: 0 }], colW: 56, rowH: 44, top: 24 });
+drawQC('#rvC4', { n: 2, init: true, noNames: true, ops: [{ g: 'X', q: 0, col: 0 }, { g: 'X', q: 1, col: 0 }], colW: 56, rowH: 48, top: 26 });
 
 /* 共通部品（後半）：復習問題・スライド制御・一覧・黒ペン・レーザー。スライド固有のスクリプトより後に置く */
 /* ---------- 復習問題：カードをクリックすると答えが出る（もう一度押すと隠れる） ---------- */
