@@ -828,3 +828,6 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .rv-bv{font-size:12px;white-space:nowrap}
 .slide[data-id="rv1"] .rvc8:first-child{gap:10px}
 .slide[data-id="rv1"] .rvc8:first-child .eqrow{font-size:22px}
+
+.rv-tg{display:flex;align-items:center;gap:12px;line-height:1.5}
+.rv-qc4{width:110px;flex:none}

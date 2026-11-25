@@ -31,7 +31,7 @@ partial('pm2', 2);
 {
   const X = [[0, 1], [1, 0]], Z = [[1, 0], [0, -1]];
   const M = kronM(kronM(X, X), Z), e = [0, 0, 0, 0, 0, 1, 0, 0], r = M.map(row => row[5]);
-  $('#tpBig').innerHTML = `<span>(X ⊗ X ⊗ Z)|101⟩ =</span>${matH(M, 'm8', (i, j, v) => (j === 5 ? (v ? 'hx' : 'hc') : ''))}${colH(e, (i, x) => (x ? 'hx' : ''))}<span>=</span>${colH(r, (i, x) => (x ? 'hx' : ''))}<span>= <span class="res">−|011⟩</span></span>`;
+  $('#tpBig').innerHTML = `<span>(X ⊗ X ⊗ Z)|101⟩ =</span>${matH(M, 'm8')}${colH(e)}<span>=</span>${colH(r)}<span>= <span class="res">−|011⟩</span></span>`;
 }
 
 
@@ -386,3 +386,6 @@ measCircuit('#pmC2', [0, 1]);
   svg.addEventListener('pointerup', () => st = null);
   draw();
 }
+
+/* ---------- 復習 ④：1 量子ビットゲートを 2 量子ビットに ---------- */
+drawQC('#rvC4', { n: 2, init: true, noNames: true, ops: [{ g: 'X', q: 0, col: 0 }], colW: 56, rowH: 36, top: 22 });
