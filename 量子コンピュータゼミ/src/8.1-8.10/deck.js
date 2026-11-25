@@ -355,21 +355,34 @@ measCircuit('#pmC2', [0, 1]);
   const g = $('#smG'), q4 = $('#q4Svg'); g.innerHTML = q4.innerHTML;
 }
 
-/* ---------- 復習：ブロッホ球 ---------- */
+/* ---------- 復習：ブロッホ球（θ ＝ 確率の方向、φ ＝ 位相の方向に動かせる。球をドラッグしても動く） ---------- */
 {
-  const svg = $('#rvBloch'), O = [100, 104], R = 74;
-  el('circle', { cx: O[0], cy: O[1], r: R, style: 'fill:#eef3ff;stroke:var(--ink);stroke-width:2' }, svg);
-  el('ellipse', { cx: O[0], cy: O[1], rx: R, ry: 20, style: 'fill:none;stroke:#8f8aa8;stroke-width:1.5;stroke-dasharray:4 3' }, svg);
-  el('line', { x1: O[0], y1: O[1] - R, x2: O[0], y2: O[1] + R, style: 'stroke:#8f8aa8;stroke-width:1.5' }, svg);
-  el('line', { x1: O[0], y1: O[1], x2: O[0] - 46, y2: O[1] + 40, style: 'stroke:#8f8aa8;stroke-width:1.5' }, svg);
-  el('line', { x1: O[0], y1: O[1], x2: O[0] + R + 8, y2: O[1], style: 'stroke:#8f8aa8;stroke-width:1.5' }, svg);
-  [['z', O[0] + 8, O[1] - R + 14], ['x', O[0] - 58, O[1] + 50], ['y', O[0] + R + 12, O[1] + 5]].forEach(([t, x, y]) => el('text', { x, y, style: 'font:italic 700 15px "Cambria Math",serif;fill:var(--blue)' }, svg).textContent = t);
-  el('text', { x: O[0], y: O[1] - R - 6, 'text-anchor': 'middle', style: 'font-size:16px' }, svg).textContent = '|0⟩';
-  el('text', { x: O[0], y: O[1] + R + 18, 'text-anchor': 'middle', style: 'font-size:16px' }, svg).textContent = '|1⟩';
-  const th = 0.9, ph = -0.6, px = O[0] + R * Math.sin(th) * Math.cos(ph) * 1, py = O[1] - R * Math.cos(th) + 20 * Math.sin(th) * Math.sin(-ph) * .9;
-  el('line', { x1: O[0], y1: O[1], x2: px, y2: py, style: 'stroke:var(--accent);stroke-width:3.5;stroke-linecap:round' }, svg);
-  el('circle', { cx: px, cy: py, r: 5, style: 'fill:var(--accent)' }, svg);
-  el('text', { x: px + 6, y: py - 6, style: 'font-size:16px;fill:var(--accent-d)' }, svg).textContent = '|φ⟩';
-  el('path', { d: `M${O[0]},${O[1] - 30} A30,30 0 0 1 ${O[0] + 30 * Math.sin(th)},${O[1] - 30 * Math.cos(th)}`, style: 'fill:none;stroke:var(--ink);stroke-width:1.5' }, svg);
-  el('text', { x: O[0] + 8, y: O[1] - 36, style: 'font-size:13px;font-style:italic' }, svg).textContent = 'θ';
+  const svg = $('#rvBloch'), O = [100, 100], R = 70, ex = [-.55, .5];
+  const P = (X, Y, Z) => [O[0] + R * (X * ex[0] + Y), O[1] + R * (X * ex[1] - Z)];
+  const g0 = el('g', {}, svg), g1 = el('g', {}, svg);
+  el('circle', { cx: O[0], cy: O[1], r: R, style: 'fill:#eef3ff;stroke:var(--ink);stroke-width:2' }, g0);
+  let eq = ''; for (let k = 0; k <= 60; k++) { const a = k / 60 * 2 * Math.PI, [x, y] = P(Math.cos(a), Math.sin(a), 0); eq += (k ? 'L' : 'M') + x + ',' + y; }
+  el('path', { d: eq, style: 'fill:none;stroke:#8f8aa8;stroke-width:1.5;stroke-dasharray:4 3' }, g0);
+  [[[0, 0, 1.15], 'z'], [[1.25, 0, 0], 'x'], [[0, 1.2, 0], 'y']].forEach(([v, t]) => { const [x, y] = P(...v); el('line', { x1: O[0], y1: O[1], x2: x, y2: y, style: 'stroke:#8f8aa8;stroke-width:1.5' }, g0); el('text', { x: x + (t === 'y' ? 4 : t === 'x' ? -12 : 6), y: y + (t === 'x' ? 12 : 4), style: 'font:italic 700 15px "Cambria Math",serif;fill:var(--blue)' }, g0).textContent = t; });
+  el('text', { x: O[0] - 14, y: O[1] - R - 6, style: 'font-size:15px' }, g0).textContent = '|0⟩';
+  el('text', { x: O[0] - 14, y: O[1] + R + 17, style: 'font-size:15px' }, g0).textContent = '|1⟩';
+  const th = $('#blTh'), ph = $('#blPh');
+  const draw = () => {
+    g1.innerHTML = '';
+    const t = th.value * Math.PI / 180, f = ph.value * Math.PI / 180, X = Math.sin(t) * Math.cos(f), Y = Math.sin(t) * Math.sin(f), Z = Math.cos(t);
+    const [px, py] = P(X, Y, Z), [qx, qy] = P(X, Y, 0);
+    el('line', { x1: px, y1: py, x2: qx, y2: qy, style: 'stroke:#c9c3dd;stroke-width:1.2;stroke-dasharray:3 3' }, g1);
+    el('line', { x1: O[0], y1: O[1], x2: qx, y2: qy, style: 'stroke:#c9c3dd;stroke-width:1.2;stroke-dasharray:3 3' }, g1);
+    el('line', { x1: O[0], y1: O[1], x2: px, y2: py, style: 'stroke:var(--accent);stroke-width:3.5;stroke-linecap:round' }, g1);
+    el('circle', { cx: px, cy: py, r: 6, style: 'fill:var(--accent);stroke:var(--ink);stroke-width:1.5;cursor:grab' }, g1);
+    const p0 = Math.cos(t / 2) ** 2;
+    $('#blV').innerHTML = `|a|² = ${p0.toFixed(2)}　|b|² = ${(1 - p0).toFixed(2)}　φ = ${ph.value}°`;
+  };
+  [th, ph].forEach(x => x.addEventListener('input', draw));
+  // ドラッグ：縦で θ、横で φ
+  let st = null;
+  svg.addEventListener('pointerdown', e => { st = [e.clientX, e.clientY, +th.value, +ph.value]; svg.setPointerCapture(e.pointerId); e.stopPropagation(); });
+  svg.addEventListener('pointermove', e => { if (!st) return; th.value = Math.max(0, Math.min(180, st[2] + (e.clientY - st[1]))); ph.value = ((st[3] + (e.clientX - st[0]) * 1.5) % 360 + 360) % 360; draw(); });
+  svg.addEventListener('pointerup', () => st = null);
+  draw();
 }
