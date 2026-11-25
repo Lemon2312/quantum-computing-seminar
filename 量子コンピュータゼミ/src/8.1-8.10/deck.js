@@ -236,66 +236,6 @@ const loopBox = (svg, x, y, w, h, t1, t2, back) => {
   el('polygon', { points: `${tx},${ty - 10} ${tx - 7},${ty + 2} ${tx + 7},${ty + 2}`, style: 'fill:var(--ink)' }, svg);
 };
 
-/* VQE 1：E(θ) のグラフを下っていく */
-{
-  const svg = $('#veSvg'), X = t => 60 + t * 420, Y = e => 300 - e * 230, E = t => .55 + .38 * Math.cos(2 * Math.PI * (t + .05)) * Math.exp(-.2 * t) - .25 * t * (1 - t);
-  el('line', { x1: 50, y1: 310, x2: 500, y2: 310, style: 'stroke:var(--ink);stroke-width:2' }, svg);
-  el('line', { x1: 50, y1: 310, x2: 50, y2: 30, style: 'stroke:var(--ink);stroke-width:2' }, svg);
-  el('text', { x: 500, y: 334, 'text-anchor': 'end', style: 'font-size:18px' }, svg).textContent = 'θ';
-  el('text', { x: 56, y: 26, style: 'font:800 15px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif' }, svg).textContent = 'エネルギー E(θ)';
-  let p = ''; for (let i = 0; i <= 100; i++) { const t = i / 100; p += (i ? 'L' : 'M') + X(t) + ',' + Y(E(t)); }
-  el('path', { d: p, style: 'fill:none;stroke:var(--purple);stroke-width:4' }, svg);
-  let tm = 0, em = 9; for (let i = 0; i <= 200; i++) { const t = i / 200; if (E(t) < em) { em = E(t); tm = t; } }
-  el('line', { x1: 50, y1: Y(em), x2: 500, y2: Y(em), style: 'stroke:var(--green);stroke-width:2;stroke-dasharray:6 4' }, svg);
-  el('text', { x: 498, y: Y(em) + 22, 'text-anchor': 'end', style: 'font:800 14px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--green)' }, svg).textContent = 'いちばん小さい固有値';
-  const ts = [.12, .2, .28, .34, .38, tm];
-  ts.forEach((t, k) => {
-    if (k) el('line', { x1: X(ts[k - 1]), y1: Y(E(ts[k - 1])), x2: X(t), y2: Y(E(t)), style: 'stroke:var(--accent);stroke-width:2;stroke-dasharray:4 3' }, svg);
-    el('circle', { cx: X(t), cy: Y(E(t)), r: 7, style: `fill:${k === ts.length - 1 ? 'var(--green)' : 'var(--accent)'};stroke:var(--ink);stroke-width:1.5` }, svg);
-  });
-  el('text', { x: X(ts[0]) + 10, y: Y(E(ts[0])) - 10, style: 'font:800 14px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--accent-d)' }, svg).textContent = '最初の θ';
-}
-
-/* VQE 2：回路とくり返し */
-{
-  const svg = $('#vcSvg'), ys = [70, 150];
-  wc(svg, ys, [
-    { t: 'dash', x: 64, y: 30, w: 190, h: 160, c: 'var(--accent)' }, { t: 'txt', x: 159, y: 24, label: '|ψ(θ)⟩ をつくる', s: 'font:800 14px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--accent-d)' },
-    { t: 'box', q: 0, x: 76, w: 76, label: 'R_{Y}(θ_{1})', fill: 'var(--purple)' }, { t: 'box', q: 1, x: 76, w: 76, label: 'R_{Y}(θ_{2})', fill: 'var(--purple)' },
-    { t: 'cx', c: 0, tg: 1, x: 210 },
-    { t: 'dash', x: 272, y: 30, w: 120, h: 160, c: 'var(--blue)' }, { t: 'txt', x: 332, y: 24, label: '向きを変える', s: 'font:800 14px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--blue)' },
-    { t: 'box', q: 0, x: 288, w: 40, label: 'H', fill: 'var(--blue)' }, 
-    { t: 'm', x: 420 },
-  ], 60, 470);
-  loopBox(svg, 130, 260, 340, 80, '古典コンピュータ', 'E(θ) = Σ α × 測定値 → θ を更新', [436, 166, 114, 190]);
-  el('text', { x: 478, y: 110, style: 'font-size:14px;fill:var(--muted)' }, svg).textContent = '測定値';
-}
-
-/* QAOA 1：三角形のグラフ（001 の分け方） */
-{
-  const svg = $('#qgSvg'), P = [[120, 40], [40, 200], [200, 200]], g = [0, 0, 1];
-  [[0, 1], [1, 2], [0, 2]].forEach(([a, b]) => { const cut = g[a] !== g[b]; el('line', { x1: P[a][0], y1: P[a][1], x2: P[b][0], y2: P[b][1], style: `stroke:${cut ? 'var(--pink)' : 'var(--ink)'};stroke-width:${cut ? 5 : 3};${cut ? 'stroke-dasharray:9 5' : ''}` }, svg); });
-  P.forEach(([x, y], k) => { el('circle', { cx: x, cy: y, r: 26, style: `fill:${g[k] ? 'var(--blue)' : 'var(--accent)'};stroke:var(--ink);stroke-width:3` }, svg); rich(el('text', { x, y: y + 7, 'text-anchor': 'middle', style: 'fill:#fff;font:700 20px "Cambria Math",serif' }, svg), `q_{${k}}`); });
-  el('text', { x: 250, y: 90, style: 'font-size:22px' }, svg).textContent = '例：|001⟩';
-  el('text', { x: 250, y: 124, style: 'font:15px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif' }, svg).textContent = 'q₀, q₁ がグループ 0、q₂ が 1';
-  el('text', { x: 250, y: 156, style: 'font:800 15px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--pink)' }, svg).textContent = '点線＝またぐ辺 → 2 本';
-}
-
-/* QAOA 2：回路 */
-{
-  const svg = $('#qcSvg'), ys = [50, 115, 180];
-  wc(svg, ys, [
-    { t: 'box', q: 0, x: 60, w: 36, label: 'H', fill: 'var(--blue)' }, { t: 'box', q: 1, x: 60, w: 36, label: 'H', fill: 'var(--blue)' }, { t: 'box', q: 2, x: 60, w: 36, label: 'H', fill: 'var(--blue)' },
-    { t: 'dash', x: 112, y: 16, w: 196, h: 200, c: 'var(--pink)' }, { t: 'txt', x: 210, y: 12, label: 'コスト（辺ごとに ZZ(γ)）', s: 'font:800 13px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--pink)' },
-    { t: 'zz', a: 0, b: 1, x: 124 }, { t: 'zz', a: 1, b: 2, x: 186 }, { t: 'zz', a: 0, b: 2, x: 248 },
-    { t: 'dash', x: 322, y: 16, w: 104, h: 200, c: 'var(--green)' }, { t: 'txt', x: 374, y: 12, label: '混ぜる', s: 'font:800 13px "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;fill:var(--green)' },
-    { t: 'box', q: 0, x: 334, w: 80, label: 'R_{X}(2β)', fill: 'var(--green)', fs: 14 }, { t: 'box', q: 1, x: 334, w: 80, label: 'R_{X}(2β)', fill: 'var(--green)', fs: 14 }, { t: 'box', q: 2, x: 334, w: 80, label: 'R_{X}(2β)', fill: 'var(--green)', fs: 14 },
-    { t: 'txt', x: 470, y: 120, label: '× p 回', s: 'font:900 20px sans-serif;fill:var(--ink)' },
-    { t: 'm', x: 530 },
-  ], 52, 590);
-  loopBox(svg, 150, 280, 340, 80, '古典コンピュータ', 'またぐ辺の平均 → γ, β を調整', [546, 196, 130, 216]);
-}
-
 /* ---------- |0⟩^⊗n：n 個の量子ビットがすべて |0⟩ の回路 ---------- */
 {
   const svg = $('#ktSvg'), ys = [40, 105, 170, 255], names = ['q_{0}', 'q_{1}', '', 'q_{n−1}'];
@@ -399,7 +339,6 @@ measCircuit('#pmC2', [0, 1]);
 
 /* ---------- まとめの図 ---------- */
 {
-  const f = ampBars('#smA', 4); f([.5, .5, .5, .5]); $('#smA').querySelectorAll('.val').forEach(v => v.innerHTML = '');
   const svg = $('#smB'), ys = [22, 58, 94, 132];
   ys.forEach((y, k) => {
     if (k === 2) { el('text', { x: 100, y: 108, 'text-anchor': 'middle', style: 'font-size:22px' }, svg).textContent = '⋮'; return; }
@@ -422,6 +361,9 @@ measCircuit('#pmC2', [0, 1]);
   el('circle', { cx: O[0], cy: O[1], r: R, style: 'fill:#eef3ff;stroke:var(--ink);stroke-width:2' }, svg);
   el('ellipse', { cx: O[0], cy: O[1], rx: R, ry: 20, style: 'fill:none;stroke:#8f8aa8;stroke-width:1.5;stroke-dasharray:4 3' }, svg);
   el('line', { x1: O[0], y1: O[1] - R, x2: O[0], y2: O[1] + R, style: 'stroke:#8f8aa8;stroke-width:1.5' }, svg);
+  el('line', { x1: O[0], y1: O[1], x2: O[0] - 46, y2: O[1] + 40, style: 'stroke:#8f8aa8;stroke-width:1.5' }, svg);
+  el('line', { x1: O[0], y1: O[1], x2: O[0] + R + 8, y2: O[1], style: 'stroke:#8f8aa8;stroke-width:1.5' }, svg);
+  [['z', O[0] + 8, O[1] - R + 14], ['x', O[0] - 58, O[1] + 50], ['y', O[0] + R + 12, O[1] + 5]].forEach(([t, x, y]) => el('text', { x, y, style: 'font:italic 700 15px "Cambria Math",serif;fill:var(--blue)' }, svg).textContent = t);
   el('text', { x: O[0], y: O[1] - R - 6, 'text-anchor': 'middle', style: 'font-size:16px' }, svg).textContent = '|0⟩';
   el('text', { x: O[0], y: O[1] + R + 18, 'text-anchor': 'middle', style: 'font-size:16px' }, svg).textContent = '|1⟩';
   const th = 0.9, ph = -0.6, px = O[0] + R * Math.sin(th) * Math.cos(ph) * 1, py = O[1] - R * Math.cos(th) + 20 * Math.sin(th) * Math.sin(-ph) * .9;

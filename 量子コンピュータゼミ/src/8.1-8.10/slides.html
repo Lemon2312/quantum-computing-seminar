@@ -61,12 +61,14 @@
       <div class="rh">③ 2 量子ビットの量子状態<small>第5章</small></div>
       <div class="eqrow" style="justify-content:center"><span>|φ⟩ = a|00⟩ + b|01⟩ + c|10⟩ + d|11⟩ =</span><span class="vec"><span>a</span><span>b</span><span>c</span><span>d</span></span></div>
       <div class="eqrow" style="justify-content:center;gap:6px;font-size:19px"><span>|00⟩ =</span><span class="vec"><span>1</span><span>0</span><span>0</span><span>0</span></span><span>|01⟩ =</span><span class="vec"><span>0</span><span>1</span><span>0</span><span>0</span></span><span>|10⟩ =</span><span class="vec"><span>0</span><span>0</span><span>1</span><span>0</span></span><span>|11⟩ =</span><span class="vec"><span>0</span><span>0</span><span>0</span><span>1</span></span></div>
+      <div class="eqrow rv-tp" style="justify-content:center"><span>テンソル積で計算：|0⟩ ⊗ |1⟩ =</span><span class="vec"><span>1</span><span>0</span></span><span>⊗</span><span class="vec"><span>0</span><span>1</span></span><span>=</span><span class="vec"><span>0</span><span>1</span><span>0</span><span>0</span></span><span>= |01⟩</span></div>
       <div class="ctr">（a, b, c, d は複素数、<span class="math nw"><b>|a|² + |b|² + |c|² + |d|² = 1</b></span>）</div>
-      <div><b>測定</b> すると確率 <span class="math nw"><b>|a|²</b></span> で |00⟩、<span class="math nw"><b>|b|²</b></span> で |01⟩、<span class="math nw"><b>|c|²</b></span> で |10⟩、<span class="math nw"><b>|d|²</b></span> で |11⟩</div>
+      <div><b>測定</b>：確率 <span class="math nw"><b>|a|², |b|², |c|², |d|²</b></span> で <span class="math nw">|00⟩, |01⟩, |10⟩, |11⟩</span></div>
       <div class="rq" id="rq3"><div class="rq-bar"><button class="b rq-new">🎲 問題をつくる</button><button class="b rq-ans" style="display:none">答えを見る</button></div><div class="rq-q"></div><div class="rq-a" style="display:none"></div></div>
     </div>
     <div class="rvc8 pop" style="--d:.1s;--c:var(--pink)">
       <div class="rh">④ 2 量子ビットの量子ゲート<small>第6章</small></div>
+      <div class="rv-tg">1 量子ビットゲートを 2 量子ビットにかけるときは <b class="k">テンソル積</b>：<span class="math nw">(X ⊗ I)|00⟩ = X|0⟩ ⊗ I|0⟩ = |10⟩</span></div>
       <div class="rv-g2">
         <div id="rvC2" class="rv-qc2"></div>
         <div><b class="k">CNOT</b>：制御ビットが |1⟩ のときだけ標的ビットを反転<div class="eqrow">CNOT =<span class="vec m4"><span>1</span><span>0</span><span>0</span><span>0</span><span>0</span><span>1</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>1</span><span>0</span><span>0</span><span>1</span><span>0</span></span></div></div>
@@ -387,7 +389,7 @@
 <!-- 8.9 オラクル -->
 <section class="slide" data-id="or">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.9 排他的論理和とオラクル</div>
-  <h2>オラクル：中身は分からないが実行できる回路<small>8.9・図 8.6（p.216）</small></h2>
+  <h2 class="h2s">オラクル：関数 f の出力で排他的論理和をとるブラックボックス量子ゲート<small>8.9・図 8.6（p.216）</small></h2>
   <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)">
     <div class="card pop or-card"><svg class="gsim" id="orSvg" viewBox="0 0 540 250"></svg></div>
     <div class="col">
@@ -507,94 +509,19 @@
   <div class="pageno"></div>
 </section>
 
-<!-- 【補足・教科書外】VQE 1 -->
-<section class="slide" data-id="vqe">
-  <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展 ／ 【補足・教科書外】</div>
-  <h2>VQE：エネルギーがいちばん小さくなる状態を探す<small>補足（教科書外）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
-    <div class="col">
-      <ul class="plain pop" style="--d:.1s">
-        <li><b>VQE</b>（変分量子固有値法）の目的：ハミルトニアン <span class="math">Ĥ</span> の <b class="k">いちばん小さい固有値</b>（分子のいちばん低いエネルギー）を求める</li>
-        <li>パラメータ θ で形が変わる状態 <span class="math nw">|ψ(θ)⟩</span> を量子回路でつくり、そのエネルギー <span class="math nw">E(θ) = ⟨ψ(θ)|Ĥ|ψ(θ)⟩</span> を測る</li>
-        <li>E(θ) はどんな θ でも本当の最小値以上なので、<b class="kb">E(θ) が下がる向きに θ を少しずつ変えて</b> いけば、最小値に近づく（右の図）</li>
-      </ul>
-    </div>
-    <div class="card pop"><svg class="gsim" id="veSvg" viewBox="0 0 520 380"></svg></div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 【補足・教科書外】VQE 2 -->
-<section class="slide" data-id="vqe2">
-  <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展 ／ 【補足・教科書外】</div>
-  <h2>VQE の回路：θ でつくり、項ごとに測る<small>補足（教科書外）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)">
-    <div class="col">
-      <ol class="gsteps vq-steps pop" style="--d:.1s">
-        <li><b>状態をつくる</b>：R<sub>Y</sub>(θ) と CNOT の回路で <span class="math nw">|ψ(θ)⟩</span></li>
-        <li><b>測る</b>：<span class="math nw">Ĥ = Σ α σ ⊗ σ</span>（8.10）の項ごとに測定。X や Y の項は、H などで向きを変えてから測る</li>
-        <li><b>足す</b>：古典コンピュータで <span class="math nw">E(θ) = Σ α × 測定値</span></li>
-        <li><b>更新</b>：E(θ) が下がるように θ を変えて、1 に戻る</li>
-      </ol>
-      <div class="point blue pop" style="--d:.2s;font-size:19px">Ĥ が <b class="kb">少ない個数のパウリ行列の和</b> なら、測る回数が少なくて済む（8.10.4）</div>
-    </div>
-    <div class="card pop"><svg class="gsim" id="vcSvg" viewBox="0 0 600 400"></svg></div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 【補足・教科書外】QAOA 1 -->
-<section class="slide" data-id="qaoa">
-  <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展 ／ 【補足・教科書外】</div>
-  <h2>QAOA：よい組合せを探す（例：最大カット）<small>補足（教科書外）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)">
-    <div class="col">
-      <ul class="plain pop" style="--d:.1s">
-        <li><b>QAOA</b>（量子近似最適化アルゴリズム）：たくさんの組合せの中から <b class="k">よい組合せ（ビット列）</b> を探す</li>
-        <li>例：頂点を 2 つのグループ（0 と 1）に分け、<b class="k">グループをまたぐ辺</b> をできるだけ多くする</li>
-        <li>頂点 1 つを 1 量子ビットにすると、答えは 3 ビットのビット列。またぐ辺の数を表すのが <span class="math">Ĥ<sub>C</sub></span>（コスト）</li>
-        <li>8 通りを全部調べる代わりに、<b class="kb">よい答えが高い確率で出る状態</b> を量子回路でつくる</li>
-      </ul>
-    </div>
-    <div class="card pop qa-card"><svg class="gsim" id="qgSvg" viewBox="0 0 460 250"></svg>
-      <table class="tt small qa-t"><thead><tr><th>ビット列</th><th class="out">またぐ辺</th></tr></thead><tbody>
-        <tr><td>000, 111</td><td>0 本</td></tr><tr class="hit"><td>001, 010, 100, 011, 101, 110</td><td><b>2 本（いちばん多い）</b></td></tr></tbody></table>
-    </div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
-<!-- 【補足・教科書外】QAOA 2 -->
-<section class="slide" data-id="qaoa2">
-  <div class="chap">第8章 n 量子ビットの世界 ／ 8.10 発展 ／ 【補足・教科書外】</div>
-  <h2>QAOA の回路：コストと混ぜるを交互にかける<small>補足（教科書外）</small></h2>
-  <div class="body cols" style="grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)">
-    <div class="col">
-      <ol class="gsteps vq-steps pop" style="--d:.1s">
-        <li><b>H</b> で 8 通りすべての重ね合わせにする</li>
-        <li><b>コスト</b>：辺ごとに ZZ(γ)。よい答えほど位相が回る</li>
-        <li><b>混ぜる</b>：各量子ビットに R<sub>X</sub>(2β)。位相の差を確率の差に変える</li>
-        <li>2・3 を p 回くり返して <b>測定</b>。古典コンピュータで、またぐ辺の平均が大きくなるように <b class="k">γ, β を調整</b></li>
-      </ol>
-    </div>
-    <div class="card pop"><svg class="gsim" id="qcSvg" viewBox="0 0 640 400"></svg></div>
-  </div>
-  <div class="pageno"></div>
-</section>
-
 <!-- まとめ -->
 <section class="slide" data-id="sum8">
   <div class="chap">Summary ／ 第8章</div>
   <h2>第8章のまとめ<small>8.1〜8.10（pp.192–222）</small></h2>
   <div class="body smg9">
-    <div class="smc pop" style="--d:0.00s;--c:var(--teal)"><div class="smc-h"><span class="sl-n">1</span>n 量子ビットの量子状態</div><div class="smc-f"><div class="eqtx">|φ⟩ = a<sub>0</sub>|0⟩ + ⋯ + a<sub>2ⁿ−1</sub>|2ⁿ−1⟩</div><div class="amp8" id="smA"></div></div><div class="smc-t">2ⁿ 個の基底状態の重ね合わせ。|a<sub>k</sub>|² が確率</div></div>
+    <div class="smc pop" style="--d:0.00s;--c:var(--teal)"><div class="smc-h"><span class="sl-n">1</span>n 量子ビットの量子状態</div><div class="smc-f"><div class="eqtx sm-big">|φ⟩ = a<sub>0</sub>|0⟩ + ⋯<br>+ a<sub>2ⁿ−1</sub>|2ⁿ−1⟩</div></div><div class="smc-t">2ⁿ 個の基底状態の重ね合わせ。|a<sub>k</sub>|² が確率</div></div>
     <div class="smc pop" style="--d:0.04s;--c:var(--teal)"><div class="smc-h"><span class="sl-n">2</span>複数ビットの省略表記</div><div class="smc-f"><svg class="gsim" id="smB" viewBox="0 0 300 150"></svg></div><div class="smc-t">|0⟩ ⊗ ⋯ ⊗ |0⟩ = |00⋯0⟩ = |0⟩<sup>⊗n</sup></div></div>
     <div class="smc pop" style="--d:0.08s;--c:var(--teal)"><div class="smc-h"><span class="sl-n">3</span>量子状態の 10 進数表記</div><div class="smc-f"><div class="sm-dx"><span>|101⟩</span><b>= |5⟩</b></div></div><div class="smc-t">|2 進数⟩ = |10 進数⟩</div></div>
     <div class="smc pop" style="--d:0.12s;--c:var(--pink)"><div class="smc-h"><span class="sl-n">4</span>一部の量子ビット測定後の量子状態</div><div class="smc-f"><div class="sm-g"><span>残った候補</span><div class="gz"><i style="width:25%"></i><i style="width:25%"></i><i style="width:25%"></i></div><span>× 逆数</span><div class="gz"><i class="up" style="width:33.3%"></i><i class="up" style="width:33.3%"></i><i class="up" style="width:33.4%"></i></div></div></div><div class="smc-t">確率の逆数をかけてゲージを長さ 1 に戻し、確率振幅 ＝ √確率</div></div>
     <div class="smc pop" style="--d:0.16s;--c:var(--green)"><div class="smc-h"><span class="sl-n">5</span>n 量子ビットゲートの計算方法</div><div class="smc-f"><div id="smC" class="sm-qc"></div></div><div class="smc-t">2 × 2 のテンソル積に分けて、1 本ずつ計算</div></div>
     <div class="smc pop" style="--d:0.20s;--c:var(--accent)"><div class="smc-h"><span class="sl-n">6</span>トフォリゲート</div><div class="smc-f"><div id="smD" class="sm-qc"></div></div><div class="smc-t">制御ビットがすべて |1⟩ のとき標的ビットを反転</div></div>
     <div class="smc pop" style="--d:0.24s;--c:var(--accent)"><div class="smc-h"><span class="sl-n">7</span>フレドキンゲート</div><div class="smc-f"><div id="smE" class="sm-qc"></div></div><div class="smc-t">制御ビットが |1⟩ のとき標的ビットを入れ替え</div></div>
-    <div class="smc pop" style="--d:0.28s;--c:var(--blue)"><div class="smc-h"><span class="sl-n">8</span>オラクル</div><div class="smc-f"><svg class="gsim" id="smF" viewBox="40 20 470 210"></svg></div><div class="smc-t">中身は分からないが実行できる回路</div></div>
+    <div class="smc pop" style="--d:0.28s;--c:var(--blue)"><div class="smc-h"><span class="sl-n">8</span>オラクル</div><div class="smc-f"><svg class="gsim" id="smF" viewBox="40 20 470 210"></svg></div><div class="smc-t">f の出力で排他的論理和をとるブラックボックス</div></div>
     <div class="smc pop" style="--d:0.32s;--c:var(--gold)"><div class="smc-h"><span class="sl-n">9</span>非ユニタリ行列の計算</div><div class="smc-f"><svg class="gsim" id="smG" viewBox="15 15 540 380"></svg></div><div class="smc-t">パウリ行列の和に分けて、量子で計算・古典で足す</div></div>
   </div>
   <div class="pageno"></div>
