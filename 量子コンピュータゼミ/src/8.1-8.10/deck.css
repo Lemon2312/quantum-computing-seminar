@@ -737,3 +737,8 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .mvx .vec{font-size:20px}
 .mvx-l{font-size:15px}
 .slide[data-id="cx"] ul.plain li{font-size:20px}
+.mvx-note{margin-top:6px;background:#fff6cf;border:2px dashed var(--accent);border-radius:10px;padding:5px 10px;font-size:15px;line-height:1.55}
+.mvx-note b{color:var(--accent-d)}
+.mvx{font-size:19px}
+.mvx .vec{font-size:17px}
+.slide[data-id="cx"] ul.plain li{font-size:19px;margin:4px 0}

@@ -1354,6 +1354,11 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 .mvx .vec{font-size:20px}
 .mvx-l{font-size:15px}
 .slide[data-id="cx"] ul.plain li{font-size:20px}
+.mvx-note{margin-top:6px;background:#fff6cf;border:2px dashed var(--accent);border-radius:10px;padding:5px 10px;font-size:15px;line-height:1.55}
+.mvx-note b{color:var(--accent-d)}
+.mvx{font-size:19px}
+.mvx .vec{font-size:17px}
+.slide[data-id="cx"] ul.plain li{font-size:19px;margin:4px 0}
 
 </style>
 </head>
@@ -1719,7 +1724,7 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
       <ul class="plain pop" style="--d:.1s">
         <li>n が大きいときの計算ステップ数のおおよその数を <span class="math nw">O(f(n))</span> で表し、<b class="k">計算量</b> という</li>
         <li>2ⁿ × 2ⁿ 行列と 2ⁿ 次元ベクトルの積は <span class="math nw"><b>O((2ⁿ)²) = O(2²ⁿ)</b></span>
-          <div class="mvx"><div class="mvx-i"><span class="vec m3s"><span>a<sub>00</sub></span><span>⋯</span><span>a<sub>07</sub></span><span>⋮</span><span></span><span>⋮</span><span>a<sub>70</sub></span><span>⋯</span><span>a<sub>77</sub></span></span><span class="mvx-l">2ⁿ 行 × 2ⁿ 列</span></div><span>×</span><div class="mvx-i"><span class="vec"><span>b<sub>0</sub></span><span>⋮</span><span>b<sub>7</sub></span></span><span class="mvx-l">2ⁿ 次元<br>列ベクトル</span></div><span>=</span><div class="mvx-i"><span class="vec"><span>a<sub>00</sub>b<sub>0</sub> + a<sub>01</sub>b<sub>1</sub> + ⋯ + a<sub>07</sub>b<sub>7</sub></span><span>⋮</span><span>a<sub>70</sub>b<sub>0</sub> + a<sub>71</sub>b<sub>1</sub> + ⋯ + a<sub>77</sub>b<sub>7</sub></span></span><span class="mvx-l">2ⁿ 次元列ベクトル</span></div></div><div class="mvx-c">（n = 3 のとき 2ⁿ = 8）</div></li>
+          <div class="mvx"><div class="mvx-i"><span class="vec m3s"><span>a<sub>00</sub></span><span>⋯</span><span>a<sub>07</sub></span><span>⋮</span><span></span><span>⋮</span><span>a<sub>70</sub></span><span>⋯</span><span>a<sub>77</sub></span></span><span class="mvx-l">2ⁿ 行 × 2ⁿ 列</span></div><span>×</span><div class="mvx-i"><span class="vec"><span>b<sub>0</sub></span><span>⋮</span><span>b<sub>7</sub></span></span><span class="mvx-l">2ⁿ 次元<br>列ベクトル</span></div><span>=</span><div class="mvx-i"><span class="vec"><span>a<sub>00</sub>b<sub>0</sub> + a<sub>01</sub>b<sub>1</sub> + ⋯ + a<sub>07</sub>b<sub>7</sub></span><span>⋮</span><span>a<sub>70</sub>b<sub>0</sub> + a<sub>71</sub>b<sub>1</sub> + ⋯ + a<sub>77</sub>b<sub>7</sub></span></span><span class="mvx-l">2ⁿ 次元列ベクトル</span></div></div><div class="mvx-c">（n = 3 のとき 2ⁿ = 8）</div><div class="mvx-note"><b>正確な回数</b>：1 行につき かけ算 2ⁿ 回・足し算 2ⁿ − 1 回、それが 2ⁿ 行<br>→ かけ算 4ⁿ 回 ＋ 足し算 (4ⁿ − 2ⁿ) 回 ＝ <b>2·4ⁿ − 2ⁿ 回</b>（n = 3 なら 64 ＋ 56 ＝ 120 回）<br><b>なぜ O(2²ⁿ)？</b>：O( ) は n が大きいときの増え方だけを見るので、定数倍（2 倍）と、より小さく増える項（2ⁿ）を無視する → O(4ⁿ) = O(2²ⁿ)</div></li>
         <li>量子コンピュータなら、<b class="kb">少ないゲートで作れるユニタリ発展</b> は、2ⁿ 個の状態にまとめて短い時間で実行できる（どんなユニタリ発展でも速いわけではない）</li>
       </ul>
     </div>
