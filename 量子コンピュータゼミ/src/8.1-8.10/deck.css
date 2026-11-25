@@ -846,3 +846,17 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 
 .an-eq{font-size:30px !important;margin-bottom:10px}
 .an-eq .sig{font-size:1.25em}
+.sq-src{font-size:14px;color:var(--muted);margin:-4px 0 0 4px}
+.slide[data-id="sq"] .sq-case{display:inline-block}
+/* 長い見出しは 1 行に収め、iPad で折り返しても下の図と重ならないよう余裕を持たせる */
+.slide[data-id="tp"] h2,.slide[data-id="tf"] h2,.slide[data-id="fr"] h2{font-size:27px}
+.slide[data-id="or"] h2.h2s{font-size:23px}
+.slide[data-id="pa"] h2{font-size:33px}
+.slide[data-id="tp"] h2 small,.slide[data-id="tf"] h2 small,.slide[data-id="fr"] h2 small,.slide[data-id="or"] h2 small,.slide[data-id="pa"] h2 small{font-size:15px;padding:1px 10px}
+.slide[data-id="tp"] h2,.slide[data-id="tf"] h2,.slide[data-id="fr"] h2{font-size:25px}
+/* iPad では行の高さが大きいので、9 ページの縦の余裕を広げる */
+.slide[data-id="sq"] .sq-card{gap:5px;padding:10px 20px}
+.slide[data-id="sq"] .sq-box{height:42px}
+.slide[data-id="sq"] .sq-row.band{padding:3px 12px}
+.slide[data-id="sq"] .sq-qc{width:120px}
+.slide[data-id="sq"] .sq-note{display:none}

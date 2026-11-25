@@ -30,6 +30,8 @@ const path = require('path');
       });
       const bd = s.querySelector('.body'), sr = s.getBoundingClientRect();
       const room = bd ? Math.round((sr.bottom - [...bd.querySelectorAll('*')].reduce((m, e) => Math.max(m, e.getBoundingClientRect().bottom), 0)) / (sr.height / 720)) : null;
+      const h = s.querySelector('h2');
+      if (h) { const hr = h.getBoundingClientRect(), k = sr.height / 720; if (hr.height / k > 62) bad.push(`見出しが 2 行（${Math.round(hr.height / k)}px）`); else if (((() => { const r = document.createRange(); r.selectNodeContents(h); return Math.max(...[...r.getClientRects()].map(x => x.right)); })() - sr.left) / k > 1280 - 64 - 90) bad.push('見出しが右端ぎりぎり（iPad では折り返すおそれ）'); }
       return { bad, room };
     });
     if (r.bad.length || (r.room !== null && r.room < 60)) console.log(`${i + 1}: はみ出し ${JSON.stringify(r.bad)} 本文下の余白 ${r.room}px`);

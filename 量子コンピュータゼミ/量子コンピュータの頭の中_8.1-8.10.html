@@ -1463,6 +1463,20 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 
 .an-eq{font-size:30px !important;margin-bottom:10px}
 .an-eq .sig{font-size:1.25em}
+.sq-src{font-size:14px;color:var(--muted);margin:-4px 0 0 4px}
+.slide[data-id="sq"] .sq-case{display:inline-block}
+/* 長い見出しは 1 行に収め、iPad で折り返しても下の図と重ならないよう余裕を持たせる */
+.slide[data-id="tp"] h2,.slide[data-id="tf"] h2,.slide[data-id="fr"] h2{font-size:27px}
+.slide[data-id="or"] h2.h2s{font-size:23px}
+.slide[data-id="pa"] h2{font-size:33px}
+.slide[data-id="tp"] h2 small,.slide[data-id="tf"] h2 small,.slide[data-id="fr"] h2 small,.slide[data-id="or"] h2 small,.slide[data-id="pa"] h2 small{font-size:15px;padding:1px 10px}
+.slide[data-id="tp"] h2,.slide[data-id="tf"] h2,.slide[data-id="fr"] h2{font-size:25px}
+/* iPad では行の高さが大きいので、9 ページの縦の余裕を広げる */
+.slide[data-id="sq"] .sq-card{gap:5px;padding:10px 20px}
+.slide[data-id="sq"] .sq-box{height:42px}
+.slide[data-id="sq"] .sq-row.band{padding:3px 12px}
+.slide[data-id="sq"] .sq-qc{width:120px}
+.slide[data-id="sq"] .sq-note{display:none}
 
 </style>
 </head>
@@ -1639,11 +1653,11 @@ u.wv{text-decoration:underline wavy var(--accent);text-underline-offset:5px;text
 <!-- 正規化：確率のゲージ -->
 <section class="slide" data-id="sq">
   <div class="chap">第8章 n 量子ビットの世界 ／ 8.5 一部の量子ビットの測定</div>
-  <h2>0 ビット目の測定後の量子状態<small>8.5.1（pp.199–201・例を簡単にした）・教科書とは別の考え方</small></h2>
+  <h2>0 ビット目の測定後の量子状態<small>8.5.1（pp.199–201）</small></h2>
   <div class="body center solo">
     <div class="card pop sq-card">
       <div class="sq-row s0"><div class="sq-h"><div class="pm-qc sq-qc" id="pmC1"></div></div><div class="eqtx sq-res">|φ⟩ = <span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>(|000⟩ + |001⟩ + |010⟩ + |111⟩)<div class="sq-pr">どの基底状態も確率 |<span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>|² = <span class="eq inline"><span class="frac"><span>1</span><span>4</span></span></span></div></div></div>
-      <div class="sq-case">▼ 0 ビット目を測定したら <b>|0⟩</b> だった場合の計算</div>
+      <div class="sq-case">▼ 0 ビット目を測定したら <b>|0⟩</b> だった場合の計算</div><div class="sq-src">※ 例を簡単にし、教科書とは別の考え方（確率のゲージ）で計算</div>
       <div class="sq-row band"><div class="sq-h"><b><span class="sq-n">1</span>確率に直す</b><span class="math">|<span class="eq inline"><span class="frac"><span>1</span><span>2</span></span></span>|² = <span class="eq inline"><span class="frac"><span>1</span><span>4</span></span></span></span></div><div class="sq-box" id="sqA"></div><div class="sq-v">合計 1</div></div>
       <div class="sq-row band"><div class="sq-h"><b><span class="sq-n">2</span>0 ビット目が |0⟩</b></div><div class="sq-box" id="sqB"></div><div class="sq-v ng">合計 <span class="eq inline"><span class="frac"><span>3</span><span>4</span></span></span></div></div>
       <div class="sq-row band"><div class="sq-h"><b><span class="sq-n">3</span>逆数 <span class="eq inline"><span class="frac"><span>4</span><span>3</span></span></span> をかける</b><span class="math"><span class="eq inline"><span class="frac"><span>1</span><span>4</span></span></span> × <span class="eq inline"><span class="frac"><span>4</span><span>3</span></span></span> = <span class="eq inline"><span class="frac"><span>1</span><span>3</span></span></span></span></div><div class="sq-box" id="sqC"></div><div class="sq-v ok">合計 1</div></div>
