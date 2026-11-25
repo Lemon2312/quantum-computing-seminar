@@ -342,3 +342,22 @@ measCircuit('#pmC2', [0, 1]);
   el('rect', { x: 180, y: 12, width: 190, height: 182, rx: 12, style: 'fill:#fff1c2;stroke:var(--ink);stroke-width:3' }, svg);
   el('text', { x: 275, y: 114, 'text-anchor': 'middle', style: 'font-size:40px;font-style:italic' }, svg).textContent = 'U';
 }
+
+/* ---------- まとめの図 ---------- */
+{
+  const f = ampBars('#smA', 4); f([.5, .5, .5, .5]); $('#smA').querySelectorAll('.val').forEach(v => v.innerHTML = '');
+  const svg = $('#smB'), ys = [22, 58, 94, 132];
+  ys.forEach((y, k) => {
+    if (k === 2) { el('text', { x: 100, y: 108, 'text-anchor': 'middle', style: 'font-size:22px' }, svg).textContent = '⋮'; return; }
+    el('text', { x: 40, y: y + 7, style: 'font-size:20px' }, svg).textContent = '|0⟩';
+    el('line', { x1: 78, y1: y, x2: 170, y2: y, class: 'w' }, svg);
+  });
+  el('path', { d: 'M182,12 Q194,12 194,40 V66 Q194,77 206,77 Q194,77 194,88 V114 Q194,142 182,142', style: 'fill:none;stroke:var(--ink);stroke-width:2.5' }, svg);
+  const t = el('text', { x: 212, y: 85, style: 'font-size:24px' }, svg); el('tspan', {}, t).textContent = '|0⟩'; el('tspan', { dy: -10, 'font-size': '16px' }, t).textContent = '⊗n';
+  drawQC('#smC', { n: 3, noNames: true, ops: [0, 1, 2].map(q => ({ g: 'I', q, col: 0, label: `U_{${q + 1}}` })), colW: 80, rowH: 46 });
+  drawQC('#smD', { n: 3, noNames: true, ops: [{ g: 'CX', c: [0, 1], t: 2, col: 0 }], colW: 90, rowH: 46 });
+  drawQC('#smE', { n: 3, noNames: true, ops: [{ g: 'SW', a: 1, b: 2, c: 0, col: 0 }], colW: 90, rowH: 46 });
+  oracleBox($('#smF'), { ys: [70, 180], ins: ['|x⟩', '|y⟩'], outs: ['|x⟩', '|y ⊕ f(x)⟩'], x0: 190, x1: 330, label: 'U_{f}', q: true });
+  // 非ユニタリ：量子 4 回 → 古典で足す（8.10.1 の図を小さく）
+  const g = $('#smG'), q4 = $('#q4Svg'); g.innerHTML = q4.innerHTML;
+}

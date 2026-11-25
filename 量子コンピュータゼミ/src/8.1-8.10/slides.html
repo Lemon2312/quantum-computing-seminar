@@ -167,7 +167,7 @@
   <h2>0 ビット目の測定後の量子状態<small>8.5.1（pp.199–201・例を簡単にした）・教科書とは別の考え方</small></h2>
   <div class="body center solo">
     <div class="card pop sq-card">
-      <div class="sq-row s0"><div class="sq-h"><b>元の量子状態</b><div class="pm-qc sq-qc" id="pmC1"></div></div><div class="eqtx sq-res">|φ⟩ = {{1/2}}(|000⟩ + |001⟩ + |010⟩ + |111⟩)<div class="sq-pr">どの基底状態も確率 |{{1/2}}|² = {{1/4}}。0 ビット目を測定したら |0⟩ だった場合</div></div></div>
+      <div class="sq-row s0"><div class="sq-h"><div class="pm-qc sq-qc" id="pmC1"></div></div><div class="eqtx sq-res">|φ⟩ = {{1/2}}(|000⟩ + |001⟩ + |010⟩ + |111⟩)<div class="sq-pr">どの基底状態も確率 |{{1/2}}|² = {{1/4}}。0 ビット目を測定したら |0⟩ だった場合</div></div></div>
       <div class="sq-row band"><div class="sq-h"><b><span class="sq-n">1</span>確率に直す</b><span class="math">|{{1/2}}|² = {{1/4}}</span></div><div class="sq-box" id="sqA"></div><div class="sq-v">合計 1</div></div>
       <div class="sq-row band"><div class="sq-h"><b><span class="sq-n">2</span>0 ビット目が |0⟩</b></div><div class="sq-box" id="sqB"></div><div class="sq-v ng">合計 {{3/4}}</div></div>
       <div class="sq-row band"><div class="sq-h"><b><span class="sq-n">3</span>逆数 {{4/3}} をかける</b><span class="math">{{1/4}} × {{4/3}} = {{1/3}}</span></div><div class="sq-box" id="sqC"></div><div class="sq-v ok">合計 1</div></div>
@@ -356,7 +356,7 @@
       <ul class="plain pop" style="--d:.1s">
         <li>n が大きいときの計算ステップ数のおおよその数を <span class="math nw">O(f(n))</span> で表し、<b class="k">計算量</b> という</li>
         <li>2ⁿ × 2ⁿ 行列と 2ⁿ 次元ベクトルの積は <span class="math nw"><b>O((2ⁿ)²) = O(2²ⁿ)</b></span>
-          <div class="mvx"><span class="vec m3s"><span>a<sub>00</sub></span><span>⋯</span><span>a<sub>07</sub></span><span>a<sub>10</sub></span><span>⋯</span><span>a<sub>17</sub></span><span>a<sub>20</sub></span><span>⋯</span><span>a<sub>27</sub></span><span>a<sub>30</sub></span><span>⋯</span><span>a<sub>37</sub></span><span>a<sub>40</sub></span><span>⋯</span><span>a<sub>47</sub></span><span>a<sub>50</sub></span><span>⋯</span><span>a<sub>57</sub></span><span>a<sub>60</sub></span><span>⋯</span><span>a<sub>67</sub></span><span>a<sub>70</sub></span><span>⋯</span><span>a<sub>77</sub></span></span><span>×</span><span class="vec"><span>b<sub>0</sub></span><span>b<sub>1</sub></span><span>b<sub>2</sub></span><span>b<sub>3</sub></span><span>b<sub>4</sub></span><span>b<sub>5</sub></span><span>b<sub>6</sub></span><span>b<sub>7</sub></span></span><span>=</span><span class="vec"><span>a<sub>00</sub>b<sub>0</sub> + a<sub>01</sub>b<sub>1</sub> + ⋯ + a<sub>07</sub>b<sub>7</sub></span><span>a<sub>10</sub>b<sub>0</sub> + a<sub>11</sub>b<sub>1</sub> + ⋯ + a<sub>17</sub>b<sub>7</sub></span><span>a<sub>20</sub>b<sub>0</sub> + a<sub>21</sub>b<sub>1</sub> + ⋯ + a<sub>27</sub>b<sub>7</sub></span><span>a<sub>30</sub>b<sub>0</sub> + a<sub>31</sub>b<sub>1</sub> + ⋯ + a<sub>37</sub>b<sub>7</sub></span><span>a<sub>40</sub>b<sub>0</sub> + a<sub>41</sub>b<sub>1</sub> + ⋯ + a<sub>47</sub>b<sub>7</sub></span><span>a<sub>50</sub>b<sub>0</sub> + a<sub>51</sub>b<sub>1</sub> + ⋯ + a<sub>57</sub>b<sub>7</sub></span><span>a<sub>60</sub>b<sub>0</sub> + a<sub>61</sub>b<sub>1</sub> + ⋯ + a<sub>67</sub>b<sub>7</sub></span><span>a<sub>70</sub>b<sub>0</sub> + a<sub>71</sub>b<sub>1</sub> + ⋯ + a<sub>77</sub>b<sub>7</sub></span></span></div></li>
+          <div class="mvx"><div class="mvx-i"><span class="vec m3s"><span>a<sub>00</sub></span><span>⋯</span><span>a<sub>07</sub></span><span>⋮</span><span></span><span>⋮</span><span>a<sub>70</sub></span><span>⋯</span><span>a<sub>77</sub></span></span><span class="mvx-l">2ⁿ 行 × 2ⁿ 列</span></div><span>×</span><div class="mvx-i"><span class="vec"><span>b<sub>0</sub></span><span>⋮</span><span>b<sub>7</sub></span></span><span class="mvx-l">2ⁿ 次元<br>列ベクトル</span></div><span>=</span><div class="mvx-i"><span class="vec"><span>a<sub>00</sub>b<sub>0</sub> + a<sub>01</sub>b<sub>1</sub> + ⋯ + a<sub>07</sub>b<sub>7</sub></span><span>⋮</span><span>a<sub>70</sub>b<sub>0</sub> + a<sub>71</sub>b<sub>1</sub> + ⋯ + a<sub>77</sub>b<sub>7</sub></span></span><span class="mvx-l">2ⁿ 次元列ベクトル</span></div></div><div class="mvx-c">（n = 3 のとき 2ⁿ = 8）</div></li>
         <li>量子コンピュータなら、<b class="kb">少ないゲートで作れるユニタリ発展</b> は、2ⁿ 個の状態にまとめて短い時間で実行できる（どんなユニタリ発展でも速いわけではない）</li>
       </ul>
     </div>
@@ -539,19 +539,35 @@
 </section>
 
 <!-- まとめ -->
-<section class="slide" data-id="sum8">
+<section class="slide" data-id="sum8a">
   <div class="chap">Summary ／ 第8章</div>
-  <h2>第8章のまとめ<small>8.1〜8.10（pp.192–222）</small></h2>
-  <div class="body sumlist s9">
-    <div class="sl pop" style="--d:0.00s;--c:var(--teal)"><span class="sl-n">1</span><div><b class="sl-t">n 量子ビットの量子状態</b>2ⁿ 個の基底状態の重ね合わせ。<span class="math nw">|a<sub>k</sub>|²</span> がその基底状態を得る確率</div></div>
-    <div class="sl pop" style="--d:0.04s;--c:var(--teal)"><span class="sl-n">2</span><div><b class="sl-t">複数ビットの省略表記</b><span class="math nw">|0⟩ ⊗ ⋯ ⊗ |0⟩ = |00⋯0⟩ = |0⟩<sup>⊗n</sup></span></div></div>
-    <div class="sl pop" style="--d:0.08s;--c:var(--teal)"><span class="sl-n">3</span><div><b class="sl-t">量子状態の 10 進数表記</b><span class="math nw">|2 進数⟩ = |10 進数⟩</span></div></div>
-    <div class="sl pop" style="--d:0.12s;--c:var(--pink)"><span class="sl-n">4</span><div><b class="sl-t">一部の量子ビット測定後の量子状態</b>残った候補の確率に逆数をかけてゲージを長さ 1 に戻し、確率振幅に戻す</div></div>
-    <div class="sl pop" style="--d:0.16s;--c:var(--green)"><span class="sl-n">5</span><div><b class="sl-t">n 量子ビットゲートの計算方法</b>2 × 2 のテンソル積に分ければ計算が楽（定理 8.1）</div></div>
-    <div class="sl pop" style="--d:0.20s;--c:var(--accent)"><span class="sl-n">6</span><div><b class="sl-t">トフォリゲート</b>制御ビットがすべて <span class="math">|1⟩</span> のとき標的ビットを反転</div></div>
-    <div class="sl pop" style="--d:0.24s;--c:var(--accent)"><span class="sl-n">7</span><div><b class="sl-t">フレドキンゲート</b>制御ビットが <span class="math">|1⟩</span> のとき標的ビットを入れ替え</div></div>
-    <div class="sl pop" style="--d:0.28s;--c:var(--blue)"><span class="sl-n">8</span><div><b class="sl-t">オラクル</b>中身は分からないが実行できる回路 <span class="math nw">U<sub>f</sub>|x⟩|y⟩ = |x⟩|y ⊕ f(x)⟩</span></div></div>
-    <div class="sl pop" style="--d:0.32s;--c:var(--gold)"><span class="sl-n">9</span><div><b class="sl-t">非ユニタリ行列の計算</b>パウリ行列のテンソル積の和にし、量子で 4ⁿ 回計算して古典で足す</div></div>
+  <h2>第8章のまとめ（1/3）<small>8.1〜8.10（pp.192–222）</small></h2>
+  <div class="body smg">
+    <div class="smc pop" style="--d:0.00s;--c:var(--teal)"><div class="smc-h"><span class="sl-n">1</span>n 量子ビットの量子状態</div><div class="smc-f"><div class="eqtx">|φ⟩ = a<sub>0</sub>|0⟩ + ⋯ + a<sub>2ⁿ−1</sub>|2ⁿ−1⟩</div><div class="amp8" id="smA"></div></div><div class="smc-t">2ⁿ 個の基底状態の重ね合わせ。|a<sub>k</sub>|² が確率</div></div>
+    <div class="smc pop" style="--d:0.06s;--c:var(--teal)"><div class="smc-h"><span class="sl-n">2</span>複数ビットの省略表記</div><div class="smc-f"><svg class="gsim" id="smB" viewBox="0 0 300 150"></svg></div><div class="smc-t">|0⟩ ⊗ ⋯ ⊗ |0⟩ = |00⋯0⟩ = |0⟩<sup>⊗n</sup></div></div>
+    <div class="smc pop" style="--d:0.12s;--c:var(--teal)"><div class="smc-h"><span class="sl-n">3</span>量子状態の 10 進数表記</div><div class="smc-f"><div class="sm-dx"><span>|101⟩</span><b>= |5⟩</b></div></div><div class="smc-t">|2 進数⟩ = |10 進数⟩</div></div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<section class="slide" data-id="sum8b">
+  <div class="chap">Summary ／ 第8章</div>
+  <h2>第8章のまとめ（2/3）<small>8.1〜8.10（pp.192–222）</small></h2>
+  <div class="body smg">
+    <div class="smc pop" style="--d:0.00s;--c:var(--pink)"><div class="smc-h"><span class="sl-n">4</span>一部の量子ビット測定後の量子状態</div><div class="smc-f"><div class="sm-g"><span>残った候補</span><div class="gz"><i style="width:25%"></i><i style="width:25%"></i><i style="width:25%"></i></div><span>× 逆数</span><div class="gz"><i class="up" style="width:33.3%"></i><i class="up" style="width:33.3%"></i><i class="up" style="width:33.4%"></i></div></div></div><div class="smc-t">確率の逆数をかけてゲージを長さ 1 に戻し、確率振幅 ＝ √確率</div></div>
+    <div class="smc pop" style="--d:0.06s;--c:var(--green)"><div class="smc-h"><span class="sl-n">5</span>n 量子ビットゲートの計算方法</div><div class="smc-f"><div id="smC" class="sm-qc"></div></div><div class="smc-t">2 × 2 のテンソル積に分けて、1 本ずつ計算</div></div>
+    <div class="smc pop" style="--d:0.12s;--c:var(--accent)"><div class="smc-h"><span class="sl-n">6</span>トフォリゲート</div><div class="smc-f"><div id="smD" class="sm-qc"></div></div><div class="smc-t">制御ビットがすべて |1⟩ のとき標的ビットを反転</div></div>
+  </div>
+  <div class="pageno"></div>
+</section>
+
+<section class="slide" data-id="sum8c">
+  <div class="chap">Summary ／ 第8章</div>
+  <h2>第8章のまとめ（3/3）<small>8.1〜8.10（pp.192–222）</small></h2>
+  <div class="body smg">
+    <div class="smc pop" style="--d:0.00s;--c:var(--accent)"><div class="smc-h"><span class="sl-n">7</span>フレドキンゲート</div><div class="smc-f"><div id="smE" class="sm-qc"></div></div><div class="smc-t">制御ビットが |1⟩ のとき標的ビットを入れ替え</div></div>
+    <div class="smc pop" style="--d:0.06s;--c:var(--blue)"><div class="smc-h"><span class="sl-n">8</span>オラクル</div><div class="smc-f"><svg class="gsim" id="smF" viewBox="40 20 470 210"></svg></div><div class="smc-t">中身は分からないが実行できる回路</div></div>
+    <div class="smc pop" style="--d:0.12s;--c:var(--gold)"><div class="smc-h"><span class="sl-n">9</span>非ユニタリ行列の計算</div><div class="smc-f"><svg class="gsim" id="smG" viewBox="15 15 540 380"></svg></div><div class="smc-t">パウリ行列の和に分けて、量子で計算・古典で足す</div></div>
   </div>
   <div class="pageno"></div>
 </section>
